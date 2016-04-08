@@ -1,0 +1,99 @@
+[To Do]
+- Fix using potions
+- Fix skill cooldowns
+- Fix char spawn stance
+- Fix quests
+- Fix character creation for other classes
+- Fix MP heal over time
+- Refine monster controllers/spawn
+- Fix reactor; need to add char ID to packet structure
+- Fix being unable to attack in Adventurer's second starting map
+- Add MapleTalk Server
+
+[Notes]
+- Mobs spawn functionality is buggy. Mobs that were previously spawned, freeze when a player re-enters the map.
+- Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
+- When new players spawn into a map with existing players, the former views the latter in the jump state. 
+
+[4/6/2016]
+- Added ChangePicHandler.handlePacket(); Partially handles changing PIC. It is missing the check for using an old PIC and using repeated characters in PIC.
+- Updated GAME_MESSAGE, MULTICHAT, PARTYCHAT; This fixes general chat and party chat.
+
+[4/4/2016]
+- Updated MobPacket.moveMonster(); This synchronizes monster movement between players.
+- Updated CWvsContext.PartyPacket.partyRequestInvite() and added to PartyHandler.partyOperation(); This creates a popup message when the leader tries to invite a player.
+- Updated CField.addAttackInfo(); This partially fixes seeing other players' damage.
+
+[4/2/2016]
+- Added partyName parameter to Party.createParty()
+- Added name parameter to MapleParty.MapleParty() constructor and MapleParty.getName(); This allows party objects to store the name of the party.
+- Renamed PartyHandler.DenyPartyRequest() to partyRequest()
+- Updated PartyHandler.partyRequest(); Players can now join other players' party.
+- Updated PartyHandler.partyOperation(); Players can now create a new party.
+- Updated MapleParty.createParty(); Automatically create's a party with the name of "<Char Name>'s Party" if a name is not chosen.
+- Updated CWvsContext.PartyPacket.partyInvite(), addPartyStatus(), and updateParty()
+
+
+[4/1/2016]
+- Added MapleTalkServer; Not fully functional, it only listens to port 8785 at the moment.
+- Updated CField.spawnPlayerMapobject(); This fixes other players' spawning.
+- Updated StaticLifeMovement.serialize(); This fixes other players' movements.
+- Updated CField.addAttackInfo(); This partially fixes other players' attack animations.
+- Removed previous revision to MapleClient.getLoginState(); This prevents other players from logging into an account that was already logged on.
+
+[3/30/2016]
+- Updated SharkLogger.dump() for MapleClient.disconnect(); This fixes being unable to login to character after logging off and rollback issues when logging off.
+- Updated MapleClient.getLoginState(); This fixes being unable to login to account after logging off.
+- Updated WHISPER
+
+[3/28/2016]
+- Updated CWvsContext.PartyPacket.partyCreated(), added String partyName paraemter
+- Updated CWvsContext.PartyPacket.updateParty()
+- Updated DamageParse.partyDmgMa() packet structure; This fixes magic attacks.
+
+[3/26/2016]
+- Updated CONFIRM_SHOP_TRANSACTION; This fixes recharging stars.
+- Updated KEYMAP; This fixes keymap issues.
+- Updated CHANGE_CHANNEL
+- Updated MapleBuffStats for AVOID, SOULARROW, SHARP_EYES, MAPLE_WARRIOR, DEX
+- Updated MOVE_SUMMON, SUMMON_ATTACK, DAMAGE_SUMMON, SUB_SUMMON, REMOVE_SUMMON, CHAR_INFO_REQUEST, CHAR_INFO, PARTY_OPERATION (Recv & Send)
+
+[3/25/2016]
+- Updated to Version 171.3
+- Updated DamageParse.parseDmgR() packet structure; Fixed ranged attacks
+- Updated MapleBuffStats for WATK, WDEF, MATK, MAGIC_GUARD, BOOSTER, POWERGUARD, COMBO, SHADOWPARTNER
+
+[3/24/2016]
+- Updated to Version 171.2
+- Fixed channel population percentage by modifying LoginWorker.registerClient() 
+
+[3/19/2016]
+- Removed mapleversion parameter in LoginPacket.getHello()
+- Updated PlayerHandler.MovePLayer(); Player position is now properly updated by server
+
+[3/18/2016]
+- Updated MobHandler.MoveMonster() & MovementParse.parseMovement()
+
+[3/16/2016]
+- QUICK_MOVE updated
+- GIVE_BUFF packet structure updated but not complete (Looked in IDA)
+- CANCEL_BUFF updated
+- Updated MapleBuffStats for Speed, Jump, Recovery, & Dark Sight
+
+[3/15/2016]
+- showHpHealed updated
+- GIVE_BUFF work in progress
+
+[3/13/2016]
+- NPC Action completed
+- SHOW_SPECIAL_EFFECT beginning job tutorial completed
+- UPDATE_STATS updated
+- DROP_ITEM_FROM_MAPOBJECT updated but drop position is incorrect
+- SPAWN_MONSTER, SPAWN_MONSTER_RESPONSE updated but can only attack mobs at spawn point
+- MOVE_MONSTER_RESPONSE updated
+
+[3/12/2016]
+- getCharInfo() updated
+- NPC_TALK updated
+- NPC_SHOP updated
+- Login
