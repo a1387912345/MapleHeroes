@@ -1,17 +1,18 @@
 package net.server.login.handlers;
 
 import client.MapleClient;
-import tools.data.LittleEndianAccessor;
+import net.AbstractMaplePacketHandler;
+import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.LoginPacket;
 
-public class DeleteCharHandler {
+public class DeleteCharHandler extends AbstractMaplePacketHandler {
 
 	private static boolean loginFailCount(final MapleClient c) {
         c.loginAttempt++;
         return c.loginAttempt > 3;
     }
 	
-	public static void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
+	public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
         String secondPassword = slea.readMapleAsciiString();
         if (secondPassword == null) {
             if (slea.readByte() > 0) { // Specific if user have second password or not

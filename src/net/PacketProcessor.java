@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import net.server.handlers.*;
 import net.server.login.handlers.*;
+import net.login.handler.ClientRequestHandler;
 import net.server.channel.handlers.*;
 
 public final class PacketProcessor {
@@ -79,6 +80,7 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.CRASH_INFO, new CrashHandler());
         //registerHandler(RecvPacketOpcode.CUSTOM_PACKET, new CustomPacketHandler());
         if (channel < 0) {//login
+        	registerHandler(RecvPacketOpcode.CLIENT_REQUEST, new ClientRequestHandler());
             registerHandler(RecvPacketOpcode.ACCEPT_TOS, new AcceptToSHandler());
             registerHandler(RecvPacketOpcode.REDISPLAY_SERVERLIST, new ServerlistRequestHandler());
             registerHandler(RecvPacketOpcode.CHARLIST_REQUEST, new CharlistRequestHandler());

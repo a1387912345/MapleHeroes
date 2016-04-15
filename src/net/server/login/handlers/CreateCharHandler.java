@@ -13,15 +13,16 @@ import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.JobConstants;
+import net.AbstractMaplePacketHandler;
 import net.login.LoginInformationProvider;
 import net.login.LoginInformationProvider.JobType;
 import server.MapleItemInformationProvider;
-import tools.data.LittleEndianAccessor;
+import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.LoginPacket;
 
-public class CreateCharHandler {
+public class CreateCharHandler extends AbstractMaplePacketHandler {
 
-	public static void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
+	public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
 		if (!c.isLoggedIn()) {
             c.getSession().close();
             return;
