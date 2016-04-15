@@ -5,7 +5,8 @@ import client.MapleStat;
 import client.inventory.Item;
 import client.inventory.MaplePet;
 import constants.GameConstants;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
+
 import java.awt.Point;
 import java.util.List;
 import server.movement.LifeMovementFragment;

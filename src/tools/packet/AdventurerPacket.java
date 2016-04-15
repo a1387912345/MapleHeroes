@@ -5,9 +5,10 @@
  */
 package tools.packet;
 
-import handling.SendPacketOpcode;
 import java.awt.Point;
 import java.util.List;
+
+import net.SendPacketOpcode;
 import server.Randomizer;
 import server.life.MapleMonster;
 import tools.data.MaplePacketLittleEndianWriter;

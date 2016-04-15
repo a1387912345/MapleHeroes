@@ -13,11 +13,12 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
-import handling.MapleServerHandler;
-import handling.RecvPacketOpcode;
-import handling.SendPacketOpcode;
-import handling.channel.ChannelServer;
-import handling.world.World;
+import net.MapleServerHandler;
+import net.RecvPacketOpcode;
+import net.SendPacketOpcode;
+import net.channel.ChannelServer;
+import net.world.World;
+
 import java.awt.Point;
 import java.io.File;
 import java.io.InputStream;

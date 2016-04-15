@@ -7,7 +7,8 @@ import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
-import handling.world.World;
+import net.world.World;
+
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;

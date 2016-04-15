@@ -20,8 +20,9 @@
  */
 package client;
 
-import handling.Buffstat;
 import java.io.Serializable;
+
+import net.Buffstat;
 
 public enum MonsterStatus implements Serializable, Buffstat {
 

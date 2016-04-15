@@ -6,9 +6,10 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import database.DatabaseConnection;
-import handling.channel.ChannelServer;
-import handling.world.MapleCharacterLook;
-import handling.world.World;
+import net.channel.ChannelServer;
+import net.world.MapleCharacterLook;
+import net.world.World;
+
 import java.awt.Point;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

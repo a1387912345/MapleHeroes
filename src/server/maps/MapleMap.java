@@ -36,10 +36,11 @@ import constants.QuickMove.QuickMoveNPC;
 import constants.ServerConfig;
 import custom.MoonlightRevamp;
 import database.DatabaseConnection;
-import handling.channel.ChannelServer;
-import handling.world.PartyOperation;
-import handling.world.World;
-import handling.world.exped.ExpeditionType;
+import net.channel.ChannelServer;
+import net.world.PartyOperation;
+import net.world.World;
+import net.world.exped.ExpeditionType;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.lang.ref.WeakReference;

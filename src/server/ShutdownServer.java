@@ -1,9 +1,10 @@
 package server;
 
 import database.DatabaseConnection;
-import handling.cashshop.CashShopServer;
-import handling.channel.ChannelServer;
-import handling.world.World;
+import net.cashshop.CashShopServer;
+import net.channel.ChannelServer;
+import net.world.World;
+
 import java.lang.management.ManagementFactory;
 import java.sql.SQLException;
 import javax.management.InstanceAlreadyExistsException;

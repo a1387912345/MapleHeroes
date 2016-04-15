@@ -1,7 +1,8 @@
 package server;
 
 import client.MapleCharacter;
-import handling.channel.ChannelServer;
+import net.channel.ChannelServer;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.lang.ref.WeakReference;

@@ -1,6 +1,8 @@
 package server;
 
 import database.DatabaseConnection;
+import net.world.exped.ExpeditionType;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
-import handling.world.exped.ExpeditionType;
+
 import tools.Pair;
 import tools.Triple;
 import tools.StringUtil;

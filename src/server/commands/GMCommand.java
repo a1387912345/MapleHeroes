@@ -10,9 +10,10 @@ import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
-import handling.channel.ChannelServer;
-import handling.world.CheaterData;
-import handling.world.World;
+import net.channel.ChannelServer;
+import net.world.CheaterData;
+import net.world.World;
+
 import java.awt.Point;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -25,7 +25,8 @@ import client.MapleClient;
 import constants.ServerConstants.CommandType;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
-import handling.channel.ChannelServer;
+import net.channel.ChannelServer;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.sql.PreparedStatement;

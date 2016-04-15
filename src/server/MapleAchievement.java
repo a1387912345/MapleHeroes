@@ -22,7 +22,7 @@ package server;
 
 import client.MapleCharacter;
 import constants.GameConstants;
-import handling.world.World;
+import net.world.World;
 import tools.packet.CWvsContext;
 
 /**

@@ -4,11 +4,12 @@
  */
 package tools;
 
-import handling.RecvPacketOpcode;
-import handling.SendPacketOpcode;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
+
+import net.RecvPacketOpcode;
+import net.SendPacketOpcode;
 
 /**
  *

@@ -8,7 +8,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
+
 import java.util.LinkedList;
 import java.util.List;
 import server.farm.MapleFarm;

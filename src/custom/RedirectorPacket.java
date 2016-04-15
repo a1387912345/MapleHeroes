@@ -4,7 +4,7 @@
  */
 package custom;
 
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
 import tools.data.MaplePacketLittleEndianWriter;
 
 /**

@@ -9,18 +9,19 @@ import constants.*;
 import custom.MoonlightAchievements;
 import database.DatabaseConnection;
 import database.DatabaseException;
-import handling.channel.ChannelServer;
-import handling.channel.handler.AttackInfo;
-import handling.channel.handler.PlayerHandler;
-import handling.login.LoginInformationProvider;
-import handling.login.LoginInformationProvider.JobType;
-import handling.login.LoginServer;
-import handling.world.*;
-import handling.world.family.MapleFamily;
-import handling.world.family.MapleFamilyBuff;
-import handling.world.family.MapleFamilyCharacter;
-import handling.world.guild.MapleGuild;
-import handling.world.guild.MapleGuildCharacter;
+import net.channel.ChannelServer;
+import net.channel.handler.AttackInfo;
+import net.channel.handler.PlayerHandler;
+import net.login.LoginInformationProvider;
+import net.login.LoginServer;
+import net.login.LoginInformationProvider.JobType;
+import net.world.*;
+import net.world.family.MapleFamily;
+import net.world.family.MapleFamilyBuff;
+import net.world.family.MapleFamilyCharacter;
+import net.world.guild.MapleGuild;
+import net.world.guild.MapleGuildCharacter;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
@@ -652,6 +653,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 t.setExp(rs.getInt(t.getType().name()));
             }
             if (channelserver) {
+            	System.out.println("lcfdb debug 1");
                 ret.CRand = new PlayerRandomStream();
                 ret.anticheat = new CheatTracker(ret);
                 MapleMapFactory mapFactory = ChannelServer.getInstance(client.getChannel()).getMapFactory();
@@ -709,6 +711,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     }
                 }
 
+                System.out.println("lcfdb debug 2");
             }
             rs.close();
             ps.close();
@@ -777,6 +780,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             ps.close();
             pse.close();
             if (channelserver) {
+            	System.out.println("lcfdb debug 3");
                 ret.monsterbook = MonsterBook.loadCards(ret.accountid, ret);
                 ps = con.prepareStatement("SELECT * FROM inventoryslot where characterid = ?");
                 ps.setInt(1, charid);
@@ -794,6 +798,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 }
                 ps.close();
                 rs.close();
+                System.out.println("lcfdb debug 4");
                 for (Pair<Item, MapleInventoryType> mit : ItemLoader.INVENTORY.loadItems(false, charid).values()) {
                     ret.getInventory(mit.getRight()).addFromDB(mit.getLeft());
                     if (mit.getLeft().getPet() != null) {
@@ -801,6 +806,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     }
                 }
 
+                System.out.println("lcfdb debug 5");
                 //TODO {TEST} LOAD POTION POTS
                 /*ps = con.prepareStatement("SELECT * FROM potionpots WHERE cid = ?");
                  ps.setInt(1, ret.id);
@@ -862,6 +868,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 ps.setInt(1, charid);
                 rs = ps.executeQuery();
                 Skill skil;
+                System.out.println("lcfdb debug 6");
                 while (rs.next()) {
                     final int skid = rs.getInt("skillid");
                     skil = SkillFactory.getSkill(skid);
@@ -884,6 +891,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                         }
                     }
                 }
+                System.out.println("lcfdb debug 7");
                 rs.close();
                 ps.close();
 
@@ -912,6 +920,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 ps.setInt(1, ret.accountid);
                 rs = ps.executeQuery();
                 int maxlevel_ = 0, maxlevel_2 = 0;
+                System.out.println("lcfdb debug 8");
                 while (rs.next()) {
                     if (rs.getInt("id") != charid) { // Not this character
                         if (GameConstants.isKOC(rs.getShort("job"))) {
@@ -937,6 +946,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
                     }
                 }
+                System.out.println("lcfdb debug 9");
                 /*
                  * if (!compensate_previousSP) { for (Entry<Skill, SkillEntry>
                  * skill : ret.skills.entrySet()) { if
@@ -947,6 +957,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                  * 0; } } ret.setQuestAdd(MapleQuest.getInstance(170000), (byte)
                  * 0, null); //set it so never again }
                  */
+                System.out.println("lcfdb debug 10");
                 if (ret.BlessOfFairy_Origin == null) {
                     ret.BlessOfFairy_Origin = ret.name;
                 }
@@ -960,6 +971,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 ps.close();
                 rs.close();
                 // END
+                System.out.println("lcfdb debug 11");
 
                 ps = con.prepareStatement("SELECT skill_id, skill_level, max_level, rank, locked FROM inner_ability_skills WHERE player_id = ?");
                 ps.setInt(1, charid);
@@ -1144,19 +1156,26 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 if (!rs.next()) {
                     throw new RuntimeException("No mount data found on SQL column");
                 }
+                System.out.println("lcfdb debug 12");
                 final Item mount = ret.getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -18);
                 ret.mount = new MapleMount(ret, mount != null ? mount.getItemId() : 0, 80001000, rs.getByte("Fatigue"), rs.getByte("Level"), rs.getInt("Exp"));
                 ps.close();
                 rs.close();
 
+                System.out.println("lcfdb debug 13");
                 ret.stats.recalcLocalStats(true, ret);
+                System.out.println("lcfdb debug 14");
             } else { // Not channel server
                 for (Pair<Item, MapleInventoryType> mit : ItemLoader.INVENTORY.loadItems(true, charid).values()) {
                     ret.getInventory(mit.getRight()).addFromDB(mit.getLeft());
                 }
                 ret.stats.recalcPVPRank(ret);
             }
-        } catch (SQLException ess) {
+        } catch (NullPointerException ex) {
+        	System.out.println("Nullpointer...");
+        }
+        
+        catch (SQLException ess) {
             ess.printStackTrace();
             System.out.println("Failed to load character..");
             FileoutputUtil.outputFileError(FileoutputUtil.PacketEx_Log, ess);
@@ -3435,7 +3454,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             characterCard.recalcLocalStats(this);
             stats.recalcLocalStats(this);
             client.getSession().write(CWvsContext.updatePlayerStats(statup, this));
-            map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), 11), false);
+            map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), 13), false);
             silentPartyUpdate();
             guildUpdate();
             familyUpdate();
@@ -6592,7 +6611,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 break;
             case -3:
                 client.getSession().write(CField.getChatText(getId(), message, isSuperGM(), 0)); //1 = hide
-                System.out.println("Does it do this?");
                 break;
             case -4:
                 client.getSession().write(CField.getChatText(getId(), message, isSuperGM(), 1)); //1 = hide
@@ -6610,7 +6628,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 client.getSession().write(CWvsContext.getMidMsg(message, true, 0));
             default:
                 client.getSession().write(CWvsContext.broadcastMsg(type, message));
-                System.out.println("Or this");
         }
     }
 

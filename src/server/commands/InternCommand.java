@@ -13,11 +13,12 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;
-import handling.RecvPacketOpcode;
-import handling.SendPacketOpcode;
-import handling.channel.ChannelServer;
-import handling.world.CheaterData;
-import handling.world.World;
+import net.RecvPacketOpcode;
+import net.SendPacketOpcode;
+import net.channel.ChannelServer;
+import net.world.CheaterData;
+import net.world.World;
+
 import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;

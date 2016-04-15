@@ -24,8 +24,9 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleTrait.MapleTraitType;
 import constants.GameConstants;
-import handling.channel.ChannelServer;
-import handling.world.MaplePartyCharacter;
+import net.channel.ChannelServer;
+import net.world.MaplePartyCharacter;
+
 import java.awt.Point;
 import server.Randomizer;
 import server.Timer.MapTimer;

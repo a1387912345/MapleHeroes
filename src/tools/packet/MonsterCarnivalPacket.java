@@ -21,7 +21,8 @@
 package tools.packet;
 
 import client.MapleCharacter;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
+
 import java.util.List;
 import server.MapleCarnivalParty;
 import tools.data.MaplePacketLittleEndianWriter;

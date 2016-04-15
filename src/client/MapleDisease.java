@@ -1,7 +1,8 @@
 package client;
 
-import handling.Buffstat;
 import java.io.Serializable;
+
+import net.Buffstat;
 import server.Randomizer;
 
 public enum MapleDisease implements Serializable, Buffstat {

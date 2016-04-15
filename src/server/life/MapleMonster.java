@@ -40,15 +40,15 @@ import client.MapleCharacter;
 import client.inventory.MapleInventoryType;
 import client.MapleClient;
 import client.MapleTrait.MapleTraitType;
-import handling.channel.ChannelServer;
 import client.SkillFactory;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import constants.EventConstants;
 import constants.ServerConstants;
+import net.channel.ChannelServer;
+import net.world.MapleParty;
+import net.world.MaplePartyCharacter;
 
-import handling.world.MapleParty;
-import handling.world.MaplePartyCharacter;
 import java.awt.Rectangle;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import scripting.EventInstanceManager;

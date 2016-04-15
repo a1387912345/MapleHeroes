@@ -11,7 +11,7 @@ package constants;
 public class JobConstants {
 
     public static final boolean enableJobs = true;
-    public static final int jobOrder = 7;//v145 beasttamer
+    public static final int jobOrder = 7;
 
     public enum LoginJob {//disabled for beta
 

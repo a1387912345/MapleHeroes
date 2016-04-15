@@ -22,10 +22,11 @@ package scripting;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import handling.channel.ChannelServer;
-import handling.world.MapleParty;
-import handling.world.MaplePartyCharacter;
-import handling.world.exped.MapleExpedition;
+import net.channel.ChannelServer;
+import net.world.MapleParty;
+import net.world.MaplePartyCharacter;
+import net.world.exped.MapleExpedition;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

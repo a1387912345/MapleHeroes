@@ -5,7 +5,8 @@
 package server;
 
 import client.MapleCharacter;
-import handling.world.MaplePartyCharacter;
+import net.world.MaplePartyCharacter;
+
 import java.lang.ref.WeakReference;
 
 /**

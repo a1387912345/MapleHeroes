@@ -168,7 +168,7 @@ public class MapleReactor extends MapleMapObject {
                     if ((stats.getType(state) < 100 || stats.getType(state) == 999) && delay > 0) { //reactor broken
                         map.destroyReactor(getObjectId());
                     } else { //item-triggered on final step
-                        map.broadcastMessage(CField.triggerReactor(this, stance));
+                        map.broadcastMessage(CField.triggerReactor(this, stance, c.getPlayer()));
                     }
                     //if (rid > 200011) {
                     ReactorScriptManager.getInstance().act(c, this);

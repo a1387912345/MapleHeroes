@@ -13,7 +13,8 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConfig;
 import constants.ServerConstants.PlayerGMRank;
-import handling.channel.ChannelServer;
+import net.channel.ChannelServer;
+
 import static java.lang.System.getProperty;
 import java.util.Arrays;
 import java.util.HashMap;

@@ -5,7 +5,8 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;

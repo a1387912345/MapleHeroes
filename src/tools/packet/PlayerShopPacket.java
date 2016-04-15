@@ -24,9 +24,10 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Item;
 import constants.GameConstants;
-import handling.SendPacketOpcode;
-import handling.channel.handler.PlayerInteractionHandler;
-import handling.world.MapleCharacterLook;
+import net.SendPacketOpcode;
+import net.channel.handler.PlayerInteractionHandler;
+import net.world.MapleCharacterLook;
+
 import java.util.List;
 import server.MerchItemPackage;
 import server.stores.AbstractPlayerStore.BoughtItem;

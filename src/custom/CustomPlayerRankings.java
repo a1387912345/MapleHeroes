@@ -21,7 +21,8 @@
 package custom;
 
 import database.DatabaseConnection;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

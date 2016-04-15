@@ -25,7 +25,8 @@ import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
-import handling.channel.ChannelServer;
+import net.channel.ChannelServer;
+
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.LinkedList;

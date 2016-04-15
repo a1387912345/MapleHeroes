@@ -21,7 +21,8 @@
 package server.maps;
 
 import client.MapleCharacter;
-import handling.world.World;
+import net.world.World;
+
 import java.awt.Point;
 import server.MapleItemInformationProvider;
 import server.Randomizer;

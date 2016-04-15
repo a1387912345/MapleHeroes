@@ -23,8 +23,8 @@ package server.events;
 
 import client.MapleCharacter;
 import constants.GameConstants;
-import handling.channel.ChannelServer;
-import handling.world.World;
+import net.channel.ChannelServer;
+import net.world.World;
 import server.MapleInventoryManipulator;
 import server.RandomRewards;
 import server.Randomizer;

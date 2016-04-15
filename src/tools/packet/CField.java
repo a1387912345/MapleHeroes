@@ -4,11 +4,12 @@ import client.*;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.QuickMove.QuickMoveNPC;
-import handling.SendPacketOpcode;
-import handling.channel.handler.PlayerInteractionHandler;
-import handling.world.World;
-import handling.world.guild.MapleGuild;
-import handling.world.guild.MapleGuildAlliance;
+import net.SendPacketOpcode;
+import net.channel.handler.PlayerInteractionHandler;
+import net.world.World;
+import net.world.guild.MapleGuild;
+import net.world.guild.MapleGuildAlliance;
+
 import java.awt.Point;
 import java.util.*;
 import server.MaplePackageActions;
@@ -625,7 +626,7 @@ public class CField {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.MAP_EFFECT.getValue());
-        mplew.write(active ? 0 : 1);
+        //mplew.write(active ? 0 : 1);
 
         mplew.writeInt(itemid);
         if (active) {
@@ -3403,11 +3404,13 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
 
         public static byte[] setNPCSpecialAction(int oid, String action) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+            
             mplew.writeShort(SendPacketOpcode.NPC_SET_SPECIAL_ACTION.getValue());
             mplew.writeInt(oid);
             mplew.writeMapleAsciiString(action);
             mplew.writeInt(0); //unknown yet
             mplew.write(0); //unknown yet
+            
             return mplew.getPacket();
         }
 
@@ -3417,6 +3420,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.writeInt(oid);
             mplew.writeInt(x);
             mplew.writeInt(y);
+            mplew.writeInt(100);
             return mplew.getPacket();
         }
 
@@ -3587,9 +3591,11 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.writeInt(1);
             mplew.writeShort(0);
             mplew.write(17);
+            mplew.write(0);
             mplew.writeMapleAsciiString(text);
             mplew.write(0);
             mplew.write(1);
+            mplew.writeInt(0);
             return mplew.getPacket();
         }
 
@@ -4072,8 +4078,10 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
                 mplew.writeShort(enable);
                 mplew.write(0);
             } else {
-            	mplew.write(enable < 0 ? 1 : 0);
+            	//mplew.write(enable < 0 ? 1 : 0);
             }
+            
+            System.out.println(mplew.toString());
             return mplew.getPacket();
         }
 
@@ -4160,7 +4168,6 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             if (b > 1) {
                 mplew.writeInt(0);
             }
-
             
             return mplew.getPacket();
         }
@@ -4182,7 +4189,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.writeInt(0);
             mplew.write(1);
             mplew.writeInt(npc);
-            mplew.write(1);
+            mplew.write(0);
             mplew.write(0);
 
 

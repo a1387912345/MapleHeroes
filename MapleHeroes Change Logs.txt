@@ -15,6 +15,11 @@
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
 
+[4/15/2016]
+- Updated MapleBuffStats for INVINCIBLE, BLESS, BLESSED_ENSEMBLE
+- Updated MapScriptMethods for case Advanture_tuto00, Advanture_tuto01, Advanture_tuto11
+- Added PacketProcessor
+
 [4/6/2016]
 - Added ChangePicHandler.handlePacket(); Partially handles changing PIC. It is missing the check for using an old PIC and using repeated characters in PIC.
 - Updated GAME_MESSAGE, MULTICHAT, PARTYCHAT; This fixes general chat and party chat.

@@ -6,7 +6,7 @@
 package tools.packet;
 
 import client.MapleCharacter;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
 import server.maps.MapleMap;
 import tools.data.MaplePacketLittleEndianWriter;
 

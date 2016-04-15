@@ -1,8 +1,9 @@
 package server;
 
 import client.MapleCharacter;
-import handling.channel.ChannelServer;
-import handling.world.World;
+import net.channel.ChannelServer;
+import net.world.World;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;

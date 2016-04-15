@@ -43,6 +43,7 @@ import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
+import server.life.MapleNPC;
 import server.life.OverrideMonsterStats;
 import server.maps.MapleNodes.DirectionInfo;
 import server.quest.MapleQuest;
@@ -65,6 +66,10 @@ public class MapScriptMethods {
         "I do like your intestinal fortitude! But don't confuse your courage with recklessness!",
         "If you want to step on the path to failure, by all means to do so!"};
 
+    /**
+     * Each enum belongs to a specific map id. These enum are responsible for the actions/packets sent when a player enters the map.
+     * The enum name are found by navigating to a specific map id in the .xml wz files and looking at the value of "onFirstUserEnter".
+     */
     private static enum onFirstUserEnter {
         //new Stuff
 
@@ -161,6 +166,11 @@ public class MapScriptMethods {
         }
     };
 
+    
+    /**
+     * Each enum belongs to a specific map id. These enum are responsible for the actions/packets sent when a player enters the map.
+     * The enum name are found by navigating to a specific map id in the .xml wz files and looking at the value of "onUserEnter".
+     */
     private static enum onUserEnter {
 
         PinkZak,
@@ -1547,12 +1557,12 @@ public class MapScriptMethods {
 
             case Advanture_tuto01: {
                 try {
-                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                	c.getPlayer().getMap().resetFully();
+                	c.getSession().write(UIPacket.getDirectionStatus(true));
                     c.getSession().write(UIPacket.IntroEnableUI(1));
-                    c.getPlayer().getMap().resetFully();
                     final MapleReactor chain = new MapleReactor(MapleReactorFactory.getReactor(1008010), 1008010);
                     c.getPlayer().getMap().spawnReactorOnGroundBelow(chain, new Point(365, 216));
-                    c.getSession().write(UIPacket.getDirectionInfo(1, 3000));
+                    //c.getSession().write(UIPacket.getDirectionInfo(1, 3000));
                     Thread.sleep(3000);
                     c.getSession().write(UIPacket.getDirectionStatus(true));
                     c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/3", 2100, 0, -120, 0, 0));
@@ -1599,35 +1609,59 @@ public class MapScriptMethods {
                 break;
             }
 
-            case Advanture_tuto11:
-//                try {
+            case Advanture_tuto11: {
+            	MapleNPC mysteriousGirl = MapleLifeFactory.getNPC(10300);
+            	try {
+            		
+            		Point pos = new Point(-240, 220);
+            		
+            		mysteriousGirl.setPosition(pos);
+            		mysteriousGirl.setCy(pos.y);
+            		mysteriousGirl.setRx0(pos.x + 50);
+            		mysteriousGirl.setRx1(pos.x - 50);
+            		mysteriousGirl.setFh(c.getPlayer().getMap().getFootholds().findBelow(pos).getId());
+            		mysteriousGirl.setCustom(true);
+                    //c.getPlayer().getMap().addMapObject(mysteriousGirl);
+
+            		System.out.println("Mysterious Girl Object ID: " + mysteriousGirl.getObjectId());
+            		
                     c.getSession().write(UIPacket.getDirectionStatus(true));
                     c.getSession().write(UIPacket.IntroEnableUI(1));
                     c.getSession().write(CField.environmentChange("maplemap/enter/10000", 12));
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
-                    NPCScriptManager.getInstance().start(c, 10310, "ExplorerTut06");
-//                    c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
-//                    Thread.sleep(1000);
-//                    c.getSession().write(UIPacket.getDirectionStatus(true));
-//                    c.getSession().write(NPCPacket.setNPCSpecialAction(814124, "summon"));
-//                    c.getSession().write(UIPacket.getUnknownDirectionInfo("Effect/Direction12.img/effect/tuto/BalloonMsg1/1", 900, 0, -120, 814124));//improve
-//                    c.getSession().write(UIPacket.getDirectionInfo(1, 1800));
-//                    Thread.sleep(1800);
-//                    c.getSession().write(NPCPacket.NPCSpecialAction(814124, 1, 1000));
-//                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 200));
-//                    c.getSession().write(UIPacket.getDirectionInfo(1, 4542));
-//                    Thread.sleep(4542);
-//                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 1, 300));
-//                    c.getSession().write(UIPacket.getDirectionInfo(1, 2834));
-//                    Thread.sleep(2834);
-//                    c.getSession().write(UIPacket.getDirectionInfo(1, 900));
-//                    Thread.sleep(900);
-                    //npc
-//               } catch (InterruptedException e) {
-//                }
-                break;
 
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
+                    Thread.sleep(1000);
+                    c.getSession().write(NPCPacket.spawnNPCRequestController(mysteriousGirl, true));
+                    c.getSession().write(NPCPacket.setNPCSpecialAction(mysteriousGirl.getObjectId(), "summon"));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction12.img/effect/tuto/BalloonMsg1/1", 900, 0, -120, mysteriousGirl.getObjectId()));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1800));
+                    System.out.println("Tut11 Debug 1");
+                    Thread.sleep(1800);
+                    c.getSession().write(NPCPacket.NPCSpecialAction(mysteriousGirl.getObjectId(), 1, 1000));
+                    System.out.println("Tut11 Debug 2");
+
+                    
+                    System.out.println("Tut11 Debug 3");
+                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 200));
+                    //Thread.sleep(4500);
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
+                    Thread.sleep(4500);
+
+                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 1, 0));
+                    //c.getSession().write(UIPacket.getDirectionInfo(1, 0));
+                    //c.getSession().write(UIPacket.getDirectionInfo(1, 900));
+                    //Thread.sleep(900);
+                    //c.getPlayer().getMap().removeNpc(mysteriousGirl.getId());
+                    
+                    
+            	} catch (InterruptedException e) {
+                }
+            	//c.getSession().write(UIPacket.IntroEnableUI(0));
+            	NPCScriptManager.getInstance().start(c, 10310, "ExplorerTut06");
+                break;
+            }
             case Advanture_tuto33: {
                 c.getPlayer().getMap().resetFully();
                 c.getSession().write(CWvsContext.getTopMsg("Eliminate Mano."));

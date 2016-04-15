@@ -4,8 +4,9 @@ import client.*;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants;
-import handling.Buffstat;
-import handling.world.MapleCharacterLook;
+import net.Buffstat;
+import net.world.MapleCharacterLook;
+
 import java.util.*;
 import java.util.Map.Entry;
 import server.CashItem;

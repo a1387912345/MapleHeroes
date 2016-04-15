@@ -9,8 +9,9 @@ import constants.JobConstants.LoginJob;
 import constants.ServerConfig;
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
-import handling.SendPacketOpcode;
-import handling.login.LoginServer;
+import net.SendPacketOpcode;
+import net.login.LoginServer;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -399,10 +400,8 @@ public class LoginPacket {
         	mplew.writeInt(chr.getId());
         }
         mplew.write(chars.size());
-        int i = 0;
         for (MapleCharacter chr : chars) {
             addCharEntry(mplew, chr, (!chr.isGM()) && (chr.getLevel() >= 30), false);
-            i++;
         }
         if (constants.ServerConfig.DISABLE_PIC) {
             mplew.writeShort(2);

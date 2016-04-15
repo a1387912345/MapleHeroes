@@ -16,9 +16,10 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import custom.CustomSkills;
-import handling.channel.ChannelServer;
-import handling.world.MaplePartyCharacter;
-import handling.world.World;
+import net.channel.ChannelServer;
+import net.world.MaplePartyCharacter;
+import net.world.World;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;

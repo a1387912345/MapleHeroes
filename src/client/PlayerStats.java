@@ -7,9 +7,10 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import constants.EventConstants;
 import constants.GameConstants;
-import handling.world.World;
-import handling.world.guild.MapleGuild;
-import handling.world.guild.MapleGuildSkill;
+import net.world.World;
+import net.world.guild.MapleGuild;
+import net.world.guild.MapleGuildSkill;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;

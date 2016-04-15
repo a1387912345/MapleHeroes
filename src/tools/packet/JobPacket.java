@@ -6,7 +6,8 @@ package tools.packet;
 
 import client.MapleBuffStat;
 import client.MapleCharacter;
-import handling.SendPacketOpcode;
+import net.SendPacketOpcode;
+
 import java.awt.Point;
 import java.util.EnumMap;
 import java.util.List;

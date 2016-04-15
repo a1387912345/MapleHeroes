@@ -1,7 +1,8 @@
 package client;
 
-import handling.Buffstat;
 import java.io.Serializable;
+
+import net.Buffstat;
 
 public enum MapleBuffStat implements Serializable, Buffstat {
 
@@ -26,7 +27,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     POWERGUARD(0x80000000, 3), // Last updated: v171
     MAXHP(0x2000, 1),
     MAXMP(0x4000, 1),
-    INVINCIBLE(0x8000, 1),//0x800000000000L ??
+    INVINCIBLE(0x10000000, 3), // Last updated: v171.3
     SOULARROW(0x20000, 5), // Last updated: v171 ?
     STUN(0x20000, 1),
     POISON(0x40000, 1),
@@ -154,7 +155,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     ONYX_SHROUD(0x10000000, 4),
     ONYX_WILL(0x8000000, 4),//-2
     TORNADO_CURSE(0x40000000, 4),
-    BLESS(0x20000000, 4),//-2
+    BLESS(0x400000, 6), // Last updated: v171.3
     //1 //blue star + debuff
     //2 debuff	 but idk
     THREATEN_PVP(0x4, 5),
@@ -319,7 +320,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     CROSS_SURGE(0x8000000, 10),
     HP_RECOVER(0x4000000, 10),
     PARASHOCK_GUARD(0x80000000, 10, true),
-    PASSIVE_BLESS(0x4, 11),
+    BLESSED_ENSEMBLE(0x4, 11), // Last updated: v171.3
     DIVINE_FORCE_AURA(0x1000, 11),
     DIVINE_SPEED_AURA(0x2000, 11),
     WDEF_BOOST2(0x4000, 6, true),

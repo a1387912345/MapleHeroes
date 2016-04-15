@@ -36,9 +36,9 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import database.DatabaseConnection;
+import net.channel.ChannelServer;
+import net.world.World;
 
-import handling.channel.ChannelServer;
-import handling.world.World;
 import java.util.ArrayList;
 import server.maps.MapleMapObject;
 import server.maps.MapleMap;
