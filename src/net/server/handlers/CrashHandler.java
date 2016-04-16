@@ -24,10 +24,11 @@ package net.server.handlers;
 import client.MapleClient;
 import net.MaplePacketHandler;
 import net.SendPacketOpcode;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.LittleEndianAccessor;
 
 public class CrashHandler implements MaplePacketHandler {
-    public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
+	
+    public void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
     	slea.skip(12);
     	short opcode = slea.readShort();
     	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + ":" + opcode + "] caused a client to crash.");

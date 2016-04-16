@@ -64,6 +64,7 @@ import server.CashItemInfo;
 import server.Randomizer;
 import server.commands.CommandProcessor;
 import server.shark.SharkPacket;
+import tools.FilePrinter;
 import tools.FileoutputUtil;
 import tools.HexTool;
 import tools.MapleAESOFB;
@@ -77,6 +78,7 @@ import tools.packet.CSPacket;
 public class MapleServerHandler extends IoHandlerAdapter implements MapleServerHandlerMBean {
 
 	private PacketProcessor processor;
+	private int world = -1, channel = -1;
     public static boolean Log_Packets = false;
     private static int numDC = 0;
     private static long lastDC = System.currentTimeMillis();
@@ -91,6 +93,17 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
     //Note to Zero: Use an enumset. Don't iterate through an array.
     private static final EnumSet<RecvPacketOpcode> blocked = EnumSet.noneOf(RecvPacketOpcode.class), sBlocked = EnumSet.noneOf(RecvPacketOpcode.class);
 
+    public MapleServerHandler() {
+        this.processor = PacketProcessor.getProcessor(-1, -1);
+    }
+    
+    public MapleServerHandler(int world, int channel) {
+    	this.processor = PacketProcessor.getProcessor(world, channel);
+    	this.world = world;
+    	this.channel = channel;
+    }
+    
+    
     public static void reloadLoggedIPs() {
         //IPLoggingLock.writeLock().lock();
         //try {
@@ -282,11 +295,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         registerMBean();
     }
 
-    public MapleServerHandler() {
-        //ONLY FOR THE MBEAN
-    }
-    // </editor-fold>
-
     @Override
     public void exceptionCaught(final IoSession session, final Throwable cause) throws Exception {
         /*
@@ -296,6 +304,13 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
          * cause);
          */
         // cause.printStackTrace();
+    	if (cause instanceof IOException || cause instanceof ClassCastException) {
+            return;
+        }
+    	MapleClient c = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
+        if (c != null && c.getPlayer() != null) {
+            FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, cause, "Exception caught by: " + c.getPlayer());
+        }
     }
 
     @Override
@@ -425,6 +440,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         super.sessionIdle(session, status);
     }
 
+    /*
     @Override
     public void messageReceived(final IoSession session, final Object message) {
         if (message == null || session == null) {
@@ -497,6 +513,41 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         sb.append(HexTool.toString((byte[]) message)).append("\n").append(HexTool.toStringFromAscii((byte[]) message));
         System.out.println(sb.toString());
     }
+    */
+    
+    
+    @Override
+    public void messageReceived(IoSession session, Object message) {
+        final LittleEndianAccessor lea = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) message));
+        short packetId = lea.readShort();
+        MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
+        
+        if (ServerConstants.LOG_SHARK) {
+            final SharkPacket sp = new SharkPacket((byte[]) message, true);
+            client.sl.log(sp);
+        }
+        
+        if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(packetId)))) {
+        	String tab = "";
+        	String recv = RecvPacketOpcode.getOpcodeName(packetId);
+            for (int i = 4; i > Integer.valueOf(recv.length() / 8); i--) {
+                tab += "\t";
+            }
+            System.out.println("[Recv]\t" + recv + tab + "|     " + HexTool.getOpcodeToString(packetId) + "\t|\t" + lea.toString());
+            System.out.println(HexTool.toStringFromAscii((byte[]) message)); 
+        }
+        
+        final MaplePacketHandler packetHandler = processor.getHandler(packetId);
+        if (packetHandler != null && packetHandler.validateState(client)) {
+            try {
+                packetHandler.handlePacket(lea, client);
+            } catch (final Throwable t) {
+                FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (client.getPlayer() == null ? "" : "player ; " + client.getPlayer() + " on map ; " + client.getPlayer().getMapId() + " - ") + "account ; " + client.getAccountName() + "\r\n" + lea.toString());
+                //client.announce(MaplePacketCreator.enableActions());//bugs sometimes
+            }
+        }
+    }
+    
 
     public static void handlePacket(final RecvPacketOpcode header, final LittleEndianAccessor slea, final MapleClient c) throws Exception {
         if (ServerConfig.logPackets && !isSpamHeader(header)) {
@@ -612,9 +663,9 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case CHAR_SELECT:
                 //CharLoginHandler.Character_WithoutSecondPassword(slea, c, true, false);
             	//CharLoginHandler.Character_WithSecondPassword(slea, c, false);
+            	CharLoginHandler.Character_WithSecondPassword(slea, c, true);
                 break;
             case VIEW_SELECT_PIC:
-                CharLoginHandler.Character_WithSecondPassword(slea, c, true);
                 break;
             case AUTH_SECOND_PASSWORD:
                 CharLoginHandler.Character_WithSecondPassword(slea, c, false);

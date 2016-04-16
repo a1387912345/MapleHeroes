@@ -22,10 +22,9 @@
 package net;
 
 import client.MapleClient;
-//import tools.data.LittleEndianAccessor;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.LittleEndianAccessor;
 
 public interface MaplePacketHandler {
-    void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c);
+    void handlePacket(final LittleEndianAccessor lea, final MapleClient c);
     boolean validateState(final MapleClient c);
 }

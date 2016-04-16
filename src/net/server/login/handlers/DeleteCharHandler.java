@@ -2,7 +2,7 @@ package net.server.login.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class DeleteCharHandler extends AbstractMaplePacketHandler {
@@ -12,16 +12,16 @@ public class DeleteCharHandler extends AbstractMaplePacketHandler {
         return c.loginAttempt > 3;
     }
 	
-	public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
-        String secondPassword = slea.readMapleAsciiString();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+        String secondPassword = lea.readMapleAsciiString();
         if (secondPassword == null) {
-            if (slea.readByte() > 0) { // Specific if user have second password or not
-                secondPassword = slea.readMapleAsciiString();
+            if (lea.readByte() > 0) { // Specific if user have second password or not
+                secondPassword = lea.readMapleAsciiString();
             }
-            slea.readMapleAsciiString();
+            lea.readMapleAsciiString();
         }
 
-        final int charid = slea.readInt();
+        final int charid = lea.readInt();
 
         if (!c.login_Auth(charid) || !c.isLoggedIn() || loginFailCount(c)) {
             c.getSession().close();

@@ -145,7 +145,7 @@ public class ByteArrayByteStream {
         if (b) {
             return "All: " + HexTool.toString(arr) + "\nNow: " + nows;
         } else {
-            return "Data: " + nows;
+            return nows;
         }
     }
 

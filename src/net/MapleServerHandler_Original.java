@@ -442,7 +442,7 @@ public class MapleServerHandler_Original extends IoHandlerAdapter implements Map
             c.sl.log(sp);
         }
         final short header_num = slea.readShort();
-        if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.nameOf(header_num)))) {
+        if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(header_num)))) {
             final StringBuilder sb = new StringBuilder("Received data :\n");
             sb.append(HexTool.toString((byte[]) message)).append("\n").append(HexTool.toStringFromAscii((byte[]) message));
             System.out.println(sb.toString());

@@ -19,13 +19,13 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package net;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import net.server.handlers.*;
 import net.server.login.handlers.*;
-import net.login.handler.ClientRequestHandler;
 import net.server.channel.handlers.*;
 
 public final class PacketProcessor {
@@ -53,7 +53,7 @@ public final class PacketProcessor {
         }
         return null;
     }
-
+    
     public void registerHandler(RecvPacketOpcode code, MaplePacketHandler handler) {
         try {
             handlers[code.getValue()] = handler;
@@ -76,34 +76,30 @@ public final class PacketProcessor {
     public void reset(int channel) {
         handlers = new MaplePacketHandler[handlers.length];
 
+        registerHandler(RecvPacketOpcode.AUTH_REQUEST, new AuthRequestHandler());
         registerHandler(RecvPacketOpcode.PONG, new PongHandler());
         registerHandler(RecvPacketOpcode.CRASH_INFO, new CrashHandler());
-        //registerHandler(RecvPacketOpcode.CUSTOM_PACKET, new CustomPacketHandler());
-        if (channel < 0) {//login
+        if (channel < 0) { 
+        	// Login Handlers
+        	registerHandler(RecvPacketOpcode.CLIENT_HELLO, new ClientHelloHandler());
         	registerHandler(RecvPacketOpcode.CLIENT_REQUEST, new ClientRequestHandler());
-            registerHandler(RecvPacketOpcode.ACCEPT_TOS, new AcceptToSHandler());
+        	registerHandler(RecvPacketOpcode.LOGIN_PASSWORD, new LoginPasswordHandler());
+        	registerHandler(RecvPacketOpcode.VIEW_SERVERLIST, new ViewServerListHandler());
             registerHandler(RecvPacketOpcode.REDISPLAY_SERVERLIST, new ServerlistRequestHandler());
             registerHandler(RecvPacketOpcode.CHARLIST_REQUEST, new CharlistRequestHandler());
-            registerHandler(RecvPacketOpcode.CHAR_SELECT, new CharSelectedHandler());
-            registerHandler(RecvPacketOpcode.LOGIN_PASSWORD, new LoginPasswordHandler());
-            //registerHandler(RecvPacketOpcode.RELOG, new RelogRequestHandler());
+            registerHandler(RecvPacketOpcode.CHAR_SELECT, new CharSelectWithPicHandler());
+            registerHandler(RecvPacketOpcode.PLAYER_LOGGEDIN, new PlayerLoggedInHandler());
+            registerHandler(RecvPacketOpcode.ACCEPT_TOS, new AcceptToSHandler()); // Doesn't do anything yet.
             registerHandler(RecvPacketOpcode.SERVERLIST_REQUEST, new ServerlistRequestHandler());
             registerHandler(RecvPacketOpcode.SERVERSTATUS_REQUEST, new ServerStatusRequestHandler());
             registerHandler(RecvPacketOpcode.CHECK_CHAR_NAME, new CheckCharNameHandler());
             registerHandler(RecvPacketOpcode.CREATE_CHAR, new CreateCharHandler());
             registerHandler(RecvPacketOpcode.DELETE_CHAR, new DeleteCharHandler());
-            registerHandler(RecvPacketOpcode.VIEW_ALL_CHAR, new ViewCharHandler());
-            registerHandler(RecvPacketOpcode.PICK_ALL_CHAR, new PickCharHandler());
-            registerHandler(RecvPacketOpcode.REGISTER_PIN, new RegisterPinHandler());
-            registerHandler(RecvPacketOpcode.GUEST_LOGIN, new GuestLoginHandler());
-            registerHandler(RecvPacketOpcode.REGISTER_PIC, new RegisterPicHandler());
+            registerHandler(RecvPacketOpcode.CHAR_SELECT_NO_PIC, new CharSelectWithNoPicHandler());
             registerHandler(RecvPacketOpcode.CHANGE_PIC_REQUEST, new ChangePicHandler());
-            registerHandler(RecvPacketOpcode.CHAR_SELECT_WITH_PIC, new CharSelectedWithPicHandler());
-            registerHandler(RecvPacketOpcode.SET_GENDER, new SetGenderHandler());
-            registerHandler(RecvPacketOpcode.VIEW_ALL_WITH_PIC, new ViewAllCharSelectedWithPicHandler());
-            registerHandler(RecvPacketOpcode.VIEW_ALL_PIC_REGISTER, new ViewAllPicRegisterHandler());
-        } else {
-            //CHANNEL HANDLERS
+        } else { 
+        	// Channel Handlers
+        	/*
             registerHandler(RecvPacketOpcode.CHANGE_CHANNEL, new ChangeChannelHandler());
             registerHandler(RecvPacketOpcode.STRANGE_DATA, LoginRequiringNoOpHandler.getInstance());
             registerHandler(RecvPacketOpcode.GENERAL_CHAT, new GeneralchatHandler());
@@ -226,6 +222,8 @@ public final class PacketProcessor {
             registerHandler(RecvPacketOpcode.REMOTE_STORE, new RemoteStoreHandler());
             registerHandler(RecvPacketOpcode.WEDDING_ACTION, new WeddingHandler());
             registerHandler(RecvPacketOpcode.ADMIN_CHAT, new AdminChatHandler());
+            */
         }
     }
 }
+

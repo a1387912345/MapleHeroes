@@ -1,4 +1,6 @@
 [To Do]
+- Add channel handlers
+- Come up with a better way to find and call a Recv Opcode name rather than iterating through all the opcodes
 - Fix using potions
 - Fix skill cooldowns
 - Fix char spawn stance
@@ -19,6 +21,8 @@
 - Updated MapleBuffStats for INVINCIBLE, BLESS, BLESSED_ENSEMBLE
 - Updated MapScriptMethods for case Advanture_tuto00, Advanture_tuto01, Advanture_tuto11
 - Added PacketProcessor
+- Finished adding login handlers
+- Updated MapleServerHandler to work with PacketProcessor, success!
 
 [4/6/2016]
 - Added ChangePicHandler.handlePacket(); Partially handles changing PIC. It is missing the check for using an old PIC and using repeated characters in PIC.

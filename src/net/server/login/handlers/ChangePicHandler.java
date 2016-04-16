@@ -2,7 +2,7 @@ package net.server.login.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class ChangePicHandler extends AbstractMaplePacketHandler {
@@ -12,7 +12,7 @@ public class ChangePicHandler extends AbstractMaplePacketHandler {
 	}
 	
 	@Override
-	public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
 		final String oldPic = slea.readMapleAsciiString();
     	final String newPic = slea.readMapleAsciiString();
     	int response = 6; // Couldn't process the request - Will never end as 6, but precautionary.

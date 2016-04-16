@@ -23,10 +23,10 @@ package net.server.handlers;
 
 import client.MapleClient;
 import net.MaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.LittleEndianAccessor;
 
 public class PongHandler implements MaplePacketHandler {
-    public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
+    public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
         c.pongReceived();
     }
 

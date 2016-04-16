@@ -49,8 +49,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CREATE_SPECIAL_CHAR(true, (short) 0x7D), // v146 - 0x41; v170 - 0x87
     DELETE_CHAR(true, (short) 0x80), // v146 - 0x2C; v170 - 0x8A; v171 - 0x80
     CHAR_SELECT_NO_PIC(false, (short) 0xA2),// v146 - 0x25; v170 - 0x91; v171 - 0xA2
-    VIEW_SELECT_PIC(true, (short) 0x6B), // v146 - 0x35; v170 - 0x6B; v171 - 0x6B
-    CHAR_SELECT(true, (short) 0x6C), // v146 - 0x31; v170 - 0x6C; v171 - 0x6C
+    CHAR_SELECT(true, (short) 0x6B), // v146 - 0x31; v170 - 0x6B; v171 - 0x6B
+    VIEW_SELECT_PIC(true, (short) 0x6C), // v146 - 0x35; v170 - 0x6C; v171 - 0x6C  Don't know what this is used for
     VIEW_REGISTER_PIC(true, (short) 0x92), // v146 - 0x32; v170 - 0x91 ??  not correct
     CHANGE_PIC_REQUEST(true, (short) 0xA7),  // v146 - 0x33; v170 - 0xA7
     PLAYER_LOGGEDIN(false, (short) 0x6E), // v146 - 0x27; v170 - 0x6E; v171 - 0x6E
@@ -384,7 +384,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
         return CheckState;
     }
 
-    public static String nameOf(short value) {
+    public static String getOpcodeName(short value) {
         for (RecvPacketOpcode header : RecvPacketOpcode.values()) {
             if (header.getValue() == value) {
                 return header.name();

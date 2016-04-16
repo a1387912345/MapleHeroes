@@ -17,26 +17,26 @@ import net.AbstractMaplePacketHandler;
 import net.login.LoginInformationProvider;
 import net.login.LoginInformationProvider.JobType;
 import server.MapleItemInformationProvider;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class CreateCharHandler extends AbstractMaplePacketHandler {
 
-	public void handlePacket(final SeekableLittleEndianAccessor slea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
 		if (!c.isLoggedIn()) {
             c.getSession().close();
             return;
         }
-        final String name = slea.readMapleAsciiString();
+        final String name = lea.readMapleAsciiString();
         int hairColor = -1, hat = -1, bottom = -1, cape = -1, faceMark = -1, ears = -1, tail = -1, shield = -1;
         System.out.println("Creating Character Name: " + name);
         if (!MapleCharacterUtil.canCreateChar(name, false)) {
             System.out.println("[Alert] Character Name Hack: " + name);
             return;
         }
-        final int keySettings = slea.readInt(); // Key Settings
-        slea.readInt(); //-1
-        final int jobType = slea.readInt();
+        final int keySettings = lea.readInt(); // Key Settings
+        lea.readInt(); //-1
+        final int jobType = lea.readInt();
         final JobType job = JobType.getByType(jobType);
         if (job == null) {
             System.out.println("[Notice] New Job Type Found: " + jobType);
@@ -52,9 +52,9 @@ public class CreateCharHandler extends AbstractMaplePacketHandler {
             }
         }
         
-        final short subcategory = slea.readShort();
-        final byte gender = slea.readByte();
-        final byte skin = slea.readByte();
+        final short subcategory = lea.readShort();
+        final byte gender = lea.readByte();
+        final byte skin = lea.readByte();
         /*
          * unk possible variables:
          * 5: Mercedes
@@ -62,41 +62,41 @@ public class CreateCharHandler extends AbstractMaplePacketHandler {
          * 7: Cygnus, DemonSlayer, 
          * 8: Mihile, Shade, Hayato, Kanna
          */
-        final byte unk = slea.readByte();
-        final int face = slea.readInt();
-        int hair = slea.readInt();
+        final byte unk = lea.readByte();
+        final int face = lea.readInt();
+        int hair = lea.readInt();
         
         if (job.hairColor) {
-            hairColor = slea.readInt();
+            hairColor = lea.readInt();
         }
         if (job.skinColor) {
-            slea.readInt();
+            lea.readInt();
         }
         if (job.faceMark) {
-            faceMark = slea.readInt();
+            faceMark = lea.readInt();
         }
         if (job.ears) {
-            ears = slea.readInt();
+            ears = lea.readInt();
         }
         if (job.tail) {
-            tail = slea.readInt();
+            tail = lea.readInt();
         }
         if (job.hat) {
-            hat = slea.readInt();
+            hat = lea.readInt();
         }
-        final int top = slea.readInt();
+        final int top = lea.readInt();
         if (job.bottom) {
-            bottom = slea.readInt();
+            bottom = lea.readInt();
         }
         if (job.cape) {
-            cape = slea.readInt();
+            cape = lea.readInt();
         }
         
-        final int shoes = slea.readInt();
-        final int weapon = slea.readInt();
+        final int shoes = lea.readInt();
+        final int weapon = lea.readInt();
         
-        if (slea.available() >= 4) {
-            shield = slea.readInt();
+        if (lea.available() >= 4) {
+            shield = lea.readInt();
         }
         
         int index = 0;
