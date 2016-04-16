@@ -1,7 +1,7 @@
 package net.chat.handlers;
 
 import client.MapleClient;
-import net.MaplePacketHandler;
+import net.AbstractMaplePacketHandler;
 import constants.ServerConstants.CommandType;
 import server.commands.CommandProcessor;
 import tools.data.LittleEndianAccessor;
@@ -14,19 +14,20 @@ import net.world.MapleMessenger;
 import net.world.MapleMessengerCharacter;
 import net.world.World;
 
-public class GeneralChatHandler implements MaplePacketHandler
+public class GeneralChatHandler extends AbstractMaplePacketHandler
 {
 	@Override
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) 
 	{
-		final String text = lea.readMapleAsciiString();
-		final byte unk = lea.readByte();
-		final MapleCharacter chr = c.getPlayer();
 		System.out.println(lea.toString());
         if (c.getPlayer() != null && c.getPlayer().getMap() != null) 
         {
             c.getPlayer().updateTick(lea.readInt());
-        
+            
+            final String text = lea.readMapleAsciiString();
+    		final byte unk = lea.readByte();
+    		final MapleCharacter chr = c.getPlayer();
+    		
             if (text.length() > 0 && chr != null && chr.getMap() != null && !CommandProcessor.processCommand(c, text, CommandType.NORMAL)) 
             {
             	if (!chr.isIntern() && text.length() >= 80) 
@@ -138,10 +139,4 @@ public class GeneralChatHandler implements MaplePacketHandler
         }
         return packet;
     }
-	@Override
-	public boolean validateState(MapleClient c) 
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

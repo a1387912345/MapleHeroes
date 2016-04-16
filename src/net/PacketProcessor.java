@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import net.server.handlers.*;
 import net.server.login.handlers.*;
+import net.chat.handlers.*;
 import net.server.channel.handlers.*;
 
 public final class PacketProcessor {
@@ -97,12 +98,18 @@ public final class PacketProcessor {
             registerHandler(RecvPacketOpcode.DELETE_CHAR, new DeleteCharHandler());
             registerHandler(RecvPacketOpcode.CHAR_SELECT_NO_PIC, new CharSelectWithNoPicHandler());
             registerHandler(RecvPacketOpcode.CHANGE_PIC_REQUEST, new ChangePicHandler());
+            registerHandler(RecvPacketOpcode.GENERAL_CHAT, new GeneralChatHandler());
+            registerHandler(RecvPacketOpcode.PARTYCHAT, new PartyChatHandler());
+            registerHandler(RecvPacketOpcode.MESSENGER, new MessengerHandler());
+            registerHandler(RecvPacketOpcode.ADMIN_CHAT, new AdminChatHandler());
+
+
+            
         } else { 
         	// Channel Handlers
         	/*
             registerHandler(RecvPacketOpcode.CHANGE_CHANNEL, new ChangeChannelHandler());
             registerHandler(RecvPacketOpcode.STRANGE_DATA, LoginRequiringNoOpHandler.getInstance());
-            registerHandler(RecvPacketOpcode.GENERAL_CHAT, new GeneralchatHandler());
             registerHandler(RecvPacketOpcode.WHISPER, new WhisperHandler());
             registerHandler(RecvPacketOpcode.NPC_TALK, new NPCTalkHandler());
             registerHandler(RecvPacketOpcode.NPC_TALK_MORE, new NPCMoreTalkHandler());
@@ -141,7 +148,6 @@ public final class PacketProcessor {
             registerHandler(RecvPacketOpcode.GIVE_FAME, new GiveFameHandler());
             registerHandler(RecvPacketOpcode.PARTY_OPERATION, new PartyOperationHandler());
             registerHandler(RecvPacketOpcode.DENY_PARTY_REQUEST, new DenyPartyRequestHandler());
-            registerHandler(RecvPacketOpcode.PARTYCHAT, new PartyChatHandler());
             registerHandler(RecvPacketOpcode.USE_DOOR, new DoorHandler());
             registerHandler(RecvPacketOpcode.ENTER_MTS, new EnterMTSHandler());
             registerHandler(RecvPacketOpcode.ENTER_CASHSHOP, new EnterCashShopHandler());
@@ -157,7 +163,6 @@ public final class PacketProcessor {
             registerHandler(RecvPacketOpcode.DENY_GUILD_REQUEST, new DenyGuildRequestHandler());
             registerHandler(RecvPacketOpcode.BBS_OPERATION, new BBSOperationHandler());
             registerHandler(RecvPacketOpcode.SKILL_EFFECT, new SkillEffectHandler());
-            registerHandler(RecvPacketOpcode.MESSENGER, new MessengerHandler());
             registerHandler(RecvPacketOpcode.NPC_ACTION, new NPCAnimation());
             registerHandler(RecvPacketOpcode.CHECK_CASH, new TouchingCashShopHandler());
             registerHandler(RecvPacketOpcode.CASHSHOP_OPERATION, new CashOperationHandler());
@@ -221,7 +226,6 @@ public final class PacketProcessor {
             registerHandler(RecvPacketOpcode.MONSTER_CARNIVAL, new MonsterCarnivalHandler());
             registerHandler(RecvPacketOpcode.REMOTE_STORE, new RemoteStoreHandler());
             registerHandler(RecvPacketOpcode.WEDDING_ACTION, new WeddingHandler());
-            registerHandler(RecvPacketOpcode.ADMIN_CHAT, new AdminChatHandler());
             */
         }
     }
