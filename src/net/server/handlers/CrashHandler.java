@@ -23,10 +23,16 @@ package net.server.handlers;
 
 import client.MapleClient;
 import net.MaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.SendPacketOpcode;
 import tools.data.LittleEndianAccessor;
 
 public class CrashHandler implements MaplePacketHandler {
+	private RecvPacketOpcode recv;
+	
+	public CrashHandler(RecvPacketOpcode recv) {
+		this.recv = recv;
+	}
 	
     public void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
     	slea.skip(12);
@@ -38,4 +44,9 @@ public class CrashHandler implements MaplePacketHandler {
     public boolean validateState(final MapleClient c) {
         return true;
     }
+
+	@Override
+	public RecvPacketOpcode getRecvOpcode() {
+		return recv;
+	}
 }

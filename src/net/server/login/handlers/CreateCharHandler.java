@@ -14,6 +14,7 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.JobConstants;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.login.LoginInformationProvider;
 import net.login.LoginInformationProvider.JobType;
 import server.MapleItemInformationProvider;
@@ -21,6 +22,10 @@ import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class CreateCharHandler extends AbstractMaplePacketHandler {
+
+	public CreateCharHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
 		if (!c.isLoggedIn()) {

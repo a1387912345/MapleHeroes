@@ -19,6 +19,7 @@ import client.inventory.MapleWeaponType;
 import constants.GameConstants;
 import constants.ServerConfig;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.cashshop.CashShopServer;
 import net.cashshop.handler.CashShopOperation;
 import net.channel.ChannelServer;
@@ -52,6 +53,15 @@ import tools.packet.JobPacket.AvengerPacket;
 
 public class PlayerLoggedInHandler extends AbstractMaplePacketHandler {
 
+	public PlayerLoggedInHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+
+	@Override
+	public final boolean validateState(MapleClient c) {
+		return !c.isLoggedIn();
+	}
+	
 	@Override
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
 		lea.readInt();

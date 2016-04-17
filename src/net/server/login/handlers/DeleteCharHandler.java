@@ -2,10 +2,15 @@ package net.server.login.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class DeleteCharHandler extends AbstractMaplePacketHandler {
+
+	public DeleteCharHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	private static boolean loginFailCount(final MapleClient c) {
         c.loginAttempt++;

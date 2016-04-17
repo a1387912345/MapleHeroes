@@ -2,10 +2,15 @@ package net.server.login.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class ChangePicHandler extends AbstractMaplePacketHandler {
+	public ChangePicHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+
 	@Override
 	public boolean validateState(MapleClient c) {
 		return !c.isLoggedIn();

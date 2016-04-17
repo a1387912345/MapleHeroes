@@ -25,6 +25,8 @@ import client.MapleClient;
 import tools.data.LittleEndianAccessor;
 
 public interface MaplePacketHandler {
+	
     void handlePacket(final LittleEndianAccessor lea, final MapleClient c);
     boolean validateState(final MapleClient c);
+    RecvPacketOpcode getRecvOpcode();
 }

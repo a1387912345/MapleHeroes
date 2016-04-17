@@ -7,6 +7,7 @@ import client.MapleClient;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.channel.ChannelServer;
 import net.world.World;
 import tools.data.LittleEndianAccessor;
@@ -14,6 +15,10 @@ import tools.packet.CWvsContext;
 import tools.packet.LoginPacket;
 
 public class CharlistRequestHandler extends AbstractMaplePacketHandler {
+
+	public CharlistRequestHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	@Override
 	public void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
