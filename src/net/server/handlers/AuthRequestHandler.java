@@ -1,5 +1,6 @@
 package net.server.handlers;
 
+import client.MapleCharacter;
 import client.MapleClient;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -14,7 +15,7 @@ public class AuthRequestHandler implements MaplePacketHandler {
 		this.recv = recv;
 	}
 	
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		c.getSession().write(LoginPacket.sendAuthResponse(SendPacketOpcode.AUTH_RESPONSE.getValue() ^ lea.readInt()));
 	}
 

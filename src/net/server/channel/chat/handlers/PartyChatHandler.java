@@ -1,7 +1,8 @@
-package net.chat.handlers;
+package net.server.channel.chat.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import constants.ServerConstants.CommandType;
@@ -12,10 +13,13 @@ import tools.packet.CWvsContext;
 
 public class PartyChatHandler extends AbstractMaplePacketHandler
 {
+	public PartyChatHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c)
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
 	{
-		final MapleCharacter chr = c.getPlayer();
 		final int type = lea.readByte();
 	    final byte numRecipients = lea.readByte();
 	    if (numRecipients <= 0) 

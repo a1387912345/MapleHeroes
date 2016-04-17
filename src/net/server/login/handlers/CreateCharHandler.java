@@ -27,7 +27,7 @@ public class CreateCharHandler extends AbstractMaplePacketHandler {
 		super(recv);
 	}
 
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		if (!c.isLoggedIn()) {
             c.getSession().close();
             return;

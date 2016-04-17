@@ -526,8 +526,8 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             final SharkPacket sp = new SharkPacket((byte[]) message, true);
             client.sl.log(sp);
         }
-        
 
+        
         final MaplePacketHandler packetHandler = processor.getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(client)) {
         	if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(packetId)))) {
@@ -540,7 +540,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 System.out.println(HexTool.toStringFromAscii((byte[]) message)); 
         	}
             try {
-                packetHandler.handlePacket(lea, client);
+                packetHandler.handlePacket(lea, client, client.getPlayer());
             } catch (final Throwable t) {
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (client.getPlayer() == null ? "" : "player ; " + client.getPlayer() + " on map ; " + client.getPlayer().getMapId() + " - ") + "account ; " + client.getAccountName() + "\r\n" + lea.toString());
                 //client.announce(MaplePacketCreator.enableActions());//bugs sometimes

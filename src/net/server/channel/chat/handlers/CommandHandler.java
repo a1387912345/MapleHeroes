@@ -1,17 +1,22 @@
-package net.chat.handlers;
+package net.server.channel.chat.handlers;
 
 import client.MapleClient;
 import client.MapleCharacter;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.channel.ChannelServer;
 import net.world.World;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 
-public class CommandChatHandler extends AbstractMaplePacketHandler
+public class CommandHandler extends AbstractMaplePacketHandler
 {
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c)
+	public CommandHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
 	{
 		final byte mode = lea.readByte();
         lea.readInt(); //ticks

@@ -37,8 +37,7 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(LittleEndianAccessor lea, MapleClient c) {
-		final MapleCharacter chr = c.getPlayer();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		final boolean energy = getRecvOpcode() == RecvPacketOpcode.PASSIVE_ENERGY;
 		
 		if ((chr == null) || ((energy) && (chr.getBuffedValue(MapleBuffStat.ENERGY_CHARGE) == null) && (chr.getBuffedValue(MapleBuffStat.BODY_PRESSURE) == null) && (chr.getBuffedValue(MapleBuffStat.DARK_AURA) == null) && (chr.getBuffedValue(MapleBuffStat.TORNADO) == null) && (chr.getBuffedValue(MapleBuffStat.SUMMON) == null) && (chr.getBuffedValue(MapleBuffStat.RAINING_MINES) == null) && (chr.getBuffedValue(MapleBuffStat.ASURA) == null) && (chr.getBuffedValue(MapleBuffStat.TELEPORT_MASTERY) == null))) {

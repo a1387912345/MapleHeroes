@@ -1,17 +1,21 @@
-package net.chat.handlers;
+package net.server.channel.chat.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.world.World;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CWvsContext;
 
 public class AdminChatHandler extends AbstractMaplePacketHandler
 {
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c)
+	public AdminChatHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
 	{
-		final MapleCharacter chr = c.getPlayer();
 		if (!c.getPlayer().isGM()) 
 		{//if ( (signed int)CWvsContext::GetAdminLevel((void *)v294) > 2 )
             return;

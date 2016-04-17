@@ -25,8 +25,7 @@ public class ChangeMapHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
-		final MapleCharacter chr = c.getPlayer();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		if(c.getPlayer().getMap() == null) {
 			CashShopServer.getPlayerStorage().deregisterPlayer(chr);
 	        c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());

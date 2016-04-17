@@ -30,7 +30,7 @@ public class LoginPasswordHandler implements MaplePacketHandler {
         return c.loginAttempt > 3;
     }
 
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		lea.readByte();
     	String pwd = c.isLocalhost() ? "admin" : lea.readMapleAsciiString();
         String login = c.isLocalhost() ? "admin" : lea.readMapleAsciiString();
@@ -58,9 +58,9 @@ public class LoginPasswordHandler implements MaplePacketHandler {
         } else if (pwd.equalsIgnoreCase("disconnect")) {
             for (WorldOption servers : WorldOption.values()) {
                 if (servers.show() && servers.isAvailable()) {
-                    for (MapleCharacter chr : c.loadCharacters(servers.getWorld())) {
+                    for (MapleCharacter character : c.loadCharacters(servers.getWorld())) {
                         for (ChannelServer cs : ChannelServer.getAllInstances()) {
-                            MapleCharacter victim = cs.getPlayerStorage().getCharacterById(chr.getId());
+                            MapleCharacter victim = cs.getPlayerStorage().getCharacterById(character.getId());
                             if (victim != null) {
                                 victim.getClient().getSession().close();
                                 victim.getClient().disconnect(true, false);

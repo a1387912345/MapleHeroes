@@ -20,7 +20,7 @@ public class ServerlistRequestHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		c.getSession().write(LoginPacket.changeBackground(ServerConstants.backgrounds));
     	if (ServerConstants.TESPIA) {
             for (TespiaWorldOption tespiaservers : TespiaWorldOption.values()) {

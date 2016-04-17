@@ -20,7 +20,7 @@ public class ViewServerListHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		if(lea.readByte() == 0) {
 			c.getSession().write(LoginPacket.changeBackground(ServerConstants.backgrounds));
 	    	if (ServerConstants.TESPIA) {

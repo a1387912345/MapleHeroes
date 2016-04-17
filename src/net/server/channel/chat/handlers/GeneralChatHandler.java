@@ -1,23 +1,23 @@
-package net.chat.handlers;
+package net.server.channel.chat.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import constants.ServerConstants.CommandType;
 import server.commands.CommandProcessor;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
 import client.MapleCharacter;
-import client.MapleCharacterUtil;
-import net.channel.ChannelServer;
-import net.world.MapleMessenger;
-import net.world.MapleMessengerCharacter;
-import net.world.World;
 
 public class GeneralChatHandler extends AbstractMaplePacketHandler
 {
+	public GeneralChatHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+	
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) 
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) 
 	{
 		System.out.println(lea.toString());
         if (c.getPlayer() != null && c.getPlayer().getMap() != null) 
@@ -26,7 +26,6 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
             
             final String text = lea.readMapleAsciiString();
     		final byte unk = lea.readByte();
-    		final MapleCharacter chr = c.getPlayer();
     		
             if (text.length() > 0 && chr != null && chr.getMap() != null && !CommandProcessor.processCommand(c, text, CommandType.NORMAL)) 
             {
@@ -85,6 +84,7 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
             }	
         }
 	}
+	
 	public static byte[] ColourChat(final MapleCharacter chr, String text, final byte unk, short colour) 
 	{
         String rank = "";

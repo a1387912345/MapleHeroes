@@ -1,5 +1,6 @@
 package net.server.login.handlers;
 
+import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -14,7 +15,7 @@ public class ServerStatusRequestHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		// 0 = Select world normally
         // 1 = "Since there are many users, you may encounter some..."
         // 2 = "The concurrent users in this world have reached the max"

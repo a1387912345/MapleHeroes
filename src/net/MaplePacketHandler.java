@@ -21,12 +21,13 @@
 */
 package net;
 
+import client.MapleCharacter;
 import client.MapleClient;
 import tools.data.LittleEndianAccessor;
 
 public interface MaplePacketHandler {
 	
-    void handlePacket(final LittleEndianAccessor lea, final MapleClient c);
+    void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr);
     boolean validateState(final MapleClient c);
     RecvPacketOpcode getRecvOpcode();
 }

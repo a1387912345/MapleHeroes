@@ -18,8 +18,7 @@ public class ChangeChannelHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
-		final MapleCharacter chr = c.getPlayer();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		final boolean room = getRecvOpcode() == RecvPacketOpcode.CHANGE_ROOM_CHANNEL;
 		
 		if (chr == null || chr.hasBlockedInventory() || chr.getEventInstance() != null || chr.getMap() == null || chr.isInBlockedMap() || FieldLimitType.ChannelSwitch.check(chr.getMap().getFieldLimit())) {

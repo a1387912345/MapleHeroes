@@ -15,8 +15,7 @@ public class NPCTalkHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(LittleEndianAccessor lea, MapleClient c) {
-		final MapleCharacter chr = c.getPlayer();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		
 		if (chr == null || chr.getMap() == null) {
             return;

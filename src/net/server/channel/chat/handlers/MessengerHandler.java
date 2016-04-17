@@ -1,9 +1,10 @@
-package net.chat.handlers;
+package net.server.channel.chat.handlers;
 
 import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.world.MapleMessenger;
 import net.world.MapleMessengerCharacter;
 import net.world.World;
@@ -13,7 +14,11 @@ import tools.packet.CWvsContext;
 
 public class MessengerHandler extends AbstractMaplePacketHandler
 {
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c)
+	public MessengerHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
+
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
 	{
 		String input;
         MapleMessenger messenger = c.getPlayer().getMessenger();

@@ -14,9 +14,8 @@ public class CancelChairHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(LittleEndianAccessor lea, MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		final short id = lea.readShort();
-		final MapleCharacter chr = c.getPlayer();
 		
 		if (id == -1) {
             chr.cancelFishingTask();

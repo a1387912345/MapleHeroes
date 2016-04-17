@@ -1,5 +1,6 @@
 package net.server.login.handlers;
 
+import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -17,7 +18,7 @@ public class AcceptToSHandler extends AbstractMaplePacketHandler {
 	}
 	
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 
 	}
 

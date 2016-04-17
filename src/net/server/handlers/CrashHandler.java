@@ -21,6 +21,7 @@
 */
 package net.server.handlers;
 
+import client.MapleCharacter;
 import client.MapleClient;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -34,11 +35,10 @@ public class CrashHandler implements MaplePacketHandler {
 		this.recv = recv;
 	}
 	
-    public void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
-    	slea.skip(12);
-    	short opcode = slea.readShort();
-    	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + ":" + opcode + "] caused a client to crash.");
-    	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + "] " + slea.toString());
+    public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
+    	lea.skip(12);
+    	short opcode = lea.readShort();
+    	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + ":" + opcode + "] caused a client to crash. \t|\t" + lea.toString());
     }
 
     public boolean validateState(final MapleClient c) {

@@ -25,8 +25,7 @@ public class MoveLifeHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(LittleEndianAccessor lea, MapleClient c) {
-		final MapleCharacter chr = c.getPlayer();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		int oid = lea.readInt();
         final MapleMonster monster = chr.getMap().getMonsterByOid(oid);
 

@@ -1,5 +1,6 @@
 package net.server.login.handlers;
 
+import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
@@ -16,7 +17,7 @@ public class CheckCharNameHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		final String name = lea.readMapleAsciiString();
 		boolean nameUsed = true;
 		LoginInformationProvider li = LoginInformationProvider.getInstance();

@@ -21,7 +21,7 @@ public class CharlistRequestHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor slea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor slea, final MapleClient c, MapleCharacter chr) {
 		if (!c.isLoggedIn()) {
             c.getSession().close();
             return;

@@ -63,7 +63,7 @@ public class PlayerLoggedInHandler extends AbstractMaplePacketHandler {
 	}
 	
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		lea.readInt();
         final int charid = lea.readInt();
         

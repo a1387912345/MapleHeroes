@@ -37,8 +37,7 @@ public class TakeDamageHandler extends AbstractMaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(LittleEndianAccessor lea, MapleClient c) {
-		final MapleCharacter chr = c.getPlayer();
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		lea.skip(4);
         chr.updateTick(lea.readInt());
         byte type = lea.readByte();
