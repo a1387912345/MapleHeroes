@@ -1,6 +1,5 @@
 [To Do]
 - Add channel handlers
-- Come up with a better way to find and call a Recv Opcode name rather than iterating through all the opcodes
 - Fix using potions
 - Fix skill cooldowns
 - Fix char spawn stance
@@ -16,6 +15,11 @@
 - Mobs spawn functionality is buggy. Mobs that were previously spawned, freeze when a player re-enters the map.
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
+
+[4/16/2016]
+- Added more channel handlers
+- Created constructors for each handler class to accept the RecvPacketOpcode as an argument.
+- Added getRecvOpcode() to AbstractMaplePacketHandler. This allows handler.getRecvOpcode() to call the specific RecvPacketOpcode that was used.
 
 [4/15/2016]
 - Updated MapleBuffStats for INVINCIBLE, BLESS, BLESSED_ENSEMBLE

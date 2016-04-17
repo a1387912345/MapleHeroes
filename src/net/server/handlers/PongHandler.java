@@ -23,9 +23,16 @@ package net.server.handlers;
 
 import client.MapleClient;
 import net.MaplePacketHandler;
+import net.RecvPacketOpcode;
 import tools.data.LittleEndianAccessor;
 
 public class PongHandler implements MaplePacketHandler {
+	private RecvPacketOpcode recv;
+	
+	public PongHandler(RecvPacketOpcode recv) {
+		this.recv = recv;
+	}
+	
     public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
         c.pongReceived();
     }
@@ -33,4 +40,9 @@ public class PongHandler implements MaplePacketHandler {
     public boolean validateState(final MapleClient c) {
         return true;
     }
+
+	@Override
+	public RecvPacketOpcode getRecvOpcode() {
+		return recv;
+	}
 }

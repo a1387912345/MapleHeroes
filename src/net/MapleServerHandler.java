@@ -527,18 +527,18 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             client.sl.log(sp);
         }
         
-        if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(packetId)))) {
-        	String tab = "";
-        	String recv = RecvPacketOpcode.getOpcodeName(packetId);
-            for (int i = 4; i > Integer.valueOf(recv.length() / 8); i--) {
-                tab += "\t";
-            }
-            System.out.println("[Recv]\t" + recv + tab + "|     " + HexTool.getOpcodeToString(packetId) + "\t|\t" + lea.toString());
-            System.out.println(HexTool.toStringFromAscii((byte[]) message)); 
-        }
-        
+
         final MaplePacketHandler packetHandler = processor.getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(client)) {
+        	if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(packetId)))) {
+        		String tab = "";
+        		String recv = processor.getHandler(packetId).getRecvOpcode().name();
+        		for (int i = 4; i > Integer.valueOf(recv.length() / 8); i--) {
+                    tab += "\t";
+                }
+        		System.out.println("[Recv]\t" + recv + tab + "|     " + HexTool.getOpcodeToString(packetId) + "\t|\t" + lea.toString());
+                System.out.println(HexTool.toStringFromAscii((byte[]) message)); 
+        	}
             try {
                 packetHandler.handlePacket(lea, client);
             } catch (final Throwable t) {

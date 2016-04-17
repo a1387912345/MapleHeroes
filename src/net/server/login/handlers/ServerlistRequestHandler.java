@@ -8,11 +8,16 @@ import constants.ServerConstants;
 import constants.WorldConstants.TespiaWorldOption;
 import constants.WorldConstants.WorldOption;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.login.LoginServer;
 import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class ServerlistRequestHandler extends AbstractMaplePacketHandler {
+
+	public ServerlistRequestHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	@Override
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {

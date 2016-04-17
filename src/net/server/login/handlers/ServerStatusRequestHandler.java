@@ -2,11 +2,16 @@ package net.server.login.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.login.LoginServer;
 import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 
 public class ServerStatusRequestHandler extends AbstractMaplePacketHandler {
+
+	public ServerStatusRequestHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	@Override
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {

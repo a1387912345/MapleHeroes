@@ -2,9 +2,14 @@ package net.server.login.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import tools.data.LittleEndianAccessor;
 
 public class AcceptToSHandler extends AbstractMaplePacketHandler {
+
+	public AcceptToSHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	@Override
 	public boolean validateState(MapleClient c) {

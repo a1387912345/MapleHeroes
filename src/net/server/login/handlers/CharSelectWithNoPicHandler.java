@@ -3,6 +3,7 @@ package net.server.login.handlers;
 import client.MapleClient;
 import constants.WorldConstants.WorldOption;
 import net.AbstractMaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.channel.ChannelServer;
 import net.login.LoginServer;
 import net.login.handler.CharLoginHandler;
@@ -11,6 +12,10 @@ import tools.packet.CField;
 import tools.packet.LoginPacket;
 
 public class CharSelectWithNoPicHandler extends AbstractMaplePacketHandler {
+
+	public CharSelectWithNoPicHandler(RecvPacketOpcode recv) {
+		super(recv);
+	}
 
 	private static boolean loginFailCount(final MapleClient c) {
         c.loginAttempt++;

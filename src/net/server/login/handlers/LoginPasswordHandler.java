@@ -8,6 +8,7 @@ import constants.ServerConfig;
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
 import net.MaplePacketHandler;
+import net.RecvPacketOpcode;
 import net.channel.ChannelServer;
 import net.login.LoginWorker;
 import net.login.handler.AutoRegister;
@@ -18,13 +19,17 @@ import tools.packet.LoginPacket;
 import tools.packet.PacketHelper;
 
 public class LoginPasswordHandler implements MaplePacketHandler {
+	private RecvPacketOpcode recv;
+	
+	public LoginPasswordHandler(RecvPacketOpcode recv) {
+		this.recv = recv;
+	}
 
 	private static boolean loginFailCount(final MapleClient c) {
         c.loginAttempt++;
         return c.loginAttempt > 3;
     }
-	
-	@Override
+
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c) {
 		lea.readByte();
     	String pwd = c.isLocalhost() ? "admin" : lea.readMapleAsciiString();
@@ -114,10 +119,13 @@ public class LoginPasswordHandler implements MaplePacketHandler {
         }
 	}
 
-	@Override
     public boolean validateState(MapleClient c) {
         return !c.isLoggedIn();
     }
+
+	public RecvPacketOpcode getRecvOpcode() {
+		return recv;
+	}
 
     
 

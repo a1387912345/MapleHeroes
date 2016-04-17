@@ -24,9 +24,19 @@ package net;
 import client.MapleClient;
 
 public abstract class AbstractMaplePacketHandler implements MaplePacketHandler {
+	protected RecvPacketOpcode recv;
+	
+	public AbstractMaplePacketHandler(RecvPacketOpcode recv) {
+		this.recv = recv;
+	}
 	
     @Override
     public boolean validateState(final MapleClient c) {
         return c.isLoggedIn();
+    }
+    
+    @Override
+	public RecvPacketOpcode getRecvOpcode() {
+    	return recv;
     }
 }
