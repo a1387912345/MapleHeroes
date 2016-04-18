@@ -893,7 +893,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case CANCEL_BUFF:
                 PlayerHandler.CancelBuffHandler(slea.readInt(), c.getPlayer());
                 break;
-            case MECH_CANCEL:
+            case CANCEL_MECH:
                 PlayerHandler.CancelMech(slea, c.getPlayer());
                 break;
             case CANCEL_ITEM_EFFECT:
@@ -954,7 +954,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 slea.skip(1);
                 PlayerHandler.InnerPortal(slea, c, c.getPlayer());
                 break;
-            case TROCK_ADD_MAP:
+            case TELEPORT_ROCK_ADD_MAP:
                 PlayerHandler.TrockAddMap(slea, c, c.getPlayer());
                 break;
             case LIE_DETECTOR:
@@ -983,7 +983,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case NOTE_ACTION:
                 PlayersHandler.Note(slea, c.getPlayer());
                 break;
-            case USE_DOOR:
+            case USE_MYSTIC_DOOR:
                 PlayersHandler.UseDoor(slea, c.getPlayer());
                 break;
             case USE_MECH_DOOR:
@@ -1313,7 +1313,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 }
                 PetHandler.PetCommand(pet, PetDataFactory.getPetCommand(pet.getPetItemId(), slea.readByte()), c, c.getPlayer());
                 break;
-            case PET_FOOD:
+            case USE_PET_FOOD:
                 PetHandler.PetFood(slea, c, c.getPlayer());
                 break;
             case PET_LOOT:
@@ -1516,7 +1516,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
 
     public static boolean isSpamHeader(RecvPacketOpcode header) {
         switch (header) {
-            case AUTH_REQUEST:
+            //case AUTH_REQUEST:
             case MOVE_LIFE:
             case MOVE_PLAYER:
             case SPECIAL_MOVE:

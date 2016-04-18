@@ -19,13 +19,13 @@ public class QuestActionHandler extends AbstractMaplePacketHandler {
 
 	@Override
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, final MapleCharacter chr) {
+		if (chr == null) {
+            return;
+        }
 		final byte action = lea.readByte();
         int quest = lea.readUShort();
         if (quest == 20734) {
             c.getSession().write(CWvsContext.ultimateExplorer());
-            return;
-        }
-        if (chr == null) {
             return;
         }
         final MapleQuest q = MapleQuest.getInstance(quest);

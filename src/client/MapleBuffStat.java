@@ -10,10 +10,13 @@ public enum MapleBuffStat implements Serializable, Buffstat {
 	 * BuffStats change during big updates. 
 	 * Please comment "Last Updated: vXXX" after every BuffStat to indicate whether it has been updated or not.
 	 */
+    
     WATK(0x80000000, 1), // Last updated: v171
     WDEF(0x20000000, 1), // Last updated: v171
     MATK(0x40000000, 1), // Last updated: v171
-    MDEF(0x8, 1),
+    HP_BOOST(0x4000000, 1, true), //Last updated: v171.3 Note: weapon acc/magic acc pct boost 
+    MP_BOOST(0x6000000, 1, true), // Last updated: v171.3
+    MDEF(0x500, 2), // Last Updated: v171.3
     ACC(0x10, 1),
     AVOID(0x2000, 6), // Last updated: v171
     HANDS(0x40, 1),
@@ -24,10 +27,11 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     MAGIC_GUARD(0x4, 2), // Last updated: v171
     DARKSIGHT(0x2, 2), // Last updated: v171
     BOOSTER(0x1, 2), // Last updated: v171
-    POWERGUARD(0x80000000, 3), // Last updated: v171
-    MAXHP(0x2000, 1),
-    MAXMP(0x4000, 1),
+    HOLY_SYMBOL(0x100000, 3), // Last updated: v171.3
     INVINCIBLE(0x10000000, 3), // Last updated: v171.3
+    MAXHP(0x20000000, 3), // Last updated: v171
+    MAXMP(0x40000000, 3), // Last updated: v171
+    POWERGUARD(0x80000000, 3), // Last updated: v171
     SOULARROW(0x20000, 5), // Last updated: v171 ?
     STUN(0x20000, 1),
     POISON(0x40000, 1),
@@ -37,7 +41,6 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     SUMMON(0x200000, 1), //hack buffstat for summons ^.- (does/should not increase damage... hopefully <3)
     WK_CHARGE(0x400000, 1),
     DRAGONBLOOD(0x800000, 1),
-    HOLY_SYMBOL(0x1000000, 1),
     MESOUP(0x2000000, 1),
     Battoujutsu(0x2000000, 11),
     Battoujutsu2(0x80000, 11),
@@ -54,13 +57,13 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     MORPH(0x2, 2),
     RECOVERY(0x400, 3), // Last updated: v171
     MAPLE_WARRIOR(0x200, 3), // Last updated: v171
-    STANCE(0x10, 2),
+    STANCE(0x100, 3), // Last updated: v171.3
     SHARP_EYES(0x80, 3), // Last updated: v171
     MANA_REFLECTION(0x40, 2),
     SEDUCE(0x80, 2),
     SPIRIT_CLAW(0x100, 2), // d
-    INFINITY(0x200, 2),
-    HOLY_SHIELD(0x400, 2), //advanced blessing after ascension
+    HOLY_SHIELD(0x4, 3), // Last updated: v171.3
+    INFINITY(0x8, 3), // Last updated: v171.3
     HAMSTRING(0x800, 2),
     BLIND(0x1000, 2),
     CONCENTRATE(0x2000, 2),
@@ -147,9 +150,9 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     DICE_ROLL(0x40000, 4),//0x100000
     DIVINE_SHIELD(0x80000, 4),//0x200000
     DAMAGE_RATE(0x100000, 4),//0x400000
-    TELEPORT_MASTERY(0x200000, 4),//-2
+    TELEPORT_MASTERY(0x40000000, 6), // Last updated: v171.3
     COMBAT_ORDERS(0x400000, 4),//0x1000000
-    BEHOLDER(0x200000, 4),//-2 ?
+    BEHOLDER(0x10000000, 6), // Last updated: v171.3
     DISABLE_POTENTIAL(0x4000000, 4),
     GIANT_POTION(0x8000000, 4),
     ONYX_SHROUD(0x10000000, 4),
@@ -171,8 +174,6 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     //8 unknown tornado debuff? - hp
     INDIE_PAD(0x400, 5, true), // indiePad
     INDIE_MAD(0x800, 5, true),
-    HP_BOOST(0x1000, 5, true), //0x4000 - 142 - weapon acc/magic acc pct boost
-    MP_BOOST(0x2000, 5, true),
     ANGEL_ACC(0x4000, 5, true),
     ANGEL_AVOID(0x8000, 5, true),//0x20000
     ANGEL_JUMP(0x10000, 5, true),//0x40000
@@ -194,7 +195,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     PVP_FLAG(0x2, 6),
     //4 unknown
     //8 unknown
-    HOLY_MAGIC_SHELL(0x1, 6), //max amount of attacks absorbed
+    HOLY_MAGIC_SHELL(0x10000000, 7), // Last updated: v171.3
     //2 unknown a debuff
     MANY_USES(0x4, 6, true),//was40
     BUFF_MASTERY(0x200, 2), //buff duration increase //was 0x80, 6
@@ -263,7 +264,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     LUMINOUS_GAUGE(0x200, 8),
     DARK_CRESCENDO(0x400, 8),
     BLACK_BLESSING(0x800, 8),
-    PRESSURE_VOID(0x1000, 8),
+    PRESSURE_VOID(0x40, 8), // Last updated: v171.3
     LUNAR_TIDE(0x2000, 8), //hp to damage
     KAISER_COMBO(0x8000, 8),
     KAISER_MORPH_GAUGE(0x8000, 1),//Pure KMS guess..
@@ -317,7 +318,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     HAYATO_ATTACK_SPEED(0x4, 12),//confirm
     HAYATO_STANCE(0x100, 12),//not sure  
     BATTOUJUTSU_STANCEnew(0x40000, 11),
-    CROSS_SURGE(0x8000000, 10),
+    CROSS_SURGE(0x400000, 11), // Last updated: v171.3
     HP_RECOVER(0x4000000, 10),
     PARASHOCK_GUARD(0x80000000, 10, true),
     BLESSED_ENSEMBLE(0x4, 11), // Last updated: v171.3

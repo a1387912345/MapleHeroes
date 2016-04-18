@@ -33,6 +33,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CLIENT_START(false, (short) 0x66),  // v146 - 0x38; v160 - 0x3A, v170 - 0x66
     LOGIN_PASSWORD(false, (short) 0x69), // v146 - 0x40;  v160 - 0x43; v170 - 0x69; v171 - 0x69
     WRONG_PASSWORD(false, (short) 0xA4),//v146 - 0x49; v170 - 0xA4; v171 - 0xA4
+    ACCEPT_TOS(true, (short) 0x9A), // v146 - 0x1D; v171.3 - 0x9A
     /*
      * World Select Opcodes
      */
@@ -54,13 +55,12 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     VIEW_REGISTER_PIC(true, (short) 0x92), // v146 - 0x32; v170 - 0x91 ??  not correct
     CHANGE_PIC_REQUEST(true, (short) 0xA7),  // v146 - 0x33; v170 - 0xA7
     PLAYER_LOGGEDIN(false, (short) 0x6E), // v146 - 0x27; v170 - 0x6E; v171 - 0x6E
+    CHARACTER_CARD(true, (short) 0x8F), // v146 - 0x3C; v171.3 - 0x8F
     
     // Char Select Opcodes - Not Updated Yet
     GUEST_LOGIN(true, (short) 0x16),
-    ACCEPT_TOS(true, (short) 0x9A), // v146 - 0x1D; v171.3 - 0x9A
     CLIENT_FAILED(false, (short) 0x39),
-    PART_TIME_JOB(true, (short) 0x3B),
-    CHARACTER_CARD(true, (short) 0x3C),
+    PART_TIME_JOB(true, (short) 0x3B), 
     ENABLE_LV50_CHAR(true, (short) 0x3D),
     CREATE_LV50_CHAR(true, (short) 0x3E),
     ENABLE_SPECIAL_CREATION(true, (short) 0x3E),
@@ -73,7 +73,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
      */
     CHANGE_MAP(true, (short) 0xAC), // v146 - 0x51; v170 - 0xAA; v171 - 0xAC
     CHANGE_CHANNEL(true, (short) 0xAD), // v146 - 0x52; v171 - 0xAD
-    ENTER_CASH_SHOP(true, (short) 0x54),
+    ENTER_CASH_SHOP(true, (short) 0x54),// v146 - 0x54; v171.3 - 0xB1
     ENTER_FARM(true, (short) 0x57),
     ENTER_AZWAN(true, (short) 0x4D),
     ENTER_AZWAN_EVENT(true, (short) 0x4A),
@@ -103,26 +103,26 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CHANGE_CODEX_SET(true, (short) 0x7A),//79
     CODEX_UNK(true, (short) 0x7B),
     MONSTER_BOOK_DROPS(true, (short) 0x7F),//7C  v146 - 0x7D
-    NPC_TALK(true, (short) 0xD8),//7E v146 - 0x7F; v171 - 0xD8
-    NPC_TALK_MORE(true, (short) 0xDA),//80 v146 - 0x81; v171 - 0xDA
-    NPC_SHOP(true, (short) 0xDB),//81   v146 - 0x82; v171 - 0xDB?
-    STORAGE(true, (short) 0xDC),//83 v171 - 0xDC?
+    NPC_TALK(true, (short) 0xD8),       //v146 - 0x7F; v171 - 0xD8
+    NPC_TALK_MORE(true, (short) 0xDA),  //v146 - 0x81; v171 - 0xDA
+    NPC_SHOP(true, (short) 0xDB),       //v146 - 0x82; v171 - 0xDB
+    STORAGE(true, (short) 0xDC),        //v171 - 0xDC?
     USE_HIRED_MERCHANT(true, (short) 0x85),//84
-    MERCH_ITEM_STORE(true, (short) 0x86),//85
+    MERCH_ITEM_STORE(true, (short) 0x87),//85
     PACKAGE_OPERATION(true, (short) 0x7F),//87
-    MECH_CANCEL(true, (short) 0x89),//87
+    CANCEL_MECH(true, (short) 0x89),//87
     HOLLY(true, (short) 0xF0),
     OWL(true, (short) 0x8C),//8A
     OWL_WARP(true, (short) 0x8D),//8A
-    ITEM_SORT(true, (short) 0xEB),//90  // v146 - 0x92; v171 - 0xEB
-    ITEM_GATHER(true, (short) 0xEA),//91 //v171 - 0xEA
-    ITEM_MOVE(true, (short) 0xEC),//92 // v146 - 0x94; v171 - 0xEC
-    MOVE_BAG(true, (short) 0xED),//93 //v146 - 0x95
+    ITEM_SORT(true, (short) 0xEB),      //v146 - 0x92; v171 - 0xEB
+    ITEM_GATHER(true, (short) 0xEA),    //v171 - 0xEA
+    ITEM_MOVE(true, (short) 0xEC),      //v146 - 0x94; v171 - 0xEC
+    MOVE_BAG(true, (short) 0xED),       //v146 - 0x95
     SWITCH_BAG(true, (short) 0xEE),//94
-    USE_ITEM(true, (short) 0xF1),//96 v146 - 0x98; v171 - 0xF1
-    CANCEL_ITEM_EFFECT(true, (short) 0xF2),//97 v146 - 0x99; v171 - 0xF2
+    USE_ITEM(true, (short) 0xF1),       //v146 - 0x98; v171 - 0xF1
+    CANCEL_ITEM_EFFECT(true, (short) 0xF2),//v146 - 0x99; v171 - 0xF2
     USE_SUMMON_BAG(true, (short) 0x9B),//99
-    PET_FOOD(true, (short) 0x9C),//9A
+    USE_PET_FOOD(true, (short) 0xF5),  //v146 - 0x9C; v171.3 - 0xF5
     USE_MOUNT_FOOD(true, (short) 0x9D),//9B
     USE_SCRIPTED_NPC_ITEM(true, (short) 0x9F),//9C // v146 - 0x9E
     USE_RECIPE(true, (short) 0x9F),//9D
@@ -137,7 +137,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     TOT_GUIDE(true, (short) 0xB5),
     USE_OWL_MINERVA(true, (short) 0xBC),//+1 (v144)
     USE_TELE_ROCK(true, (short) 0xBD),//+1 (v144)
-    USE_RETURN_SCROLL(true, (short) 0xBF),//+1 (v144)
+    USE_RETURN_SCROLL(true, (short) 0x10C), // v146 - 0xBF; v171.3 - 0x10C
     USE_UPGRADE_SCROLL(true, (short) 0xC0),//+1 (v144)
     USE_FLAG_SCROLL(true, (short) 0xC1),//+1 (v144)
     USE_EQUIP_SCROLL(true, (short) 0xC2),//+1 (v144)
@@ -147,34 +147,34 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     USE_CARVED_SEAL(true, (short) 0xC9),//C5
     USE_BAG(true, (short) 0xC9),
     USE_CRAFTED_CUBE(true, (short) 0xCA),
-    USE_MAGNIFY_GLASS(true, (short) 0xCA),//CA v146 - 0xCD
-    DISTRIBUTE_AP(true, (short) 0x125),//CD // v146 - 0x126; v171 - 0x125
-    AUTO_ASSIGN_AP(true, (short) 0x126),//CE // v146 - 0x127; v171 - 0x126
-    HEAL_OVER_TIME(true, (short) 0x128),//CF  v146 - 0xD2; v171 - 0x128
+    USE_MAGNIFY_GLASS(true, (short) 0x11E),  //v146 - 0xCD; v171.3 - 0x11E
+    DISTRIBUTE_AP(true, (short) 0x125),      //v146 - 0x126; v171 - 0x125
+    AUTO_ASSIGN_AP(true, (short) 0x126),     //v146 - 0x127; v171 - 0x126
+    HEAL_OVER_TIME(true, (short) 0x128),     //v146 - 0xD2; v171 - 0x128
     LINK_SKILL(true, (short) 0xD4),//Confirmed
         IDK_1(true, (short) 0x49),
     IDK_2(true, (short) 0x70),
     IDK_3(true, (short) 0x71),
     IDK_4(true, (short) 0xE2),
     
-    DISTRIBUTE_SP(true, (short) 0x12B),//D2 v146 - 0xD5; v171 - 0x12B
-    SPECIAL_MOVE(true, (short) 0x12C),//D3 v146 - 0xD6; v171 - 0x12C
-    CANCEL_BUFF(true, (short) 0x12D),//D4 v146 - 0xD7; v171 - 0x12D
-    SKILL_EFFECT(true, (short) 0x12E),//D5 v146 - 0xD8; v171 - 0x12E ?
-    MESO_DROP(true, (short) 0x12F),//D6 v146 - 0xD9; v171 - 0x12F 
-    GIVE_FAME(true, (short) 0x130),//D7 v146 - 0xDA; v171 - 0x130 ?
-    CHAR_INFO_REQUEST(true, (short) 0x132),//D9 v146 - 0xDC; v171 - 0x132 ?
-    SPAWN_PET(true, (short) 0x133),//DA v146 - 0xDD; v171 - 0x133 ?
-    GET_BOOK_INFO(true, (short) 0x135),//DC v146 - 0xDF; v171 - 0x135 ?
+    DISTRIBUTE_SP(true, (short) 0x12B),    //v146 - 0xD5; v171 - 0x12B
+    SPECIAL_MOVE(true, (short) 0x12C),     //v146 - 0xD6; v171 - 0x12C
+    CANCEL_BUFF(true, (short) 0x12D),      //v146 - 0xD7; v171 - 0x12D
+    SKILL_EFFECT(true, (short) 0x12E),     //v146 - 0xD8; v171 - 0x12E ?c
+    MESO_DROP(true, (short) 0x12F),        //v146 - 0xD9; v171 - 0x12F 
+    GIVE_FAME(true, (short) 0x130),        //v146 - 0xDA; v171 - 0x130 ?
+    CHAR_INFO_REQUEST(true, (short) 0x132),//v146 - 0xDC; v171 - 0x132
+    SPAWN_PET(true, (short) 0x133),        //v146 - 0xDD; v171 - 0x133
+    GET_BOOK_INFO(true, (short) 0x135),    //v146 - 0xDF; v171 - 0x135 ?
     
-    USE_FAMILIAR(true, (short) 0x2C7),// v146 - 0xE0; v171.3 - 0x2C7
-    SPAWN_FAMILIAR(true, (short) 0x30A),// v146 - 0xE1; v171.3 - 0x30A
-    RENAME_FAMILIAR(true, (short) 0xE2),//DF
+    USE_FAMILIAR(true, (short) 0x2C6),     //v146 - 0xE0; v171.3 - 0x2C6
+    SPAWN_FAMILIAR(true, (short) 0x2C7),   //v146 - 0xE1; v171.3 - 0x2C7
+    RENAME_FAMILIAR(true, (short) 0x2C8),  //v146 - 0xE2; v171.3 - 0x2C8
     PET_BUFF(true, (short) 0xE3),//E0
     CANCEL_DEBUFF(true, (short) 0xE4),//E1
     SPECIAL_PORTAL(true, (short) 0x136),        // v146 - 0xE5; v171.3 - 0x136
     USE_INNER_PORTAL(true, (short) 0x137),      // v146 - 0xE6; v171.3 - 0x137
-    TROCK_ADD_MAP(true, (short) 0x138),         // v146 - 0xE7; v171.3 - 0x138?
+    TELEPORT_ROCK_ADD_MAP(true, (short) 0x138), // v146 - 0xE7; v171.3 - 0x138?
     LIE_DETECTOR(true, (short) 0x139),          // v146 - 0xE8; v171.3 - 0x139?
     LIE_DETECTOR_SKILL(true, (short) 0x13A),    // v146 - 0xE9; v171.3 - 0x13A?
     LIE_DETECTOR_RESPONSE(true, (short) 0x13B), // v146 - 0xEA; v171.3 - 0x13B?
@@ -182,7 +182,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     QUEST_ACTION(true, (short) 0x13F),          // v146 - 0xED; v171.3 - 0x13F
     REISSUE_MEDAL(true, (short) 0x140),         // v146 - 0xEE; v171.3 - 0x140?
     BUFF_RESPONSE(true, (short) 0x141),         // v146 - 0xEF; v171.3 - 0x141
-    SKILL_MACRO(true, (short) 0xF5),//was 0xF3
+    SKILL_MACRO(true, (short) 0x147),           // v146 - 0xF5; v171.3 - 0x147
+    SPECIAL_STAT(false, (short) 0x157),         // v146 - 0x10C; v171 - 0x157
     REWARD_ITEM(true, (short) 0xF7),//F2
     ITEM_MAKER(true, (short) 0x999),
     REPAIR_ALL(true, (short) 0xFE),//C7
@@ -223,9 +224,9 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     ADMIN_LOG(true, (short) 0x135),//12D
     BUDDYLIST_MODIFY(true, (short) 0x18A), //12E v146 - 0x137; v171.3 - 0x18A
     NOTE_ACTION(true, (short) 0x999),//127
-    USE_DOOR(true, (short) 0x13A),//131
-    USE_MECH_DOOR(true, (short) 0x13B),//132
-    CHANGE_KEYMAP(true, (short) 0x194), //134 v146 - 0x13D; v171 - 0x194
+    USE_MYSTIC_DOOR(true, (short) 0x190),   //v146 - 0x13A; v171.3 - 0x190
+    USE_MECH_DOOR(true, (short) 0x191),     //v146 - 0x13B; v171.3 - 0x191
+    CHANGE_KEYMAP(true, (short) 0x194),     //v146 - 0x13D; v171.3 - 0x194
     RPS_GAME(true, (short) 0x135),
     RING_ACTION(true, (short) 0x137), // v146 - 0x136; 
     WEDDING_ACTION(true, (short) 0x137),
@@ -265,10 +266,10 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CASSANDRAS_COLLECTION(true, (short) 0x178),//new v145
     BUY_SILENT_CRUSADE(true, (short) 0x128),
     BUDDY_ADD(true, (short) 0x1A2),
-    MOVE_PET(true, (short) 0x1B8),//1A8
-    PET_CHAT(true, (short) 0x1B9),//1A9
-    PET_COMMAND(true, (short) 0x1BA),//1AA
-    PET_LOOT(true, (short) 0x1BB),//1AB
+    MOVE_PET(true, (short) 0x212),    //v146 - 0x1B8; v171.3 - 0x212
+    PET_CHAT(true, (short) 0x213),    //v146 - 0x1B9; v171.3 - 0x213
+    PET_COMMAND(true, (short) 0x214), //v146 - 0x1BA; v171.3 - 0x214
+    PET_LOOT(true, (short) 0x215),    //v146 - 0x1BB; v171.3 - 0x215
     PET_AUTO_POT(true, (short) 0x1BC),//1AC
     PET_IGNORE(true, (short) 0x1BD),//1AD
     MOVE_HAKU(true, (short) 0x1C1),//1B1
@@ -288,8 +289,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     QUEST_ITEM(true, (short) 0x1D6),//1C8
     MOVE_FAMILIAR(true, (short) 0x307),// v146 - 0x1DC; v171.3 - 0x307
     TOUCH_FAMILIAR(true, (short) 0x1DD),//1CD
-    ATTACK_FAMILIAR(true, (short) 0x1DE),//1CE
-    REVEAL_FAMILIAR(true, (short) 0x1DF),//1CF
+    ATTACK_FAMILIAR(true, (short) 0x308),//v146 - 0x1DE; v171.3 - 0x308
+    REVEAL_FAMILIAR(true, (short) 0x308),//v146 - 0x1DF; v171.3 - 0x30A
     QUICK_SLOT(true, (short) 0x1D7),
     PAM_SONG(true, (short) 0x1D8),
     MOVE_LIFE(true, (short) 0x310),//1EC v146 - 0x20B; v171 - 0x310
@@ -315,7 +316,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     START_EVOLUTION(true, (short) 0x186),
     COCONUT(true, (short) 0x999),
     SHIP_OBJECT(true, (short) 0x999),
-    PARTY_SEARCH_START(true, (short) 0x197),
+    PARTY_SEARCH_START(true, (short) 0x34F), //v146 - 0x197; v171.3 - 0x34F
     PARTY_SEARCH_STOP(true, (short) 0x198),
     START_HARVEST(true, (short) 0x251),//22F
     STOP_HARVEST(true, (short) 0x252),//230
@@ -345,7 +346,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     BLACK_FRIDAY(true, (short) 0x2BE),
     UPDATE_RED_LEAF(true, (short) 0x29C),
     //Not Placed:
-    SPECIAL_STAT(false, (short) 0x157),//107 v146 - 0x10C; v171 - 0x157
+    
     UPDATE_HYPER(true, (short) 0x171),//
     RESET_HYPER(true, (short) 0x172),//
     DRESSUP_TIME(true, (short) 0x17F),

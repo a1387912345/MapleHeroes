@@ -1,5 +1,6 @@
 [To Do]
 - Add channel handlers
+- Update/write new MagnifyGlassHandler
 - Fix using potions
 - Fix skill cooldowns
 - Fix char spawn stance
@@ -15,6 +16,15 @@
 - Mobs spawn functionality is buggy. Mobs that were previously spawned, freeze when a player re-enters the map.
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
+
+[4/18/2016]
+- Updated MapleQuest.complete() packets; This fixes the complete quest effect.
+- Updated CWvsContext.getShowItemGain() packets; This fixes the complete quest effect.
+- Updated CField.setBoatState() packets
+
+[4/17/2016]
+- Updated MapleBuffStats for HP_BOOST, MP_BOOST, MDEF, HOLY_SYMBOL, MAXHP, MAXMP, STANCE, HOLY_SHIELD, INFINITY, TELEPORT_MASTERY, BEHOLDER, HOLY_MAGIC_SHELL, PRESSURE_VOID, CROSS_SURGE
+- Added more channel handlers
 
 [4/16/2016]
 - Added more channel handlers

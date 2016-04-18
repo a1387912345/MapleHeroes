@@ -102,9 +102,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     TRADE_LIMIT((short) 0x50),
     UPDATE_GENDER((short) 0x51),//50
     BBS_OPERATION((short) 0x52),//51
-    CHAR_INFO((short) 0x6C),//v146 - 0x55; v171.3 0x6C
-    PARTY_OPERATION((short) 0x6D),//55 v146 - 0x56; v171.3 0x6D
-    MEMBER_SEARCH((short) 0x59),//5A
+    CHAR_INFO((short) 0x6C),      //v146 - 0x55; v171.3 - 0x6C
+    PARTY_OPERATION((short) 0x6D),//v146 - 0x56; v171.3 - 0x6D
+    MEMBER_SEARCH((short) 0x70),  //v146 - 0x59; v171.3 - 0x70
     PARTY_SEARCH((short) 0x5A),//5A
     BOOK_INFO((short) 0x5B),//5A
     CODEX_INFO_RESPONSE((short) 0x5C),//5b,
@@ -165,8 +165,8 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     JOB_UPDATE((short) 0x43),//9B v146 - 0x9E; v171 - 0x42; v171.2 - 0x43
     MAPLE_TV_MSG((short) 0x8D),
     AVATAR_MEGA_RESULT((short) 0x107),//FF
-    AVATAR_MEGA((short) 0x108),//100
-    AVATAR_MEGA_REMOVE((short) 0x109),//101
+    AVATAR_MEGA((short) 0x10D),       //v146 - 0x108; v171.3 - 0x10D
+    AVATAR_MEGA_REMOVE((short) 0x10E),//v146 - 0x109; v171.3 - 0x10E
     POPUP2((short) 0x9D),
     CANCEL_NAME_CHANGE((short) 0x9E),
     CANCEL_WORLD_TRANSFER((short) 0x9F),
@@ -249,8 +249,8 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     OX_QUIZ((short) 0x142),//v145 Guess
     GMEVENT_INSTRUCTIONS((short) 0x143),//v145, Confirmed!
     CLOCK((short) 0x1B7),//v146 - 0x144; v171.3 - 0x1B7
-    BOAT_MOVE((short) 0x145),//v145 Guess
-    BOAT_STATE((short) 0x147),//v145 Guess
+    BOAT_MOVE((short) 0x1B8), //v146 - 0x145; v171.3 - 0x1B8
+    BOAT_STATE((short) 0x1B9),//v146 - 0x147; v171.3 - 0x1B9
     STOP_CLOCK((short) 0x148),//12D
     ARIANT_SCOREBOARD((short) 0x14A),//12F
     PYRAMID_UPDATE((short) 0x14E),//131
@@ -293,15 +293,15 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     NETT_PYRAMID((short) 0x166),
     SET_PHASE((short) 0x167),
     PAMS_SONG((short) 0x168),
-    SPAWN_PET((short) 0x192),//+2
+    SPAWN_PET((short) 0x227),          //v146 - 0x192; v171.3 - 0x227
     SPAWN_PET_2((short) 0x194),//+2
-    MOVE_PET((short) 0x195),           //v146 - 0x195; v171.3 - 0x228
+    MOVE_PET((short) 0x228),           //v146 - 0x195; v171.3 - 0x228
     PET_CHAT((short) 0x196),//+2
     PET_NAMECHANGE((short) 0x197),//+2
-    PET_EXCEPTION_LIST((short) 0x198),//+2
+    PET_EXCEPTION_LIST((short) 0x22C), //v146 - 0x198; v171.3 - 0x22C
     PET_COLOR((short) 0x199),//+2
     PET_SIZE((short) 0x19A),//+2
-    PET_COMMAND((short) 0x19B),//+2
+    PET_COMMAND((short) 0x231),        //v146 - 0x19B; v171.3 - 0x231
     DRAGON_SPAWN((short) 0x19C),//+2
     INNER_ABILITY_RESET_MSG((short) 0x175),//+2
     DRAGON_MOVE((short) 0x19D),//+2
@@ -311,12 +311,12 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     ANDROID_EMOTION((short) 0x1A1),     //v146 - 0x1A1; v171.3 - 0x237
     ANDROID_UPDATE((short) 0x1A2),      //v146 - 0x1A2; v171.3 - 0x238
     ANDROID_DEACTIVATED((short) 0x1A3), //v146 - 0x1A3; v171.3 - 0x239
-    SPAWN_FAMILIAR((short) 0x1AA),//+2
+    SPAWN_FAMILIAR((short) 0x249),      //v146 - 0x1AA; v171.3 - 0x249
     MOVE_FAMILIAR((short) 0x1AB),//+2
     TOUCH_FAMILIAR((short) 0x1AC),//+2
-    ATTACK_FAMILIAR((short) 0x1AD),//+2
+    ATTACK_FAMILIAR((short) 0x1AD),     //v146 - 0x1AD; v171.3 - 0x24F
     RENAME_FAMILIAR((short) 0x1AE),//+2
-    SPAWN_FAMILIAR_2((short) 0x1AF),//+2
+    RESPAWN_FAMILIAR((short) 0x24E),    //v146 - 0x1AF; v171.3 - 0x24E
     UPDATE_FAMILIAR((short) 0x1B0),//+2
     HAKU_CHANGE_1((short) 0x1A4),//+2
     HAKU_CHANGE_0((short) 0x1A7),//+2
@@ -393,7 +393,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     FOLLOW_MSG((short) 0x211),//1E7
     AP_SP_EVENT((short) 0x215),//1E9
     QUEST_GUIDE_NPC((short) 0x214),//1EA
-    REGISTER_FAMILIAR((short) 0x218),//1F1
+    REGISTER_FAMILIAR((short) 0x32E), //v146 - 0x218; v171.3 - 0x32E
     FAMILIAR_MESSAGE((short) 0x219),//1F2
     CREATE_ULTIMATE((short) 0x21C),//1F3
     HARVEST_MESSAGE((short) 0x21E),//1F5
@@ -410,9 +410,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     MOVE_SCREEN_X((short) 0x199),//199
     MOVE_SCREEN_DOWN((short) 0x19A),//19A
     CAKE_PIE_INSTRUMENTS((short) 0x19B),//
-    COOLDOWN((short) 0x34A),//was 263 v146 - 0x269; v171.3 - 0x34A
-    SPAWN_SUMMON((short) 0x26B),//+5
-    REMOVE_SUMMON((short) 0x26C),//+5 // v146 - 0x26C; v171.3 - 0x34D ?
+    COOLDOWN((short) 0x34A),          //v146 - 0x269; v171.3 - 0x34A
+    SPAWN_SUMMON((short) 0x26B),      //v146 - 0x26B; v171.3 - 0x34C
+    REMOVE_SUMMON((short) 0x26C),     //v146 - 0x26C; v171.3 - 0x34D
     MOVE_SUMMON((short) 0x26D),//+5
     SUMMON_ATTACK((short) 0x26E),//+5
     PVP_SUMMON((short) 0x26F),//+5
@@ -429,7 +429,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     APPLY_MONSTER_STATUS((short) 0x364),//244 v146 - 0x27E; v171 - 0x363; v171.2 - 0x364 ?
     CANCEL_MONSTER_STATUS((short) 0x365),//245 v146 - 0x27F; v171 - 0x364; v171.2 - 0x365 ?
     DAMAGE_MONSTER((short) 0x36C),//248 v146 - 0x282; v171 - 0x36B; v171.2 - 0x36C ?
-    SKILL_EFFECT_MOB((short) 0x36D),//249 v146 - 0x283; v171 - 36C; v171.2 - 0x36D ?
+    SKILL_EFFECT_MOB((short) 0x36D),//249 v146 - 0x283; v171 - 0x36C; v171.2 - 0x36D ?
     TELE_MONSTER((short) 0x999), //todo sniff
     MONSTER_SKILL((short) 0x38F), //v146 - 0x369; v171.3 - 0x38F, or 0x369 is the old one
     MONSTER_CRC_CHANGE((short) 0x36A),//24B
@@ -692,7 +692,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
              case ANDROID_MOVE:
              case INVENTORY_OPERATION:
             case MOVE_PET:
-            case SHOW_SPECIAL_EFFECT:
+            //case SHOW_SPECIAL_EFFECT:
             case DROP_ITEM_FROM_MAPOBJECT:
             case REMOVE_ITEM_FROM_MAP:
             //case UPDATE_PARTYMEMBER_HP:

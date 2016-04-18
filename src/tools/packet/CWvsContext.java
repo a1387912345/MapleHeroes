@@ -3248,7 +3248,7 @@ public class CWvsContext {
 
             if (inChat) {
                 mplew.writeShort(SendPacketOpcode.SHOW_SPECIAL_EFFECT.getValue());
-                mplew.write(5);
+                mplew.write(7);
                 mplew.write(1);
                 mplew.writeInt(itemId);
                 mplew.writeInt(quantity);

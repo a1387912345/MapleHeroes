@@ -1,4 +1,4 @@
-package net.server.channel.chat.handlers;
+package net.server.channel.handlers.chat;
 
 import client.MapleCharacter;
 import client.MapleCharacterUtil;

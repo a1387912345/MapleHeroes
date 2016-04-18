@@ -26,6 +26,7 @@ import client.MapleClient;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.SendPacketOpcode;
+import tools.HexTool;
 import tools.data.LittleEndianAccessor;
 
 public class CrashHandler implements MaplePacketHandler {
@@ -38,7 +39,7 @@ public class CrashHandler implements MaplePacketHandler {
     public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
     	lea.skip(12);
     	short opcode = lea.readShort();
-    	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + ":" + opcode + "] caused a client to crash. \t|\t" + lea.toString());
+    	System.out.println("[Crash]" + SendPacketOpcode.getOpcodeName((int)opcode) + "\t|\t" + chr.getName() + "\t|\t" + HexTool.getOpcodeToString(opcode) + "\t|\t" + lea.toString());
     }
 
     public boolean validateState(final MapleClient c) {

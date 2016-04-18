@@ -726,7 +726,7 @@ public class CField {
 
         mplew.writeShort(SendPacketOpcode.BOAT_STATE.getValue());
         mplew.write(effect);
-        mplew.write(1);
+        mplew.write(0);
 
         return mplew.getPacket();
     }
@@ -1705,7 +1705,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
     public static byte[] spawnFamiliar(MonsterFamiliar mf, boolean spawn, boolean respawn) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-        mplew.writeShort(respawn ? SendPacketOpcode.SPAWN_FAMILIAR_2.getValue() : SendPacketOpcode.SPAWN_FAMILIAR.getValue());
+        mplew.writeShort(respawn ? SendPacketOpcode.RESPAWN_FAMILIAR.getValue() : SendPacketOpcode.SPAWN_FAMILIAR.getValue());
         mplew.writeInt(mf.getCharacterId());
         mplew.write(spawn ? 1 : 0);
         mplew.write(respawn ? 1 : 0);
