@@ -526,7 +526,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             final SharkPacket sp = new SharkPacket((byte[]) message, true);
             client.sl.log(sp);
         }
-
         
         final MaplePacketHandler packetHandler = processor.getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(client)) {
@@ -545,6 +544,15 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (client.getPlayer() == null ? "" : "player ; " + client.getPlayer() + " on map ; " + client.getPlayer().getMapId() + " - ") + "account ; " + client.getAccountName() + "\r\n" + lea.toString());
                 //client.announce(MaplePacketCreator.enableActions());//bugs sometimes
             }
+        } else if(ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(packetId)))){
+        	String tab = "";
+    		String recv = "UNKNOWN";
+    		for (int i = 4; i > Integer.valueOf(recv.length() / 8); i--) {
+                tab += "\t";
+            }
+
+        	System.out.println("[Recv]\t" + recv + tab + "|     " + HexTool.getOpcodeToString(packetId) + "\t|\t" + lea.toString());
+            System.out.println(HexTool.toStringFromAscii((byte[]) message)); 
         }
     }
     
@@ -560,7 +568,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         }
         switch (header) {
         	case CRASH_INFO:
-        		crashHandler(slea, c);
+        		//crashHandler(slea, c);
         		break;
         /*    case LOGIN_REDIRECTOR:
                 System.out.println("Redirector login received");
@@ -1516,7 +1524,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
 
     public static boolean isSpamHeader(RecvPacketOpcode header) {
         switch (header) {
-            //case AUTH_REQUEST:
+            case AUTH_REQUEST:
             case MOVE_LIFE:
             case MOVE_PLAYER:
             case SPECIAL_MOVE:
@@ -1548,10 +1556,4 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         return false;
     }
     
-    public static void crashHandler(final LittleEndianAccessor slea, final MapleClient c) {
-    	slea.skip(12);
-    	short opcode = slea.readShort();
-    	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + ":" + opcode + "] caused a client to crash.");
-    	System.out.println("[" + SendPacketOpcode.getOpcodeName((int)opcode) + "] " + slea.toString());
-    }
 }

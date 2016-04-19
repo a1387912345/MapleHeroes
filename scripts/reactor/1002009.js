@@ -3,5 +3,6 @@ Maple Island Box - drops various items, notably quest items Old Wooden Board and
 */
 
 function act() {
+	rm.dropItems();
 	rm.dropItems(true, 2, 8, 15);
 }

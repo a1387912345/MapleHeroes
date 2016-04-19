@@ -2,3 +2,9 @@
 /.project
 /.classpath
 /.settings/
+/wz/
+/dist/
+/launch.bat
+/config.ini
+/logs/
+/sharklogs/

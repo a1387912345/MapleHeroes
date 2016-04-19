@@ -8,11 +8,12 @@ function start(mode, type, selection) {
     if (mode == 1) {
         status++;
     } else 
-        if (status == 3) {
+        if (status == 1) {
 		    qm.sendNextS("Eh? No? Why? What about your adventures? Your memories? My entertainment?",4,9010010);
             qm.dispose();
         status--;
     }
+	/*
     if (status == 0) {
 	  qm.sendNextS("Hello #b#h0##k!\r\nI'm #bCassandra#k.",4,9010010);
 	} else if (status == 1) {
@@ -32,6 +33,21 @@ function start(mode, type, selection) {
 	  qm.gainItem(4460000,1);
 	  qm.dispose();
 	}
+	*/
+	if (status == 0) {
+		qm.sendNextS("I came to give you a gift. It's an #bExplorer Book#k, kinda like a diary. In this, you can record every exciting adventure you'll ever have! And then I can read about it later!", 4, 9010010);
+	} else if (status == 1) {
+		qm.sendYesNoS("Do you want the #bExplorer Book#k? You do, right?", 16);
+	} else if  (status == 2)  {
+		qm.sendNextS("Wait a minute... I thought I saw a book that's perfect for an Adventurer like you...",4,9010010);
+	} else if  (status == 3)  {
+		qm.sendNextPrevS("Found it!  Here. Take a good look at it after I take off.",4,9010010);
+	} else if  (status == 4)  {
+		qm.sendPrevS("Well, have a blast in your adventures!",4,9010010);
+	} else if  (status == 5)  {
+		qm.forceStartQuest();
+		qm.dispose();
+	}
  }
 
 function end(mode, type, selection) {
@@ -42,9 +58,8 @@ function end(mode, type, selection) {
 	if (status == 0) {
 	    qm.sendNextS("An #bExplorer Book#k? So, I can record all my adventures here?",16);
 	} else if (status == 1) {
-	    qm.sendNextPrevS("I've already had a few adventures, but I still haven't learned much about Maple World. Time for a fresh start! Except...",16);
+	    qm.sendNextPrevS("Perfect! I just started my adventure, so I should get started! But, wait...",16);
 	} else if (status == 2) {
-	    qm.forceStartQuest();
 	    qm.forceCompleteQuest();
         qm.showMapleLeafScene();
 		qm.gainItem(2040804,1);

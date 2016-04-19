@@ -16,7 +16,6 @@ public class DistributeSPHandler extends AbstractMaplePacketHandler {
 
 	public DistributeSPHandler(RecvPacketOpcode recv) {
 		super(recv);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

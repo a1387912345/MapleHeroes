@@ -168,11 +168,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public String getDimensionalMirror(MapleCharacter character) {
         return MapleSlideMenu.SlideMenu0.getSelectionInfo(character, id);
     }
-    
-    
-    
-    
-    
+
     public void ResetInnerPot() {
    //             int itemid = slea.readInt();
      //   short slot = (short) slea.readInt();
@@ -406,7 +402,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             sendSimple(text);
             return;
         }
-        c.getSession().write(NPCPacket.getNPCTalk(id, (byte) 0, text, "00 00", (byte) 0));
+        c.getSession().write(NPCPacket.getNPCTalk(id, (byte) 0, text, "00 00 00 00 00 00"
+        		+ "", (byte) 0));
         lastMsg = 0;
     }
 
@@ -422,7 +419,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             sendSimpleS(text, type);
             return;
         }
-        c.getSession().write(NPCPacket.getNPCTalk(id, (byte) 0, text, "00 00", type, idd));
+        c.getSession().write(NPCPacket.getNPCTalk(id, (byte) 0, text, "00 00 00 00 00 00", type, idd));
         lastMsg = 0;
     }
     

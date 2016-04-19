@@ -12,6 +12,10 @@
 - Fix being unable to attack in Adventurer's second starting map
 - Add MapleTalk Server
 
+[Gameplay/Scripting To Do]
+- Reactor at "Inside the Dangerous Forest" 4000014 doesn't drop "First Explorer Gift Box" 4033915
+- Reactor at "Southperry" 4000030 doesn't drop "Boat Boarding Ticket" 4033914
+
 [Notes]
 - Mobs spawn functionality is buggy. Mobs that were previously spawned, freeze when a player re-enters the map.
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
@@ -25,6 +29,7 @@
 [4/17/2016]
 - Updated MapleBuffStats for HP_BOOST, MP_BOOST, MDEF, HOLY_SYMBOL, MAXHP, MAXMP, STANCE, HOLY_SHIELD, INFINITY, TELEPORT_MASTERY, BEHOLDER, HOLY_MAGIC_SHELL, PRESSURE_VOID, CROSS_SURGE
 - Added more channel handlers
+- Updated RecvPacketOpcode and SendPacketOpcode
 
 [4/16/2016]
 - Added more channel handlers

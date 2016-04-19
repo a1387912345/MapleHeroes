@@ -24,6 +24,18 @@ public class NPCTalkMoreHandler extends AbstractMaplePacketHandler {
             lea.readShort();
         }
         final byte action = lea.readByte(); // 00 = end chat, 01 == follow
+        byte disposeByte;
+        switch(lastMsg) {
+	        case 3: 
+	        case 4:
+	        case 5:
+	        case 9:
+	        	disposeByte = 0;
+	        	break;
+        	default:
+        		disposeByte = (byte)0xFF;
+        		break;
+        }
 
         if (((lastMsg == 0x12 && c.getPlayer().getDirection() >= 0) || (lastMsg == 0x12 && c.getPlayer().getDirection() == -1)) && action == 1) {
             byte lastbyte = lea.readByte(); // 00 = end chat, 01 == follow
@@ -36,6 +48,11 @@ public class NPCTalkMoreHandler extends AbstractMaplePacketHandler {
             return;
         }
         final NPCConversationManager cm = NPCScriptManager.getInstance().getCM(c);
+
+        if(action == disposeByte) {
+        	cm.dispose();
+        	return;
+        } 
         /*if (cm != null && lastMsg == 0x17) {
             c.getPlayer().handleDemonJob(slea.readInt());
             return;
@@ -86,6 +103,8 @@ public class NPCTalkMoreHandler extends AbstractMaplePacketHandler {
                 cm.dispose();
             }
         }
-	}
-
+        
+             
+        
+	}	
 }

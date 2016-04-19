@@ -153,6 +153,10 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.USE_ITEM, new UseItemHandler(RecvPacketOpcode.USE_ITEM));
         registerHandler(RecvPacketOpcode.CANCEL_ITEM_EFFECT, new CancelItemEffectHandler(RecvPacketOpcode.CANCEL_ITEM_EFFECT));
         
+        registerHandler(RecvPacketOpcode.USE_SUMMON_BAG, new UseSummonBagHandler(RecvPacketOpcode.USE_SUMMON_BAG));
+        registerHandler(RecvPacketOpcode.USE_MOUNT_FOOD, new UseMountFoodHandler(RecvPacketOpcode.USE_MOUNT_FOOD));
+        registerHandler(RecvPacketOpcode.USE_SCRIPTED_NPC_ITEM, new UseScriptedNPCItemHandler(RecvPacketOpcode.USE_SCRIPTED_NPC_ITEM));
+
         registerHandler(RecvPacketOpcode.USE_RETURN_SCROLL, new ReturnScrollHandler(RecvPacketOpcode.USE_RETURN_SCROLL));
         
         registerHandler(RecvPacketOpcode.USE_MAGNIFY_GLASS, new MagnifyGlassHandler(RecvPacketOpcode.USE_MAGNIFY_GLASS));

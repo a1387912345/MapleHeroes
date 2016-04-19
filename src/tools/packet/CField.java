@@ -3455,13 +3455,13 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.writeInt(npc);
             mplew.write(0);//v141, boolean if true another int
             mplew.write(msgType);
-            mplew.write(0);
-            mplew.write(type); // mask
+            mplew.writeShort(type); // mask
             if ((type & 0x4) != 0) {
                 mplew.writeInt(diffNPC);
             }
             mplew.writeMapleAsciiString(talk);
             mplew.write(HexTool.getByteArrayFromHexString(endBytes));
+            
             return mplew.getPacket();
         }
 
@@ -4568,7 +4568,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
                 mplew.writeInt(0);
             }
             */
-            //mplew.writeZeroBytes(10);
+            mplew.writeZeroBytes(10); // Not correct, just added so wouldn't dc.
 
             System.out.println("ShowBuffEffect");
             return mplew.getPacket();

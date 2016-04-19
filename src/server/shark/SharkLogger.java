@@ -86,7 +86,7 @@ public class SharkLogger {
         	
         }
 
-        File toWrite = new File("./MShark" + sessionID++ + ".msb");
+        File toWrite = new File("./sharklogs/MShark" + sessionID++ + ".msb");
         try {
             toWrite.createNewFile();
             try (FileOutputStream fos = new FileOutputStream(toWrite)) {

@@ -9,7 +9,9 @@ function action(mode, type, selection) {
 	status++;
     else
 	status--;
-    if (status == 0) {
+    if (pi.getQuestStatus(32214)==2){
+        pi.openNpc(10305, "ExplorerTut05");
+    } else if (status == 0) {
 	    cm.sendNext("The ship isn't ready to set sail yet.");
 		cm.dispose();
     }

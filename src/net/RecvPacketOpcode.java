@@ -121,10 +121,10 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     SWITCH_BAG(true, (short) 0xEE),//94
     USE_ITEM(true, (short) 0xF1),       //v146 - 0x98; v171 - 0xF1
     CANCEL_ITEM_EFFECT(true, (short) 0xF2),//v146 - 0x99; v171 - 0xF2
-    USE_SUMMON_BAG(true, (short) 0x9B),//99
-    USE_PET_FOOD(true, (short) 0xF5),  //v146 - 0x9C; v171.3 - 0xF5
-    USE_MOUNT_FOOD(true, (short) 0x9D),//9B
-    USE_SCRIPTED_NPC_ITEM(true, (short) 0x9F),//9C // v146 - 0x9E
+    USE_SUMMON_BAG(true, (short) 0xF4),       //v146 - 0x9B; v171.3 - 0xF4
+    USE_PET_FOOD(true, (short) 0xF5),         //v146 - 0x9C; v171.3 - 0xF5
+    USE_MOUNT_FOOD(true, (short) 0xF6),       //v146 - 0x9D; v171.3 - 0xF6
+    USE_SCRIPTED_NPC_ITEM(true, (short) 0xF7),//v146 - 0x9E; v171.3 - 0xF7
     USE_RECIPE(true, (short) 0x9F),//9D
     USE_NEBULITE(true, (short) 0xA1),//9E  v146 - 0xA0
     USE_ALIEN_SOCKET(true, (short) 0xA1),//9F
@@ -160,7 +160,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     DISTRIBUTE_SP(true, (short) 0x12B),    //v146 - 0xD5; v171 - 0x12B
     SPECIAL_MOVE(true, (short) 0x12C),     //v146 - 0xD6; v171 - 0x12C
     CANCEL_BUFF(true, (short) 0x12D),      //v146 - 0xD7; v171 - 0x12D
-    SKILL_EFFECT(true, (short) 0x12E),     //v146 - 0xD8; v171 - 0x12E ?c
+    SKILL_EFFECT(true, (short) 0x12E),     //v146 - 0xD8; v171 - 0x12E ?
     MESO_DROP(true, (short) 0x12F),        //v146 - 0xD9; v171 - 0x12F 
     GIVE_FAME(true, (short) 0x130),        //v146 - 0xDA; v171 - 0x130 ?
     CHAR_INFO_REQUEST(true, (short) 0x132),//v146 - 0xDC; v171 - 0x132
@@ -211,7 +211,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     PARTYCHAT(true, (short) 0x175),          //v146 - 0x127; v171.3 - 0x175
     COMMAND(true, (short) 0x177),            //v146 - 0x129; v171.3 - 0x177
     SPOUSE_CHAT(true, (short) 0x12A),//122
-    MESSENGER(true, (short) 0x12B),//123
+    MESSENGER(true, (short) 0x12A),//123 v146 - 0x12B
     PLAYER_INTERACTION(true, (short) 0x179), //v146 - 0x12C; v171.3 - 0x179
     PARTY_OPERATION(true, (short) 0x17A),    //v146 - 0x12D; v171.3 - 0x17A
     PARTY_REQUEST(true, (short) 0x17B),      //v146 - 0x12E; v171.3 - 0x17B

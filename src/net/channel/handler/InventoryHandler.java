@@ -439,7 +439,7 @@ public class InventoryHandler {
 
         if (!FieldLimitType.PotionUse.check(chr.getMap().getFieldLimit())) { //cwk quick hack
             if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {
-                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 0, false); // remember to change the amount back
+                MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false); // remember to change the amount back
                 if (chr.getMap().getConsumeItemCoolTime() > 0) {
                     chr.setNextConsume(time + (chr.getMap().getConsumeItemCoolTime() * 1000));
                 }

@@ -310,9 +310,7 @@ public class CreateCharHandler extends AbstractMaplePacketHandler {
                 || job == JobType.Evan
                 || job == JobType.Jett
                 || job == JobType.Mihile) {
-            StarterItems = new int[]{1442071, 1442050, 1402053, 1412035, 1422039, 1302033,
-                1372046, 1382062, 1452062, 1462056, 1332081, 1472077,
-                1482029, 1492000, 1102041, 1102042, 1082146};//Just every possibly needed EQ
+            StarterItems = new int[]{};
         }
         if (job == JobType.AngelicBuster) {
             StarterItems = new int[]{1222062, 1352601, 1102041, 1102042, 1082146};
