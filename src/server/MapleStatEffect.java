@@ -3407,9 +3407,13 @@ public class MapleStatEffect implements Serializable {
         if (!isMonsterRiding() && !isMechDoor() && getSummonMovementType() == null) {
             applyto.cancelEffect(this, true, -1, localstatups);
         }
+        SkillProcessor processor = SkillProcessor.getProcessor();
+        SkillHandler skillHandler = processor.getHandler(sourceid);
         // Broadcast effect to self
         if (normal && localstatups.size() > 0) {
-            applyto.getClient().getSession().write(BuffPacket.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups, this));
+            //applyto.getClient().getSession().write(BuffPacket.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups, this));
+            applyto.getClient().getSession().write(skillHandler.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups));
+
         }
         final long starttime = System.currentTimeMillis();
         final CancelEffectAction cancelAction = new CancelEffectAction(applyto, this, starttime, localstatups);

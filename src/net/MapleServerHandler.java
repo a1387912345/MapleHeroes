@@ -531,7 +531,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
         if (packetHandler != null && packetHandler.validateState(client)) {
         	if (ServerConfig.logPackets && !isSpamHeader(RecvPacketOpcode.valueOf(RecvPacketOpcode.getOpcodeName(packetId)))) {
         		String tab = "";
-        		String recv = processor.getHandler(packetId).getRecvOpcode().name();
+        		String recv = packetHandler.getRecvOpcode().name();
         		for (int i = 4; i > Integer.valueOf(recv.length() / 8); i--) {
                     tab += "\t";
                 }

@@ -446,7 +446,6 @@ public class LoginPacket {
         if (!viewAll) {
             mplew.write(0);
         }
-        mplew.writeShort(0);
         mplew.write(ranking ? 1 : 0);
         if (ranking) {
             mplew.writeInt(chr.getRank());

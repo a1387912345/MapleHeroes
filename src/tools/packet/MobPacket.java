@@ -302,7 +302,8 @@ public class MobPacket {
         mplew.write(skill2);
         mplew.write(skill3);
         mplew.write(skill4);
-        mplew.writeShort(0);
+        mplew.write(0); // nSkillID
+        mplew.write(0); // v21
         mplew.writeInt(0);
         mplew.writePos(startPos);
         mplew.writeInt(0); // v171
@@ -371,15 +372,23 @@ public class MobPacket {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.SPAWN_MONSTER.getValue());
-        mplew.write(0);//new143
+        mplew.write(0); // bSealedInsteadDead
         mplew.writeInt(life.getObjectId());
-        mplew.write(1);
+        mplew.write(1); // nCalcDamageIndex
         mplew.writeInt(life.getId());
         
-        mplew.write(0); // changeable stats
-        mplew.writeInt(0); // flag 1
-        mplew.writeInt(0x60000000); // flag 2
-        mplew.writeInt(0x57FF8000); // flag 3
+        mplew.write(0); // Forced Mob Stat boolean
+        
+        int[] flag = new int[3];
+        flag[1] |= 0x60000000;
+        flag[2] |= 0x6000000;
+        flag[2] |= 0x4000000;
+        flag[2] |= 0xFF0000;
+        flag[2] |= 0xF000;
+        
+        for (int i = 0; i < flag.length; i++) {
+            mplew.writeInt(flag[i]);
+        }
 
         short monstergen = (short) (life.getObjectId() / 2); // who knows
         for (int i = 0; i < 4; i++) {
@@ -411,6 +420,7 @@ public class MobPacket {
         mplew.writeInt(-1);
         
         mplew.writeInt(0);
+        mplew.write(0);
         mplew.write(0);
         
         /*
@@ -511,10 +521,18 @@ public class MobPacket {
         mplew.write(1);// 1 = Control normal, 5 = Control none?
         mplew.writeInt(life.getId());
         
-        mplew.write(0); // changeable stats
-        mplew.writeInt(0); // flag 1
-        mplew.writeInt(0x60000000); // flag 2
-        mplew.writeInt(0x57FF8000); // flag 3
+        mplew.write(0); // Forced Mob Stat boolean
+        
+        int[] flag = new int[3];
+        flag[1] |= 0x60000000;
+        flag[2] |= 0x6000000;
+        flag[2] |= 0x4000000;
+        flag[2] |= 0xFF0000;
+        flag[2] |= 0xF000;
+        
+        for (int i = 0; i < flag.length; i++) {
+            mplew.writeInt(flag[i]);
+        }
 
         short monstergen = (short) (life.getObjectId() / 2); // who knows
         for (int i = 0; i < 4; i++) {
@@ -532,7 +550,7 @@ public class MobPacket {
         mplew.writeShort(life.getFh());//was0
         mplew.writeShort(life.getFh());
         
-        mplew.writeShort(-1); // -1 if used in controlMonster summonType
+        mplew.writeShort(-2); // -1 if used in controlMonster summonType
         mplew.write(-1); // team
         mplew.writeInt(life.getHp() > 2147483647 ? 2147483647 : (int) life.getHp());
         mplew.writeZeroBytes(21);
@@ -547,7 +565,7 @@ public class MobPacket {
         
         mplew.writeInt(0);
         mplew.write(0);
-        
+        mplew.write(0);
         /*
         mplew.write(spawnType);
         if ((spawnType == -3) || (spawnType >= 0)) {

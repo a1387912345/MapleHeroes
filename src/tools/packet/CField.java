@@ -351,16 +351,18 @@ public class CField {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.WARP_TO_MAP.getValue());
+        
         mplew.writeShort(2);
         mplew.writeLong(1L);
         mplew.writeLong(2L);
-        mplew.writeLong(chr.getClient().getChannel() - 1);
-        mplew.write(0);
-        mplew.write(1);
-        mplew.writeInt(0);
-        mplew.writeInt(0); // 45 05 00 00 
-        mplew.writeInt(0); // 49 03 00 00 item??
-        mplew.write(1);
+        mplew.writeInt(chr.getClient().getChannel() - 1);
+        mplew.write(0); // bDev
+        mplew.writeInt(0); // dwOldDriverId
+        mplew.write(1); // bPopupDlg
+        mplew.writeInt(0); // skip
+        mplew.writeInt(0); // 45 05 00 00 nFieldWidth
+        mplew.writeInt(0); // 49 03 00 00 nFieldHeight
+        mplew.write(1); // bCharacterData
         mplew.writeShort(0);
         chr.CRand().connectData(mplew);
         PacketHelper.addCharacterInfo(mplew, chr);
@@ -371,7 +373,7 @@ public class CField {
         mplew.writeShort(0);
         mplew.write(1);
         mplew.writeZeroBytes(20);
-
+        
         return mplew.getPacket();
     }
 
@@ -892,6 +894,15 @@ public class CField {
         return mplew.getPacket();
     }
 
+    /**
+     * Note: To find MAX_BUFFSTAT, in an IDA go to 
+     * CField::OnPacket -> CUserPool::OnUserEnterField -> 
+     * CUserRemote::Init -> SecondaryStat::DecodeForRemote.
+     * Find the first CInPacket::DecodeBuffer and the 
+     * (field length) = MAX_BUFFSTAT * 4
+     * @param chr
+     * @return
+     */
     public static byte[] spawnPlayerMapobject(MapleCharacter chr) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
@@ -919,29 +930,31 @@ public class CField {
                 mplew.writeZeroBytes(8);
             }
         }
-        mplew.write(1);
-        mplew.writeZeroBytes(12);
+        mplew.write(chr.getGender());
+        mplew.writeInt(chr.getFame());
+        mplew.writeInt(chr.getClient().getFarm().getLevel());
+        mplew.writeInt(0); // nNameTagMark 
         
         final List<Pair<Integer, Integer>> buffvalue = new ArrayList<>();
         final List<Pair<Integer, Integer>> buffvaluenew = new ArrayList<>();
         int[] mask = new int[GameConstants.MAX_BUFFSTAT];
-       /*
-        mask[0] |= -33554432; //-0x2000000
-        mask[1] |= 0x2000;
-        mask[1] |= 0x1000;
-        mask[1] |= 0x200;
-        mask[5] |= 0x20000;
-        mask[5] |= 0x8000;
-        */
         
-        mask[7] |= 0x6000000;
-        mask[10] |= 0xC0;
-        mask[12] |= 0x8000;
-        mask[12] |= 0x400;
-        mask[12] |= 0x20000;
+        mask[7] |= 0x4000000;
+        mask[7] |= 0x2000000;
+        
+        mask[10] |= 0x80;
+        mask[10] |= 0x40;
+        
         mask[12] |= 0x80000000;
-        mask[14] |= 0x8000;
-        mask[14] |= 0x3F0000;
+        mask[12] |= 0x8000;
+        mask[12] |= 0x2000;
+        mask[12] |= 0x100;
+        
+        mask[14] |= 0x2000;
+        mask[14] |= 0x1000;
+        mask[14] |= 0xF00;
+        mask[14] |= 0x80;
+        
         if ((chr.getBuffedValue(MapleBuffStat.DARKSIGHT) != null) || (chr.isHidden())) {
             mask[MapleBuffStat.DARKSIGHT.getPosition(true)] |= MapleBuffStat.DARKSIGHT.getValue();
         }
@@ -1130,37 +1143,36 @@ public class CField {
 
         mplew.writeShort(chr.getJob());
         mplew.writeShort(chr.getSubcategory());
-        mplew.writeZeroBytes(4); 
+        mplew.writeInt(0); // nTotalCHUC
         PacketHelper.addCharLook(mplew, chr, true, false);
         if (GameConstants.isZero(chr.getJob())) {
             PacketHelper.addCharLook(mplew, chr, true, false);
         }
 
-        mplew.writeInt(0);
-        mplew.writeInt(0);
-
-        mplew.writeInt(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //Valentine Effect
-        mplew.writeInt(0);
-        mplew.writeInt(0);
+        mplew.writeInt(0); // dwDriverID
+        mplew.writeInt(0); // dwPassengerID
 
         mplew.writeInt(0);
         mplew.writeInt(0);
         mplew.writeInt(0);
-        MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(124000));
-        mplew.writeInt(stat != null && stat.getCustomData() != null ? Integer.parseInt(stat.getCustomData()) : 0); //title
-        mplew.writeInt(0);
-        mplew.writeInt(0);
-        mplew.writeInt(0);//head title? chr.getHeadTitle()
-        mplew.writeInt(chr.getItemEffect());
-        //mplew.writeInt(chr.getDamageSkin()); // this aint working yet brah
-        mplew.writeInt(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0);
-        mplew.writeInt(0);
-        mplew.writeShort(0); //new v143
-        mplew.writeShort(-1);
         
-        mplew.writeInt(0); // new v171
-        mplew.writeInt(0); // new v171
-        mplew.writeInt(0); // new v171
+        mplew.writeInt(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //Valentine Effect
+        mplew.writeInt(chr.getItemEffect()); // nActiveEffectItemID
+        mplew.writeInt(0); // nMonkeyEffectItemID
+
+        
+        MapleQuestStatus stat = chr.getQuestNoAdd(MapleQuest.getInstance(124000));
+        mplew.writeInt(stat != null && stat.getCustomData() != null ? Integer.parseInt(stat.getCustomData()) : 0); //title //head title? chr.getHeadTitle()
+        mplew.writeInt(chr.getDamageSkin()); // nDamageSkin
+        mplew.writeInt(0); // ptPos.x
+        mplew.writeInt(0); // nDemonWingID
+        mplew.writeInt(0); // nKaiserWingID
+        mplew.writeInt(0); // nKaiserTailID
+        mplew.writeInt(0); // nCompleteSetID
+        mplew.writeShort(-1); // nFieldSeatID
+        mplew.writeInt(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); // nPortableChairID
+        mplew.writeInt(0);
+        mplew.writeInt(0);
         
         mplew.writePos(chr.getTruePosition());
         mplew.write(chr.getStance());
@@ -2105,7 +2117,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         addRingInfo(mplew, rings.getMid());
         addMRingInfo(mplew, rings.getRight(), chr);
         mplew.writeInt(0); // -> charid to follow (4)
-        mplew.writeZeroBytes(6);
+        mplew.writeInt(0);
         
         return mplew.getPacket();
     }
@@ -2447,28 +2459,29 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.DROP_ITEM_FROM_MAPOBJECT.getValue());
-        mplew.write(0);
+        mplew.write(0); // eDropType
         mplew.write(mod);
         mplew.writeInt(drop.getObjectId());
         mplew.write(drop.getMeso() > 0 ? 1 : 0);
-        mplew.writeInt(0);
-        mplew.writeInt(0); // C0 5A BC C0
-        mplew.writeInt(0);
+        mplew.writeInt(0); // bDropMotionType
+        mplew.writeInt(0); // bDropSpeed
+        mplew.writeInt(0); // bNoMove
         mplew.writeInt(drop.getItemId());
         mplew.writeInt(drop.getOwner());
-        mplew.write(drop.getDropType());
+        mplew.write(drop.getDropType()); // nOwnType
         mplew.writePos(dropto);
-        mplew.writeInt(0);
+        mplew.writeInt(0); // dwSourceID
         if (mod != 2) {
             mplew.writePos(dropfrom);
-            mplew.writeShort(0);
+            mplew.writeInt(0); // Delay Time
         }
-        mplew.write(new byte[3]);
+        mplew.write(0); // bExplosiveDrop
+        mplew.write(0); // ??
         if (drop.getMeso() == 0) {
             PacketHelper.addExpirationTime(mplew, drop.getItem().getExpiration());
         }
         mplew.writeShort(drop.isPlayerDrop() ? 0 : 1);
-        mplew.write(new byte[8]);
+        mplew.writeLong(0);
         mplew.write(0); // potential state (1 | 2 | 3 | 4)
         
         return mplew.getPacket();
@@ -3335,6 +3348,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.write(0);
             mplew.writeInt(-1);
             mplew.writeZeroBytes(11);
+            mplew.writeInt(0);
 
             return mplew.getPacket();
         }
@@ -3390,6 +3404,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.write(0);
             mplew.writeInt(-1);
             mplew.writeZeroBytes(11);
+            mplew.writeInt(0);
             
             return mplew.getPacket();
         }
@@ -3399,6 +3414,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.writeShort(SendPacketOpcode.NPC_TOGGLE_VISIBLE.getValue());
             mplew.writeInt(oid);
             mplew.write(hide ? 0 : 1);
+            mplew.write(0); // bViewNameTag
             return mplew.getPacket();
         }
 

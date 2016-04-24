@@ -21,6 +21,10 @@
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
 
+[4/23/2016]
+- Updated RecvPacketOpcode and SendPacketOpcode to v172.1
+- Updated CField.getCharInfo() and CField.spawnPlayerMapobject(); Can now login to the channel
+
 [4/18/2016]
 - Updated MapleQuest.complete() packets; This fixes the complete quest effect.
 - Updated CWvsContext.getShowItemGain() packets; This fixes the complete quest effect.

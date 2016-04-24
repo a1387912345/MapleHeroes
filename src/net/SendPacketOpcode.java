@@ -30,7 +30,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     /*
      * World Select Opcodes
      */
-    CHANGE_BACKGROUND((short) 0x34),//12B   v146 - 0x999   v170 - 0x31; v171.1 - 0x33; v171.2 - 0x34
+    CHANGE_BACKGROUND((short) 0x36),//12B   v146 - 0x999   v170 - 0x31; v171.1 - 0x33; v171.2 - 0x34; v172.1 - 0x36
     SERVERLIST((short) 0x01), // v146 - 0x09;   v160 - 0x09;    v170 - 0x07; v171 - 0x01
     ENABLE_RECOMMENDED((short) 0x02),//1C v146 - 0x1D  v170 - 0x08; v171 - 0x02
     SEND_RECOMMENDED((short) 0x03),//1D   v146 - 0x1E  v170 - 0x09; v171 - 0x03
@@ -44,7 +44,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     DELETE_CHAR_RESPONSE((short) 0x0C), //v146 - 0x0E; v170 - 0x12; v171 - 0x0C
     PIC_RESPONSE((short) 0x18), //v146 - 0x19; v171 - 0x18
     REGISTER_PIC_RESPONSE((short) 0x2A), // v146 - 0x1A; v170 - 0x1F; v171 - 0x2A
-    SECONDPW_ERROR((short) 0x32), // v146 - 0x25; v170 - 0x2F; v171.3 - 0x32
+    SECONDPW_ERROR((short) 0x34), // v146 - 0x25; v170 - 0x2F; v171.3 - 0x32; v172.1 - 0x34
     
     SERVER_IP((short) 0x07),// v146 - 0x0B; v170 - 0x0D; v171 - 0x07
     CHANGE_CHANNEL((short) 0x11),//10 v146 - 0x10; v171.3 - 0x11
@@ -68,20 +68,20 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
      * Question marks (?) next to the latest opcode indicates it is an assumed opcode
      * which was updated through adding a difference, and it has not been tested yet.
      */
-    INVENTORY_OPERATION((short) 0x42),  //v146 - 0x26; v171 - 0x41; v171.2 - 0x42 ?
-    INVENTORY_GROW((short) 0x43),       //v146 - 0x27; v171 - 0x42; v171.2 - 0x43 ?
-    UPDATE_STATS((short) 0x44),         //v146 - 0x28; v171 - 0x43; v171.2 - 0x44
-    GIVE_BUFF((short) 0x45),            //v146 - 0x29; v171 - 0x44; v171.2 - 0x45
-    CANCEL_BUFF((short) 0x46),          //v146 - 0x2A; v171 - 0x45; v171.2 - 0x46
-    TEMP_STATS((short) 0x47),           //v146 - 0x2B; v171 - 0x46; v171.2 - 0x47 ?
-    TEMP_STATS_RESET((short) 0x48),     //v146 - 0x2C; v171 - 0x47; v171.2 - 0x48 ?
-    UPDATE_SKILLS((short) 0x49),        //v146 - 0x2D; v171 - 0x48; v171.2 - 0x49
-    UPDATE_STOLEN_SKILLS((short) 0x4A), //v146 - 0x2E; v171 - 0x49; v171.2 - 0x4A ?
-    TARGET_SKILL((short) 0x4B),         //v146 - 0x2F; v171 - 0x4A; v171.2 - 0x4B ?
-    FAME_RESPONSE((short) 0x53),        //v146 - 0x33; v171.1 - 0x52; v171.2 - 0x53 ?
-    SHOW_STATUS_INFO((short) 0x54),     //v146 - 0x34; v171.1 - 0x53; v171.2 - 0x54
-    FULL_CLIENT_DOWNLOAD((short) 0x55), //v146 - 0x35; v171 - 0x54; v171.2 - 0x55 ?
-    SHOW_NOTES((short) 0x170),          //v146 - 0x36; v170 - 0x71; v171.1 - 0x16F; v171.2 - 0x170
+    INVENTORY_OPERATION((short) 0x44),  //v146 - 0x26; v171 - 0x41; v171.2 - 0x42; v172.1 - 0x44 ?
+    INVENTORY_GROW((short) 0x45),       //v146 - 0x27; v171 - 0x42; v171.2 - 0x43; v172.1 - 0x45 ?
+    UPDATE_STATS((short) 0x46),         //v146 - 0x28; v171 - 0x43; v171.2 - 0x44; v172.1 - 0x46
+    GIVE_BUFF((short) 0x47),            //v146 - 0x29; v171 - 0x44; v171.2 - 0x45; v172.1 - 0x47
+    CANCEL_BUFF((short) 0x48),          //v146 - 0x2A; v171 - 0x45; v171.2 - 0x46; v172.1 - 0x48
+    TEMP_STATS((short) 0x49),           //v146 - 0x2B; v171 - 0x46; v171.2 - 0x47; v172.1 - 0x49 ?
+    TEMP_STATS_RESET((short) 0x4A),     //v146 - 0x2C; v171 - 0x47; v171.2 - 0x48; v172.1 - 0x4A ?
+    UPDATE_SKILLS((short) 0x4B),        //v146 - 0x2D; v171 - 0x48; v171.2 - 0x49; v172.1 - 0x4B
+    UPDATE_STOLEN_SKILLS((short) 0x4C), //v146 - 0x2E; v171 - 0x49; v171.2 - 0x4A; v172.1 - 0x4C ?
+    TARGET_SKILL((short) 0x4D),         //v146 - 0x2F; v171 - 0x4A; v171.2 - 0x4B; v172.1 - 0x4D ?
+    FAME_RESPONSE((short) 0x55),        //v146 - 0x33; v171.1 - 0x52; v171.2 - 0x53; v172.1 - 0x55 ?
+    SHOW_STATUS_INFO((short) 0x56),     //v146 - 0x34; v171.1 - 0x53; v171.2 - 0x54; v172.1 - 0x56
+    FULL_CLIENT_DOWNLOAD((short) 0x57), //v146 - 0x35; v171 - 0x54; v171.2 - 0x55; v172.1 - 0x57 ?
+    SHOW_NOTES((short) 0x170),          //v146 - 0x36; v170 - 0x71; v171.1 - 0x16F; v171.2 - 0x170; v172.1 - 0x
     TROCK_LOCATIONS((short) 0x57),      //v146 - 0x37; v171.3 - 0x57 ?
     LIE_DETECTOR((short) 0x58),         //v146 - 0x38; v171.3 - 0x58 ?
     REPORT_RESPONSE((short) 0x5A),      //v146 - 0x3A; v171.3 - 0x5A ?
@@ -95,27 +95,27 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     AP_RESET((short) 0x63),             //v146 - 0x43; v171.3 - 0x63 ?
     DISTRIBUTE_ITEM((short) 0x64),      //v146 - 0x44; v171.3 - 0x64 ?
     EXPAND_CHARACTER_SLOTS((short) 0x65),//v146 - 0x45; v171.3 - 0x65 ?
-    FINISH_GATHER((short) 0x68),        // v146 - 0x4B; v171 - 0x67; v171.2 - 0x68
-    FINISH_SORT((short) 0x69),          //v146 - 0x4C; v171 - 0x68; v171.2 - 0x69
+    FINISH_GATHER((short) 0x6A),        // v146 - 0x4B; v171 - 0x67; v171.2 - 0x68; v172.1 - 0x6A
+    FINISH_SORT((short) 0x6B),          //v146 - 0x4C; v171 - 0x68; v171.2 - 0x69; v172.1 - 0x6B
     EXP_POTION((short) 0x43),
     REPORT_RESULT((short) 0x4E),
     TRADE_LIMIT((short) 0x50),
     UPDATE_GENDER((short) 0x51),//50
     BBS_OPERATION((short) 0x52),//51
-    CHAR_INFO((short) 0x6C),      //v146 - 0x55; v171.3 - 0x6C
-    PARTY_OPERATION((short) 0x6D),//v146 - 0x56; v171.3 - 0x6D
-    MEMBER_SEARCH((short) 0x70),  //v146 - 0x59; v171.3 - 0x70
+    CHAR_INFO((short) 0x6E),      //v146 - 0x55; v171.3 - 0x6C; v172.1 - 0x6E
+    PARTY_OPERATION((short) 0x6F),//v146 - 0x56; v171.3 - 0x6D; v172.1 - 0x6F
+    MEMBER_SEARCH((short) 0x72),  //v146 - 0x59; v171.3 - 0x70; v172.1 - 0x72
     PARTY_SEARCH((short) 0x5A),//5A
     BOOK_INFO((short) 0x5B),//5A
     CODEX_INFO_RESPONSE((short) 0x5C),//5b,
     EXPEDITION_OPERATION((short) 0x5D),//5c
-    BUDDYLIST((short) 0x76),//5d v146 - 0x5E; v171.1 - 0x75; v171.2 - 0x76
+    BUDDYLIST((short) 0x78),//5d v146 - 0x5E; v171.1 - 0x75; v171.2 - 0x76; v172.1 - 0x78
     GUILD_OPERATION((short) 0x60),//5F
     ALLIANCE_OPERATION((short) 0x61),//60
     SPAWN_PORTAL((short) 0x62),//61
     MECH_PORTAL((short) 0x63),//62
     ECHO_MESSAGE((short) 0x64),//63
-    SERVERMESSAGE((short) 0x7E), //v146 - 0x66; v170 - 0x89; v171.1 - 0x7D; v171.2 - 0x7E
+    SERVERMESSAGE((short) 0x7F), //v146 - 0x66; v170 - 0x89; v171.1 - 0x7D; v171.2 - 0x7E; v172.1 - 0x7F
     ITEM_OBTAIN((short) 0x6A),//68
     PIGMI_REWARD((short) 0x6E),//6C
     OWL_OF_MINERVA((short) 0x6F),//6D
@@ -178,7 +178,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     CANCEL_NAME_CHANGE_2((short) 0xA9),//A6
     SLOT_UPDATE((short) 0x5C),//A7 //v146 - 0xAC; v170 - 0x5B; v171 - 0x5B; v171.2 - 0x5C
     FOLLOW_REQUEST((short) 0xAD),//A8
-    TOP_MSG((short) 0xB3),//A9 v146 - 0xAE; v171 - 0xB2; v171.2 - 0xB3
+    TOP_MSG((short) 0xB4),//A9 v146 - 0xAE; v171 - 0xB2; v171.2 - 0xB3; v172.1 - 0xB4
     MID_MSG((short) 0xB2),//AB
     CLEAR_MID_MSG((short) 0xB3),//AC
     SPECIAL_MSG((short) 0xB4),//AD
@@ -195,7 +195,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     AUTO_CC_MSG((short) 0xBE),//b7
     DISALLOW_DELIVERY_QUEST((short) 0xC2),//bb
     ULTIMATE_EXPLORER((short) 0xC3),//BC
-    SPECIAL_STAT((short) 0xC2), //also profession_info //BD v146 - 0xC4; v171.1 - 0xC1; v171.2 - 0xC2
+    SPECIAL_STAT((short) 0xC3), //also profession_info //BD v146 - 0xC4; v171.1 - 0xC1; v171.2 - 0xC2; v172.1 - 0xC3
     UPDATE_IMP_TIME((short) 0xC5),//BE
     ITEM_POT((short) 0xC6),//BF
     MULUNG_MESSAGE((short) 0xC9),//C2
@@ -223,13 +223,13 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     CANDY_RANKING((short) 0xFF),//F8
     ATTENDANCE((short) 0x10A),//102
     MESSENGER_OPEN((short) 0x10B),//103
-    EVENT_CROWN((short) 0x113),//105 v146 - 0x10D; v171.1 - 0x112; v171.2 - 0x113
+    EVENT_CROWN((short) 0x114),//105 v146 - 0x10D; v171.1 - 0x112; v171.2 - 0x113; v172.1 - 0x114
     MAGIC_WHEEL((short) 0x125),//109
-    REWARD((short) 0x52),//10B  //v146 - 0x126; v170 - 0x52
+    REWARD((short) 0x122),//10B  //v146 - 0x126; v172.1 - 0x122 ?
     SKILL_MACRO((short) 0x127),//10C //127 Outdated?
-    WARP_TO_MAP((short) 0x19E), // v146 - 0x128; v170 - 0x19B; v171.1 - 0x19D; v171.2 - 0x19E
-    FARM_OPEN((short) 0x999),//10E
-    CS_OPEN((short) 0x12B),//110
+    WARP_TO_MAP((short) 0x19F), // v146 - 0x128; v170 - 0x19B; v171.1 - 0x19D; v171.2 - 0x19E; v172.1 - 0x19F
+    FARM_OPEN((short) 0x1A0),//10E v172.1 - 0x1A0
+    CS_OPEN((short) 0x1A1),//110 v146 - 0x12B; v172.1 - 0x1A1
     REMOVE_BG_LAYER((short) 0x12E),//111
     SET_MAP_OBJECT_VISIBLE((short) 0x12F),//112
     RESET_SCREEN((short) 0x12C),//12E?
@@ -237,13 +237,13 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SERVER_BLOCKED((short) 0x130),//etc
     PARTY_BLOCKED((short) 0x131),//etc
     SHOW_EQUIP_EFFECT((short) 0x132),//etc
-    MULTICHAT((short) 0x1A6),    //v146 - 0x134; v171.3 - 0x1A6
-    WHISPER((short) 0x1A8),      //v146 - 0x138; v171.3 - 0x1A8
-    SPOUSE_CHAT((short) 0x1A9),  //v146 - 0x139; v171.3 - 0x1A9
-    BOSS_ENV((short) 0x1AA),     //v146 - 0x13A; v171 - 0x1A9; v171.2 - 0x1AA
-    MOVE_ENV((short) 0x1AB),     //v146 - 0x13B; v171 - 0x1AA; v171.2 - 0x1AB ?
-    UPDATE_ENV((short) 0x1AC),   //v146 - 0x13C; v171 - 0x1AB; v171.2 - 0x1AC ?
-    MAP_EFFECT((short) 0x1B2),   //v146 - 0x13E; v171 - 0x1AD; v171.2 - 0x1B2
+    MULTICHAT((short) 0x1A8),    //v146 - 0x134; v171.3 - 0x1A6; v172.1 - 0x1A8
+    WHISPER((short) 0x1AA),      //v146 - 0x138; v171.3 - 0x1A8; v172.1 - 0x1AA
+    SPOUSE_CHAT((short) 0x1AB),  //v146 - 0x139; v171.3 - 0x1A9; v172.1 - 0x1AB
+    BOSS_ENV((short) 0x1AB),     //v146 - 0x13A; v171 - 0x1A9; v171.2 - 0x1AA; v172.1 - 0x1AB
+    MOVE_ENV((short) 0x1AD),     //v146 - 0x13B; v171 - 0x1AA; v171.2 - 0x1AB; v172.1 - 0x1AD ?
+    UPDATE_ENV((short) 0x1AE),   //v146 - 0x13C; v171 - 0x1AB; v171.2 - 0x1AC; v172.1 - 0x1AE ?
+    MAP_EFFECT((short) 0x1B4),   //v146 - 0x13E; v171 - 0x1AD; v171.2 - 0x1B2; v172.1 - 0x1B4
     CASH_SONG((short) 0x14B),//v145 Guess
     GM_EFFECT((short) 0x141),//v145 , No d/c, but is it right?
     OX_QUIZ((short) 0x142),//v145 Guess
@@ -260,16 +260,16 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     MOVE_PLATFORM((short) 0x156),//135
     PYRAMID_KILL_COUNT((short) 0x154),//137,
     PVP_INFO((short) 0x157),//136
-    DIRECTION_STATUS((short) 0x1CE), // v146 - 0x159; v171.2 - 0x1CE
+    DIRECTION_STATUS((short) 0x1CF), // v146 - 0x159; v171.2 - 0x1CE; v172.1 - 0x1CF
     GAIN_FORCE((short) 0x15A),//CONFIRMED
     INTRUSION((short) 0x162),
     DIFFERENT_IP((short) 0x164),
     ACHIEVEMENT_RATIO((short) 0x159),//13B
-    QUICK_MOVE((short) 0x1D1),// v146 - 0x15C; v171 - 0x1D0; v171.2 - 0x1D1
+    QUICK_MOVE((short) 0x1D2),// v146 - 0x15C; v171 - 0x1D0; v171.2 - 0x1D1; v172.1 - 0x1D2
     SPAWN_OBTACLE_ATOM((short) 0x15D),
-    SPAWN_PLAYER((short) 0x1EE), // v146 - 0x167; v170 - 0x1EB; v171 - 0x1ED; v171.2 - 0x1EE
-    REMOVE_PLAYER_FROM_MAP((short) 0x1EF), // v146 - 0x168; ; v171.2 - 0x1EF
-    CHATTEXT((short) 0x1F0), //v146 - 0x169; v171 - 0x1EF; v171.3 - 0x1F0
+    SPAWN_PLAYER((short) 0x1EF), // v146 - 0x167; v170 - 0x1EB; v171 - 0x1ED; v171.2 - 0x1EE; v172.1 - 0x1EF
+    REMOVE_PLAYER_FROM_MAP((short) 0x1F0), // v146 - 0x168; ; v171.2 - 0x1EF; v172.1 - 0x1F0
+    CHATTEXT((short) 0x1F1), //v146 - 0x169; v171 - 0x1EF; v171.3 - 0x1F0; v172.1 - 0x1F1
     CHATTEXT_1((short) 0x16A),//170
     CHALKBOARD((short) 0x16B),//171
     UPDATE_CHAR_BOX((short) 0x16C),//149
@@ -329,35 +329,35 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
      * Other Player Opcodes
      * These opcodes displays other players' character animations, effects, equips, and etc. 
      */
-    MOVE_PLAYER((short) 0x259),          //v146 - 0x1BA; v171 - 0x258; v171.2 - 0x259
-    CLOSE_RANGE_ATTACK((short) 0x25A),   //v146 - 0x1BC; v171.2 - 0x25A
-    RANGED_ATTACK((short) 0x25B),        //v146 - 0x1BD; v171.2 - 0x25B
-    MAGIC_ATTACK((short) 0x25C),         //v146 - 0x1BE; v171.2 - 0x25C
-    ENERGY_ATTACK((short) 0x25D),        //v146 - 0x1BF; v171.2 - 0x25D ?
-    SKILL_EFFECT((short) 0x25E),         //v146 - 0x1C0; v171.2 - 0x25E ?
-    MOVE_ATTACK((short) 0x25F),          //v146 - 0x1C1; v171.2 - 0x25F ?
-    CANCEL_SKILL_EFFECT((short) 0x260),  //v146 - 0x1C2; v171.2 - 0x260 ?
-    DAMAGE_PLAYER((short) 0x261),        //v146 - 0x1C3; v171.3 - 0x261
-    FACIAL_EXPRESSION((short) 0x262),    //v146 - 0x1C4; v171.3 - 0x262
-    SHOW_EFFECT((short) 0x264),          //v146 - 0x1C6; v171.3 - 0x264 ?
+    MOVE_PLAYER((short) 0x25A),          //v146 - 0x1BA; v171 - 0x258; v171.2 - 0x259; v172.1 - 0x25A
+    CLOSE_RANGE_ATTACK((short) 0x25B),   //v146 - 0x1BC; v171.2 - 0x25A; v172.1 - 0x25B
+    RANGED_ATTACK((short) 0x25C),        //v146 - 0x1BD; v171.2 - 0x25B; v172.1 - 0x25C
+    MAGIC_ATTACK((short) 0x25D),         //v146 - 0x1BE; v171.2 - 0x25C; v172.1 - 0x25D
+    ENERGY_ATTACK((short) 0x25E),        //v146 - 0x1BF; v171.2 - 0x25D; v172.1 - 0x25E ?
+    SKILL_EFFECT((short) 0x25F),         //v146 - 0x1C0; v171.2 - 0x25E; v172.1 - 0x25F ?
+    MOVE_ATTACK((short) 0x260),          //v146 - 0x1C1; v171.2 - 0x25F; v172.1 - 0x260 ?
+    CANCEL_SKILL_EFFECT((short) 0x261),  //v146 - 0x1C2; v171.2 - 0x260; v172.1 - 0x261 ?
+    DAMAGE_PLAYER((short) 0x262),        //v146 - 0x1C3; v171.3 - 0x261; v172.1 - 0x262
+    FACIAL_EXPRESSION((short) 0x263),    //v146 - 0x1C4; v171.3 - 0x262; v172.1 - 0x263
+    SHOW_EFFECT((short) 0x264),          //v146 - 0x1C6; v171.3 - 0x264; v172.1 - 0x264 ?
     SHOW_TITLE((short) 0x266),           //v146 - 0x1C8; v171.3 - 0x266 ?
     ANGELIC_CHANGE((short) 0x267),       //v146 - 0x1C9; v171.3 - 0x267 ?
-    SHOW_CHAIR((short) 0x26B),           //v146 - 0x1CC; v171.3 - 0x26B
-    UPDATE_CHAR_LOOK((short) 0x26C),     //v146 - 0x1CD; v171.3 - 0x26C
-    SHOW_FOREIGN_EFFECT((short) 0x26D),  //v146 - 0x1CE; v171.3 - 0x26D
-    GIVE_FOREIGN_BUFF((short) 0x26E),    //v146 - 0x1CF; v171.3 - 0x26E ?
-    CANCEL_FOREIGN_BUFF((short) 0x26F),  //v146 - 0x1D0; v171.3 - 0x26F ?
-    UPDATE_PARTYMEMBER_HP((short) 0x270),//v146 - 0x1D1; v171.3 - 0x270 ? 
-    LOAD_GUILD_NAME((short) 0x271),      //v146 - 0x1D2; v171.3 - 0x271 ?
-    LOAD_GUILD_ICON((short) 0x272),      //v146 - 0x1D3; v171.3 - 0x272 ?
-    LOAD_TEAM((short) 0x273),            //v146 - 0x1D4; v171.3 - 0x273 ?
+    SHOW_CHAIR((short) 0x26C),           //v146 - 0x1CC; v171.3 - 0x26B; v172.1 - 0x26C
+    UPDATE_CHAR_LOOK((short) 0x26D),     //v146 - 0x1CD; v171.3 - 0x26C; v172.1 - 0x26D
+    SHOW_FOREIGN_EFFECT((short) 0x26E),  //v146 - 0x1CE; v171.3 - 0x26D; v172.1 - 0x26E
+    GIVE_FOREIGN_BUFF((short) 0x26F),    //v146 - 0x1CF; v171.3 - 0x26E; v172.1 - 0x26F
+    CANCEL_FOREIGN_BUFF((short) 0x270),  //v146 - 0x1D0; v171.3 - 0x26F; v172.1 - 0x270
+    UPDATE_PARTYMEMBER_HP((short) 0x271),//v146 - 0x1D1; v171.3 - 0x270; v172.1 - 0x271 ? 
+    LOAD_GUILD_NAME((short) 0x272),      //v146 - 0x1D2; v171.3 - 0x271; v172.1 - 0x272 ?
+    LOAD_GUILD_ICON((short) 0x273),      //v146 - 0x1D3; v171.3 - 0x272; v172.1 - 0x273 ?
+    LOAD_TEAM((short) 0x274),            //v146 - 0x1D4; v171.3 - 0x273; v172.1 - 0x274 ?
     
     SHOW_HARVEST((short) 0x2BC),//1AE
     PVP_HP((short) 0x1D7),//1B0
-    CANCEL_CHAIR((short) 0x215),//1BC v146 - 0x1E6; v171 - 0x214; v171.2 - 0x215
+    CANCEL_CHAIR((short) 0x216),//1BC v146 - 0x1E6; v171 - 0x214; v171.2 - 0x215; v172.1 - 0x216
     DIRECTION_FACIAL_EXPRESSION((short) 0x287),//1BD v146 - 0x1E7; v171 - 0x286; v171.2 - 0x287 ?
     MOVE_SCREEN((short) 0x288),//1BE v146 - 0x1E8; v171 - 0x287; v171.2 - 0x288 ?
-    SHOW_SPECIAL_EFFECT((short) 0x289),//1BF  v146 - 0x1E9; v171 - 0x288; v171.2 - 0x289
+    SHOW_SPECIAL_EFFECT((short) 0x28A),//1BF  v146 - 0x1E9; v171 - 0x288; v171.2 - 0x289; v172.1 - 0x28A
     CURRENT_MAP_WARP((short) 0x28A),//1C0 v146 - 0x1EA; v171 - 0x289; v171.2 - 0x28A ?
     MESOBAG_SUCCESS((short) 0x1EC),//1C2
     MESOBAG_FAILURE((short) 0x1EA),//1C3
@@ -365,17 +365,17 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     R_MESOBAG_FAILURE((short) 0x1EC),//1C5
     MAP_FADE((short) 0x1F0),//1C6
     MAP_FADE_FORCE((short) 0x1F1),//1C7
-    UPDATE_QUEST_INFO((short) 0x28E),//1C8 v146 - 0x1F2; v171.3 - 0x28E ?
+    UPDATE_QUEST_INFO((short) 0x28F),//1C8 v146 - 0x1F2; v171.3 - 0x28E; v172.1 - 0x28F ?
     HP_DECREASE((short) 0x1F0),//1C9
     PLAYER_HINT((short) 0x1F2),//1CB
     PLAY_EVENT_SOUND((short) 0x1F3),//1CC
     PLAY_MINIGAME_SOUND((short) 0x1F4),//1CD
     MAKER_SKILL((short) 0x1F5),//1CE
-    OPEN_UI((short) 0x297),//1D1 v146 - 0x1FB; v171 - 0x296; v171.2 - 0x297
-    OPEN_UI_OPTION((short) 0x29A),//1D3 v146 - 0x1FD; v171 - 0x299; v171.2 - 0x29A ?
-    INTRO_LOCK((short) 0x29B),//1D4 v146 - 0x1FE; v171 - 0x29A; v171.2 - 0x29B
-    INTRO_ENABLE_UI((short) 0x29C), // v146 - 0x1FF; v171 - 0x29B; v171.2 - 0x29C
-    INTRO_DISABLE_UI((short) 0x29D),//1D6 v146 - 0x200; v171 - 0x29C; v171.2 - 0x29D ?
+    OPEN_UI((short) 0x298),//1D1 v146 - 0x1FB; v171 - 0x296; v171.2 - 0x297; v172.1 - 0x298
+    OPEN_UI_OPTION((short) 0x29B),//1D3 v146 - 0x1FD; v171 - 0x299; v171.2 - 0x29A; v172.1 - 0x29B ?
+    INTRO_LOCK((short) 0x29C),//1D4 v146 - 0x1FE; v171 - 0x29A; v171.2 - 0x29B; v172.1 - 0x29C
+    INTRO_ENABLE_UI((short) 0x29D), // v146 - 0x1FF; v171 - 0x29B; v171.2 - 0x29C; v172.1 - 0x29D
+    INTRO_DISABLE_UI((short) 0x29E),//1D6 v146 - 0x200; v171 - 0x29C; v171.2 - 0x29D; v172.1 - 0x29E ?
     SUMMON_HINT((short) 0x29E),//1D7 v146 - 0x201; v171 - 0x29D; v171.2 - 0x29E ?
     SUMMON_HINT_MSG((short) 0x29F),//1D8 v146 - 0x202; v171 - 0x29E; v171.2 - 0x29F ?
     ARAN_COMBO((short) 0x2A0),//1D9 v146 - 0x203; v171 - 0x29F; v171.2 - 0x2A0 ?
@@ -384,7 +384,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     RADIO_SCHEDULE((short) 0x206),//1DC
     OPEN_SKILL_GUIDE((short) 0x207),//1DD
     GAME_MSG((short) 0x209),//1DF
-    GAME_MESSAGE((short) 0x2A8),//1E0 v146 - 0x20A; v171.3 - 0x2A8
+    GAME_MESSAGE((short) 0x2A9),//1E0 v146 - 0x20A; v171.3 - 0x2A8; v172.1 - 0x2A9
     BUFF_ZONE_EFFECT((short) 0x20C),//1E2
     GO_CASHSHOP_SN((short) 0x20D),//1E3
     DAMAGE_METER((short) 0x20E),//1E4
@@ -401,9 +401,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     OPEN_BAG((short) 0x21D),//18B
     DRAGON_BLINK((short) 0x21E),//18C
     PVP_ICEGAGE((short) 0x219),//18D
-    DIRECTION_INFO((short) 0x2B6),//v146 - 0x223; v171 - 02B5; v171.2 - 0x2B6
+    DIRECTION_INFO((short) 0x2B7),//v146 - 0x223; v171 - 02B5; v171.2 - 0x2B6; v172.1 - 0x2B7
     REISSUE_MEDAL((short) 0x222),//18F
-    PLAY_MOVIE((short) 0x2BA),    //v146 - 0x227; v171.3 - 0x2BA
+    PLAY_MOVIE((short) 0x2BB),    //v146 - 0x227; v171.3 - 0x2BA; v172.1 - 0x2BB
     CAKE_VS_PIE((short) 0x225),//1FE
     PHANTOM_CARD((short) 0x229),//1FF
     LUMINOUS_COMBO((short) 0x22A),//202
@@ -421,19 +421,19 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SUMMON_DELAY((short) 0x272),//+5
     DAMAGE_SUMMON((short) 0x273),//+5
     
-    SPAWN_MONSTER((short) 0x35B),//23D v146 - 0x277; v171 - 0x35A; v171.2 - 0x35B
-    KILL_MONSTER((short) 0x35C),//23E v146 - 0x278; v171 - 0x35B; v171.2 - 0x35C
-    SPAWN_MONSTER_CONTROL((short) 0x35D),//23F v146 - 0x279; v171 - 0x35C; v171.2 - 0x35D
-    MOVE_MONSTER((short) 0x361),//241 v146 - 0x27B; v171 - 0x360; v171.2 - 0x361
-    MOVE_MONSTER_RESPONSE((short) 0x362),//242 v171 - 0x361; v171.2 - 0x362
-    APPLY_MONSTER_STATUS((short) 0x364),//244 v146 - 0x27E; v171 - 0x363; v171.2 - 0x364 ?
-    CANCEL_MONSTER_STATUS((short) 0x365),//245 v146 - 0x27F; v171 - 0x364; v171.2 - 0x365 ?
-    DAMAGE_MONSTER((short) 0x36C),//248 v146 - 0x282; v171 - 0x36B; v171.2 - 0x36C ?
-    SKILL_EFFECT_MOB((short) 0x36D),//249 v146 - 0x283; v171 - 0x36C; v171.2 - 0x36D ?
+    SPAWN_MONSTER((short) 0x35D),//23D v146 - 0x277; v171 - 0x35A; v171.2 - 0x35B; v172.1 - 0x35D
+    KILL_MONSTER((short) 0x35E),//23E v146 - 0x278; v171 - 0x35B; v171.2 - 0x35C; v172.1 - 0x35E
+    SPAWN_MONSTER_CONTROL((short) 0x35F),//23F v146 - 0x279; v171 - 0x35C; v171.2 - 0x35D; v172.1 - 0x35F
+    MOVE_MONSTER((short) 0x363),//241 v146 - 0x27B; v171 - 0x360; v171.2 - 0x361; v172.1 - 0x363
+    MOVE_MONSTER_RESPONSE((short) 0x364),//242 v171 - 0x361; v171.2 - 0x362; v172.1 - 0x364
+    APPLY_MONSTER_STATUS((short) 0x366),//244 v146 - 0x27E; v171 - 0x363; v171.2 - 0x364; v172.1 - 0x366 ?
+    CANCEL_MONSTER_STATUS((short) 0x367),//245 v146 - 0x27F; v171 - 0x364; v171.2 - 0x365; v172.1 - 0x367 ?
+    DAMAGE_MONSTER((short) 0x36A),//248 v146 - 0x282; v172.1 - 0x36A ?
+    SKILL_EFFECT_MOB((short) 0x369),//249 v146 - 0x283; v172.1 - 0x369 ?
     TELE_MONSTER((short) 0x999), //todo sniff
     MONSTER_SKILL((short) 0x38F), //v146 - 0x369; v171.3 - 0x38F, or 0x369 is the old one
-    MONSTER_CRC_CHANGE((short) 0x36A),//24B
-    SHOW_MONSTER_HP((short) 0x36C),//24C v146 - 0x286; v171 - 0x36B; v171.2 - 0x36C
+    MONSTER_CRC_CHANGE((short) 0x36D),//v171.2 - 0x36A; v172.1 - 0x36D
+    SHOW_MONSTER_HP((short) 0x36E),//24C v146 - 0x286; v171 - 0x36B; v171.2 - 0x36C; v172.1 - 0x36E
     SHOW_MAGNET((short) 0x287),//24D
     ITEM_EFFECT_MOB((short) 0x288),//24E
     CATCH_MONSTER((short) 0x289),//24F
@@ -449,21 +449,24 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     AZWAN_KILL_MONSTER((short) 0x22D),//1CB
     AZWAN_SPAWN_MONSTER_CONTROL((short) 0x999),//1CC
     
-    SPAWN_NPC((short) 0x39C),//268 //v146 - 0x2A2; v171 - 0x39B; v171.2 - 0x39C
-    REMOVE_NPC((short) 0x39D),//269 //v146 - 0x2A3; v171 - 0x39C; v171.2 - 0x39D?
-    SPAWN_NPC_REQUEST_CONTROLLER((short) 0x39F),//26B //v146 - 0x29F; v171 - 0x39E; v171.2 - 0x39F
-    NPC_ACTION((short) 0x3A0),//26C v146 - 0x2A0; v171 - 0x39F; v171.2 - 0x3A0
-    NPC_TOGGLE_VISIBLE((short) 0x2A1),//26D
+    SPAWN_NPC((short) 0x3A0),//268 //v146 - 0x2A2; v171 - 0x39B; v171.2 - 0x39C; v172.1 - 0x3A0;
+    REMOVE_NPC((short) 0x3A1),//269 //v146 - 0x2A3; v171 - 0x39C; v171.2 - 0x39D; v172.1 - 0x3A1;
+    NPC_UNKNOWN((short) 0x3A2), 
+    SPAWN_NPC_REQUEST_CONTROLLER((short) 0x3A3),//26B //v146 - 0x29F; v171 - 0x39E; v171.2 - 0x39F; v172.1 - 0x3A3
+    NPC_ACTION((short) 0x3A4),//26C v146 - 0x2A0; v171 - 0x39F; v171.2 - 0x3A0; v172.1 - 0x3A4
+    NPC_UPDATE_LIMITED_INFO((short) 0x3A5), //v146 - 0x2A4; v171.3 - 0x3A4; v172.1 - 0x3A8
+    NPC_TOGGLE_VISIBLE((short) 0x2AC), //26D
     INITIAL_QUIZ((short) 0x2A3),//26F
-    NPC_UPDATE_LIMITED_INFO((short) 0x3A4), //v146 - 0x2A4; v171.3 - 0x3A4
-    NPC_SET_SPECIAL_ACTION((short) 0x3AE),  //v146 - 0x2A5; v171.3 - 0x3AE
+    
+    NPC_SET_SPECIAL_ACTION((short) 0x3B3),  //v146 - 0x2A5; v171.3 - 0x3AE; v172.1 - 0x3B2
+    NPC_RESET_SPECIAL_ACTION((short) 0x3AF),
     NPC_SCRIPTABLE((short) 0x2A6),//272
     RED_LEAF_HIGH((short) 0x2A7),//273
     SPAWN_HIRED_MERCHANT((short) 0x2B1),//277
     DESTROY_HIRED_MERCHANT((short) 0x2B2),//278
     UPDATE_HIRED_MERCHANT((short) 0x2B3),//279
-    DROP_ITEM_FROM_MAPOBJECT((short) 0x3B4),//27A v146 - 0x2B4; v171 - 0x3B3; v171.2 - 0x3B4
-    REMOVE_ITEM_FROM_MAP((short) 0x3B6),//27C v146 - 0x2B6; v171 - 0x3B5; v171.2 - 0x3B6
+    DROP_ITEM_FROM_MAPOBJECT((short) 0x3B9),//27A v146 - 0x2B4; v171 - 0x3B3; v171.2 - 0x3B4; v172.1 - 0x3B9
+    REMOVE_ITEM_FROM_MAP((short) 0x3BB),//27C v146 - 0x2B6; v171 - 0x3B5; v171.2 - 0x3B6; v172.1 - 0x3BB
     SPAWN_KITE_ERROR((short) 0x2B7),//27D
     SPAWN_KITE((short) 0x2B8),
     DESTROY_KITE((short) 0x2B9),
@@ -473,10 +476,10 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     REMOVE_DOOR((short) 0x2BD),
     MECH_DOOR_SPAWN((short) 0x2BE),//v145, confirmed.
     MECH_DOOR_REMOVE((short) 0x2BF),//v145, confirmed.
-    REACTOR_HIT((short) 0x3C4),//2C0 v171 - 0x3C3; v171.2 - 0x3C4
+    REACTOR_HIT((short) 0x3CA),//2C0 v171 - 0x3C3; v171.2 - 0x3C4; v172.1 - 0x3CA
     REACTOR_MOVE((short) 0x3C5),//2C1
-    REACTOR_SPAWN((short) 0x3C6), // v146 - 0x2C2; v170 - 0x398; v171 - 0x3C5; v171.2 - 0x3C6
-    REACTOR_DESTROY((short) 0x3CA),//2C4 v171 - 0x3C9; v171.2 - 0x3CA
+    REACTOR_SPAWN((short) 0x3CC), // v146 - 0x2C2; v170 - 0x398; v171 - 0x3C5; v171.2 - 0x3C6; v172.1 - 0x3CC
+    REACTOR_DESTROY((short) 0x3D0),//2C4 v171 - 0x3C9; v171.2 - 0x3CA; v172.1 - 0x3D0
     SPAWN_EXTRACTOR((short) 0x3C8),//2C5
     REMOVE_EXTRACTOR((short) 0x3C9),//2C6
     ROLL_SNOWBALL((short) 0x2C7),//2C7
@@ -520,9 +523,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     CAPTURE_POSITION((short) 0x2E3),
     CAPTURE_RESET((short) 0x2E4),
     PINK_ZAKUM_SHRINE((short) 0x2E5),
-    NPC_TALK((short) 0x4B4),                //v146 - 0x33D; v171 - 0x4B3; v171.2 - 0x4B4
-    OPEN_NPC_SHOP((short) 0x4B5),           //v146 - 0x33E; v171 - 0x4B4; v171.2 - 0x4B5
-    CONFIRM_SHOP_TRANSACTION((short) 0x4B6),//v171.3 - 0x4B6
+    NPC_TALK((short) 0x4BC),                //v146 - 0x33D; v171 - 0x4B3; v171.2 - 0x4B4; v172.1 - 0x4BC
+    OPEN_NPC_SHOP((short) 0x4BD),           //v146 - 0x33E; v171 - 0x4B4; v171.2 - 0x4B5; v172.1 - 0x4BD
+    CONFIRM_SHOP_TRANSACTION((short) 0x4BE),    //v171.3 - 0x4B6; v172.1 - 0x4BE
     OPEN_STORAGE((short) 0x4CF),            //v146 - 0x34A; v171.3 - 0x4CF
     MERCH_ITEM_MSG((short) 0x4D0),          //v146 - 0x34B; v171.3 - 0x4D0 ?
     MERCH_ITEM_STORE((short) 0x4D1),        //v146 - 0x34C; v171.3 - 0x4D1 ?
@@ -558,7 +561,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     ONE_A_DAY((short) 0x258),
     NX_SPEND_GIFT((short) 0x25A),
     RECEIVE_GIFT((short) 0x25A),//new v145
-    KEYMAP((short) 0x537), //v146 - 0x37C; v170 - 0x514; v171.1 - 0x517; v171.2 - 0x537
+    KEYMAP((short) 0x540), //v146 - 0x37C; v170 - 0x514; v171.1 - 0x517; v171.2 - 0x537; v172.1 - 0x540
     PET_AUTO_HP((short) 0x377),//321
     PET_AUTO_MP((short) 0x378),//322
     PET_AUTO_CURE((short) 0x379),//323

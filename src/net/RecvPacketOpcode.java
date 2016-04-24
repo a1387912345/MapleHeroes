@@ -172,7 +172,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     RENAME_FAMILIAR(true, (short) 0x2C8),  //v146 - 0xE2; v171.3 - 0x2C8
     PET_BUFF(true, (short) 0xE3),//E0
     CANCEL_DEBUFF(true, (short) 0xE4),//E1
-    SPECIAL_PORTAL(true, (short) 0x136),        // v146 - 0xE5; v171.3 - 0x136
+    SPECIAL_PORTAL(true, (short) 0x136),        // v146 - 0xE5; v171.3 - 0x136; v172.1 - 0x136
     USE_INNER_PORTAL(true, (short) 0x137),      // v146 - 0xE6; v171.3 - 0x137
     TELEPORT_ROCK_ADD_MAP(true, (short) 0x138), // v146 - 0xE7; v171.3 - 0x138?
     LIE_DETECTOR(true, (short) 0x139),          // v146 - 0xE8; v171.3 - 0x139?
@@ -183,7 +183,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     REISSUE_MEDAL(true, (short) 0x140),         // v146 - 0xEE; v171.3 - 0x140?
     BUFF_RESPONSE(true, (short) 0x141),         // v146 - 0xEF; v171.3 - 0x141
     SKILL_MACRO(true, (short) 0x147),           // v146 - 0xF5; v171.3 - 0x147
-    SPECIAL_STAT(false, (short) 0x157),         // v146 - 0x10C; v171 - 0x157
+    SPECIAL_STAT(false, (short) 0x157),         // v146 - 0x10C; v171 - 0x157; v172.1 - 0x157
     REWARD_ITEM(true, (short) 0xF7),//F2
     ITEM_MAKER(true, (short) 0x999),
     REPAIR_ALL(true, (short) 0xFE),//C7
@@ -266,10 +266,10 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CASSANDRAS_COLLECTION(true, (short) 0x178),//new v145
     BUY_SILENT_CRUSADE(true, (short) 0x128),
     BUDDY_ADD(true, (short) 0x1A2),
-    MOVE_PET(true, (short) 0x212),    //v146 - 0x1B8; v171.3 - 0x212
-    PET_CHAT(true, (short) 0x213),    //v146 - 0x1B9; v171.3 - 0x213
-    PET_COMMAND(true, (short) 0x214), //v146 - 0x1BA; v171.3 - 0x214
-    PET_LOOT(true, (short) 0x215),    //v146 - 0x1BB; v171.3 - 0x215
+    MOVE_PET(true, (short) 0x213),    //v146 - 0x1B8; v171.3 - 0x212; v172.1 - 0x213
+    PET_CHAT(true, (short) 0x214),    //v146 - 0x1B9; v171.3 - 0x213; v172.1 - 0x214?
+    PET_COMMAND(true, (short) 0x215), //v146 - 0x1BA; v171.3 - 0x214; v172.1 - 0x215?
+    PET_LOOT(true, (short) 0x216),    //v146 - 0x1BB; v171.3 - 0x215; v172.1 - 0x216?
     PET_AUTO_POT(true, (short) 0x1BC),//1AC
     PET_IGNORE(true, (short) 0x1BD),//1AD
     MOVE_HAKU(true, (short) 0x1C1),//1B1
@@ -293,7 +293,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     REVEAL_FAMILIAR(true, (short) 0x308),//v146 - 0x1DF; v171.3 - 0x30A
     QUICK_SLOT(true, (short) 0x1D7),
     PAM_SONG(true, (short) 0x1D8),
-    MOVE_LIFE(true, (short) 0x310),//1EC v146 - 0x20B; v171 - 0x310
+    MOVE_LIFE(true, (short) 0x314),//1EC v146 - 0x20B; v171 - 0x310; v172.1 - 0x314
     AUTO_AGGRO(true, (short) 0x1EE),
     FRIENDLY_DAMAGE(true, (short) 0x999),//1ef
     MONSTER_BOMB(true, (short) 0x1F0),
@@ -302,9 +302,9 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     MOB_NODE(true, (short) 0x1F6),
     DISPLAY_NODE(true, (short) 0x1F7),
     MONSTER_CARNIVAL(true, (short) 0x1F8),
-    NPC_ACTION(true, (short) 0x329),//203 v146 - 0x222; v171 - 0x329
-    ITEM_PICKUP(true, (short) 0x32E),//208 v146 - 0x22A; v171 - 0x32E
-    DAMAGE_REACTOR(true, (short) 0x331),//v146 - 0x22D; v171 - 0x331
+    NPC_ACTION(true, (short) 0x32D),//203 v146 - 0x222; v171 - 0x329; v172.1 - 0x32D
+    ITEM_PICKUP(true, (short) 0x332),//208 v146 - 0x22A; v171 - 0x32E; v172.1 - 0x332
+    DAMAGE_REACTOR(true, (short) 0x335),//v146 - 0x22D; v171 - 0x331; v172.1 - 0x335
     TOUCH_REACTOR(true, (short) 0x22E),//v145 Confirmed
     CLICK_REACTOR(true, (short) 0x22E),//v145 Confirmed v146 - 0x22F
     MAKE_EXTRACTOR(true, (short) 0x22E),//v145 Confirmed v146 - 0x22F
@@ -351,7 +351,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     RESET_HYPER(true, (short) 0x172),//
     DRESSUP_TIME(true, (short) 0x17F),
     DF_COMBO(true, (short) 0x10F),
-    BUTTON_PRESSED(true, (short) 0x22F),//1D3 v146 - 0x1E3; v171 - 0x22F (Useless..)
+    BUTTON_PRESSED(true, (short) 0x23B),//1D3 v146 - 0x1E3; v171 - 0x22F; v172.1 - 0x23B (Useless..)
     OS_INFORMATION(true, (short) 0x1E6),//1D6
     LUCKY_LOGOUT(true, (short) 0x2B6),
     MESSENGER_RANKING(true, (short) 0x1DD);

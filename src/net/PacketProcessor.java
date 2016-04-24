@@ -60,7 +60,7 @@ public final class PacketProcessor {
         try {
             handlers[code.getValue()] = handler;
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Error registering handler - " + code.name());
+            System.out.println("Error registering packet handler - " + code.name());
         }
     }
 
