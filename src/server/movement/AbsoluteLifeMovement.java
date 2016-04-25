@@ -69,7 +69,7 @@ public class AbsoluteLifeMovement extends AbstractLifeMovement {
         if (getType() != 44) {
             lew.writePos(offset);
         }
-        lew.write(getNewstate());
+        lew.write(getMoveAction());
         lew.writeShort(getDuration());
         lew.write(0);
         System.out.println("absolute movement");

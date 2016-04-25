@@ -44,7 +44,7 @@ public class RelativeLifeMovement extends AbstractLifeMovement {
         if (getType() == 18 || getType() == 19) {
             lew.writeShort(unk);
         }
-        lew.write(getNewstate());
+        lew.write(getMoveAction());
         lew.writeShort(getDuration());
         System.out.println("relative movement");
     }

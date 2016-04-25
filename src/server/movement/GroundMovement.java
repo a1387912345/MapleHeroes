@@ -29,7 +29,7 @@ public class GroundMovement extends AbstractLifeMovement {
     @Override
     public void serialize(MaplePacketLittleEndianWriter lew) {
         lew.write(getType());
-        lew.write(getNewstate());
+        lew.write(getMoveAction());
         lew.writeShort(getDuration());
         System.out.println("ground movement");
     }

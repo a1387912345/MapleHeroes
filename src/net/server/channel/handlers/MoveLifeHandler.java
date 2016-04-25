@@ -95,7 +95,7 @@ public class MoveLifeHandler extends AbstractMaplePacketHandler {
 
         final Point startPos = monster.getPosition();
         List res;
-        res = MovementParse.parseMovement(lea, 2);
+        res = MovementParse.parseMovement(lea, 2, startPos);
 
         if (monster != null && c != null) {
             c.getSession().write(MobPacket.moveMonsterResponse(oid, moveid, monster.getMp(), monster.isControllerHasAggro(), realskill, level));

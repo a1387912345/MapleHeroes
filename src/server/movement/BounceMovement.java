@@ -37,7 +37,7 @@ public class BounceMovement extends AbstractLifeMovement {
         lew.write(getType());
         lew.writePos(getPosition());
         lew.writePos(offset);
-        lew.write(getNewstate());
+        lew.write(getMoveAction());
         lew.writeShort(getDuration());
     }
 }

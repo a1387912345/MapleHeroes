@@ -142,7 +142,7 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject
         for (LifeMovementFragment move : movement) {
             if (((move instanceof LifeMovement))
                     && ((move instanceof StaticLifeMovement))) {
-                setFh(((StaticLifeMovement) move).getUnk());
+                setFh(((StaticLifeMovement) move).getUnknown());
             }
         }
     }

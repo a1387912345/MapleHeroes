@@ -33,13 +33,15 @@ import tools.data.LittleEndianAccessor;
 public class MovementParse {
 
     //1 = player, 2 = mob, 3 = pet, 4 = summon, 5 = dragon
-    public static List<LifeMovementFragment> parseMovement(final LittleEndianAccessor lea, final int kind) {
-        return parseMovement(lea, kind, null);
+    public static List<LifeMovementFragment> parseMovement(final LittleEndianAccessor lea, final int kind, final Point startPos) {
+        return parseMovement(lea, kind, startPos, null);
     }
 
-    public static List<LifeMovementFragment> parseMovement(final LittleEndianAccessor lea, final int kind, MapleCharacter chr) {
+    public static List<LifeMovementFragment> parseMovement(final LittleEndianAccessor lea, final int kind, final Point startPos, final MapleCharacter chr) {
         final List<LifeMovementFragment> res = new ArrayList<>();
         final byte numCommands = lea.readByte();
+        short xposition = 0, yposition = 0, xvelocity = 0, yvelocity = 0, foothold = 0, xoffset = 0, yoffset = 0, unknown = 0, duration = 0;
+        byte moveAction = 0, unknown2 = 0, wui = 0;
 
         for (byte i = 0; i < numCommands; i++) {
             final byte command = lea.readByte();
@@ -51,35 +53,27 @@ public class MovementParse {
 	            case 18:
 	            case 66:
 	            case 67:
-	            case 68: {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short xwobble = lea.readShort();
-                    final short ywobble = lea.readShort();
-                    final short unk = lea.readShort(); // fh
-                    short fh = 0;
-                    short xoffset = 0;
-                    short yoffset = 0;
-                    if (command != 58) {
-                        xoffset = lea.readShort();
-                        yoffset = lea.readShort();
+	            case 68:
+                    xposition = lea.readShort();
+                    yposition = lea.readShort();
+                    xvelocity = lea.readShort();
+                    yvelocity = lea.readShort();
+                    foothold = lea.readShort();
+                    if (command == 15 || command == 16) {
+                    	unknown = lea.readShort();
                     }
-                    if (command == 15) {
-                    	fh = lea.readShort();
-                    }
-                    final byte newstate = lea.readByte(); // stance
-                    final short duration = lea.readShort();
-                    final byte unk2 = lea.readByte(); // unknown new byte
-
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(xpos, ypos), duration, newstate);
-                    mov.setUnk(unk);
-                    mov.setFh(fh);
-                    mov.setPixelsPerSecond(new Point(xwobble, ywobble));
-                    mov.setOffset(new Point(xoffset, yoffset));
-
-                    res.add(mov);
+                    xoffset = lea.readShort();
+                    yoffset = lea.readShort();
                     break;
-	            }
+	            case 55:
+	            case 65:
+	            case 82:
+	            	xposition = lea.readShort();
+                    yposition = lea.readShort();
+                    xvelocity = lea.readShort();
+                    yvelocity = lea.readShort();
+                    foothold = lea.readShort();
+	            	break;
 	            case 1:
 	            case 2:
 	            case 17:
@@ -89,22 +83,17 @@ public class MovementParse {
 	            case 61:
 	            case 62:
 	            case 63:
-	            case 64: {
-                    final short xmod = lea.readShort();
-                    final short ymod = lea.readShort();
-                    short unk = 0;
-                    if (command == 19 || command == 20) {
-                        unk = lea.readShort();
+	            case 64:
+	            	if(startPos != null) {
+		            	xposition = (short) startPos.getX();
+		            	yposition = (short) startPos.getY();
+	            	}
+	            	xvelocity = lea.readShort();
+                    yvelocity = lea.readShort();
+                    if (command == 20 || command == 21) {
+                        unknown = lea.readShort();
                     }
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final byte unk2 = lea.readByte(); // unknown new byte
-
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(xmod, ymod), duration, newstate);
-                    mov.setUnk(unk);
-                    res.add(mov);
                     break;
-	            }
 	            case 28:
 	            case 29:
 	            case 30:
@@ -137,15 +126,12 @@ public class MovementParse {
 	            case 71:
 	            case 73:
 	            case 78:
-	            case 80: {
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final byte unk2 = lea.readByte(); // unknown new byte
-
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(0, 0), duration, newstate);
-                    res.add(mov);
+	            case 80:
+	            	if(startPos != null) {
+		            	xposition = (short) startPos.getX();
+		            	yposition = (short) startPos.getY();
+	            	}
                     break;
-	            }
 	            case 3:
 	            case 4:
 	            case 5:
@@ -164,57 +150,32 @@ public class MovementParse {
 	            case 75:
 	            case 76:
 	            case 77:
-	            case 79: {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short fh = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final byte unk2 = lea.readByte(); // unknown new byte
-                    
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(xpos, ypos), duration, newstate);
-                    mov.setFh(fh);
-
-                    res.add(mov);
+	            case 79: 
+	            	xposition = lea.readShort();
+                    yposition = lea.readShort();
+                    foothold = lea.readShort();
                     break;
-	            }
-                case 14: {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short unk = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final byte unk2 = lea.readByte(); // unknown new byte
-
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(xpos, ypos), duration, newstate);
-                    mov.setUnk(unk);
-
-                    res.add(mov);
+                case 14:
+                	if(startPos != null) {
+		            	xposition = (short) startPos.getX();
+		            	yposition = (short) startPos.getY();
+	            	}
+                	xvelocity = lea.readShort();
+                    yvelocity = lea.readShort();
+                    unknown = lea.readShort();
                     break;
-                }
-                case 22: {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short xwobble = lea.readShort();
-                    final short ywobble = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
-                    final byte unk2 = lea.readByte(); // unknown new byte
-
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(xpos, ypos), duration, newstate);
-                    mov.setPixelsPerSecond(new Point(xwobble, ywobble));
-
-                    res.add(mov);
+                case 22:
+                	xposition = lea.readShort();
+                    yposition = lea.readShort();
+                    xvelocity = lea.readShort();
+                    yvelocity = lea.readShort();
                     break;
-                }
                 case 12: {
-                    final byte newstate = 0;
-                    final short duration = 0;
-                    final int wui = lea.readByte();
-
-                    final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(0, 0), duration, newstate);
-                    mov.setWui(wui);
-                    res.add(mov);
+                	if(startPos != null) {
+		            	xposition = (short) startPos.getX();
+		            	yposition = (short) startPos.getY();
+	            	}
+                    wui = lea.readByte();
                     break;
                 }
                 default:
@@ -225,6 +186,24 @@ public class MovementParse {
                     //FileoutputUtil.log(FileoutputUtil.Movement_Log, "Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + lea.toString(true) + "\r\n");
                     //return null;
             }
+            
+            if (command != 12) {
+		        moveAction = lea.readByte(); // stance
+		        duration = lea.readShort();
+		        unknown2 = lea.readByte(); // unknown new byte
+            }
+		
+	        final StaticLifeMovement mov = new StaticLifeMovement(command, new Point(xposition, yposition), duration, moveAction);
+	        mov.setFoothold(foothold);
+	        mov.setUnknown(unknown);
+	        mov.setUnknown2(unknown2);
+	        mov.setPixelsPerSecond(new Point(xvelocity, yvelocity));
+	        mov.setOffset(new Point(xoffset, yoffset));
+	
+	        if (command == 12) {
+	        	mov.setWui(wui);
+	        }
+	        res.add(mov);    
         }
         if (numCommands != res.size()) {
             return null; // Probably hack
@@ -406,7 +385,7 @@ public class MovementParse {
                     position.y += yoffset;
                     target.setPosition(position);
                 }
-                target.setStance(((LifeMovement) move).getNewstate());
+                target.setStance(((LifeMovement) move).getMoveAction());
             }
         }
     }

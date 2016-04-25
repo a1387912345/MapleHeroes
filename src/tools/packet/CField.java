@@ -3409,40 +3409,44 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             return mplew.getPacket();
         }
 
-        public static byte[] toggleNPCShow(int oid, boolean hide) {
+        public static byte[] toggleNPCShow(int oid, boolean hide, boolean viewNameTag) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+            
             mplew.writeShort(SendPacketOpcode.NPC_TOGGLE_VISIBLE.getValue());
             mplew.writeInt(oid);
-            mplew.write(hide ? 0 : 1);
-            mplew.write(0); // bViewNameTag
+            mplew.write(hide ? 0 : 1);        // bView
+            mplew.write(viewNameTag ? 0 : 1); // bViewNameTag
+            
             return mplew.getPacket();
         }
 
-        public static byte[] setNPCSpecialAction(int oid, String action) {
+        public static byte[] setNPCSpecialAction(int oid, String action, int duration, boolean localAct) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
             
             mplew.writeShort(SendPacketOpcode.NPC_SET_SPECIAL_ACTION.getValue());
             mplew.writeInt(oid);
-            mplew.writeMapleAsciiString(action);
-            mplew.writeInt(0); //unknown yet
-            mplew.write(0); //unknown yet
+            mplew.writeMapleAsciiString(action); // sName
+            mplew.writeInt(duration);            // tDuration
+            mplew.write(localAct ? 0 : 1);       // bLocalAct
             
             return mplew.getPacket();
         }
 
-        public static byte[] NPCSpecialAction(int oid, int x, int y) {
+        public static byte[] setNPCForceMove(int oid, int forceX, int moveX, int speedRate) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-            mplew.writeShort(SendPacketOpcode.NPC_UPDATE_LIMITED_INFO.getValue());
+            
+            mplew.writeShort(SendPacketOpcode.NPC_SET_FORCE_MOVE.getValue());
             mplew.writeInt(oid);
-            mplew.writeInt(x);
-            mplew.writeInt(y);
-            mplew.writeInt(100);
+            mplew.writeInt(forceX);    // nForceX
+            mplew.writeInt(moveX);     // nMoveX
+            mplew.writeInt(speedRate); // nSpeedRate
+            
             return mplew.getPacket();
         }
 
         public static byte[] setNPCScriptable() {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-            mplew.writeShort(SendPacketOpcode.NPC_SCRIPTABLE.getValue());
+            mplew.writeShort(SendPacketOpcode.NPC_SET_SCRIPT.getValue());
 
             List<Pair<Integer, String>> npcs = new LinkedList();
             npcs.add(new Pair<>(9070006, "Why...why has this happened to me? My knightly honor... My knightly pride..."));

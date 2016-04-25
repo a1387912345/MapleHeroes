@@ -106,7 +106,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     NPC_TALK(true, (short) 0xD8),       //v146 - 0x7F; v171 - 0xD8
     NPC_TALK_MORE(true, (short) 0xDA),  //v146 - 0x81; v171 - 0xDA
     NPC_SHOP(true, (short) 0xDB),       //v146 - 0x82; v171 - 0xDB
-    STORAGE(true, (short) 0xDC),        //v171 - 0xDC?
+    STORAGE_OPERATION(true, (short) 0xDC),//v171 - 0xDC
     USE_HIRED_MERCHANT(true, (short) 0x85),//84
     MERCH_ITEM_STORE(true, (short) 0x87),//85
     PACKAGE_OPERATION(true, (short) 0x7F),//87
@@ -130,7 +130,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     USE_ALIEN_SOCKET(true, (short) 0xA1),//9F
     USE_ALIEN_SOCKET_RESPONSE(true, (short) 0xA2),//A0
     USE_NEBULITE_FUSION(true, (short) 0xAF),//A1  v146 - 0xA3
-    USE_CASH_ITEM(true, (short) 0xA6),//A2 v146 - 0xA4; 
+    USE_CASH_ITEM(true, (short) 0xFE),//A2 v146 - 0xA4; v172.1 - 0xFE
     USE_CATCH_ITEM(true, (short) 0xA6),//A4
     USE_SKILL_BOOK(true, (short) 0xAB),//A9
     USE_EXP_POTION(true, (short) 0xAE),//A8
@@ -180,7 +180,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     LIE_DETECTOR_RESPONSE(true, (short) 0x13B), // v146 - 0xEA; v171.3 - 0x13B?
     REPORT(true, (short) 0x13E),                // v146 - 0xEC; v171.3 - 0x13E?
     QUEST_ACTION(true, (short) 0x13F),          // v146 - 0xED; v171.3 - 0x13F
-    REISSUE_MEDAL(true, (short) 0x140),         // v146 - 0xEE; v171.3 - 0x140?
+    REISSUE_MEDAL(true, (short) 0x140),         // v146 - 0xEE; v171.3 - 0x140
     BUFF_RESPONSE(true, (short) 0x141),         // v146 - 0xEF; v171.3 - 0x141
     SKILL_MACRO(true, (short) 0x147),           // v146 - 0xF5; v171.3 - 0x147
     SPECIAL_STAT(false, (short) 0x157),         // v146 - 0x10C; v171 - 0x157; v172.1 - 0x157
@@ -218,7 +218,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     ALLOW_PARTY_INVITE(true, (short) 0x17C), //v146 - 0x12F; v171.3 - 0x17C
     EXPEDITION_OPERATION(true, (short) 0x130),//128
     EXPEDITION_LISTING(true, (short) 0x131),//129
-    GUILD_OPERATION(true, (short) 0x132),//12A
+    GUILD_OPERATION(true, (short) 0x180),    //v146 - 0x132; v172.1 - 0x180
     DENY_GUILD_REQUEST(true, (short) 0x133),//12B
     ADMIN_COMMAND(true, (short) 0x134),//12C
     ADMIN_LOG(true, (short) 0x135),//12D
@@ -276,8 +276,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     CHANGE_HAKU(true, (short) 0x1C2),//1B2
     //HAKU_1D8(true, (short) 0x1D8),//test
     //HAKU_1D9(true, (short) 0x1D9),//test
-    MOVE_SUMMON(true, (short) 0x21C),//1b8 v146 - 0x1C8; v171.3 - 0x21C
-    SUMMON_ATTACK(true, (short) 0x21D),//1B9 v146 - 0x1C9; v171.3 - 0x21D ?
+    MOVE_SUMMON(true, (short) 0x224),//1b8 v146 - 0x1C8; v171.3 - 0x21C; v172.1 - 0x224
+    SUMMON_ATTACK(true, (short) 0x225),//1B9 v146 - 0x1C9; v171.3 - 0x21D; v172.1 - 0x225
     DAMAGE_SUMMON(true, (short) 0x21E),//1BA v146 - 0x1CA; v171.3 - 0x21E ?
     SUB_SUMMON(true, (short) 0x21F),//1BB v146 - 0x1CB; v171.3 - 0x21F ?
     REMOVE_SUMMON(true, (short) 0x220),//1BC v146 - 0x1CC; v171.3 - 0x220 ?
@@ -294,7 +294,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     QUICK_SLOT(true, (short) 0x1D7),
     PAM_SONG(true, (short) 0x1D8),
     MOVE_LIFE(true, (short) 0x314),//1EC v146 - 0x20B; v171 - 0x310; v172.1 - 0x314
-    AUTO_AGGRO(true, (short) 0x1EE),
+    AUTO_AGGRO(true, (short) 0x315), // v172.1 - 0x315
     FRIENDLY_DAMAGE(true, (short) 0x999),//1ef
     MONSTER_BOMB(true, (short) 0x1F0),
     HYPNOTIZE_DMG(true, (short) 0x1F1),

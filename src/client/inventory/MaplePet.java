@@ -302,7 +302,7 @@ public class MaplePet implements Serializable {
                 if (move instanceof StaticLifeMovement) {
                     setPos(((LifeMovement) move).getPosition());
                 }
-                setStance(((LifeMovement) move).getNewstate());
+                setStance(((LifeMovement) move).getMoveAction());
             }
         }
     }

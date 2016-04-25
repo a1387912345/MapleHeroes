@@ -35,7 +35,7 @@ public class MovePlayerHandler extends AbstractMaplePacketHandler {
         final Point Original_Pos = chr.getPosition();
         List res;
         try {
-            res = MovementParse.parseMovement(lea, 1, chr);
+            res = MovementParse.parseMovement(lea, 1, null, chr);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(new StringBuilder().append("AIOBE Type1:\n").append(lea.toString(true)).toString());
             return;

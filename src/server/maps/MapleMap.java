@@ -2438,7 +2438,7 @@ public final class MapleMap {
          }
          }*/
         if (getNPCById(9073000) != null && getId() == 931050410) {
-            chr.getClient().getSession().write(CField.NPCPacket.toggleNPCShow(getNPCById(9073000).getObjectId(), true));
+            chr.getClient().getSession().write(CField.NPCPacket.toggleNPCShow(getNPCById(9073000).getObjectId(), true, true));
         }
         if (GameConstants.isPhantom(chr.getJob())) {
             chr.getClient().getSession().write(PhantomPacket.updateCardStack(chr.getCardStack()));

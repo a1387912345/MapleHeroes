@@ -64,7 +64,7 @@ public class SummonHandler {
 
 public static final void MoveDragon(final LittleEndianAccessor slea, final MapleCharacter chr) {//MIXTAMAL6 +Mally
         slea.skip(12);//New in v14X+
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 5);
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 5, null, null);
         if (chr != null && chr.getDragon() != null && res.size() > 0) {
             final Point pos = chr.getDragon().getPosition();
             MovementParse.updatePosition(res, chr.getDragon(), 0);
@@ -118,7 +118,7 @@ public static final void MoveDragon(final LittleEndianAccessor slea, final Maple
             return;
         }
         slea.skip(12); //startPOS
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 4);
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 4, null, null);
 
         final Point pos = sum.getPosition();
         MovementParse.updatePosition(res, sum, 0);

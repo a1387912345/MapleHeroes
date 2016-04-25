@@ -217,7 +217,7 @@ public class MobHandler {
 
         final Point startPos = monster.getPosition();
         List res;
-        res = MovementParse.parseMovement(rh, 2);
+        res = MovementParse.parseMovement(rh, 2, startPos);
 
         if (monster != null && c != null) {
             c.getSession().write(MobPacket.moveMonsterResponse(oid, moveid, monster.getMp(), monster.isControllerHasAggro(), realskill, level));
@@ -416,7 +416,7 @@ public class MobHandler {
 
     public static final void MoveFamiliar(LittleEndianAccessor slea, MapleClient c, MapleCharacter chr) {
         slea.skip(17);
-        List res = MovementParse.parseMovement(slea, 6);
+        List res = MovementParse.parseMovement(slea, 6, null, null);
         if ((chr != null) && (chr.getSummonedFamiliar() != null) && (res.size() > 0)) {
             Point pos = chr.getSummonedFamiliar().getPosition();
             MovementParse.updatePosition(res, chr.getSummonedFamiliar(), 0);

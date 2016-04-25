@@ -200,7 +200,7 @@ public class PetHandler {
         }
         final int petId = (int) slea.readLong();
         slea.skip(13); // byte(index?), int(pos), int
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 3);
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 3, null, null);
         if (res != null && chr != null && !res.isEmpty() && chr.getMap() != null) { // map crash hack
             final MaplePet pet = chr.getPet(chr.getPetIndex(petId));
             if (pet == null) {

@@ -1894,7 +1894,7 @@ public static void ChangeAndroidEmotion(int emote, MapleCharacter chr) {//MIXTAM
 
     public static void MoveAndroid(LittleEndianAccessor slea, MapleClient c, MapleCharacter chr) {//MIXTAMAL6
         slea.skip(12);//MIXTAMAL6
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 3);//MIXTAMAL6
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(slea, 3, null, null);//MIXTAMAL6
        
 
         if ((res != null) && (chr != null) && (!res.isEmpty()) && (chr.getMap() != null) && (chr.getAndroid() != null)) {
@@ -1906,7 +1906,7 @@ public static void ChangeAndroidEmotion(int emote, MapleCharacter chr) {//MIXTAM
 
     public static void MoveHaku(LittleEndianAccessor slea, MapleClient c, MapleCharacter chr) {
         slea.skip(17);
-        List res = MovementParse.parseMovement(slea, 6);
+        List res = MovementParse.parseMovement(slea, 6, null, null);
 
         if ((res != null) && (chr != null) && (!res.isEmpty()) && (chr.getMap() != null) && (chr.getHaku() != null)) {
             Point pos = new Point(chr.getHaku().getPosition());
@@ -1993,7 +1993,7 @@ public static void ChangeAndroidEmotion(int emote, MapleCharacter chr) {//MIXTAM
         final Point Original_Pos = chr.getPosition();
         List res;
         try {
-            res = MovementParse.parseMovement(slea, 1, chr);
+            res = MovementParse.parseMovement(slea, 1, null, chr);
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(new StringBuilder().append("AIOBE Type1:\n").append(slea.toString(true)).toString());
             return;

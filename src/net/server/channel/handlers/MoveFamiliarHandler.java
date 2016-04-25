@@ -20,7 +20,7 @@ public class MoveFamiliarHandler extends AbstractMaplePacketHandler {
 	@Override
 	public void handlePacket(LittleEndianAccessor lea, MapleClient c, MapleCharacter chr) {
 		lea.skip(17);
-        List res = MovementParse.parseMovement(lea, 6);
+        List res = MovementParse.parseMovement(lea, 6, null, null);
         if ((chr != null) && (chr.getSummonedFamiliar() != null) && (res.size() > 0)) {
             Point pos = chr.getSummonedFamiliar().getPosition();
             MovementParse.updatePosition(res, chr.getSummonedFamiliar(), 0);

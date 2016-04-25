@@ -138,7 +138,7 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.NPC_TALK, new NPCTalkHandler(RecvPacketOpcode.NPC_TALK));
         registerHandler(RecvPacketOpcode.NPC_TALK_MORE, new NPCTalkMoreHandler(RecvPacketOpcode.NPC_TALK_MORE));
         registerHandler(RecvPacketOpcode.NPC_SHOP, new NPCShopHandler(RecvPacketOpcode.NPC_SHOP));
-        registerHandler(RecvPacketOpcode.STORAGE, new StorageHandler(RecvPacketOpcode.STORAGE));
+        registerHandler(RecvPacketOpcode.STORAGE_OPERATION, new StorageHandler(RecvPacketOpcode.STORAGE_OPERATION));
         
         registerHandler(RecvPacketOpcode.USE_HIRED_MERCHANT, new UseHiredMerchantHandler(RecvPacketOpcode.USE_HIRED_MERCHANT));
         registerHandler(RecvPacketOpcode.MERCH_ITEM_STORE, new MerchItemStoreHandler(RecvPacketOpcode.MERCH_ITEM_STORE));

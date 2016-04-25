@@ -19,7 +19,7 @@ package server.movement;
 
 public interface LifeMovement extends LifeMovementFragment {
 
-    int getNewstate();
+    int getMoveAction();
 
     int getDuration();
 

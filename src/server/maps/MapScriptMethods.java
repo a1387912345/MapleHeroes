@@ -1424,7 +1424,7 @@ public class MapScriptMethods {
              if (!c.getPlayer().getMap().containsNPC(9390381)) {
              c.getPlayer().getMap().spawnNpc(9390381, new Point(89, 32));
              }
-             c.getSession().write(NPCPacket.setNPCSpecialAction(9390381, "summon"));
+             c.getSession().write(NPCPacket.setNPCSpecialAction(9390381, "summon", 0, false));
              c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
              Thread.sleep(1000);
              c.getSession().write(UIPacket.getDirectionStatus(true));
@@ -1634,16 +1634,13 @@ public class MapScriptMethods {
                     c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
                     Thread.sleep(1000);
                     c.getSession().write(NPCPacket.spawnNPCRequestController(mysteriousGirl, true));
-                    c.getSession().write(NPCPacket.setNPCSpecialAction(mysteriousGirl.getObjectId(), "summon"));
+                    c.getSession().write(NPCPacket.setNPCSpecialAction(mysteriousGirl.getObjectId(), "summon", 0, false));
                     c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction12.img/effect/tuto/BalloonMsg1/1", 900, 0, -120, mysteriousGirl.getObjectId()));
                     c.getSession().write(UIPacket.getDirectionInfo(1, 1800));
-                    System.out.println("Tut11 Debug 1");
                     Thread.sleep(1800);
-                    c.getSession().write(NPCPacket.NPCSpecialAction(mysteriousGirl.getObjectId(), 1, 1000));
-                    System.out.println("Tut11 Debug 2");
+                    c.getSession().write(NPCPacket.setNPCForceMove(mysteriousGirl.getObjectId(), 1, 1000, 100));
 
                     
-                    System.out.println("Tut11 Debug 3");
                     c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 200));
                     //Thread.sleep(4500);
                     c.getSession().write(UIPacket.getDirectionInfo(1, 2000));

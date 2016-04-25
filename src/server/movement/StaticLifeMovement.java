@@ -14,8 +14,8 @@ import tools.data.MaplePacketLittleEndianWriter;
 public class StaticLifeMovement extends AbstractLifeMovement {
 
     private Point pixelsPerSecond, offset;
-    private short unk, fh;
-    private int wui;
+    private short foothold, unknown;
+    private byte unknown2, wui;
 
     public StaticLifeMovement(int type, Point position, int duration, int newstate) {
         super(type, position, duration, newstate);
@@ -29,33 +29,40 @@ public class StaticLifeMovement extends AbstractLifeMovement {
         this.offset = wobble;
     }
 
-    public void setFh(short fh) {
-        this.fh = fh;
+    public void setFoothold(short foothold) {
+        this.foothold = foothold;
     }
 
-    public void setUnk(short unk) {
-        this.unk = unk;
+    public void setUnknown(short unknown) {
+        this.unknown = unknown;
     }
 
-    public short getUnk() {
-        return unk;
+    public short getUnknown() {
+        return unknown;
+    }
+    
+    public void setUnknown2(byte unknown2) {
+    	this.unknown2 = unknown2;
+    }
+    public byte getUnknown2() {
+    	return unknown2;
     }
 
-    public void setWui(int wui) {
+    public void setWui(byte wui) {
         this.wui = wui;
     }
 
     public void defaulted() {
-        unk = 0;
-        fh = 0;
+        unknown = 0;
+        foothold = 0;
         pixelsPerSecond = new Point(0, 0);
         offset = new Point(0, 0);
         wui = 0;
     }
 
     @Override
-    public void serialize(MaplePacketLittleEndianWriter lew) {
-        lew.write(getType());
+    public void serialize(MaplePacketLittleEndianWriter mlew) {
+        mlew.write(getType());
         switch (getType()) {
             case 0:
             case 8:
@@ -65,20 +72,21 @@ public class StaticLifeMovement extends AbstractLifeMovement {
             case 66:
             case 67:
             case 68:
-                lew.writePos(getPosition());
-                lew.writePos(pixelsPerSecond);
-                lew.writeShort(unk);
+                mlew.writePos(getPosition());
+                mlew.writePos(pixelsPerSecond);
+                mlew.writeShort(foothold);
                 if (getType() == 15 || getType() == 16) {
-                    lew.writeShort(fh);
+                	System.out.println(getType());
+                    mlew.writeShort(unknown);
                 }
-                lew.writePos(offset);
+                mlew.writePos(offset);
                 break;
             case 55:
             case 65:
             case 82:
-            	lew.writePos(getPosition());
-            	lew.writePos(pixelsPerSecond);
-            	lew.writeShort(unk);
+            	mlew.writePos(getPosition());
+            	mlew.writePos(pixelsPerSecond);
+            	mlew.writeShort(foothold);
             	break;
             case 1:
             case 2:
@@ -90,11 +98,9 @@ public class StaticLifeMovement extends AbstractLifeMovement {
             case 62:
             case 63:
             case 64:
-                lew.writePos(getPosition());
-                lew.writeShort(unk);
-                lew.writePos(pixelsPerSecond);
+                mlew.writePos(pixelsPerSecond);
                 if (getType() == 20 || getType() == 21) {
-                    lew.writeShort(fh);
+                    mlew.writeShort(unknown);
                 }
                 break;
             case 28:
@@ -150,28 +156,25 @@ public class StaticLifeMovement extends AbstractLifeMovement {
             case 76:
             case 77:
             case 79:
-                lew.writePos(getPosition());
-                //lew.writeShort(unk);
-                lew.writeShort(fh);
+                mlew.writePos(getPosition());
+                mlew.writeShort(foothold);
                 break;
             case 14:
-                //lew.writePos(getPosition());
-                //lew.writeShort(unk);
-            	lew.writePos(pixelsPerSecond);
-            	lew.writeShort(fh);
+            	mlew.writePos(pixelsPerSecond);
+            	mlew.writeShort(unknown);
                 break;
             case 22:
-                lew.writePos(getPosition());
-                lew.writePos(pixelsPerSecond);
+                mlew.writePos(getPosition());
+                mlew.writePos(pixelsPerSecond);
                 break;
             case 12:
-            	lew.write(wui);
+            	mlew.write(wui);
             	break;
         }
         if (getType() != 12) {
-            lew.write(getNewstate());
-            lew.writeShort(getDuration());
-            lew.write(0);
+            mlew.write(getMoveAction());
+            mlew.writeShort(getDuration());
+            mlew.write(getUnknown2());
         } else {
             //lew.write(wui);
         }

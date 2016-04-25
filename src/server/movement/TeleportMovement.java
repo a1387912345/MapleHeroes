@@ -38,7 +38,7 @@ public class TeleportMovement extends AbstractLifeMovement {
         lew.write(getType());
         lew.writePos(getPosition());
         lew.writeShort(fh);
-        lew.write(getNewstate());
+        lew.write(getMoveAction());
         lew.writeShort(getDuration());
         System.out.println("teleport movement");
     }

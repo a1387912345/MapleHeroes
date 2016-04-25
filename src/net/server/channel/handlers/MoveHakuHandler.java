@@ -20,7 +20,7 @@ public class MoveHakuHandler extends AbstractMaplePacketHandler {
 	@Override
 	public void handlePacket(LittleEndianAccessor lea, MapleClient c, MapleCharacter chr) {
 		lea.skip(17);
-        List res = MovementParse.parseMovement(lea, 6);
+        List res = MovementParse.parseMovement(lea, 6, null, null);
 
         if ((res != null) && (chr != null) && (!res.isEmpty()) && (chr.getMap() != null) && (chr.getHaku() != null)) {
             Point pos = new Point(chr.getHaku().getPosition());

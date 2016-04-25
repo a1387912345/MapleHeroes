@@ -1158,7 +1158,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 break;
             case TOT_GUIDE:
                 break;
-            case STORAGE:
+            case STORAGE_OPERATION:
                 NPCHandler.Storage(slea, c, c.getPlayer());
                 break;
             case GENERAL_CHAT:
