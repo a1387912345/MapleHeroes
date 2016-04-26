@@ -1538,7 +1538,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case CHANGE_KEYMAP:
             case USE_INNER_PORTAL:
             case MOVE_HAKU:
-            case TAKE_DAMAGE:
+            //case TAKE_DAMAGE:
             case FRIENDLY_DAMAGE:
            // case CLOSE_RANGE_ATTACK: //todo code zero
           //  case RANGED_ATTACK: //todo code zero

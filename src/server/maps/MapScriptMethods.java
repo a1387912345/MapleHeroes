@@ -418,6 +418,7 @@ public class MapScriptMethods {
         direction_59063,
         direction_59070,
         direction_59070b,
+        enter_101074000,
         NULL;
 
         private static onUserEnter fromString(String Str) {
@@ -3591,6 +3592,15 @@ public class MapScriptMethods {
                         MapleQuest.getInstance(28862).forceComplete(c.getPlayer(), 0);
                     }
                 }
+                break;
+            }
+            
+            case enter_101074000: {
+            	c.getSession().write(UIPacket.getDirectionStatus(true));
+            	c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionInfo(9, 1));
+                c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 100, -600, 0));
+                
             }
             default: {
                 System.out.println("Unhandled script : " + scriptName + ", type : onUserEnter - MAPID " + c.getPlayer().getMapId());

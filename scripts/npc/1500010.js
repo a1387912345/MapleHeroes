@@ -17,11 +17,16 @@ function action(mode, type, selection) {
     if (status == 0) {
 	    cm.sendYesNoS("Would you like to enter #b#e[Theme Dungeon Ellinel Fairy Academy]#n#k?", 4);
 	} else if (status == 1) {
-	  if (cm.getQuestStatus(32102)==0){
+        cm.warp(101074000, 0);
+        cm.dispose();
+    }
+	  /*
+        if (cm.getQuestStatus(32101)== 0){
 	    cm.warp(101070000,0);
 		cm.forceStartQuest(32102);
 	} else
 		cm.warp(101070000,0);
         cm.dispose();
     }
+    */
   }

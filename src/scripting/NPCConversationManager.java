@@ -499,7 +499,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             sendSimple(text);
             return;
         }
-        lastMsg = (byte) (GameConstants.GMS ? 15 : 0xE);//was 0xF
+        lastMsg = (byte) (GameConstants.GMS ? 16 : 0xE);//was 0xF
         c.getSession().write(NPCPacket.getNPCTalk(id, (byte) lastMsg, text, "", (byte) 0));
     }
 
@@ -2558,7 +2558,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         c.getSession().write(CField.UIPacket.IntroEnableUI(0));
     }
     
-        public void showLumiVid() {
+    public void showLumiVid() {
         warp(101000100);
         forceCompleteQuest(25560);
     }

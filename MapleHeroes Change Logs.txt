@@ -21,6 +21,11 @@
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
 
+[4/26/2016]
+- Fixed Magic Guard taking in wrong damage
+- Fixed revive ui not showing when player dies
+- Added some job advancement quests for Cleric and I/L Wizard
+
 [4/23/2016]
 - Updated RecvPacketOpcode and SendPacketOpcode to v172.1
 - Updated CField.getCharInfo() and CField.spawnPlayerMapobject(); Can now login to the channel

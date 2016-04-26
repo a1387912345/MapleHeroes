@@ -4095,6 +4095,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             setXenonSurplus((short) 0);
             pyramidSubway.fail(this);
         }
+        
+        client.getSession().write(CField.showReviveUI());
     }
 
     public void updatePartyMemberHP() {
@@ -10375,7 +10377,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         if (deathCount > 99) {
             deathCount = 99;
         }
-//        client.getSession().write(EffectPacket.updateDeathCount(deathCount));
+        //client.getSession().write(EffectPacket.updateDeathCount(deathCount));
     }
 
     public void giveMiracleBlessing() {

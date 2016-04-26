@@ -23,11 +23,12 @@ public class QuestActionHandler extends AbstractMaplePacketHandler {
             return;
         }
 		final byte action = lea.readByte();
-        int quest = lea.readUShort();
+        int quest = lea.readInt();
         if (quest == 20734) {
             c.getSession().write(CWvsContext.ultimateExplorer());
             return;
         }
+
         final MapleQuest q = MapleQuest.getInstance(quest);
         switch (action) {
             case 0: { // Restore lost item
@@ -92,8 +93,6 @@ public class QuestActionHandler extends AbstractMaplePacketHandler {
                 }
                 //c.getPlayer().updateTick(slea.readInt());
                 NPCScriptManager.getInstance().endQuest(c, npc, quest, false);
-                c.getSession().write(EffectPacket.showForeignEffect(14)); // Quest completion
-                chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getId(), 14), false);
                 break;
             }
         }

@@ -58,11 +58,11 @@ public class TakeDamageHandler extends AbstractMaplePacketHandler {
         Point pPos = new Point(0, 0);
         MapleMonster attacker = null;
         
-               if (GameConstants.isXenon(chr.getJob())) {
-                if (chr.getSkillLevel(36110004) > 0) {
-                    chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
-                }
-            }
+        if (GameConstants.isXenon(chr.getJob())) {
+        	if (chr.getSkillLevel(36110004) > 0) {
+        		chr.getMap().broadcastMessage(JobPacket.XenonPacket.EazisSystem(chr.getId(), oid));
+        	}
+        }
                
         if ((chr == null) || (chr.isHidden()) || (chr.getMap() == null)) {
             c.getSession().write(CWvsContext.enableActions());
@@ -218,31 +218,31 @@ public class TakeDamageHandler extends AbstractMaplePacketHandler {
                     }
                     chr.addMPHP(-hploss, -mploss);
                 }
-            }				if (chr.getTotalSkillLevel(SkillFactory.getSkill(27000003)) > 0) {
-					int hploss = 0;
-					int mploss = 0;
-					if (isDeadlyAttack) {
-						if (stats.getHp() > 1) {
-							hploss = stats.getHp() - 1;
-						}
-						if (stats.getMp() > 1) {
-							mploss = stats.getMp() - 1;
-						}
-						chr.addMPHP(-hploss, -mploss);
-					} else {
-						double lost = SkillFactory
-								.getSkill(27000003)
-								.getEffect(
-										chr.getTotalSkillLevel(SkillFactory
-												.getSkill(27000003))).getX() / 100.0D;
-						mploss = (int) (damage * lost + mpattack);
-						hploss = damage - mploss;
-						if (mploss > stats.getMp()) {
-							mploss = stats.getMp();
-							hploss = damage - mploss + mpattack;
-						}
-						chr.addMPHP(-hploss, -mploss);
+            } else if (chr.getTotalSkillLevel(SkillFactory.getSkill(27000003)) > 0) {
+				int hploss = 0;
+				int mploss = 0;
+				if (isDeadlyAttack) {
+					if (stats.getHp() > 1) {
+						hploss = stats.getHp() - 1;
 					}
+					if (stats.getMp() > 1) {
+						mploss = stats.getMp() - 1;
+					}
+					chr.addMPHP(-hploss, -mploss);
+				} else {
+					double lost = SkillFactory
+							.getSkill(27000003)
+							.getEffect(
+									chr.getTotalSkillLevel(SkillFactory
+											.getSkill(27000003))).getX() / 100.0D;
+					mploss = (int) (damage * lost + mpattack);
+					hploss = damage - mploss;
+					if (mploss > stats.getMp()) {
+						mploss = stats.getMp();
+						hploss = damage - mploss + mpattack;
+					}
+					chr.addMPHP(-hploss, -mploss);
+				}
         	} else if (chr.getStat().mesoGuardMeso > 0.0D) {
                 int mesoloss = (int) (damage * (chr.getStat().mesoGuardMeso / 100.0D));
                 if (chr.getMeso() < mesoloss) {

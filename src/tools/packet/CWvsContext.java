@@ -51,7 +51,6 @@ public class CWvsContext {
 
     public static byte[] updatePlayerStats(Map<MapleStat, Long> mystats, boolean itemReaction, MapleCharacter chr) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
         mplew.writeShort(SendPacketOpcode.UPDATE_STATS.getValue());
         mplew.write(itemReaction ? 1 : 0);
         long updateMask = 0L;
@@ -127,8 +126,11 @@ public class CWvsContext {
         if ((updateMask == 0L) && (!itemReaction)) {
             mplew.write(1);
         }
-        mplew.writeInt(255);
-        mplew.write(0);
+        mplew.write(-1); // nMixBaseHairColor
+        mplew.write(0); // nMixAddHairColor
+        mplew.write(0); // nMixHairBaseProb
+        mplew.write(0); // aLevelQuest
+        mplew.write(0); // battleRecoveryInfo
         
         return mplew.getPacket();
     }
@@ -3267,7 +3269,7 @@ public class CWvsContext {
 
             mplew.writeShort(SendPacketOpcode.SHOW_STATUS_INFO.getValue());
             mplew.write(1);
-            mplew.writeShort(quest.getQuest().getId());
+            mplew.writeInt(quest.getQuest().getId());
             mplew.write(quest.getStatus());
             switch (quest.getStatus()) {
                 case 0:
@@ -3446,7 +3448,7 @@ public class CWvsContext {
 
             mplew.writeShort(SendPacketOpcode.SHOW_STATUS_INFO.getValue());
             mplew.write(12);
-            mplew.writeShort(quest);
+            mplew.writeInt(quest);
             mplew.writeMapleAsciiString(data);
 //            System.err.println("infoquest " + mplew.toString());
             return mplew.getPacket();

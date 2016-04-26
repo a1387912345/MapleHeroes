@@ -411,6 +411,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     MOVE_SCREEN_X((short) 0x199),//199
     MOVE_SCREEN_DOWN((short) 0x19A),//19A
     CAKE_PIE_INSTRUMENTS((short) 0x19B),//
+    REVIVE_UI((short) 0x2CF),         //v172.1 - 0x2CF
     COOLDOWN((short) 0x30E),          //v146 - 0x269; v171.3 - 0x34A; v172.1 - 0x30E
     SPAWN_SUMMON((short) 0x34E),      //v146 - 0x26B; v171.3 - 0x34C; v172.1 - 0x34E
     REMOVE_SUMMON((short) 0x34F),     //v146 - 0x26C; v171.3 - 0x34D; v172.1 - 0x34F
@@ -440,7 +441,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     CATCH_MONSTER((short) 0x289),//24F
     MONSTER_PROPERTIES((short) 0x1B9),
     REMOVE_TALK_MONSTER((short) 0x1BA),
-    TALK_MONSTER((short) 0x28A),
+    TALK_MONSTER((short) 0x372),  // v172.1 - 0x372?
     CYGNUS_ATTACK((short) 0x28F),
     MONSTER_RESIST((short) 0x290),//
     MOB_REACTION((short) 0x291), // v146 - 0x291; v171 - 0x38E; v171.2 -  ?
@@ -619,7 +620,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     STRENGTHEN_UI((short) 0x408),//39D
     //Unplaced:
     MAPLE_POINT((short) 0x999),//E6 //v146 - 0xED; v170 - 0x534; v171 - nope
-    DEATH_COUNT((short) 0x2CE), // v146 - 0x206; v171.3 - 0x2CE
+    DEATH_COUNT((short) 0x2CF), // v146 - 0x206; v171.3 - 0x2CF // not correct
 
     REDIRECTOR_COMMAND((short) 0x1337), 
     
@@ -694,8 +695,8 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
             //case MOVE_SUMMON:
             // case MOVE_FAMILIAR:
             
-             case ANDROID_MOVE:
-             case INVENTORY_OPERATION:
+            case ANDROID_MOVE:
+            case INVENTORY_OPERATION:
             case MOVE_PET:
             //case SHOW_SPECIAL_EFFECT:
             case DROP_ITEM_FROM_MAPOBJECT:
@@ -704,7 +705,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
             case DAMAGE_PLAYER:
             case SHOW_MONSTER_HP:
             case CLOSE_RANGE_ATTACK:
-       //     case RANGED_ATTACK:
+            case RANGED_ATTACK:
             //case ARAN_COMBO:
             case REMOVE_BG_LAYER:
             case SPECIAL_STAT:

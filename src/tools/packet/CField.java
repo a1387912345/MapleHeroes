@@ -2244,9 +2244,10 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
 
         mplew.writeShort(SendPacketOpcode.UPDATE_QUEST_INFO.getValue());
         mplew.write(progress);
-        mplew.writeShort(quest);
+        mplew.writeInt(quest);
         mplew.writeInt(npc);
         mplew.writeInt(0);
+        mplew.write(1);
 
         return mplew.getPacket();
     }
@@ -2256,9 +2257,10 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
 
         mplew.writeShort(SendPacketOpcode.UPDATE_QUEST_INFO.getValue());
         mplew.write(11);//was 10
-        mplew.writeShort(quest);
+        mplew.writeInt(quest);
         mplew.writeInt(npc);
         mplew.writeInt(nextquest);
+        mplew.write(0);
 
         return mplew.getPacket();
     }
@@ -4686,6 +4688,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
 
             return mplew.getPacket();
         }
+        
     }
 
     public static byte[] showWeirdEffect(String effect, int itemId) {
@@ -4771,5 +4774,19 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         mplew.writeInt(1);
 
         return mplew.getPacket();
+    }
+    
+    /**
+     * Shows a Revive UI that sends the player to the nearest town after they have died.
+     * @return <code>01 00 00 00 00 00 00 00 00</code> packet
+     */
+    public static byte[] showReviveUI() {
+    	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+    	
+    	mplew.writeShort(SendPacketOpcode.REVIVE_UI.getValue());
+    	mplew.write(1); // 1 to show; 0 to not show
+    	mplew.writeLong(0);
+    	
+    	return mplew.getPacket();
     }
 }

@@ -352,10 +352,12 @@ public class MapleQuest implements Serializable {
         }
     }
 
-    public void forceComplete(MapleCharacter c, int npc) {
+    public void forceComplete(MapleCharacter chr, int npc) {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, (byte) 2, npc);
-        newStatus.setForfeited(c.getQuest(this).getForfeited());
-        c.updateQuest(newStatus);
+        newStatus.setForfeited(chr.getQuest(this).getForfeited());
+        chr.getClient().getSession().write(EffectPacket.showForeignEffect(14)); // Quest completion effect
+        chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getId(), 14), false);
+        chr.updateQuest(newStatus);
     }
 
     public int getId() {
