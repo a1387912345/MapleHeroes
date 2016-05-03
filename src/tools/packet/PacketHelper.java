@@ -1537,8 +1537,10 @@ public static void addRedLeafInfo(MaplePacketLittleEndianWriter mplew, MapleChar
             mask = new int[12];
         }
         */
+        System.out.println("Cancel stats" + statups.toString());
         for (Buffstat statup : statups) {
-            mask[(statup.getPosition() - 1)] |= statup.getValue();
+            mask[(statup.getPosition() - 1)] += statup.getValue();
+            System.out.println(statup.getValue());
         }
         for(int i = 0; i < mask.length; i++) {
         	mplew.writeInt(mask[i]);
@@ -1598,7 +1600,7 @@ public static void addRedLeafInfo(MaplePacketLittleEndianWriter mplew, MapleChar
         }
         */
         for (Buffstat statup : statups.keySet()) {
-            mask[(statup.getPosition() - 1)] |= statup.getValue();
+            mask[(statup.getPosition() - 1)] += statup.getValue();
         }
         for(int i = 0; i < mask.length; i++) {
         	mplew.writeInt(mask[i]);

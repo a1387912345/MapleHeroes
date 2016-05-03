@@ -1,6 +1,6 @@
 package server;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import constants.Skills;
@@ -8,9 +8,10 @@ import server.skills.*;
 
 public class SkillProcessor {
 
-	private SkillHandler[] handlers;
+	private Map<Integer, SkillHandler> handlers = new HashMap<Integer, SkillHandler>();
 	
 	private SkillProcessor() {
+		/*
 		int maxSkillId = 0;
 		for (Skills skill : Skills.values()) {
 			if(skill.getId() > maxSkillId) {
@@ -19,16 +20,17 @@ public class SkillProcessor {
 		}
 		
 		handlers = new SkillHandler[maxSkillId + 1];
+		*/
 	}
 	
-	public SkillHandler getHandler(int skillId) {
+	public SkillHandler getHandler(int skillid) {
 		/*
 		if(skillId > handlers.length) {
 			return null;
 		}
 		*/
 		try {
-			SkillHandler handler = handlers[skillId];
+			SkillHandler handler = handlers.get(skillid);
 			if(handler != null) {
 				return handler;
 			}
@@ -37,6 +39,7 @@ public class SkillProcessor {
 		return new AbstractSkillHandler();
 	}
 	
+	/*
 	public void registerHandler(Skills skill, SkillHandler handler) {
 		try {
 			handlers[skill.getId()] = handler;
@@ -44,6 +47,7 @@ public class SkillProcessor {
 			System.out.println("Error registering skill handler " + skill.getId());
 		}
 	}
+	*/
 	
 	public synchronized static SkillProcessor getProcessor() {
 		SkillProcessor processor = new SkillProcessor();
@@ -52,8 +56,12 @@ public class SkillProcessor {
 	}
 	
 	public void reset() {
+		/*
 		handlers = new SkillHandler[handlers.length];
 		
 		registerHandler(Skills.HASTE, new HasteSkill());
+		*/
+		handlers.put(Skills.HASTE.getId(), new HasteSkill());
+		handlers.put(Skills.ADVANCED_BLESS.getId(), new AdvancedBlessSkill());
 	}
 }

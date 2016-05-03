@@ -2087,6 +2087,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public final void setQuestRecord(Object ch, final int questid, final String data) {
         ((MapleCharacter) ch).getQuestNAdd(MapleQuest.getInstance(questid)).setCustomData(data);
     }
+    
+    public final void updateQuest(final int questid, final String status) {
+    	c.getSession().write(CWvsContext.InfoPacket.updateQuest(questid, status));
+    }
 
     public final void doWeddingEffect(final Object ch) {
         final MapleCharacter chr = (MapleCharacter) ch;

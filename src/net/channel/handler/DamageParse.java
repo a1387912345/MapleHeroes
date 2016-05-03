@@ -1223,7 +1223,7 @@ public class DamageParse {
         if (ret.skill == 2221012|| ret.skill == 36101001 || ret.skill == 42120003) {
             lea.skip(1);
         }
-        lea.skip(1);
+        lea.skip(1); // Skill Level
         lea.readInt();
        // lea.readInt(); //same as above
         lea.readShort();
@@ -1275,7 +1275,7 @@ public class DamageParse {
 
         ret.unk = lea.readByte();
         ret.display = lea.readUShort();
-        if (ret.skill == 2221012 || ret.skill == 36101001 ||ret.skill == 42120003) {
+        if (ret.skill == 2221012 || ret.skill == 36101001 ||ret.skill == 42120003 || ret.skill == 2311007) {
             lea.skip(4);
         } else {
             lea.skip(5);
@@ -1287,12 +1287,10 @@ public class DamageParse {
         ret.lastAttackTickCount = lea.readInt();
         if (GameConstants.isEnergyBuff(ret.skill)) {
             lea.skip(4);
-        } 
-        else if (ret.skill == 4341052){//Asura
+        } else if (ret.skill == 4341052){//Asura
             lea.skip(3); //new
-        } 
-        else {
-            lea.skip(8);
+        } else {
+        	lea.skip(8);
         }
 
         ret.allDamage = new ArrayList();

@@ -1,7 +1,7 @@
-/* Dawnveil
-    Enter Ellinel Fairy Academy Theme Dungeon
-	Fanzy
-    Made by Daenerys
+/*
+    Description: Enter & Exit Ellinel Fairy Academy Theme Dungeon
+	NPC: Fanzy
+    Author: Richard
 */
 var status = -1;
 
@@ -14,19 +14,19 @@ function action(mode, type, selection) {
             cm.dispose();
         status--;
     }
-    if (status == 0) {
-	    cm.sendYesNoS("Would you like to enter #b#e[Theme Dungeon Ellinel Fairy Academy]#n#k?", 4);
-	} else if (status == 1) {
-        cm.warp(101074000, 0);
-        cm.dispose();
+    if (cm.getMapId() == 101030000) {
+        if (status == 0) {
+            cm.sendYesNoS("Would you like to enter #b#e[Theme Dungeon Ellinel Fairy Academy]#n#k?", 4);
+        } else if (status == 1) {
+            cm.warp(101074000);
+            cm.dispose();
+        }
+    } else if (cm.getMapId() == 101070000) {
+        if (status == 0) {
+            cm.sendYesNoS("Head back to #bNorth Forest: Giant Tree#k?", 4);
+        } else if (status == 1) {
+            cm.warp(101074001);
+            cm.dispose();
+        }
     }
-	  /*
-        if (cm.getQuestStatus(32101)== 0){
-	    cm.warp(101070000,0);
-		cm.forceStartQuest(32102);
-	} else
-		cm.warp(101070000,0);
-        cm.dispose();
-    }
-    */
-  }
+}

@@ -29,6 +29,7 @@ import net.server.login.handlers.*;
 import net.server.channel.handlers.*;
 import net.server.channel.handlers.chat.*;
 import net.server.channel.handlers.pet.*;
+import net.server.channel.handlers.summon.*;
 
 public final class PacketProcessor {
 
@@ -188,6 +189,8 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.MOVE_HAKU, new MoveHakuHandler(RecvPacketOpcode.MOVE_HAKU));
         registerHandler(RecvPacketOpcode.CHANGE_HAKU, new ChangeHakuHandler(RecvPacketOpcode.CHANGE_HAKU));
         
+        registerHandler(RecvPacketOpcode.MOVE_SUMMON, new MoveSummonHandler(RecvPacketOpcode.MOVE_SUMMON));
+        registerHandler(RecvPacketOpcode.SUMMON_ATTACK, new SummonAttackHandler(RecvPacketOpcode.SUMMON_ATTACK));
         
         registerHandler(RecvPacketOpcode.PET_BUFF, new PetBuffHandler(RecvPacketOpcode.PET_BUFF));
         registerHandler(RecvPacketOpcode.CANCEL_DEBUFF, new CancelDebuffHandler(RecvPacketOpcode.CANCEL_DEBUFF)); // Does nothing.

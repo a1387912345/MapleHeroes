@@ -13,7 +13,7 @@ public class HasteSkill extends AbstractSkillHandler {
 	
 	@Override
 	public byte[] giveBuff(int buffid, int bufflength, Map<MapleBuffStat, Integer> statups) {
-		System.out.println("attempting to give buff");
+		System.out.println("attempting to give haste");
     	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
     	
     	mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
@@ -58,6 +58,7 @@ public class HasteSkill extends AbstractSkillHandler {
         mplew.write(0);
         mplew.write(0);
         
+        System.out.println(mplew.toString());
     	return mplew.getPacket();
     }
 

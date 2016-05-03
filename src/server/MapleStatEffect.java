@@ -1138,11 +1138,11 @@ public class MapleStatEffect implements Serializable {
                         case 2321002:
                             ret.statups.put(MapleBuffStat.MANA_REFLECTION, 1);
                             break;
-                        case 2321005: // holy shield, TODO JUMP
+                        case 2321005: // Advanced Bless
 //                            ret.statups.put(MapleBuffStat.HOLY_SHIELD, GameConstants.GMS ? (int) ret.level : ret.info.get(MapleStatInfo.x));
                             ret.statups.put(MapleBuffStat.HOLY_SHIELD, ret.info.get(MapleStatInfo.x));
-                            ret.statups.put(MapleBuffStat.HP_BOOST, ret.info.get(MapleStatInfo.y));//fix names
-                            ret.statups.put(MapleBuffStat.MP_BOOST, ret.info.get(MapleStatInfo.z));
+                            ret.statups.put(MapleBuffStat.HP_BOOST, ret.info.get(MapleStatInfo.indieMhp));//fix names
+                            ret.statups.put(MapleBuffStat.MP_BOOST, ret.info.get(MapleStatInfo.indieMmp));
                             break;
                         case 3121007: // Hamstring
                             ret.statups.put(MapleBuffStat.HAMSTRING, ret.info.get(MapleStatInfo.x));
@@ -1744,6 +1744,9 @@ public class MapleStatEffect implements Serializable {
             applyfrom.dropMessage(5, "You may not use this skill in towns.");
             applyfrom.getClient().getSession().write(CWvsContext.enableActions());
             return false;
+        } else if (sourceid == 2301004 && applyfrom.getBuffedValue(MapleBuffStat.HOLY_SHIELD) != null) {
+        	applyfrom.getClient().getSession().write(CWvsContext.enableActions());
+        	return false;
         }
         int hpchange = calcHPChange(applyfrom, primary);
         int mpchange = calcMPChange(applyfrom, primary);
@@ -2139,20 +2142,20 @@ public class MapleStatEffect implements Serializable {
                 }
             }
         }
-               if (applyto.getJob() == 132) {       
-               if (applyto.getBuffedValue(MapleBuffStat.IGNORE_DEF) != 1); { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
+        if (applyto.getJob() == 132) {
+        	if (applyto.getBuffedValue(MapleBuffStat.IGNORE_DEF) != 1); { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
                 applyto.cancelBuffStats(MapleBuffStat.BEHOLDER);
                 applyfrom.getClient().getSession().write(CField.skillCooldown(1321013, getCooldown(applyfrom) * 0));
                 applyto.addCooldown(1321013, System.currentTimeMillis(), getCooldown(applyfrom));
-                applyto.removeCooldown(1321013);
-            } 
-            }
+                applyto.removeCooldown(1321013);  
+        	}     
+        }
                
-               if (GameConstants.isLuminous(applyto.getJob())) {       
-               if (applyto.getBuffedValue(MapleBuffStat.LUMINOUS_GAUGE) != 1); { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
-                   //World.Broadcast.broadcastMessage(CField.getGameMessage("Light?.", (short) 8));
+        if (GameConstants.isLuminous(applyto.getJob())) {       
+        	if (applyto.getBuffedValue(MapleBuffStat.LUMINOUS_GAUGE) != 1); { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
+        		//World.Broadcast.broadcastMessage(CField.getGameMessage("Light?.", (short) 8));
             } 
-            }
+        }
         if (fatigueChange != 0 && applyto.getSummonedFamiliar() != null && (familiars == null || familiars.contains(applyto.getSummonedFamiliar().getFamiliar()))) {
             applyto.getSummonedFamiliar().addFatigue(applyto, fatigueChange);
         }
@@ -3111,10 +3114,8 @@ public class MapleStatEffect implements Serializable {
                 applyto.getMap().broadcastMessage(applyto, BuffPacket.giveForeignBuff(applyto.getId(), stat, this), false);
                 break;
             }
-            case 2321005: //holy shield
-                if (GameConstants.GMS) { //TODO JUMP
-                    applyto.cancelEffectFromBuffStat(MapleBuffStat.BLESS);
-                }
+            case 2321005: // Advanced Bless
+                applyto.cancelEffectFromBuffStat(MapleBuffStat.BLESS);
                 break;
             case 4211008:
             case 4331002:
@@ -3405,7 +3406,7 @@ public class MapleStatEffect implements Serializable {
             applyto.getClient().getSession().write(EffectPacket.showOwnBuffEffect(sourceid - 1000, 1, applyto.getLevel(), level, (byte) 1));
         }
         if (!isMonsterRiding() && !isMechDoor() && getSummonMovementType() == null) {
-            applyto.cancelEffect(this, true, -1, localstatups);
+            applyto.cancelEffect(this, false, -1, localstatups);
         }
         SkillProcessor processor = SkillProcessor.getProcessor();
         SkillHandler skillHandler = processor.getHandler(sourceid);

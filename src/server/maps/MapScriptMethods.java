@@ -419,6 +419,7 @@ public class MapScriptMethods {
         direction_59070,
         direction_59070b,
         enter_101074000,
+        enter_101074001,
         NULL;
 
         private static onUserEnter fromString(String Str) {
@@ -1908,11 +1909,6 @@ public class MapScriptMethods {
             }
 
             case enter_101070000: {
-                try {
-                    c.getSession().write(CWvsContext.getTopMsg("The forest of fairies seems to materialize from nowhere as you exit the passage."));
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                }
                 c.getSession().write(CField.MapEff("temaD/enter/fairyAcademy"));
                 break;
             }
@@ -3596,11 +3592,55 @@ public class MapScriptMethods {
             }
             
             case enter_101074000: {
-            	c.getSession().write(UIPacket.getDirectionStatus(true));
-            	c.getSession().write(UIPacket.IntroEnableUI(1));
-                c.getSession().write(UIPacket.getDirectionInfo(9, 1));
-                c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 100, -600, 0));
-                
+            	try {
+	            	c.getSession().write(UIPacket.getDirectionStatus(true));
+	            	c.getSession().write(UIPacket.IntroEnableUI(1));
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 1));
+	                c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 100, -600, 0));
+	                c.getSession().write(UIPacket.getDirectionStatus(true));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
+	                Thread.sleep(1000);
+	                c.getSession().write(CWvsContext.getTopMsg("The forest of fairies seems to materialize from nowhere as you exit the passage."));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 3800));
+	                Thread.sleep(3800);
+	                c.getSession().write(CField.environmentChange("temaD/enter/fairyAcademy", 12));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 2800));
+	                Thread.sleep(2800);
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 0));
+	            	c.getSession().write(UIPacket.IntroEnableUI(0));
+
+	                
+	                MapleMap mapto = c.getChannelServer().getMapFactory().getMap(101070000);
+	                c.getPlayer().changeMap(mapto, mapto.getPortal(0));
+            	} catch (InterruptedException e) {
+            		
+            	}
+            	break;
+            }
+            
+            case enter_101074001: {
+            	try {
+	            	c.getSession().write(UIPacket.getDirectionStatus(true));
+	            	c.getSession().write(UIPacket.IntroEnableUI(1));
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 1));
+	                c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 100, 600, 0));
+	                c.getSession().write(UIPacket.getDirectionStatus(true));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
+	                Thread.sleep(1000);
+	                c.getSession().write(CWvsContext.getTopMsg("The forest of fairies gradually fades from view, as if waking from a dream."));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
+	                Thread.sleep(2000);
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 0));
+	            	c.getSession().write(UIPacket.IntroEnableUI(0));
+
+	            	MapleMap mapto = c.getChannelServer().getMapFactory().getMap(101030000);
+	                c.getPlayer().changeMap(mapto, mapto.getPortal(5));
+
+            	} catch (InterruptedException e) {
+            		
+            	}
+
+
             }
             default: {
                 System.out.println("Unhandled script : " + scriptName + ", type : onUserEnter - MAPID " + c.getPlayer().getMapId());

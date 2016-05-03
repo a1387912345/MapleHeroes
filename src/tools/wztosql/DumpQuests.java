@@ -24,7 +24,9 @@ public class DumpQuests {
 
     public DumpQuests(boolean update) throws Exception {
 	this.update = update;
-	this.quest = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Quest.wz"));
+	//this.quest = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Quest.wz"));
+	this.quest = MapleDataProviderFactory.getDataProvider(new File("C:/Users/Richard/Desktop/MapleStory Server Dev/MapleHeroes Project Files/wz/Quest.wz"));
+	
 	if (quest == null) {
             hadError = true;
         }

@@ -1661,15 +1661,14 @@ public class CField {
         return mplew.getPacket();
     }
 
-public static byte[] showAndroidEmotion(int cid, byte emo1) {
+public static byte[] showAndroidEmotion(int cid, byte emotion) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.ANDROID_EMOTION.getValue());
-        mplew.writeInt(cid);
-        mplew.write(0);//new
-        mplew.write(emo1);
+        //mplew.writeInt(cid);
+        mplew.writeInt(emotion);
+        mplew.writeInt(0); // tDuration
       
-
         return mplew.getPacket();
     }
 
@@ -2030,7 +2029,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             mplew.writeShort(SendPacketOpcode.DIRECTION_FACIAL_EXPRESSION.getValue());
             mplew.writeInt(expression);
             mplew.writeInt(duration);
-            mplew.write(0);
+            mplew.write(0); // bByItemOption
 
 
             /* Facial Expressions:
@@ -2235,16 +2234,22 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         mplew.writeShort(SendPacketOpcode.CURRENT_MAP_WARP.getValue());
         mplew.write(0);
         mplew.write(portal);
+        if (portal <= 0) {
+        	mplew.writeInt(0); // nIdx, map id? 
+        } else {
+        	mplew.writeInt(0); // dwCallerId, player id?
+        	mplew.writeInt(0); // ptTarget, x,y point
+        }
 
         return mplew.getPacket();
     }
 
-    public static byte[] updateQuestInfo(MapleCharacter c, int quest, int npc, byte progress) {
+    public static byte[] updateQuestInfo(MapleCharacter c, int questid, int npc, byte progress) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.UPDATE_QUEST_INFO.getValue());
         mplew.write(progress);
-        mplew.writeInt(quest);
+        mplew.writeInt(questid);
         mplew.writeInt(npc);
         mplew.writeInt(0);
         mplew.write(1);
@@ -2252,13 +2257,13 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         return mplew.getPacket();
     }
 
-    public static byte[] updateQuestFinish(int quest, int npc, int nextquest) {
+    public static byte[] updateQuestFinish(int questid, int npc, int nextquest) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.UPDATE_QUEST_INFO.getValue());
-        mplew.write(11);//was 10
-        mplew.writeInt(quest);
-        mplew.writeInt(npc);
+        mplew.write(11);
+        mplew.writeInt(questid);
+        mplew.writeInt(npc);  // uJobDemandLower
         mplew.writeInt(nextquest);
         mplew.write(0);
 
@@ -2624,20 +2629,21 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         return mplew.getPacket();
     }
 
-    public static byte[] spawnDoor(int oid, Point pos, boolean animation) {
+    public static byte[] spawnMysticDoor(int oid, int skillid, Point pos, boolean animation) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-        mplew.writeShort(SendPacketOpcode.SPAWN_DOOR.getValue());
+        mplew.writeShort(SendPacketOpcode.SPAWN_MYSTIC_DOOR.getValue());
         mplew.write(animation ? 0 : 1);
         mplew.writeInt(oid);
+        mplew.writeInt(skillid);
         mplew.writePos(pos);
 
         return mplew.getPacket();
     }
 
-    public static byte[] removeDoor(int oid, boolean animation) {
+    public static byte[] removeMysticDoor(int oid, boolean animation) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.writeShort(SendPacketOpcode.REMOVE_DOOR.getValue());
+        mplew.writeShort(SendPacketOpcode.REMOVE_MYSTIC_DOOR.getValue());
         mplew.write(animation ? 0 : 1);
         mplew.writeInt(oid);
 
@@ -3832,12 +3838,16 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             if ((summon.getSkill() == 35121003) && (summon.getOwner().getMap() != null)) {//Giant Robot SG-88
                 mplew.writeShort(summon.getOwner().getMap().getFootholds().findBelow(summon.getPosition()).getId());
             } else {
-                mplew.writeShort(0);
+                mplew.writeShort(summon.getOwner().getMap().getFootholds().findBelow(summon.getPosition()).getId());
             }
             mplew.write(summon.getMovementType().getValue());
             mplew.write(summon.getSummonType());
             mplew.write(animated ? 1 : 0);
-            mplew.write(1);
+            mplew.writeInt(0); // dwMobID
+            mplew.write(0); // bFlyMob
+            mplew.write(1); // bBeforeFirstAttack
+            mplew.writeInt(0); // nLookID
+            mplew.writeInt(0); // nBulletID
             MapleCharacter chr = summon.getOwner();
             mplew.write((summon.getSkill() == 4341006) && (chr != null) ? 1 : 0); // Mirrored Target
             if ((summon.getSkill() == 4341006) && (chr != null)) { // Mirrored Target
@@ -3852,6 +3862,9 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
             if (summon.getSkill() == 3121013) {
                 chr.dropMessage(6,"no");
             }
+            
+            mplew.write(0); // bJaguarActive
+            mplew.writeInt(0); // tSummonTerm
 
             return mplew.getPacket();
         }
@@ -3937,7 +3950,7 @@ public static byte[] showAndroidEmotion(int cid, byte emo1) {
         public static byte[] pvpSummonAttack(int cid, int playerLevel, int oid, int animation, Point pos, List<AttackPair> attack) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-            mplew.writeShort(SendPacketOpcode.PVP_SUMMON.getValue());
+            mplew.writeShort(SendPacketOpcode.SUMMON_PVP_ATTACK.getValue());
             mplew.writeInt(cid);
             mplew.writeInt(oid);
             mplew.write(playerLevel);

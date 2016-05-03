@@ -1,28 +1,19 @@
-package server;
+package server.skills;
 
 import java.util.Map;
 
 import client.MapleBuffStat;
 import constants.GameConstants;
 import net.SendPacketOpcode;
+import server.AbstractSkillHandler;
 import tools.data.MaplePacketLittleEndianWriter;
 import tools.packet.PacketHelper;
 
-public class AbstractSkillHandler implements SkillHandler {
+public class AdvancedBlessSkill extends AbstractSkillHandler {
 	
-	public AbstractSkillHandler() {
-		
-	}
-
-	@Override
-	public void handleBuff() {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public byte[] giveBuff(int buffid, int bufflength, Map<MapleBuffStat, Integer> statups) {
-		System.out.println("trying for abstract");
+		System.out.println("Trying for advanced bless handler");
 		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
     	
     	mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
@@ -52,14 +43,8 @@ public class AbstractSkillHandler implements SkillHandler {
                 mplew.writeInt(bufflength);
             }
         } 
-        
-        if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR)) {
-        	mplew.write(0);
-        }
- 
-        mplew.writeShort(1);
-        mplew.write(0);
-        mplew.write(0);
+
+        mplew.writeLong(0);
         mplew.write(0);
         
     	return mplew.getPacket();

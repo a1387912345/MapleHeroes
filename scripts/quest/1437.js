@@ -1,50 +1,55 @@
-/* 
-	NPC Name: 		Arec
-	Map(s): 		El Nath : Chief's Residence
-	Description: 		Quest - [Job Advancement]Blade Lord
-*/
+/**
+ * Quest Name: [Job Advancement] Priest
+ * Description: Priest 3rd Job Advancement
+ * NPC: Robeira
+ */
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
-	qm.dispose();
-    } else {
-	if (mode == 1)
-	    status++;
-	else
-	    status--;
-	if (status == 0) {
-		qm.sendNext("All you have to do is go where I tell you, beat an enemy, and bring back the spoils... If you don't think you can handle that, go back to Victoria Island now. Ossyria is no place for weaklings.");
-    } else if (status == 1) {
-	    qm.sendNextPrev("There is an obelisk at Sharp Cliff I near El Nath. Behind it, there's a path to the Holy Ground at the Snowfield. Touch the Holy Stone there, and you'll be warped to another dimension. Your enemy is waiting for you there.");
-	} else if (status == 2) {
-	    qm.sendNextPrev("Bring me proof of your victory, and we'll see if you're ready.");
-	} else if (status == 3) {
-	    qm.forceStartQuest();
-	    qm.dispose();
+	if (mode == -1) {
+		qm.dispose();
+	} else {
+		if (mode == 1)
+			status++;
+		else
+			status--;
 	}
-    }
-}
-function end(mode, type, selection) {
-    if (mode == -1) {
-	qm.dispose();
-    } else {
-	if (mode == 1)
-	    status++;
-	else
-	    status--;
 	if (status == 0) {
-	    if (!qm.haveItem(4031059)) {
-		qm.sendOk("Very good. Now come back to me when you have received #i4031059");
+		qm.warp(211040401);
 		qm.forceStartQuest();
 		qm.dispose();
-	    } else {
-		qm.getPlayer().changeJob(231);
-		qm.gainSp(3);
-		qm.gainItem(4031059, -1);
-		qm.forceCompleteQuest();
-		qm.dispose();
-		 }
-    }
+	}
 }
+
+function end(mode, type, selection) {
+    if (mode == -1) {
+		qm.dispose();
+    } else {
+		if (mode == 1) {
+			status++;
+		} else {
+			if (status == 1) {
+				qm.sendOk("I'll be here waiting.");
+				qm.dispose();
+			}
+			status--;
+		}
+	}
+	if (status == 0) {
+		if (!qm.haveItem(4031059)) {
+			qm.sendOk("Come back to me when you have received a #i4031059");
+			qm.dispose();
+		} else {
+			qm.sendNext("Did you meet #bthe other Grendel the Really Old#k? The #bHoly Stone#k is more powerful than I thought, if it allows you to fight a doppelganger in another dimension. You should thank #bGrendel the Really Old#k... he prepared all of this just for you...");
+		}
+	} else if (status == 1) {
+		qm.sendYesNo("By fighting against a true Magician, you have proven your talents with magic. The only thing left is the Job Advancement to Priest. Are you ready?");
+	} else if (status == 2) {
+		qm.getPlayer().changeJob(231);
+		qm.gainItem(4031059, -1);
+		qm.gainAp(5);
+		qm.forceCompleteQuest();
+		qm.sendOk("You are now a #bPriest#k, a master of #bhealing and holy power#k. As a true Priest, show the world your strength!");
+		qm.dispose();
+	}
 }

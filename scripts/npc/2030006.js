@@ -12,15 +12,27 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (status >= 2 && mode == 0) {
-	cm.dispose();
-	return;
-    }
-    if (mode == 1)
-	status++;
-    else
-	status--;
+	if (mode == -1) {
+		cm.dispose();
+	} else {
+		if (mode == 1) {
+			status++;
+		} else {
+			if (status == 0) {
+				cm.sendOk("I better stay away...");
+				cm.dispose();
+			}
+			status--;
+		}
+	}
+
     if (status == 0) {
+		cm.sendYesNo("#b(A mysterious energy surrounds this stone. The elder definitely told me to touch it... Should I really touch this thing?)");
+	} else if (status == 1) {
+		cm.warp(910540000);
+		cm.dispose();
+	}
+	/*
 	if (cm.getQuestStatus(1440) != 1 || cm.getQuestStatus(1439) != 1) {
 	    cm.warp(910540000);
 	    cm.dispose();
@@ -39,5 +51,5 @@ function action(mode, type, selection) {
 	    cm.sendOk("Indeed.");
 	    cm.dispose();
 	}
-    }
+	*/
 }

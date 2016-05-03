@@ -11,8 +11,8 @@ public class ServerConfig {
     public static boolean logAccounts = false; //Writes to a loose file called Account, unhashed.
     public static boolean DISABLE_PIC = false;
     public static final int flags = 3;
-    public static final String serverName = "OpenMaple";
-    public static final String eventMessage = "v171 OpenMaple Development!";
+    public static final String serverName = "Heroes of Maple";
+    public static final String eventMessage = "Heroes of Maple Development";
     public static final String rankingURL = "http://www.acernis.org/ranking";
     public static final int flag = 3;
     public static final int maxCharacters = 20;

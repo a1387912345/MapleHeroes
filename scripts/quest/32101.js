@@ -1,6 +1,7 @@
 /**
  * Quest Name: [Ellinel Fairy Academy] Fairynappers
  * NPC: Fanzy
+ * Author: Richard
  */
 var status = -1;
 

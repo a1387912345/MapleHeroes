@@ -32,11 +32,10 @@ public class ItemPickupHandler extends AbstractMaplePacketHandler {
 
 	public ItemPickupHandler(RecvPacketOpcode recv) {
 		super(recv);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void handlePacket(LittleEndianAccessor lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, final MapleCharacter chr) {
 		if (c.getPlayer().hasBlockedInventory()) { //hack
             return;
         }

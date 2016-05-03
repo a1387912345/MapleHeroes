@@ -1038,7 +1038,7 @@ public class CSPacket {
         // 31 00 09 00 // It's the map you're currently on.
         // 31 00 0A 00 // This map is not available to enter for the list.
         // 31 00 0B 00 // Users below level 7 are not allowed to go out from Maple Island.
-        mplew.writeShort(SendPacketOpcode.TROCK_LOCATIONS.getValue());
+        mplew.writeShort(SendPacketOpcode.TELEPORT_ROCK_LOCATIONS.getValue());
         mplew.write(delete ? 2 : 3);
         mplew.write(vip);
         if (vip == 1) {

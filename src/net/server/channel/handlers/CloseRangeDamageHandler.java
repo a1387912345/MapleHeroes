@@ -46,7 +46,6 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
         if ((chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        System.out.println(lea.toString());
         AttackInfo attack = DamageParse.parseDmgM(lea, chr);
         if (attack == null) {
             c.getSession().write(CWvsContext.enableActions());
@@ -70,8 +69,6 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
         if (!dmg.isEmpty()) {
 //            chr.dropMessage(-1, "Damage: " + dmg);//debug mode
         }
-        System.out.println("closeRange debug 0");
-        System.out.println(attack.skill);
         if (attack.skill != 0) {
             //chr.dropMessage(-1, "Attack Skill: " + attack.skill);//debug mode
             skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
@@ -79,7 +76,6 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
                 c.getSession().write(CWvsContext.enableActions());
                 return;
             }
-            System.out.println("closeRange debug 1");
             if (GameConstants.isDemonAvenger(chr.getJob())) {
                 int exceedMax = chr.getSkillLevel(31220044) > 0 ? 20 : 20;
              //   chr.showInfo("Info", false, "exceedMax;" + exceedMax);

@@ -323,8 +323,8 @@ public final class MonsterBook
     public final boolean monsterCaught(MapleClient c, int cardid, String cardname) {
         if ((!this.cards.containsKey(Integer.valueOf(cardid))) || ((this.cards.get(Integer.valueOf(cardid))).intValue() < 2)) {
             this.changed = true;
-            c.getPlayer().dropMessage(-6, new StringBuilder().append("Book entry updated - ").append(cardname).toString());
-            c.getSession().write(CField.EffectPacket.showForeignEffect(16));
+            c.getPlayer().dropMessage(-6, new StringBuilder().append("[").append(cardname).append("] has been successfully recorded on the Monster Book.").toString());
+            c.getSession().write(CField.EffectPacket.showForeignEffect(18));
             this.cards.put(Integer.valueOf(cardid), Integer.valueOf(2));
             if (GameConstants.GMS) {
                 if (c.getPlayer().getQuestStatus(50195) != 1) {
@@ -360,8 +360,8 @@ public final class MonsterBook
         }
         this.changed = true;
 
-        c.getPlayer().dropMessage(-6, new StringBuilder().append("New book entry - ").append(cardname).toString());
+        c.getPlayer().dropMessage(-6, new StringBuilder().append("[").append(cardname).append("] has been successfully recorded on the Monster Book.").toString());
         this.cards.put(Integer.valueOf(cardid), Integer.valueOf(1));
-        c.getSession().write(CField.EffectPacket.showForeignEffect(16));
+        c.getSession().write(CField.EffectPacket.showForeignEffect(18));
     }
 }

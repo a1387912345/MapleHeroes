@@ -968,6 +968,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     }
                     ret.skills.put(SkillFactory.getSkill(GameConstants.getEmpress_ForJob(ret.job)), new SkillEntry(maxlevel_2, (byte) 0, -1));
                 }
+                
+                if (SkillFactory.getSkill(Skills.LEVELUP.getId()) != null) { // Manually add the LEVELUP skill
+                	ret.skills.put(SkillFactory.getSkill(Skills.LEVELUP.getId()), new SkillEntry(1, (byte) 1, -1));
+                }
                 ps.close();
                 rs.close();
                 // END
@@ -2050,7 +2054,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public final void updateQuest(final MapleQuestStatus quest, final boolean update) {
         quests.put(quest.getQuest(), quest);
         if (!(quest.isCustom())) {
-            client.getSession().write(InfoPacket.updateQuest(quest));
+            client.getSession().write(InfoPacket.updateQuest(quest, ""));
             if (quest.getStatus() == 1 && !update) {
                 client.getSession().write(CField.updateQuestInfo(this, quest.getQuest().getId(), quest.getNpc(), (byte) 11));//was10
             }
@@ -2445,6 +2449,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         if (buffstats.size() <= 0) {
             return;
         }
+        System.out.println("BuffStats " + buffstats.toString());
         if (effect.isInfinity() && getBuffedValue(MapleBuffStat.INFINITY) != null) { //before
             int duration = Math.max(effect.getDuration(), effect.alchemistModifyVal(this, effect.getDuration(), false));
             final long start = getBuffedStarttime(MapleBuffStat.INFINITY);
@@ -2460,8 +2465,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 setSchedule(MapleBuffStat.INFINITY, BuffTimer.getInstance().schedule(new CancelEffectAction(this, effect, start, stat), effect.alchemistModifyVal(this, 4000, false)));
                 return;
             } else if ((effect.getSourceId() == 15001022 || effect.getSourceId() == 27121005) && !overwrite) {
-                    acaneAim = 0;
-                }
+                    acaneAim = 0;        
+            }
         }
         final boolean clonez = deregisterBuffStats(buffstats);
         if (effect.isMagicDoor()) {
@@ -2482,6 +2487,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             combo = 0;
         }
         // check if we are still logged in o.o
+        System.out.println("does it run this cancelEffect?");
         cancelPlayerBuffs(buffstats, overwrite);
         if (!overwrite) {
             if (effect.isHide() && client.getChannelServer().getPlayerStorage().getCharacterById(this.getId()) != null) { //Wow this is so fking hacky...
@@ -4753,6 +4759,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             return 0;
         }
         final SkillEntry ret = skills.get(skill);
+
         if (ret == null || ret.skillevel <= 0) {
             return 0;
         }

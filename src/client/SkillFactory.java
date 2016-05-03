@@ -40,7 +40,7 @@ public class SkillFactory {
         SummonSkillEntry sse;
 
         for (MapleDataFileEntry topDir : root.getFiles()) { // Loop thru jobs
-            if (topDir.getName().length() <= 9) {
+        	if (Character.isDigit(topDir.getName().charAt(0))) { // Checks for numerical skill files only
                 for (MapleData data : datasource.getData(topDir.getName())) { // Loop thru each jobs
                     if (data.getName().equals("skill")) {
                         for (MapleData data2 : data) { // Loop thru each jobs

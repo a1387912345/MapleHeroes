@@ -1,15 +1,13 @@
 [To Do]
-- Add channel handlers
 - Update/write new MagnifyGlassHandler
-- Fix using potions
-- Fix skill cooldowns
+- Fix using potions; HP potions work fine, MP potions static values become percentage % values
+- Fix skill cooldowns; Note: Might not need fixing. I'm testing these skills on a GM character and GM's don't have cooldowns.
 - Fix char spawn stance
 - Fix quests
 - Fix character creation for other classes
 - Fix MP heal over time
 - Refine monster controllers/spawn
 - Fix reactor; need to add char ID to packet structure
-- Fix being unable to attack in Adventurer's second starting map
 - Add MapleTalk Server
 
 [Gameplay/Scripting To Do]
@@ -20,6 +18,23 @@
 - Mobs spawn functionality is buggy. Mobs that were previously spawned, freeze when a player re-enters the map.
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
+
+[Rev 3.3]
+- Minor update to V.172.2
+- Added Priest Job Advancement
+- Added level skill to skills Map in MapleCharacter. This fixes leveling skill not doing damage.
+- Updated DamagePrase.parseDmgM(); This fixes Teleport Mastery not doing damage.
+- Updated CField.spawnMysticDoor(); This fixes Mystic Door d/c when using the skill.
+- Modified SkillFactory; This changes the way Skill.wz files are chosen to load. Instead of loading Skill.wz.img files of length <= 9, it reads all files starting with a numerical file.
+- Added summon handlers to PacketProcessor
+- Fixed CField.SummonPacket.spawnSummon(); This fixes d/cing when summoning.
+- Updated SummonAttackHandler; This fixes summon's attacks not registering damage.
+- Updated majority of CWvsContext opcodes
+- Updated AbstractSkillHandler.giveBuff() for Maple Warrior
+- Updated MapleStatEffect.applyTo(); This fixes Bless overriding Advanced Bless.
+- Updated MapleStatEffect.applyBuffEffect, changed applyto.cancelEffect() override to false; This makes it so it doesn't send a CANCEL_BUFF packet everytime a player buffs. It's more GMS like.
+- Changed SkillProcessor to use a HashMap<Integer, SkillHandler> instead of Array; Hopefully this saves memory and is more efficient.
+- Updated PacketHelper.writeMask & writeBuffMask(); This fixes BuffStats flags incorrectly added to array.
 
 [4/26/2016]
 - Fixed Magic Guard taking in wrong damage
