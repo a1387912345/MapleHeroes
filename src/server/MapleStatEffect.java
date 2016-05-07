@@ -4586,6 +4586,10 @@ private boolean isSpiritClaw() {
     public int getWeapon() {
         return weapon;
     }
+    
+    public void setOvertime(boolean overTime) {
+    	this.overTime = overTime;
+    }
 
     public static class CancelEffectAction implements Runnable {
 

@@ -33,22 +33,22 @@ import tools.HexTool;
 
 public class AttackInfo {
 
-    public int skill, charge, lastAttackTickCount;
+    public int skillid, skillLevel, charge, lastAttackTickCount;
     public List<AttackPair> allDamage;
     public Point position;
     public int display;
     public byte hits, targets, tbyte, speed, csstar, AOE, slot, unk;
     public boolean real = true;
 
-    public final MapleStatEffect getAttackEffect(final MapleCharacter chr, int skillLevel, final Skill skill_) {
-        if (GameConstants.isMulungSkill(skill) || GameConstants.isPyramidSkill(skill) || GameConstants.isInflationSkill(skill)) {
+    public final MapleStatEffect getAttackEffect(final MapleCharacter chr, final Skill skill) {
+        if (GameConstants.isMulungSkill(skillid) || GameConstants.isPyramidSkill(skillid) || GameConstants.isInflationSkill(skillid)) {
             skillLevel = 1;
         } else if (skillLevel <= 0) {
             return null;
         }
         int dd = ((display & 0x8000) != 0 ? (display - 0x8000) : display);
-        if (GameConstants.isLinkedAttackSkill(skill)) {
-            final Skill skillLink = SkillFactory.getSkill(skill);
+        if (GameConstants.isLinkedAttackSkill(skillid)) {
+            final Skill skillLink = SkillFactory.getSkill(skillid);
             if (1 == 1) { //is bugged after red
                 return skillLink.getEffect(skillLevel);
             }
@@ -61,13 +61,13 @@ public class AttackInfo {
                     } else {
                         //AutobanManager.getInstance().autoban(chr.getClient(), "No delay hack, SkillID : " + skillLink.getId() + ", animation: " + dd + ", expected: " + skillLink.getAnimation());
                     }
-                    if (skill_.getId() == 24121003) {
+                    if (skill.getId() == 24121003) {
                         return skillLink.getEffect(skillLevel);
                     }
-                    if (GameConstants.isZero(skill_.getId() / 10000)) {
+                    if (GameConstants.isZero(skill.getId() / 10000)) {
                         return skillLink.getEffect(skillLevel); //idk wat 2 do w/ dis
                     }
-                    if(GameConstants.isBeastTamer(skill_.getId() / 11000)) {
+                    if(GameConstants.isBeastTamer(skill.getId() / 11000)) {
                         return skillLink.getEffect(skillLevel);
                     }
                     return null;
@@ -87,6 +87,7 @@ public class AttackInfo {
          * + skill_.getAnimation()); } return null; }
          }
          */
-        return skill_.getEffect(skillLevel);
+        return skill.getEffect(skillLevel);
     }
+    
 }

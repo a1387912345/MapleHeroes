@@ -28,6 +28,8 @@ public class AttackPair {
     public int objectid;
     public Point point;
     public List<Pair<Integer, Boolean>> attack;
+    public byte unknownByte = 0, unknownBool1 = 0, unknownBool2 = 0;
+    public short unknownShort = 0;
 
     public AttackPair(int objectid, List<Pair<Integer, Boolean>> attack) {
         this.objectid = objectid;
@@ -37,6 +39,15 @@ public class AttackPair {
     public AttackPair(int objectid, Point point, List<Pair<Integer, Boolean>> attack) {
         this.objectid = objectid;
         this.point = point;
+        this.attack = attack;
+    }
+    
+    public AttackPair(int objectid, byte unknownByte, byte unknownBool1, byte unknownBool2, short unknownShort, List<Pair<Integer, Boolean>> attack) {
+    	this.objectid = objectid;
+    	this.unknownByte = unknownByte;
+    	this.unknownBool1 = unknownBool1;
+    	this.unknownBool2 = unknownBool2;
+    	this.unknownShort = unknownShort;
         this.attack = attack;
     }
 }

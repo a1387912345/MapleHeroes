@@ -2523,12 +2523,11 @@ public class PlayerStats implements Serializable {
             magic += eff.getY();
             accuracy += eff.getV();
             mpconReduce += eff.getMPConReduce();
-        }
+        }      
         eff = chra.getStatForBuff(MapleBuffStat.MAGIC_RESISTANCE);
         if (eff != null) {
             ASR += eff.getX();
         }
-
         eff = chra.getStatForBuff(MapleBuffStat.COMBO);
         buff = chra.getBuffedValue(MapleBuffStat.COMBO);
         if (eff != null && buff != null) {

@@ -58,7 +58,6 @@ public class MoveLifeHandler extends AbstractMaplePacketHandler {
                 level = skillToUse.getRight();
                 // Skill ID and Level
                 final MobSkill mobSkill = MobSkillFactory.getMobSkill(realskill, level);
-                //System.out.println("몹스킬 : " + realskill);
                 if (!mobSkill.checkCurrentBuff(chr, monster)) {
                     final long now = System.currentTimeMillis();
                     final long ls = monster.getLastSkillUsed(realskill);

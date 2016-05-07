@@ -53,6 +53,7 @@ public class MagicianBuff extends AbstractBuffClass {
             2321000, //Maple Warrior
             2321004, //Infinity
             2321005, //Advanced Blessing
+            2321001, //Big Bang
             2321010, //Buff Mastery
             2121053, //Epic Adventure
             2121054, //Inferno Aura
@@ -122,6 +123,11 @@ public class MagicianBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.HP_BOOST, eff.info.get(MapleStatInfo.indieMhp));
                 eff.statups.put(MapleBuffStat.MP_BOOST, eff.info.get(MapleStatInfo.indieMmp));
                 break;
+            case 2321001: //Big Bang
+            	eff.info.put(MapleStatInfo.time, 45000);
+            	eff.statups.put(MapleBuffStat.BIG_BANG, 1);
+            	eff.setOvertime(true);
+            	break;
             case 2121000: //Maple Warrior
             case 2221000: //Maple Warrior
             case 2321000: //Maple Warrior

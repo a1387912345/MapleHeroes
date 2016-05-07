@@ -17,6 +17,7 @@ import server.MapleStatEffect;
 import server.Timer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
+import tools.HexTool;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -34,22 +35,23 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
 		if ((chr == null) || (chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        AttackInfo attack = DamageParse.parseDmgMa(lea, chr);
+        AttackInfo attack = DamageParse.parseMagicDamage(lea, chr);
         if (attack == null) {
             c.getSession().write(CWvsContext.enableActions());
             return;
         }
-        Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-        if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+        
+        Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skillid));
+        if ((skill == null) || ((GameConstants.isAngel(attack.skillid)) && (chr.getStat().equippedSummon % 10000 != attack.skillid % 10000))) {
             c.getSession().write(CWvsContext.enableActions());
             return;
         }
-        int skillLevel = chr.getTotalSkillLevel(skill);
-        MapleStatEffect effect = attack.getAttackEffect(chr, skillLevel, skill);
+        MapleStatEffect effect = attack.getAttackEffect(chr, skill);
         if (effect == null) {
             return;
         }
-                switch (attack.skill) {
+        
+        switch (attack.skillid) {
            case 27001100: // Flash Shower
            case 27101100: //Sylvan Lance
            case 27111100: //Spectral Light
@@ -73,9 +75,9 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
                  }
 
         }
-        double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skill)) / 100.0D;
+        double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skillid)) / 100.0D;
         int bulletCount = 1;
-        switch (attack.skill) {
+        switch (attack.skillid) {
             case 27101100: // Sylvan Lance
             case 27101202: // Pressure Void
             case 27111100: // Spectral Light
@@ -99,13 +101,13 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
          //   case 36101009:
        //     case 36111010:
                 bulletCount = effect.getAttackCount();
-                DamageParse.applyAttack(attack, skill, chr, skillLevel, maxdamage, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+                DamageParse.applyAttack(attack, skill, chr, attack.skillLevel, maxdamage, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.applyMagicAttack(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
-
+        
      /*   if (skill.getId() >= 27100000 && skill.getId() < 27120400 && attack.targets > 0 && chr.getLuminousState() < 20040000) {
             //chr.changeSkillLevel(SkillFactory.getSkill(20040216), (byte) 1, (byte) 1);
             //chr.changeSkillLevel(SkillFactory.getSkill(20040217), (byte) 1, (byte) 1);
@@ -130,26 +132,26 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
             }
         }
       //  double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skill)) / 100.0D;
-        if (GameConstants.isPyramidSkill(attack.skill)) {
+        if (GameConstants.isPyramidSkill(attack.skillid)) {
             maxdamage = 1.0D;
         } else if ((GameConstants.isBeginnerJob(skill.getId() / 10000)) && (skill.getId() % 10000 == 1000)) {
             maxdamage = 40.0D;
         }
         if ((effect.getCooldown(chr) > 0) && (!chr.isGM())) {
-            if (chr.skillisCooling(attack.skill)) {
+            if (chr.skillisCooling(attack.skillid)) {
                 c.getSession().write(CWvsContext.enableActions());
                 return;
             }
-            c.getSession().write(CField.skillCooldown(attack.skill, effect.getCooldown(chr)));
-            chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
+            c.getSession().write(CField.skillCooldown(attack.skillid, effect.getCooldown(chr)));
+            chr.addCooldown(attack.skillid, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getTruePosition());
+            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getTruePosition());
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), false);
+            chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), false);
         }
-        DamageParse.applyAttackMagic(attack, skill, c.getPlayer(), effect, maxdamage);
+        DamageParse.applyMagicAttack(attack, skill, c.getPlayer(), effect, maxdamage);
         WeakReference<MapleCharacter>[] clones = chr.getClones();
         for (int i = 0; i < clones.length; i++) {
             if (clones[i].get() != null) {
@@ -157,17 +159,16 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
                 final Skill skil2 = skill;
                 final MapleStatEffect eff2 = effect;
                 final double maxd = maxdamage;
-                final int skillLevel2 = skillLevel;
                 final AttackInfo attack2 = DamageParse.DivideAttack(attack, chr.isGM() ? 1 : 4);
                 Timer.CloneTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            clone.getMap().broadcastMessage(CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
+                            clone.getMap().broadcastMessage(CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
                         } else {
-                            clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk), false);
+                            clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk), false);
                         }
-                        DamageParse.applyAttackMagic(attack2, skil2, chr, eff2, maxd);
+                        DamageParse.applyMagicAttack(attack2, skil2, chr, eff2, maxd);
                     }
                 }, 500 * i + 500);
             }

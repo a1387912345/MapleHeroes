@@ -46,7 +46,7 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
         if ((chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        AttackInfo attack = DamageParse.parseDmgM(lea, chr);
+        AttackInfo attack = DamageParse.parseCloseRangeDamage(lea, chr);
         if (attack == null) {
             c.getSession().write(CWvsContext.enableActions());
             return;
@@ -55,7 +55,6 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
         double maxdamage = chr.getStat().getCurrentMaxBaseDamage();
         Item shield = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem((byte) -10);
         int attackCount = (shield != null) && (shield.getItemId() / 10000 == 134) ? 2 : 1;
-        int skillLevel = 0;
         MapleStatEffect effect = null;
         Skill skill = null;
 
@@ -69,10 +68,10 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
         if (!dmg.isEmpty()) {
 //            chr.dropMessage(-1, "Damage: " + dmg);//debug mode
         }
-        if (attack.skill != 0) {
+        if (attack.skillid != 0) {
             //chr.dropMessage(-1, "Attack Skill: " + attack.skill);//debug mode
-            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-            if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skillid));
+            if ((skill == null) || ((GameConstants.isAngel(attack.skillid)) && (chr.getStat().equippedSummon % 10000 != attack.skillid % 10000))) {
                 c.getSession().write(CWvsContext.enableActions());
                 return;
             }
@@ -88,7 +87,7 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
             if (GameConstants.isExceedAttack(skill.getId())) {
                 chr.handleExceedAttack(skill.getId());
             }
-            switch (attack.skill) {
+            switch (attack.skillid) {
                 case 101001100:
                 case 101101100:
                 case 101111100:
@@ -103,8 +102,7 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
                     break;
 
             }
-            skillLevel = chr.getTotalSkillLevel(skill);
-            effect = attack.getAttackEffect(chr, skillLevel, skill);
+            effect = attack.getAttackEffect(chr, skill);
             if (effect == null) {
                 return;
             }
@@ -134,7 +132,7 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
                             c.getSession().write(AngelicPacket.unlockSkill());
 //                    c.getSession().write(AngelicPacket.showRechargeEffect());
                         } else {
-                            c.getSession().write(AngelicPacket.lockSkill(attack.skill));
+                            c.getSession().write(AngelicPacket.lockSkill(attack.skillid));
                         }
                     }
                 } else {
@@ -142,47 +140,47 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
                         c.getSession().write(AngelicPacket.unlockSkill());
 //                    c.getSession().write(AngelicPacket.showRechargeEffect());
                     } else {
-                        c.getSession().write(AngelicPacket.lockSkill(attack.skill));
+                        c.getSession().write(AngelicPacket.lockSkill(attack.skillid));
                     }
                 }
             }
-            maxdamage *= (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skill)) / 100.0D;
+            maxdamage *= (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skillid)) / 100.0D;
             attackCount = effect.getAttackCount();
 
             if ((effect.getCooldown(chr) > 0) && (!chr.isGM()) && (!energy)) {
-                if (chr.skillisCooling(attack.skill)) {
+                if (chr.skillisCooling(attack.skillid)) {
                     c.getSession().write(CWvsContext.enableActions());
                     return;
                 }
-                c.getSession().write(CField.skillCooldown(attack.skill, effect.getCooldown(chr)));
-                chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
+                c.getSession().write(CField.skillCooldown(attack.skillid, effect.getCooldown(chr)));
+                chr.addCooldown(attack.skillid, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
             }
         }
         attack = DamageParse.Modify_AttackCrit(attack, chr, 1, effect);
         attackCount *= (mirror ? 2 : 1);
         if (!energy) {
-            if (((chr.getMapId() == 109060000) || (chr.getMapId() == 109060002) || (chr.getMapId() == 109060004)) && (attack.skill == 0)) {
+            if (((chr.getMapId() == 109060000) || (chr.getMapId() == 109060002) || (chr.getMapId() == 109060004)) && (attack.skillid == 0)) {
                 MapleSnowball.MapleSnowballs.hitSnowball(chr);
             }
 
             int numFinisherOrbs = 0;
             Integer comboBuff = chr.getBuffedValue(MapleBuffStat.COMBO);
 
-            if (PlayerHandler.isFinisher(attack.skill) > 0) {
+            if (PlayerHandler.isFinisher(attack.skillid) > 0) {
                 if (comboBuff != null) {
                     numFinisherOrbs = comboBuff.intValue() - 1;
                 }
                 if (numFinisherOrbs <= 0) {
                     return;
                 }
-                chr.handleOrbconsume(PlayerHandler.isFinisher(attack.skill));
+                chr.handleOrbconsume(PlayerHandler.isFinisher(attack.skillid));
             }
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), chr.getTruePosition());
+            chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), chr.getTruePosition()); // Unnecessary parameters? Could just access them within the method
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), false);
+            chr.getMap().broadcastGMMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), false);
         }
         DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         WeakReference<MapleCharacter>[] clones = chr.getClones();
@@ -190,7 +188,6 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
             if (clones[i].get() != null) {
                 final MapleCharacter clone = clones[i].get();
                 final Skill skil2 = skill;
-                final int skillLevel2 = skillLevel;
                 final int attackCount2 = attackCount;
                 final double maxdamage2 = maxdamage;
                 final MapleStatEffect eff2 = effect;
@@ -199,9 +196,9 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            clone.getMap().broadcastMessage(CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge));
+                            clone.getMap().broadcastMessage(CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge));
                         } else {
-                            clone.getMap().broadcastGMMessage(clone, CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge), false);
+                            clone.getMap().broadcastGMMessage(clone, CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge), false);
                         }
                         DamageParse.applyAttack(attack2, skil2, chr, attackCount2, maxdamage2, eff2, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
                     }
@@ -209,13 +206,13 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
             }
         }
         int bulletCount = 1;
-        switch (attack.skill) {
+        switch (attack.skillid) {
             case 1201011:
                 bulletCount = effect.getAttackCount();
-                DamageParse.applyAttack(attack, skill, chr, skillLevel, maxdamage, effect, AttackType.NON_RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
+                DamageParse.applyAttack(attack, skill, chr, attack.skillLevel, maxdamage, effect, AttackType.NON_RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.applyMagicAttack(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
 	}

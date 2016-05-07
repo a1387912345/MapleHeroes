@@ -1181,7 +1181,7 @@ public class PlayerHandler {
             return;
         }
         System.out.println(slea.toString());
-        AttackInfo attack = DamageParse.parseDmgM(slea, chr);
+        AttackInfo attack = DamageParse.parseCloseRangeDamage(slea, chr);
         if (attack == null) {
             c.getSession().write(CWvsContext.enableActions());
             return;
@@ -1205,11 +1205,11 @@ public class PlayerHandler {
 //            chr.dropMessage(-1, "Damage: " + dmg);//debug mode
         }
         System.out.println("closeRange debug 0");
-        System.out.println(attack.skill);
-        if (attack.skill != 0) {
+        System.out.println(attack.skillid);
+        if (attack.skillid != 0) {
             //chr.dropMessage(-1, "Attack Skill: " + attack.skill);//debug mode
-            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-            if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skillid));
+            if ((skill == null) || ((GameConstants.isAngel(attack.skillid)) && (chr.getStat().equippedSummon % 10000 != attack.skillid % 10000))) {
                 c.getSession().write(CWvsContext.enableActions());
                 return;
             }
@@ -1226,7 +1226,7 @@ public class PlayerHandler {
             if (GameConstants.isExceedAttack(skill.getId())) {
                 chr.handleExceedAttack(skill.getId());
             }
-            switch (attack.skill) {
+            switch (attack.skillid) {
                 case 101001100:
                 case 101101100:
                 case 101111100:
@@ -1242,7 +1242,7 @@ public class PlayerHandler {
 
             }
             skillLevel = chr.getTotalSkillLevel(skill);
-            effect = attack.getAttackEffect(chr, skillLevel, skill);
+            effect = attack.getAttackEffect(chr, skill);
             if (effect == null) {
                 return;
             }
@@ -1272,7 +1272,7 @@ public class PlayerHandler {
                             c.getSession().write(AngelicPacket.unlockSkill());
 //                    c.getSession().write(AngelicPacket.showRechargeEffect());
                         } else {
-                            c.getSession().write(AngelicPacket.lockSkill(attack.skill));
+                            c.getSession().write(AngelicPacket.lockSkill(attack.skillid));
                         }
                     }
                 } else {
@@ -1280,47 +1280,47 @@ public class PlayerHandler {
                         c.getSession().write(AngelicPacket.unlockSkill());
 //                    c.getSession().write(AngelicPacket.showRechargeEffect());
                     } else {
-                        c.getSession().write(AngelicPacket.lockSkill(attack.skill));
+                        c.getSession().write(AngelicPacket.lockSkill(attack.skillid));
                     }
                 }
             }
-            maxdamage *= (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skill)) / 100.0D;
+            maxdamage *= (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skillid)) / 100.0D;
             attackCount = effect.getAttackCount();
 
             if ((effect.getCooldown(chr) > 0) && (!chr.isGM()) && (!energy)) {
-                if (chr.skillisCooling(attack.skill)) {
+                if (chr.skillisCooling(attack.skillid)) {
                     c.getSession().write(CWvsContext.enableActions());
                     return;
                 }
-                c.getSession().write(CField.skillCooldown(attack.skill, effect.getCooldown(chr)));
-                chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
+                c.getSession().write(CField.skillCooldown(attack.skillid, effect.getCooldown(chr)));
+                chr.addCooldown(attack.skillid, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
             }
         }
         attack = DamageParse.Modify_AttackCrit(attack, chr, 1, effect);
         attackCount *= (mirror ? 2 : 1);
         if (!energy) {
-            if (((chr.getMapId() == 109060000) || (chr.getMapId() == 109060002) || (chr.getMapId() == 109060004)) && (attack.skill == 0)) {
+            if (((chr.getMapId() == 109060000) || (chr.getMapId() == 109060002) || (chr.getMapId() == 109060004)) && (attack.skillid == 0)) {
                 MapleSnowball.MapleSnowballs.hitSnowball(chr);
             }
 
             int numFinisherOrbs = 0;
             Integer comboBuff = chr.getBuffedValue(MapleBuffStat.COMBO);
 
-            if (isFinisher(attack.skill) > 0) {
+            if (isFinisher(attack.skillid) > 0) {
                 if (comboBuff != null) {
                     numFinisherOrbs = comboBuff.intValue() - 1;
                 }
                 if (numFinisherOrbs <= 0) {
                     return;
                 }
-                chr.handleOrbconsume(isFinisher(attack.skill));
+                chr.handleOrbconsume(isFinisher(attack.skillid));
             }
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), chr.getTruePosition());
+            chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), chr.getTruePosition());
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), false);
+            chr.getMap().broadcastGMMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), false);
         }
         DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         WeakReference<MapleCharacter>[] clones = chr.getClones();
@@ -1337,9 +1337,9 @@ public class PlayerHandler {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            clone.getMap().broadcastMessage(CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge));
+                            clone.getMap().broadcastMessage(CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge));
                         } else {
-                            clone.getMap().broadcastGMMessage(clone, CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge), false);
+                            clone.getMap().broadcastGMMessage(clone, CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge), false);
                         }
                         DamageParse.applyAttack(attack2, skil2, chr, attackCount2, maxdamage2, eff2, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
                     }
@@ -1347,13 +1347,13 @@ public class PlayerHandler {
             }
         }
         int bulletCount = 1;
-        switch (attack.skill) {
+        switch (attack.skillid) {
             case 1201011:
                 bulletCount = effect.getAttackCount();
                 DamageParse.applyAttack(attack, skill, chr, skillLevel, maxdamage, effect, AttackType.NON_RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.applyMagicAttack(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
     }
@@ -1376,16 +1376,16 @@ public class PlayerHandler {
         int skillLevel = 0;
         MapleStatEffect effect = null;
         Skill skill = null;
-        boolean AOE = attack.skill == 4111004;
+        boolean AOE = attack.skillid == 4111004;
         boolean noBullet = (chr.getJob() >= 300 && chr.getJob() <= 322) || (chr.getJob() >= 3500 && chr.getJob() <= 3512) || GameConstants.isCannon(chr.getJob()) || GameConstants.isXenon(chr.getJob()) || GameConstants.isJett(chr.getJob()) || GameConstants.isPhantom(chr.getJob()) || GameConstants.isMercedes(chr.getJob()) || GameConstants.isZero(chr.getJob()) || GameConstants.isBeastTamer(chr.getJob()) || GameConstants.isLuminous(chr.getJob());
-        if (attack.skill != 0) {
-            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-            if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+        if (attack.skillid != 0) {
+            skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skillid));
+            if ((skill == null) || ((GameConstants.isAngel(attack.skillid)) && (chr.getStat().equippedSummon % 10000 != attack.skillid % 10000))) {
             	c.getSession().write(CWvsContext.enableActions());
                 return;
             }
             skillLevel = chr.getTotalSkillLevel(skill);
-            effect = attack.getAttackEffect(chr, skillLevel, skill);
+            effect = attack.getAttackEffect(chr, skill);
             if (effect == null) {
                 return;
             }
@@ -1413,7 +1413,7 @@ public class PlayerHandler {
                             c.getSession().write(AngelicPacket.unlockSkill());
 //                    c.getSession().write(AngelicPacket.showRechargeEffect());
                         } else {
-                            c.getSession().write(AngelicPacket.lockSkill(attack.skill));
+                            c.getSession().write(AngelicPacket.lockSkill(attack.skillid));
                         }
                     }
                 } else {
@@ -1421,7 +1421,7 @@ public class PlayerHandler {
                         c.getSession().write(AngelicPacket.unlockSkill());
 //                    c.getSession().write(AngelicPacket.showRechargeEffect());
                     } else {
-                        c.getSession().write(AngelicPacket.lockSkill(attack.skill));
+                        c.getSession().write(AngelicPacket.lockSkill(attack.skillid));
                     }
                 }
             }       
@@ -1511,7 +1511,7 @@ public class PlayerHandler {
 	            }
             }
             }
-            switch (attack.skill) {
+            switch (attack.skillid) {
                 case 13101005:
                 case 21110004: // Ranged but uses attackcount instead
                 case 14101006: // Vampure
@@ -1583,13 +1583,13 @@ public class PlayerHandler {
             if ((noBullet) && (effect.getBulletCount() < effect.getAttackCount())) {
                 bulletCount = effect.getAttackCount();
             }
-            if ((effect.getCooldown(chr) > 0) && (!chr.isGM()) && (((attack.skill != 35111004) && (attack.skill != 35121013)) || (chr.getBuffSource(MapleBuffStat.MECH_CHANGE) != attack.skill))) {
-                if (chr.skillisCooling(attack.skill)) {
+            if ((effect.getCooldown(chr) > 0) && (!chr.isGM()) && (((attack.skillid != 35111004) && (attack.skillid != 35121013)) || (chr.getBuffSource(MapleBuffStat.MECH_CHANGE) != attack.skillid))) {
+                if (chr.skillisCooling(attack.skillid)) {
                     c.getSession().write(CWvsContext.enableActions());
                     return;
                 }
-                c.getSession().write(CField.skillCooldown(attack.skill, effect.getCooldown(chr)));
-                chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
+                c.getSession().write(CField.skillCooldown(attack.skillid, effect.getCooldown(chr)));
+                chr.addCooldown(attack.skillid, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
             }
         }
         attack = DamageParse.Modify_AttackCrit(attack, chr, 2, effect);
@@ -1648,7 +1648,7 @@ public class PlayerHandler {
         }
         PlayerStats statst = chr.getStat();
         double basedamage;
-        switch (attack.skill) {
+        switch (attack.skillid) {
             case 4001344:
             case 4121007:
             case 14001004:
@@ -1660,7 +1660,7 @@ public class PlayerHandler {
                 break;
             default:
                 basedamage = statst.getCurrentMaxBaseDamage();
-                switch (attack.skill) {
+                switch (attack.skillid) {
                     case 3101005:
                         basedamage *= effect.getX() / 100.0D;
                         break;
@@ -1668,7 +1668,7 @@ public class PlayerHandler {
         }
 
         if (effect != null) {
-            basedamage *= (effect.getDamage() + statst.getDamageIncrease(attack.skill)) / 100.0D;
+            basedamage *= (effect.getDamage() + statst.getDamageIncrease(attack.skillid)) / 100.0D;
 
             long money = effect.getMoneyCon();
             if (money != 0) {
@@ -1680,15 +1680,15 @@ public class PlayerHandler {
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            if (attack.skill == 3211006) {
-                chr.getMap().broadcastMessage(chr, CField.strafeAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, chr.getTotalSkillLevel(3220010)), chr.getTruePosition());
+            if (attack.skillid == 3211006) {
+                chr.getMap().broadcastMessage(chr, CField.strafeAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, chr.getTotalSkillLevel(3220010)), chr.getTruePosition());
             } else {
-                chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), chr.getTruePosition());
+                chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), chr.getTruePosition());
             }
-        } else if (attack.skill == 3211006) {
-            chr.getMap().broadcastGMMessage(chr, CField.strafeAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, chr.getTotalSkillLevel(3220010)), false);
+        } else if (attack.skillid == 3211006) {
+            chr.getMap().broadcastGMMessage(chr, CField.strafeAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, chr.getTotalSkillLevel(3220010)), false);
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), false);
+            chr.getMap().broadcastGMMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), false);
         }
 
         DamageParse.applyAttack(attack, skill, chr, bulletCount, basedamage, effect, ShadowPartner != null ? AttackType.RANGED_WITH_SHADOWPARTNER : AttackType.RANGED);
@@ -1707,16 +1707,16 @@ public class PlayerHandler {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            if (attack2.skill == 3211006) {
-                                clone.getMap().broadcastMessage(CField.strafeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, chr.getTotalSkillLevel(3220010)));
+                            if (attack2.skillid == 3211006) {
+                                clone.getMap().broadcastMessage(CField.strafeAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, chr.getTotalSkillLevel(3220010)));
                             } else {
-                                clone.getMap().broadcastMessage(CField.rangedAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk));
+                                clone.getMap().broadcastMessage(CField.rangedAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk));
                             }
                         } else {
-                            if (attack2.skill == 3211006) {
-                                clone.getMap().broadcastGMMessage(clone, CField.strafeAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, chr.getTotalSkillLevel(3220010)), false);
+                            if (attack2.skillid == 3211006) {
+                                clone.getMap().broadcastGMMessage(clone, CField.strafeAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, chr.getTotalSkillLevel(3220010)), false);
                             } else {
-                                clone.getMap().broadcastGMMessage(clone, CField.rangedAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk), false);
+                                clone.getMap().broadcastGMMessage(clone, CField.rangedAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk), false);
                             }
                         }
                         DamageParse.applyAttack(attack2, skil2, chr, bulletCount2, basedamage2, eff2, AttackType.RANGED);
@@ -1730,22 +1730,22 @@ public class PlayerHandler {
         if ((chr == null) || (chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        AttackInfo attack = DamageParse.parseDmgMa(slea, chr);
+        AttackInfo attack = DamageParse.parseMagicDamage(slea, chr);
         if (attack == null) {
             c.getSession().write(CWvsContext.enableActions());
             return;
         }
-        Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skill));
-        if ((skill == null) || ((GameConstants.isAngel(attack.skill)) && (chr.getStat().equippedSummon % 10000 != attack.skill % 10000))) {
+        Skill skill = SkillFactory.getSkill(GameConstants.getLinkedAttackSkill(attack.skillid));
+        if ((skill == null) || ((GameConstants.isAngel(attack.skillid)) && (chr.getStat().equippedSummon % 10000 != attack.skillid % 10000))) {
             c.getSession().write(CWvsContext.enableActions());
             return;
         }
         int skillLevel = chr.getTotalSkillLevel(skill);
-        MapleStatEffect effect = attack.getAttackEffect(chr, skillLevel, skill);
+        MapleStatEffect effect = attack.getAttackEffect(chr, skill);
         if (effect == null) {
             return;
         }
-                switch (attack.skill) {
+                switch (attack.skillid) {
            case 27001100: // Flash Shower
            case 27101100: //Sylvan Lance
            case 27111100: //Spectral Light
@@ -1769,9 +1769,9 @@ public class PlayerHandler {
                  }
 
         }
-        double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skill)) / 100.0D;
+        double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skillid)) / 100.0D;
         int bulletCount = 1;
-        switch (attack.skill) {
+        switch (attack.skillid) {
             case 27101100: // Sylvan Lance
             case 27101202: // Pressure Void
             case 27111100: // Spectral Light
@@ -1798,7 +1798,7 @@ public class PlayerHandler {
                 DamageParse.applyAttack(attack, skill, chr, skillLevel, maxdamage, effect, AttackType.RANGED);//applyAttack(attack, skill, chr, bulletCount, effect, AttackType.RANGED);
                 break;
             default:
-                DamageParse.applyAttackMagic(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
+                DamageParse.applyMagicAttack(attack, skill, chr, effect, maxdamage);//applyAttackMagic(attack, skill, c.getPlayer(), effect);
                 break;
         }
 
@@ -1826,26 +1826,26 @@ public class PlayerHandler {
             }
         }
       //  double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skill)) / 100.0D;
-        if (GameConstants.isPyramidSkill(attack.skill)) {
+        if (GameConstants.isPyramidSkill(attack.skillid)) {
             maxdamage = 1.0D;
         } else if ((GameConstants.isBeginnerJob(skill.getId() / 10000)) && (skill.getId() % 10000 == 1000)) {
             maxdamage = 40.0D;
         }
         if ((effect.getCooldown(chr) > 0) && (!chr.isGM())) {
-            if (chr.skillisCooling(attack.skill)) {
+            if (chr.skillisCooling(attack.skillid)) {
                 c.getSession().write(CWvsContext.enableActions());
                 return;
             }
-            c.getSession().write(CField.skillCooldown(attack.skill, effect.getCooldown(chr)));
-            chr.addCooldown(attack.skill, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
+            c.getSession().write(CField.skillCooldown(attack.skillid, effect.getCooldown(chr)));
+            chr.addCooldown(attack.skillid, System.currentTimeMillis(), effect.getCooldown(chr) * 1000);
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getTruePosition());
+            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getTruePosition());
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skill, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), false);
+            chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getId(), attack.tbyte, attack.skillid, skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), false);
         }
-        DamageParse.applyAttackMagic(attack, skill, c.getPlayer(), effect, maxdamage);
+        DamageParse.applyMagicAttack(attack, skill, c.getPlayer(), effect, maxdamage);
         WeakReference<MapleCharacter>[] clones = chr.getClones();
         for (int i = 0; i < clones.length; i++) {
             if (clones[i].get() != null) {
@@ -1859,11 +1859,11 @@ public class PlayerHandler {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            clone.getMap().broadcastMessage(CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
+                            clone.getMap().broadcastMessage(CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
                         } else {
-                            clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skill, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk), false);
+                            clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getId(), attack2.tbyte, attack2.skillid, skillLevel2, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk), false);
                         }
-                        DamageParse.applyAttackMagic(attack2, skil2, chr, eff2, maxd);
+                        DamageParse.applyMagicAttack(attack2, skil2, chr, eff2, maxd);
                     }
                 }, 500 * i + 500);
             }

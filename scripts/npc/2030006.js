@@ -19,7 +19,7 @@ function action(mode, type, selection) {
 			status++;
 		} else {
 			if (status == 0) {
-				cm.sendOk("I better stay away...");
+				cm.sendOk("#b(I've got a bad feeling about this. I'll do it, but after I prepare...)");
 				cm.dispose();
 			}
 			status--;

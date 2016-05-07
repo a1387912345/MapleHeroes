@@ -10060,10 +10060,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     MapleStatEffect Eclipse = SkillFactory.getSkill(20040217).getEffect(getSkillLevel(20040217));
                     AttackInfo attack = null;
                 //    Integer Gauge = getBuffedValue(MapleBuffStat.LUMINOUS_GAUGE);
-                        if (GameConstants.isLightSkills(attack.skill)) {
+                        if (GameConstants.isLightSkills(attack.skillid)) {
                             Sunfire.applyTo(chr);
                         }
-                        if (GameConstants.isDarkSkills(attack.skill)) {
+                        if (GameConstants.isDarkSkills(attack.skillid)) {
                             Eclipse.applyTo(chr);
                         }   
                     }

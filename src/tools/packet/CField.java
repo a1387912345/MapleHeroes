@@ -1836,7 +1836,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         return addAttackInfo(3, cid, tbyte, skill, skillLevel, display, speed, damage, charLevel, (byte) 0, unk, charge, null, 0);
     }
 
-    public static byte[] addAttackInfo(int type, int cid, int tbyte, int skill, int skillLevel, int display, byte speed, List<AttackPair> damage, int charLevel, byte mastery, byte unk, int charge, Point pos, int ultLevel) {
+    public static byte[] addAttackInfo(int type, int cid, int tbyte, int skillid, int skillLevel, int display, byte speed, List<AttackPair> damage, int charLevel, byte mastery, byte unk, int charge, Point pos, int ultLevel) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         if (type == 0) {
@@ -1855,16 +1855,15 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         System.out.println(tbyte + " - tbyte");
         System.out.println(type + " - type");
         mplew.write(charLevel);
-        if ((skill > 0) || (type == 3)) {
-            mplew.write(skillLevel);
-            if (skillLevel > 0) {
-                mplew.writeInt(skill);
-            }
-        } else if (type != 2 && type != 3) {
-            mplew.write(0);
+        
+        if (skillLevel > 0) {
+        	mplew.write(skillLevel);
+            mplew.writeInt(skillid);
+        } else {
+        	mplew.write(0);
         }
 
-        if (GameConstants.isZero(skill / 10000) && skill != 100001283) {
+        if (GameConstants.isZero(skillid / 10000) && skillid != 100001283) {
             short zero1 = 0;
             short zero2 = 0;
             mplew.write(zero1 > 0 || zero2 > 0); //boolean
@@ -1875,36 +1874,51 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             }
         }
 
-        if (type == 2) {
+        if (type == 1 || type == 2) { // if RANGED_ATTACK
             mplew.write(ultLevel);
             if (ultLevel > 0) {
                 mplew.writeInt(3220010);
             }
         }
-        if (skill == 40021185 || skill == 42001006) {
-            mplew.write(0); //boolean if true then int
+        
+        if (skillid == 80001850) {
+        	mplew.write(skillLevel);
+        	if (skillLevel > 0) {
+        		mplew.writeInt(skillid);
+        	}
         }
-        if (type == 0 || type == 1) {
-            mplew.writeZeroBytes(5);
-        }
-        mplew.write(unk);//always 0?
+        
+        mplew.write(0); // some flag
+        mplew.write(unk); // flag
+        mplew.writeInt(0); // nOption3 or nBySummonedID
+        
         if ((unk & 2) != 0) {
-            mplew.writeInt(0);
-            mplew.writeInt(0);
+        	mplew.writeInt(skillid); // buckShotInfo.nSkillID
+        	mplew.writeInt(skillLevel); // buckShotInfo.nSkillLV
         }
+        
+        if ((unk & 8) != 0) {
+        	mplew.write(0); // nPassiveAddAttackCount
+        }
+        
+        /*if (skillid == 40021185 || skillid == 42001006) {
+            mplew.write(0); //boolean if true then int
+        }*/
+
+        
         mplew.writeShort(display);
         mplew.write(speed);
         mplew.write(mastery);
-        mplew.writeInt(charge);
+        mplew.writeInt(0);
+        
         for (AttackPair oned : damage) {
             if (oned.attack != null) {
                 mplew.writeInt(oned.objectid);
-                mplew.write(7);
-                mplew.write(0);
-                mplew.write(0);
-                mplew.write(0);
-                mplew.write(1);
-                if (skill == 42111002) {
+                mplew.write(oned.unknownByte != 0 ? oned.unknownByte : 7);
+                mplew.write(oned.unknownBool1); // some boolean
+                mplew.write(oned.unknownBool2); // some boolean
+                mplew.writeShort(oned.unknownShort != 0 ? oned.unknownShort : 256); // ??
+                if (skillid == 42111002) {
                     mplew.write(oned.attack.size());
                     for (Pair eachd : oned.attack) {
                         mplew.writeInt(((Integer) eachd.left).intValue());
@@ -1917,31 +1931,32 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
                 }
             }
         }
-        if (skill == 2321001 || skill == 2221052 || skill == 11121052) {
+        if (skillid == 2321001 || skillid == 2221052 || skillid == 11121052) {
             mplew.writeInt(0);
-        } else if (skill == 65121052 || skill == 101000202 || skill == 101000102) {
+        } else if (skillid == 65121052 || skillid == 101000202 || skillid == 101000102) {
             mplew.writeInt(0);
             mplew.writeInt(0);
         }
-        if (skill == 42100007) {
+        if (skillid == 42100007) {
             mplew.writeShort(0);
             mplew.write(0);
         }
         /*if (type == 1 || type == 2) {
             mplew.writePos(pos);
-        } else */if (type == 3 && charge > 0) {
+        } else */
+        if (type == 3 && charge > 0) {
             mplew.writeInt(charge);
         }
-        if (skill == 5321000
-                || skill == 5311001
-                || skill == 5321001
-                || skill == 5011002
-                || skill == 5311002
-                || skill == 5221013
-                || skill == 5221017
-                || skill == 3120019
-                || skill == 3121015
-                || skill == 4121017) {
+        if (skillid == 5321000
+                || skillid == 5311001
+                || skillid == 5321001
+                || skillid == 5011002
+                || skillid == 5311002
+                || skillid == 5221013
+                || skillid == 5221017
+                || skillid == 3120019
+                || skillid == 3121015
+                || skillid == 4121017) {
             mplew.writePos(pos);
         }
         //mplew.writeZeroBytes(30);//test
@@ -2214,6 +2229,16 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         return mplew.getPacket();
     }
 
+    public static byte[] cancelChair(MapleCharacter chr) {
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+        mplew.writeShort(SendPacketOpcode.CANCEL_CHAIR.getValue());
+        mplew.writeInt(chr.getId());
+        mplew.write(0);
+
+        return mplew.getPacket();
+    }
+    
     public static byte[] cancelChair(int id) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 

@@ -541,6 +541,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             try {
                 packetHandler.handlePacket(lea, client, client.getPlayer());
             } catch (final Throwable t) {
+            	System.out.println("something happened for " + packetId);
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (client.getPlayer() == null ? "" : "player ; " + client.getPlayer() + " on map ; " + client.getPlayer().getMapId() + " - ") + "account ; " + client.getAccountName() + "\r\n" + lea.toString());
                 //client.announce(MaplePacketCreator.enableActions());//bugs sometimes
             }

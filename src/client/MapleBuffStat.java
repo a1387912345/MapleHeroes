@@ -11,7 +11,9 @@ public enum MapleBuffStat implements Serializable, Buffstat {
 	 * Please comment "Last Updated: vXXX" after every BuffStat to indicate whether it has been updated or not.
 	 */
     
-    WATK(0x80000000, 1), // Last updated: v171
+    BC_DAMAGE_PERCENT(0x1000, 1), // Last updated: v172.2 - Burning Conduit
+    BC_ATTACK_SPEED(0x20, 1), // Last updated: v172.2 - Burning Conduit
+	WATK(0x80000000, 1), // Last updated: v171
     WDEF(0x20000000, 1), // Last updated: v171
     MATK(0x40000000, 1), // Last updated: v171
     HP_BOOST(0x4000000, 1, true), //Last updated: v171.3 Note: weapon acc/magic acc pct boost 
@@ -257,6 +259,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     KILL_COUNT(0x800000, 7),
     IGNORE_DEF(0x2000000, 7),
     DAMAGE_PERCENT(0x80000000, 7, true),
+    BIG_BANG(0x8000000, 7),
     PHANTOM_MOVE(0x8, 8),
     JUDGMENT_DRAW(0x10, 8),
     HYBRID_DEFENSES(0x400, 8),

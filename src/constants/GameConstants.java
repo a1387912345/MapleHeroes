@@ -536,7 +536,7 @@ public class GameConstants {
     }
 
     public static boolean isZero(int job) {
-        return job == 10000 || (job >= 10100 && job <= 10112);
+        return job == 10000 || job == 10100 || (job >= 10110 && job <= 10112);
     }
 
     public static boolean isShade(int job) {
