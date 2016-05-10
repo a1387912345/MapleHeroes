@@ -6,7 +6,7 @@ import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
-import net.farm.FarmServer;
+import net.server.farm.FarmServer;
 import net.world.CharacterTransfer;
 import net.world.MapleMessengerCharacter;
 import net.world.PlayerBuffStorage;

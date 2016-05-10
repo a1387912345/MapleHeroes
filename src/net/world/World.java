@@ -17,7 +17,7 @@ import database.DatabaseConnection;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
 import net.channel.PlayerStorage;
-import net.farm.FarmServer;
+import net.server.farm.FarmServer;
 import net.world.exped.ExpeditionType;
 import net.world.exped.MapleExpedition;
 import net.world.exped.PartySearch;

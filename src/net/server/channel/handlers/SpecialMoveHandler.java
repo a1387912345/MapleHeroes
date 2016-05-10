@@ -97,6 +97,7 @@ public class SpecialMoveHandler extends AbstractMaplePacketHandler {
                 levelCheckSkill = 24121001;
             }
         }
+        System.out.println("Total skill level " + chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)));
         if ((levelCheckSkill == 0) && ((chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) || (chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) != skillLevel))) {
             if ((!GameConstants.isMulungSkill(skillid)) && (!GameConstants.isPyramidSkill(skillid)) && (chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) && !GameConstants.isAngel(skillid)) {
                 c.getSession().write(CWvsContext.enableActions());

@@ -31,6 +31,8 @@ public class LeaveAzwanHandler extends AbstractMaplePacketHandler {
         c.getSession().write(CField.UIPacket.sendAzwanResult());
         //c.getPlayer().getStats().recalcLocalStats(c.getPlayer());
         //c.getPlayer().getStats().heal(c.getPlayer());
+        c.getSession().write(CField.showEffect("hillah/fail"));  // Old handler sends these a second time
+        c.getSession().write(CField.UIPacket.sendAzwanResult());
 	}
 
 }

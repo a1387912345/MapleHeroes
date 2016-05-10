@@ -16,7 +16,6 @@ public class AbstractSkillHandler implements SkillHandler {
 
 	@Override
 	public void handleBuff() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -55,6 +54,9 @@ public class AbstractSkillHandler implements SkillHandler {
         
         if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR)) {
         	mplew.write(0);
+        }
+        if (statups.containsKey(MapleBuffStat.DARKSIGHT)) {
+        	mplew.writeInt(0);
         }
  
         mplew.writeShort(1);

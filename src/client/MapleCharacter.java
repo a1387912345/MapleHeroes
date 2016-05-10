@@ -4915,7 +4915,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         statup.put(MapleStat.AVAILABLESP, (long) remainingSp[GameConstants.getSkillBook(job, level)]);
         obtainHyperSP();
    //     client.getSession().write(CField.getAndroidTalkStyle(2008, "Yay", 2));
-        PlayerHandler.ChangeAndroidEmotion(10, client.getPlayer());
+        PlayerHandler.changeAndroidEmotion(10, client.getPlayer());
         stats.setInfo(maxhp, maxmp, maxhp, maxmp);
         client.getSession().write(CWvsContext.updatePlayerStats(statup, this));
         map.broadcastMessage(this, EffectPacket.showForeignEffect(getId(), 0), false);
@@ -9878,89 +9878,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             //duration 0 = forever map 0 = current map
         }
     }
-    
-            	public static void giveLinkSkill(LittleEndianAccessor slea, MapleClient c) {
-		int skillFrom = slea.readInt();
-		int skillTo= 0;
-                int skillRank = 0;
-		int charID = slea.readInt();
-		int accid= 0;
-		short level= c.getPlayer().getLevel();
-		
-		switch(skillFrom){
-			case 110:
-				skillTo= 80000000;
-				break;
-			case 20021110:
-				skillTo= 80001040;
-				break;
-			case 20030204:
-				skillTo= 80000002;
-				break;
-			case 20040218:
-				skillTo= 80000005;
-				break;
-			case 30010112:
-				skillTo= 80000001;
-				break;
-			case 50001214:
-				skillTo= 80001140;
-				break;
-			case 60000222:
-				skillTo= 80000006; 
-				break;
-			case 60011219:
-				skillTo= 80001155; 
-				break;
-		}
-
-		Connection con = DatabaseConnection.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		
-		
-		try{
-			ps = con.prepareStatement("SELECT accountid FROM characters where id = "+charID);
-			rs= ps.executeQuery();
-			
-			if(rs.next()){
-				accid= rs.getInt(1);
-			}
-			ps.close();
-			rs.close();
-		}catch(Exception ex){ex.printStackTrace();}
-		
-		try{
-			ps= con.prepareStatement("DELETE FROM skills WHERE skillid= "+skillTo
-					+" AND characterid IN (SELECT id FROM characters WHERE accountid= "+accid+")");
-			ps.execute();
-			ps.close();
-			rs.close();
-		}catch(Exception ex){ex.printStackTrace();}
-		
-		try{
-			ps = con.prepareStatement("INSERT INTO skills(skillid,characterid,skilllevel,masterlevel,expiration,victimid) " +
-					"VALUES(?,?,?,?,?,?)");
-			ps.setInt(1, skillTo);
-			ps.setInt(2, charID);
-			ps.setInt(3, c.getPlayer().getSkillLevel(skillFrom));
-			ps.setInt(4, c.getPlayer().getMasterLevel(skillFrom));
-			ps.setInt(5, -1);
-			ps.setInt(6, charID);
-			
-			ps.executeUpdate();
-			ps.close();
-			rs.close();
-			
-			con.commit();
-		}catch(Exception ex){ex.printStackTrace();}
-		finally{
-			try{con.setAutoCommit(true);}
-			catch(SQLException ex){ex.printStackTrace();}
-		}
-		
-		c.getPlayer().dropMessage(1, "Link skill updated!");
-	}
 
     public static void addLinkSkill(int cid, int skill) {
         Connection con = DatabaseConnection.getConnection();

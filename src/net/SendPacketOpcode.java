@@ -303,9 +303,10 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     CHALKBOARD((short) 0x16B),//171
     UPDATE_CHAR_BOX((short) 0x16C),//149
     SHOW_CONSUME_EFFECT((short) 0x16D),//14a
-    SHOW_SCROLL_EFFECT((short) 0x16E),//14b
-    SHOW_MAGNIFYING_EFFECT((short) 0x170),//14c
-    SHOW_POTENTIAL_RESET((short) 0x171),//14d
+    SHOW_SCROLL_EFFECT((short) 0x1F5),    //v146 - 0x16E; v172.2 - 0x1F5 ?
+    SHOW_SOUL_EFFECT((short) 0x1F7),                    //v172.2 - 0x1F7
+    SHOW_MAGNIFYING_EFFECT((short) 0x1F9),//v146 - 0x170; v172.2 - 0x1F9 ?
+    SHOW_POTENTIAL_RESET((short) 0x1FA),  //v146 - 0x171; v172.2 - 0x1FA ?
     SHOW_FIREWORKS_EFFECT((short) 0x172),//14e
     SHOW_NEBULITE_EFFECT((short) 0x172),//14f
     SHOW_FUSION_EFFECT((short) 0x174),//150
@@ -349,9 +350,9 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     UPDATE_FAMILIAR((short) 0x1B0),//+2
     HAKU_CHANGE_1((short) 0x1A4),//+2
     HAKU_CHANGE_0((short) 0x1A7),//+2
-    HAKU_MOVE((short) 0x1B2),//+2
-    HAKU_UNK((short) 0x1B3),//+2
-    HAKU_CHANGE((short) 0x1B4),//+2
+    HAKU_MOVE((short) 0x242),           //v146 - 0x1B2; v172.2 - 0x242
+    HAKU_UNK((short) 0x1B3),            //Haku opcodes, 0x240, 0x243, 0x244 sends when he changes
+    HAKU_CHANGE((short) 0x1B4),         
     SPAWN_HAKU((short) 0x1B7),//+2
     
     /*
@@ -516,8 +517,8 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SPAWN_KITE_ERROR((short) 0x2B7),//27D
     SPAWN_KITE((short) 0x2B8),
     DESTROY_KITE((short) 0x2B9),
-    SPAWN_MIST((short) 0x3BA),//v146 - 0x2BA; v171.3 - 0x3BA?
-    REMOVE_MIST((short) 0x3BB),//v146 - 0x2BB; v171.3 - 0x3BB?
+    SPAWN_MIST((short) 0x3BF),//v146 - 0x2BA; v171.3 - 0x3BA; v172.2 - 0x3BF
+    REMOVE_MIST((short) 0x3C1),//v146 - 0x2BB; v171.3 - 0x3BB; v172.2 - 0x3C1
     SPAWN_MYSTIC_DOOR((short) 0x3C2),//v146 - 0x2BC; v172.1 - 0x3C2
     REMOVE_MYSTIC_DOOR((short) 0x2BD), //v146 - 0x2BD; v172.1 - 0x3C3
     MECH_DOOR_SPAWN((short) 0x2BE),//v145, confirmed.

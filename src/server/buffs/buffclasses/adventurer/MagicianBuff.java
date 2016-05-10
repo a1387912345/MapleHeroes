@@ -43,15 +43,13 @@ public class MagicianBuff extends AbstractBuffClass {
             2311007, //Teleport Mastery
             2311009, //Holy Magic Shield
             2121000, //Maple Warrior
-            2121004, //Infinity
             2121009, //Buff Mastery
             2221000, //Maple Warrior
-            2221004, //Infinity
             2121004, //Infinity
             2221004, //Infinity
+            2321004, //Infinity
             2221009, //Buff Mastery
             2321000, //Maple Warrior
-            2321004, //Infinity
             2321005, //Advanced Blessing
             2321001, //Big Bang
             2321010, //Buff Mastery
@@ -111,10 +109,14 @@ public class MagicianBuff extends AbstractBuffClass {
                 break;
             case 2311009: //Holy Magic Shield
                 eff.statups.put(MapleBuffStat.HOLY_MAGIC_SHELL, eff.info.get(MapleStatInfo.x));
+                //ret.info.put(MapleStatInfo.cooltime, ret.info.get(MapleStatInfo.y));
+                //ret.hpR = ret.info.get(MapleStatInfo.z) / 100.0;
                 break;
             case 2121004: //Infinity
             case 2221004: //Infinity
             case 2321004: //Infinity
+            	//eff.hpR = eff.info.get(MapleStatInfo.y) / 100.0;
+                //eff.mpR = eff.info.get(MapleStatInfo.y) / 100.0;
                 eff.statups.put(MapleBuffStat.INFINITY, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(MapleBuffStat.STANCE, eff.info.get(MapleStatInfo.prop));
                 break;

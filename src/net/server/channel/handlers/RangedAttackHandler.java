@@ -55,7 +55,7 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
         if ((chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        AttackInfo attack = DamageParse.parseDmgR(lea, chr);
+        AttackInfo attack = DamageParse.parseRangeDamage(lea, chr);
         if (attack == null) {
             c.getSession().write(CWvsContext.enableActions());
             return;
@@ -369,7 +369,9 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
             if (attack.skillid == 3211006) {
                 chr.getMap().broadcastMessage(chr, CField.strafeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, chr.getTotalSkillLevel(3220010)), chr.getTruePosition());
             } else {
-                chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), chr.getTruePosition());
+                //chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), chr.getTruePosition());
+                chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getId(), attack, visProjectile, chr.getLevel(), chr.getStat().passive_mastery()), chr.getTruePosition());
+
             }
         } else if (attack.skillid == 3211006) {
             chr.getMap().broadcastGMMessage(chr, CField.strafeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, chr.getTotalSkillLevel(3220010)), false);

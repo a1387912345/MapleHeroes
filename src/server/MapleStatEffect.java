@@ -442,8 +442,7 @@ public class MapleStatEffect implements Serializable {
                         case 15111024: //ironclad
                             ret.statups.put(MapleBuffStat.DAMAGE_ABSORBED, ret.info.get(MapleStatInfo.y));  
                             break;
-                        case 2001002: // magic guard
-                        case 12001001:
+                        case 12001001: // magic guard
                         case 22111001:
                         case 27000003:
                             ret.statups.put(MapleBuffStat.MAGIC_GUARD, ret.info.get(MapleStatInfo.x));
@@ -455,9 +454,6 @@ public class MapleStatEffect implements Serializable {
                            // ret.statups.put(MapleBuffStat.ELEMENT_RESIST,ret.info.get(MapleStatInfo.y));
                             ret.statups.put(MapleBuffStat.ABNORMAL_STATUS_R, ret.info.get(MapleStatInfo.terR));//x
                             ret.statups.put(MapleBuffStat.ELEMENTAL_STATUS_R, ret.info.get(MapleStatInfo.terR));//y
-                            break;
-                        case 2301003: // invincible
-                            ret.statups.put(MapleBuffStat.INVINCIBLE, ret.info.get(MapleStatInfo.x));
                             break;
                         case 35120000://Extreme proto
                         case 35001002://mech proto
@@ -702,9 +698,6 @@ public class MapleStatEffect implements Serializable {
                         case 5721000:
                         case 1221000:
                         case 1321000:
-                        case 2121000:
-                        case 2221000:
-                        case 2321000:
                         case 3121000:
                         case 3221000:
                         case 4121000:
@@ -828,11 +821,6 @@ public class MapleStatEffect implements Serializable {
                             break;
                         case 32121003: //twister
                             ret.statups.put(MapleBuffStat.TORNADO, ret.info.get(MapleStatInfo.x));
-                            break;
-                        case 2311009: //holy magic
-                            ret.statups.put(MapleBuffStat.HOLY_MAGIC_SHELL, ret.info.get(MapleStatInfo.x));
-                            ret.info.put(MapleStatInfo.cooltime, ret.info.get(MapleStatInfo.y));
-                            ret.hpR = ret.info.get(MapleStatInfo.z) / 100.0;
                             break;
                         case 32111005: //body boost
                             ret.info.put(MapleStatInfo.time, 60000);
@@ -1078,7 +1066,6 @@ public class MapleStatEffect implements Serializable {
                             ret.statups.put(MapleBuffStat.DAMAGE_PERCENT, (int) ret.info.get(MapleStatInfo.damR));
                             ret.statups.put(MapleBuffStat.DARK_METAMORPHOSIS, 6); // mob count
                             break;
-                        case 2311003: // hs
                         case 9001002: // GM hs
                         case 9101002:
                             ret.statups.put(MapleBuffStat.HOLY_SYMBOL, ret.info.get(MapleStatInfo.x));
@@ -1102,21 +1089,9 @@ public class MapleStatEffect implements Serializable {
                         case 4111003: // shadow web
                         case 14111001:
                             ret.monsterStatus.put(MonsterStatus.SHADOW_WEB, 1);
-                            break;
-                        case 4111009: // Shadow Stars
-                        case 5201008:
-                        case 14111007:
+                            break;  
+                        case 14111007: // Shadow Stars
                             ret.statups.put(MapleBuffStat.SPIRIT_CLAW, 0);
-                            break;
-                        case 2121004:
-                        case 2221004:
-                        case 2321004: // Infinity
-                            ret.hpR = ret.info.get(MapleStatInfo.y) / 100.0;
-                            ret.mpR = ret.info.get(MapleStatInfo.y) / 100.0;
-                            ret.statups.put(MapleBuffStat.INFINITY, ret.info.get(MapleStatInfo.x));
-                            if (GameConstants.GMS) { //TODO JUMP
-                                ret.statups.put(MapleBuffStat.STANCE, (int) ret.info.get(MapleStatInfo.prop));
-                            }
                             break;
                         case 22181004:
                             ret.statups.put(MapleBuffStat.ONYX_WILL, (int) ret.info.get(MapleStatInfo.damage)); //is this the right order
@@ -1138,12 +1113,6 @@ public class MapleStatEffect implements Serializable {
                         case 2321002:
                             ret.statups.put(MapleBuffStat.MANA_REFLECTION, 1);
                             break;
-                        case 2321005: // Advanced Bless
-//                            ret.statups.put(MapleBuffStat.HOLY_SHIELD, GameConstants.GMS ? (int) ret.level : ret.info.get(MapleStatInfo.x));
-                            ret.statups.put(MapleBuffStat.HOLY_SHIELD, ret.info.get(MapleStatInfo.x));
-                            ret.statups.put(MapleBuffStat.HP_BOOST, ret.info.get(MapleStatInfo.indieMhp));//fix names
-                            ret.statups.put(MapleBuffStat.MP_BOOST, ret.info.get(MapleStatInfo.indieMmp));
-                            break;
                         case 3121007: // Hamstring
                             ret.statups.put(MapleBuffStat.HAMSTRING, ret.info.get(MapleStatInfo.x));
                             ret.monsterStatus.put(MonsterStatus.SPEED, ret.info.get(MapleStatInfo.x));
@@ -1158,7 +1127,6 @@ public class MapleStatEffect implements Serializable {
                             ret.statups.put(MapleBuffStat.INDIE_PAD, Integer.MAX_VALUE);
                             ret.statups.put(MapleBuffStat.INDIE_MAD, Integer.MAX_VALUE);
                             ret.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, 500000);
-                        case 2301004:
                         case 9001003:
                             ret.statups.put(MapleBuffStat.BLESS, (int) ret.level);
                             break;
@@ -1273,13 +1241,6 @@ public class MapleStatEffect implements Serializable {
                             ret.statups.put(MapleBuffStat.XENON_FLY, Integer.valueOf(1));
                             ret.info.put(MapleStatInfo.time, Integer.valueOf(180000));
                             break;
-                        case 2321054:
-                            ret.statups.put(MapleBuffStat.ANGEL, 1);
-                            ret.statups.put(MapleBuffStat.IGNORE_DEF, ret.info.get(MapleStatInfo.ignoreMobpdpR));
-                            ret.statups.put(MapleBuffStat.ATTACK_SPEED, ret.info.get(MapleStatInfo.indieBooster));
-                            ret.statups.put(MapleBuffStat.INDIE_MAD, ret.info.get(MapleStatInfo.indieMad));
-                            ret.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, ret.info.get(MapleStatInfo.indieMaxDamageOver));
-                            break;
                     //    case 4211008:
                         case 36111006:
                             ret.statups.put(MapleBuffStat.SHADOWPARTNER, Integer.valueOf(ret.level));
@@ -1389,15 +1350,12 @@ public class MapleStatEffect implements Serializable {
                         case 4121053:
                         case 3221053:
                         case 3121053:
-                        case 2321053:
-                        case 2221053:
-                        case 2121053:
                         case 1321053:
                         case 1221053:
                         case 1121053: //Epic Adventure
                             ret.statups.put(MapleBuffStat.DAMAGE_CAP_INCREASE, ret.info.get(MapleStatInfo.indieMaxDamageOver));
                             ret.statups.put(MapleBuffStat.DAMAGE_PERCENT, ret.info.get(MapleStatInfo.indieDamR));
-                        break;
+                            break;
                         case 31221053:
                         case 31121053:
                         case 32121053:

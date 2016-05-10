@@ -408,24 +408,6 @@ public class ItemMakerHandler {
         return c.getPlayer().getSkillLevel(SkillFactory.getSkill(PlayerStats.getSkillByJob(1007, c.getPlayer().getJob()))) >= reqlvl;
     }
 
-    public static final void UseRecipe(final LittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
-        if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
-            c.getSession().write(CWvsContext.enableActions());
-            return;
-        }
-        c.getPlayer().updateTick(slea.readInt());
-        final byte slot = (byte) slea.readShort();
-        final int itemId = slea.readInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
-
-        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || itemId / 10000 != 251) {
-            c.getSession().write(CWvsContext.enableActions());
-            return;
-        }
-        if (MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId()).applyTo(chr)) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
-        }
-    }
 
     public static final void MakeExtractor(final LittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
@@ -444,34 +426,6 @@ public class ItemMakerHandler {
 
         //expiry date ..
         //MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.SETUP, toUse.getPosition(), (short) 1, false);
-    }
-
-    public static final void UseBag(final LittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
-        if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory()) {
-            c.getSession().write(CWvsContext.enableActions());
-            return;
-        }
-        c.getPlayer().updateTick(slea.readInt());
-        final byte slot = (byte) slea.readShort();
-        final int itemId = slea.readInt();
-        final Item toUse = chr.getInventory(MapleInventoryType.ETC).getItem(slot);
-
-        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || itemId / 10000 != 433) {
-            c.getSession().write(CWvsContext.enableActions());
-            return;
-        }
-        boolean firstTime = !chr.getExtendedSlots().contains(itemId);
-        if (firstTime) {
-            chr.getExtendedSlots().add(itemId);
-            chr.changedExtended();
-            short flag = toUse.getFlag();
-            flag |= ItemFlag.LOCK.getValue();
-            flag |= ItemFlag.UNTRADABLE.getValue();
-            toUse.setFlag(flag);
-            c.getSession().write(InventoryPacket.updateSpecialItemUse(toUse, (byte) 4, toUse.getPosition(), true, chr));
-        }
-        c.getSession().write(CField.openBag(chr.getExtendedSlots().indexOf(itemId), itemId, firstTime));
-        c.getSession().write(CWvsContext.enableActions());
     }
 
     public static final void StartHarvest(final LittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {

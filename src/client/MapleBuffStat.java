@@ -11,8 +11,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
 	 * Please comment "Last Updated: vXXX" after every BuffStat to indicate whether it has been updated or not.
 	 */
     
-    BC_DAMAGE_PERCENT(0x1000, 1), // Last updated: v172.2 - Burning Conduit
-    BC_ATTACK_SPEED(0x20, 1), // Last updated: v172.2 - Burning Conduit
+    HYPER_DAMAGE_PERCENT(0x20, 1), // Last updated: v172.2 - Burning Conduit & Forbidden Contract
+    HYPER_ATTACK_SPEED(0x1000, 1), // Last updated: v172.2 - Burning Conduit & Forbidden Contract
 	WATK(0x80000000, 1), // Last updated: v171
     WDEF(0x20000000, 1), // Last updated: v171
     MATK(0x40000000, 1), // Last updated: v171
@@ -63,7 +63,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     SHARP_EYES(0x80, 3), // Last updated: v171
     MANA_REFLECTION(0x40, 2),
     SEDUCE(0x80, 2),
-    SPIRIT_CLAW(0x100, 2), // d
+    SPIRIT_CLAW(0x10, 3), // Last updated: v172.2
     HOLY_SHIELD(0x4, 3), // Last updated: v171.3
     INFINITY(0x8, 3), // Last updated: v171.3
     HAMSTRING(0x800, 2),
@@ -172,7 +172,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     DEX(0x2, 3), // Last updated: v171
     LUK(0x80, 5),//-2
     ATTACK(0x100, 5), //used also for kaiser majesty //-2
-    ANGEL(0x100, 9),
+    ANGEL(0x200, 9), // Last updated: v172.2 
     //8 unknown tornado debuff? - hp
     INDIE_PAD(0x400, 5, true), // indiePad
     INDIE_MAD(0x800, 5, true),
@@ -192,7 +192,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     //1, unknown
     ICE_SKILL(0x20000000, 5),
     //4 - debuff
-    BOUNDLESS_RAGE(0x20000000, 5),
+    BOUNDLESS_RAGE(0x80000000, 7), // Last updated: v172.2
     // 1 unknown
     PVP_FLAG(0x2, 6),
     //4 unknown
@@ -217,7 +217,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     //2, 4, 8 unknown
     NO_SLIP(0x100000, 6),
     FAMILIAR_SHADOW(0x200000, 6),
-    LEECH_AURA(0x2000000, 6),
+    LEECH_AURA(0x100, 7), // Last Updated: v172.2
     // 4
     // 8
     //CRITICAL_RATE(0x1000000, 6),
@@ -259,7 +259,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     KILL_COUNT(0x800000, 7),
     IGNORE_DEF(0x2000000, 7),
     DAMAGE_PERCENT(0x80000000, 7, true),
-    BIG_BANG(0x8000000, 7),
+    BIG_BANG(0x8000000, 7), // Last updated: v172.2
     PHANTOM_MOVE(0x8, 8),
     JUDGMENT_DRAW(0x10, 8),
     HYBRID_DEFENSES(0x400, 8),
@@ -277,8 +277,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     CRIT_DAMAGE(0x200000, 8),
     DAMAGE_ABSORBED(0x800000, 8),
     ENERGY_CHARGE(0x2000000, 8),
-    DASH_SPEED(0x4000000, 12),//was 8
-    DASH_JUMP(0x8000000, 12),//was8
+    DASH_SPEED(0x80000, 15), // Last updated: 172.2
+    DASH_JUMP(0x100000, 15), // Last updated: 172.2
  // MONSTER_RIDING(0x10000000, 8),
     MONSTER_RIDING(0x10000000, 10),
     STORM_BRINGER((int) 0x20000000000L, 3),
@@ -298,7 +298,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     ATTACK_COUNT(0x80000000, 9),
     EXCEED_ATTACK(0x4000000, 9),
     EXCEED(0x40000000, 9),
-    DIABOLIC_RECOVERY(0x8000000, 9),
+    DIABOLIC_RECOVERY(0x800000, 10), // Last updated: v172.2 
     BOSS_DAMAGE(0x10000, 9, true),
     BOSS_ATTDMG(16777216, 9),
     SUPPLY_SURPLUS(0x2, 10),
@@ -342,7 +342,8 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     HAKU_BLESS(0x8000, 12),
     BEARASSAULT(0x6000, 1),
     ANIMAL_SELECT(0x100000, 12),
-    ASURA(0x10000, 9);
+    ASURA(0x10000, 9),
+    ASSASSINS_MARK(0x80000, 13);
     private static final long serialVersionUID = 0L;
     private final int buffstat;
     private final int first;

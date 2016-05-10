@@ -16,8 +16,7 @@ public class CommandHandler extends AbstractMaplePacketHandler
 		super(recv);
 	}
 
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
-	{
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		final byte mode = lea.readByte();
         lea.readInt(); //ticks
         switch (mode) {

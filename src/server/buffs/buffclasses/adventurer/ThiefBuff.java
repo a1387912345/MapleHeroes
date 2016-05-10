@@ -21,6 +21,7 @@ public class ThiefBuff extends AbstractBuffClass {
             4001003, //Dark Sight
             4001005, //Haste
             4101003, //Claw Booster
+            4101011, //Assassin's Mark
             4201002, //Dagger Booster
             4201009, //Channel Karma
             4201011, //Meso Guard
@@ -65,6 +66,11 @@ public class ThiefBuff extends AbstractBuffClass {
             case 4001003: //Dark Sight
                 eff.statups.put(MapleBuffStat.DARKSIGHT, eff.info.get(MapleStatInfo.x));
                 break;
+            case 4101011: // Assassin's Mark
+            	eff.info.put(MapleStatInfo.time, 2100000000);
+            	eff.statups.put(MapleBuffStat.ASSASSINS_MARK, 1);
+            	eff.setOvertime(true);
+            	break;
             case 4101003: //Claw Booster
             case 4201002: //Dagger Booster
             case 4311009: // Katara Booster
@@ -87,7 +93,7 @@ public class ThiefBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.SHADOWPARTNER, eff.info.get(MapleStatInfo.x));
                 break;
             case 4111009: //Shadow Star
-                eff.statups.put(MapleBuffStat.SPIRIT_CLAW, 0);
+                eff.statups.put(MapleBuffStat.SPIRIT_CLAW, eff.info.get(MapleStatInfo.x));
                 break;
             case 4121014: //Dark Harmony
                 eff.statups.put(MapleBuffStat.INDIE_PAD, eff.info.get(MapleStatInfo.indiePad));//test - works without

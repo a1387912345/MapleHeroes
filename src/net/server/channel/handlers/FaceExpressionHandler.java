@@ -46,7 +46,6 @@ public class FaceExpressionHandler extends AbstractMaplePacketHandler {
                 }
             }
         }
-
 	}
 
 }

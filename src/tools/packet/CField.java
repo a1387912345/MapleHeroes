@@ -3,9 +3,10 @@ package tools.packet;
 import client.*;
 import client.inventory.*;
 import constants.GameConstants;
+import constants.Interaction;
 import constants.QuickMove.QuickMoveNPC;
 import net.SendPacketOpcode;
-import net.channel.handler.PlayerInteractionHandler;
+import net.channel.handler.AttackInfo;
 import net.world.World;
 import net.world.guild.MapleGuild;
 import net.world.guild.MapleGuildAlliance;
@@ -1827,8 +1828,149 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
     public static byte[] rangedAttack(int cid, byte tbyte, int skill, int skillLevel, int display, byte speed, int itemid, List<AttackPair> damage, Point pos, int charLevel, byte mastery, byte unk) {
         return addAttackInfo(1, cid, tbyte, skill, skillLevel, display, speed, damage, charLevel, mastery, unk, itemid, pos, 0);
     }
+    
+    public static byte[] rangedAttack(int charid, AttackInfo attack, int itemid, short charLevel, byte mastery) {
+		return addAttackInfo(1, charid, attack, itemid, charLevel, mastery);
+	}
 
-    public static byte[] strafeAttack(int cid, byte tbyte, int skill, int skillLevel, int display, byte speed, int itemid, List<AttackPair> damage, Point pos, int charLevel, byte mastery, byte unk, int ultLevel) {
+    public static byte[] addAttackInfo(int type, int charid, AttackInfo attack, int itemid, short charLevel, byte mastery) {
+    	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+    	final int skillLevel = attack.skillLevel, skillid = attack.skillid, ultLevel = 0;
+    	final byte unk = attack.unk;
+
+        if (type == 0) {
+            mplew.writeShort(SendPacketOpcode.CLOSE_RANGE_ATTACK.getValue());
+        } else if (type == 1 || type == 2) {
+            mplew.writeShort(SendPacketOpcode.RANGED_ATTACK.getValue());
+        } else if (type == 3) {
+            mplew.writeShort(SendPacketOpcode.MAGIC_ATTACK.getValue());
+        } else {
+            mplew.writeShort(SendPacketOpcode.ENERGY_ATTACK.getValue());
+        }
+
+        mplew.writeInt(charid);
+        mplew.write(0);
+        mplew.write(attack.tbyte);
+        mplew.write(charLevel);
+        
+        if (skillLevel > 0) {
+        	mplew.write(skillLevel);
+            mplew.writeInt(skillid);
+        } else {
+        	mplew.write(0);
+        }
+
+        if (GameConstants.isZero(skillid / 10000) && skillid != 100001283) {
+            short zero1 = 0;
+            short zero2 = 0;
+            mplew.write(zero1 > 0 || zero2 > 0); //boolean
+            if (zero1 > 0 || zero2 > 0) {
+                mplew.writeShort(zero1);
+                mplew.writeShort(zero2);
+                //there is a full handler so better not write zero
+            }
+        }
+
+        /*
+        if (type == 1 || type == 2) { // if RANGED_ATTACK  (Got this from the IDA but it's wrong?)
+            mplew.write(ultLevel);
+            if (ultLevel > 0) {
+                mplew.writeInt(3220010);
+            }
+        }
+        */
+        
+        if (skillid == 4121013) {  // if the skill can be affect by a hyper stat
+        	mplew.write(ultLevel); // Hyper Skill Boolean/Level
+        	if (ultLevel > 0) {
+        		mplew.writeInt(0); // Hyper Skill ID
+        	}
+        }
+
+        if (skillid == 80001850) {
+        	mplew.write(skillLevel);
+        	if (skillLevel > 0) {
+        		mplew.writeInt(skillid);
+        	}
+        }
+        
+        mplew.write(attack.flag); // some flag
+        mplew.write(unk); // flag
+        mplew.writeInt(0); // nOption3 or nBySummonedID
+        
+        if ((unk & 2) != 0) {
+        	mplew.writeInt(skillid); // buckShotInfo.nSkillID
+        	mplew.writeInt(skillLevel); // buckShotInfo.nSkillLV
+        }
+        
+        if ((unk & 8) != 0) {
+        	mplew.write(0); // nPassiveAddAttackCount
+        }
+        
+        /*if (skillid == 40021185 || skillid == 42001006) {
+            mplew.write(0); //boolean if true then int
+        }*/
+
+        
+        mplew.writeShort(attack.display);
+        mplew.write(attack.speed);
+        mplew.write(mastery);
+        mplew.writeInt(itemid > 0 ? itemid : 0); // Throwing Star ID
+        
+        for (AttackPair oned : attack.allDamage) {
+            if (oned.attack != null) {
+                mplew.writeInt(oned.objectid);
+                mplew.write(oned.unknownByte != 0 ? oned.unknownByte : 7);
+                mplew.write(oned.unknownBool1); // some boolean
+                mplew.write(oned.unknownBool2); // some boolean
+                mplew.writeShort(oned.unknownShort != 0 ? oned.unknownShort : 256); // ??
+                if (skillid == 42111002) {
+                    mplew.write(oned.attack.size());
+                    for (Pair eachd : oned.attack) {
+                        mplew.writeInt(((Integer) eachd.left).intValue());
+                    }
+                } else {
+                    for (Pair eachd : oned.attack) {
+                        mplew.write(((Boolean) eachd.right).booleanValue() ? 1 : 0); // Show critical if true
+                        mplew.writeInt(((Integer) eachd.left).intValue());
+                    }
+                }
+            }
+        }
+        if (skillid == 2321001 || skillid == 2221052 || skillid == 11121052) {
+            mplew.writeInt(0);
+        } else if (skillid == 65121052 || skillid == 101000202 || skillid == 101000102) {
+            mplew.writeInt(0);
+            mplew.writeInt(0);
+        }
+        if (skillid == 42100007) {
+            mplew.writeShort(0);
+            mplew.write(0);
+        }
+        /*if (type == 1 || type == 2) {
+            mplew.writePos(pos);
+        } else */
+        if (type == 3 && attack.charge > 0) {
+            mplew.writeInt(attack.charge);
+        }
+        if (skillid == 5321000
+                || skillid == 5311001
+                || skillid == 5321001
+                || skillid == 5011002
+                || skillid == 5311002
+                || skillid == 5221013
+                || skillid == 5221017
+                || skillid == 3120019
+                || skillid == 3121015
+                || skillid == 4121017) {
+            mplew.writePos(attack.position);
+        }
+
+        System.out.println(mplew.toString());
+        return mplew.getPacket();
+	}
+
+	public static byte[] strafeAttack(int cid, byte tbyte, int skill, int skillLevel, int display, byte speed, int itemid, List<AttackPair> damage, Point pos, int charLevel, byte mastery, byte unk, int ultLevel) {
         return addAttackInfo(2, cid, tbyte, skill, skillLevel, display, speed, damage, charLevel, mastery, unk, itemid, pos, ultLevel);
     }
 
@@ -1852,8 +1994,6 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         mplew.writeInt(cid);
         mplew.write(0);
         mplew.write(tbyte);
-        System.out.println(tbyte + " - tbyte");
-        System.out.println(type + " - type");
         mplew.write(charLevel);
         
         if (skillLevel > 0) {
@@ -1874,13 +2014,22 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             }
         }
 
-        if (type == 1 || type == 2) { // if RANGED_ATTACK
+        /*
+        if (type == 1 || type == 2) { // if RANGED_ATTACK  (Got this from the IDA but it's wrong?)
             mplew.write(ultLevel);
             if (ultLevel > 0) {
                 mplew.writeInt(3220010);
             }
         }
+        */
         
+        if (skillid == 4121013) {  // if the skill can be affect by a hyper stat
+        	mplew.write(ultLevel); // Hyper Skill Boolean/Level
+        	if (ultLevel > 0) {
+        		mplew.writeInt(0); // Hyper Skill ID
+        	}
+        }
+
         if (skillid == 80001850) {
         	mplew.write(skillLevel);
         	if (skillLevel > 0) {
@@ -1909,7 +2058,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         mplew.writeShort(display);
         mplew.write(speed);
         mplew.write(mastery);
-        mplew.writeInt(0);
+        mplew.writeInt(charge > 0 ? charge : 0); // Throwing Star ID
         
         for (AttackPair oned : damage) {
             if (oned.attack != null) {
@@ -1959,7 +2108,6 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
                 || skillid == 4121017) {
             mplew.writePos(pos);
         }
-        //mplew.writeZeroBytes(30);//test
 
         System.out.println(mplew.toString());
         return mplew.getPacket();
@@ -2630,6 +2778,10 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         mplew.writePos(mist.getPosition());
         mplew.writeInt(0);
         mplew.writeInt(0);
+        mplew.writeInt(0);
+        mplew.writeShort(0);
+        mplew.writeShort(mist.getSkillDelay());
+        mplew.writeShort(0);
 
         return mplew.getPacket();
     }
@@ -2651,6 +2803,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         mplew.writeShort(SendPacketOpcode.REMOVE_MIST.getValue());
         mplew.writeInt(oid);
         mplew.write(0); //v181
+        
         return mplew.getPacket();
     }
 
@@ -3255,7 +3408,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-            mplew.write(PlayerInteractionHandler.Interaction.INVITE_TRADE.action);
+            mplew.write(Interaction.INVITE_TRADE.action);
             mplew.write(4);//was 3
             mplew.writeMapleAsciiString(c.getName());
 //            mplew.writeInt(c.getLevel());
@@ -3267,7 +3420,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-            mplew.write(PlayerInteractionHandler.Interaction.UPDATE_MESO.action);
+            mplew.write(Interaction.UPDATE_MESO.action);
             mplew.write(number);
             mplew.writeLong(meso);
             return mplew.getPacket();
@@ -3288,7 +3441,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-            mplew.write(PlayerInteractionHandler.Interaction.SET_ITEMS.action);
+            mplew.write(Interaction.SET_ITEMS.action);
             mplew.write(number);
             mplew.write(item.getPosition());
             PacketHelper.addItemInfo(mplew, item);
@@ -3333,7 +3486,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-            mplew.write(PlayerInteractionHandler.Interaction.CONFIRM_TRADE.action);
+            mplew.write(Interaction.CONFIRM_TRADE.action);
 
             return mplew.getPacket();
         }
@@ -3342,7 +3495,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-            mplew.write(PlayerInteractionHandler.Interaction.EXIT.action);
+            mplew.write(Interaction.EXIT.action);
 //            mplew.write(25);//new v141
             mplew.write(UserSlot);
             mplew.write(message);
@@ -3354,7 +3507,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-            mplew.write(PlayerInteractionHandler.Interaction.EXIT.action);
+            mplew.write(Interaction.EXIT.action);
             mplew.write(UserSlot);
             mplew.write(7);//was2
 
@@ -4827,4 +4980,5 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
     	
     	return mplew.getPacket();
     }
+
 }

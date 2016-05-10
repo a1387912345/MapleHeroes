@@ -12,6 +12,7 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
+import net.channel.handler.InventoryHandler;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
@@ -81,7 +82,7 @@ public class MagnifyGlassHandler extends AbstractMaplePacketHandler {
                         StructItemOption pot = pots.get(Randomizer.nextInt(pots.size())).get(reqLevel);
                         if (pot != null && pot.reqLevel / 1 <= reqLevel && GameConstants.optionTypeFits(pot.optionType, eqq.getItemId()) && GameConstants.potentialIDFits(pot.opID, new_state, i)) { //optionType
                             //have to research optionType before making this truely official-like
-                            if (isAllowedPotentialStat(eqq, pot.opID)) {
+                            if (InventoryHandler.isAllowedPotentialStat(eqq, pot.opID)) {
                                 if (i == 0) {
                                     eqq.setPotential1(pot.opID);
                                 } else if (i == 1) {
@@ -127,12 +128,5 @@ public class MagnifyGlassHandler extends AbstractMaplePacketHandler {
             System.out.println("Return 4");
         }
 	}
-	
-	public static boolean isAllowedPotentialStat(Equip eqq, int opID) { //For now
-        //if (GameConstants.isWeapon(eqq.getItemId())) {
-        //    return !(opID > 60000) || (opID >= 1 && opID <= 4) || (opID >= 9 && opID <= 12) || (opID >= 10001 && opID <= 10006) || (opID >= 10011 && opID <= 10012) || (opID >= 10041 && opID <= 10046) || (opID >= 10051 && opID <= 10052) || (opID >= 10055 && opID <= 10081) || (opID >= 10201 && opID <= 10291) || (opID >= 210001 && opID <= 20006) || (opID >= 20011 && opID <= 20012) || (opID >= 20041 && opID <= 20046) || (opID >= 20051 && opID <= 20052) || (opID >= 20055 && opID <= 20081) || (opID >= 20201 && opID <= 20291) || (opID >= 30001 && opID <= 30006) || (opID >= 30011 && opID <= 30012) || (opID >= 30041 && opID <= 30046) || (opID >= 30051 && opID <= 30052) || (opID >= 30055 && opID <= 30081) || (opID >= 30201 && opID <= 30291) || (opID >= 40001 && opID <= 40006) || (opID >= 40011 && opID <= 40012) || (opID >= 40041 && opID <= 40046) || (opID >= 40051 && opID <= 40052) || (opID >= 40055 && opID <= 40081) || (opID >= 40201 && opID <= 40291);
-        //}
-        return opID < 60000;
-    }
 
 }

@@ -1154,8 +1154,7 @@ public class DamageParse {
         return attack;
     }
 
-    public static AttackInfo parseMagicDamage(LittleEndianAccessor lea, MapleCharacter chr) // magic
-    {
+    public static AttackInfo parseMagicDamage(LittleEndianAccessor lea, MapleCharacter chr) {
         try {
             AttackInfo ret = new AttackInfo();
 
@@ -1219,8 +1218,7 @@ public class DamageParse {
         return null;
     }
 
-    public static AttackInfo parseCloseRangeDamage(LittleEndianAccessor lea, MapleCharacter chr)//reg att
-    {
+    public static AttackInfo parseCloseRangeDamage(LittleEndianAccessor lea, MapleCharacter chr) {
         AttackInfo ret = new AttackInfo();
         lea.skip(1);
         ret.tbyte = lea.readByte();
@@ -1329,10 +1327,9 @@ public class DamageParse {
         return ret;
     }
 
-    public static AttackInfo parseDmgR(LittleEndianAccessor lea, MapleCharacter chr)//ranged att
-    {
+    public static AttackInfo parseRangeDamage(LittleEndianAccessor lea, MapleCharacter chr) {
         AttackInfo ret = new AttackInfo();
-        lea.skip(2);
+        lea.readShort();
         ret.tbyte = lea.readByte();
 
         ret.targets = ((byte) (ret.tbyte >>> 4 & 0xF));
@@ -1341,10 +1338,10 @@ public class DamageParse {
         if (GameConstants.isZero(chr.getJob())) {
             lea.skip(1); //zero has byte
         }
-        lea.skip(2);
+        ret.skillLevel = lea.readByte();
+        lea.readByte(); // some boolean?
         lea.readInt();
-     //   lea.readInt(); //same as above
-        lea.readShort();
+        ret.flag = lea.readByte(); // Shadow Star
         switch (ret.skillid) {
             case 3121004:
             case 3221001:
@@ -1368,10 +1365,12 @@ public class DamageParse {
             case 3120019:
             case 5221022:
                 lea.skip(4);
+            default:
+            	ret.charge = -1;
         }
-
-        ret.charge = -1;
+        
         ret.unk = lea.readByte();
+        lea.readByte(); // Expert Handling Boolean
         ret.display = lea.readUShort();
         lea.skip(5);
         if (ret.skillid == 23111001 || ret.skillid == 36111010) {
@@ -1384,29 +1383,44 @@ public class DamageParse {
             lea.readInt();//newv144
         }  
         ret.speed = lea.readByte();
-        lea.skip(4);
         ret.lastAttackTickCount = lea.readInt();
+        lea.skip(4);
         lea.skip(4);
         ret.slot = ((byte) lea.readShort());
         ret.csstar = ((byte) lea.readShort());
         ret.AOE = lea.readByte();
+        
+        
+        if ((ret.flag & 0x40) != 0) { // if Shadow Star is active
+        	lea.readInt(); // Star ID
+        }
+        
         ret.allDamage = new ArrayList();
 
         for (int i = 0; i < ret.targets; i++) {
             int oid = lea.readInt();
-            lea.skip(20);//v140 = 19
+            byte unkByte = lea.readByte();
+            byte unkBool1 = lea.readByte();
+            byte unkBool2 = lea.readByte();
+            lea.skip(15);
+            short unkShort = lea.readShort();
+            
             List allDamageNumbers = new ArrayList();
             for (int j = 0; j < ret.hits; j++) {
                 int damage = lea.readInt();
                 allDamageNumbers.add(new Pair(Integer.valueOf(damage), Boolean.valueOf(false)));
             }
-            lea.skip(8);
-            ret.allDamage.add(new AttackPair(Integer.valueOf(oid).intValue(), allDamageNumbers));
+            lea.skip(4); // CRC of monster [Wz Editing]
+            lea.readInt(); //idk
+            ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers));
         }
+        
         ret.position = lea.readPos();
-        if (lea.available() >= 4) {
-            lea.skip(4);//moved after pos in v141
+        
+        if (lea.available() > 4) {
+            lea.skip(4);
         }
+        
         return ret;
     }
 

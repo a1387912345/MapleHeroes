@@ -37,7 +37,7 @@ public class AttackInfo {
     public List<AttackPair> allDamage;
     public Point position;
     public int display;
-    public byte hits, targets, tbyte, speed, csstar, AOE, slot, unk;
+    public byte hits, targets, tbyte, speed, csstar, AOE, slot, unk, flag;
     public boolean real = true;
 
     public final MapleStatEffect getAttackEffect(final MapleCharacter chr, final Skill skill) {

@@ -29,11 +29,10 @@ import constants.ServerConfig;
 import constants.ServerConstants;
 import net.cashshop.handler.*;
 import net.channel.handler.*;
-import net.farm.handler.FarmHandler;
-import net.farm.handler.FarmOperation;
 import net.login.LoginServer;
 import net.login.handler.*;
 import net.mina.MaplePacketDecoder;
+import net.server.channel.handlers.monster.MobHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -541,7 +540,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             try {
                 packetHandler.handlePacket(lea, client, client.getPlayer());
             } catch (final Throwable t) {
-            	System.out.println("something happened for " + packetId);
+            	System.err.println("[Error] An error occured when trying to handle the packet " + packetId);
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (client.getPlayer() == null ? "" : "player ; " + client.getPlayer() + " on map ; " + client.getPlayer().getMapId() + " - ") + "account ; " + client.getAccountName() + "\r\n" + lea.toString());
                 //client.announce(MaplePacketCreator.enableActions());//bugs sometimes
             }
@@ -568,9 +567,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             FileoutputUtil.log("PacketLog.txt", "\r\n\r\n[Recv]\t" + header.name() + tab + "|\t" + header.getValue() + "\t|\t" + HexTool.getOpcodeToString(header.getValue()) + "\r\n\r\n");
         }
         switch (header) {
-        	case CRASH_INFO:
-        		//crashHandler(slea, c);
-        		break;
         /*    case LOGIN_REDIRECTOR:
                 System.out.println("Redirector login received");
                 if (!ServerConstants.Redirector) {
@@ -586,35 +582,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                     System.out.println(client_username);
                     c.getSession().write(LoginPacket.getAuthSuccessRequest(c));
                     break; //<-- Unsecure Hawt login
-            case CLIENT_HELLO:
-                // [08] - locale
-                // [8E 00] - version
-                // [02 00] - patch version
-            	//c.getSession().write(LoginPacket.sendUnknown()); // fix that the login button is stuck
-                System.out.println(c.getSessionIPAddress() + " Connected!");
-                break;
-            case PONG:
-                c.pongReceived();
-                break;
-            case CHANGE_PIC_REQUEST:
-            	ChangePicHandler.handlePacket(slea, c);
-        		break;  
-            case CLIENT_REQUEST:
-                c.getSession().write(LoginPacket.getIntegrityResponse(slea.readInt()));
-                break;
-            //case CLIENT_REQUEST2:
-            //	c.getSession().write(LoginPacket.getClientResponse());
-            //	break;
-            case STRANGE_DATA:
-                // Does nothing for now, HackShield's heartbeat
-                break;
-            case LOGIN_PASSWORD:
-                CharLoginHandler.login(slea, c);
-                break;
-            case AUTH_REQUEST:
-                //CharLoginHandler.handleAuthRequest(slea, c);
-            	c.getSession().write(LoginPacket.sendAuthResponse(SendPacketOpcode.AUTH_RESPONSE.getValue() ^ slea.readInt()));
-                break;
             /*
             case CLIENT_START:
             	
@@ -633,41 +600,14 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 break;
             case VIEW_SERVERLIST:
                 if (slea.readByte() == 0) {
-                    CharLoginHandler.ServerListRequest(c);
+                    //CharLoginHandler.ServerListRequest(c);
                 }
-                break;
-            case REDISPLAY_SERVERLIST:
-            case SERVERLIST_REQUEST:
-                CharLoginHandler.ServerListRequest(c);
-                break;
-            case CHARLIST_REQUEST:
-                CharLoginHandler.CharlistRequest(slea, c);
-                break;
-            case SERVERSTATUS_REQUEST:
-                CharLoginHandler.ServerStatusRequest(c);
-                break;
-            case CHECK_CHAR_NAME:
-                CharLoginHandler.CheckCharName(slea.readMapleAsciiString(), c);
-                break;
-            case CREATE_CHAR:
-            case CREATE_SPECIAL_CHAR:
-                //CharLoginHandler.CreateChar(slea, c);
-            	CreateCharHandler.handlePacket(slea, c);
-                break;
-            case CREATE_ULTIMATE:
-                CharLoginHandler.CreateUltimate(slea, c);
-                break;
-            case DELETE_CHAR:
-                DeleteCharHandler.handlePacket(slea, c);
                 break;
             case CHAR_SELECT_NO_PIC:
                 CharLoginHandler.Character_WithoutSecondPassword(slea, c, false, false);
                 break;
             case VIEW_REGISTER_PIC:
                 CharLoginHandler.Character_WithoutSecondPassword(slea, c, true, true);
-                break;
-            case PART_TIME_JOB:
-                CharLoginHandler.PartJob(slea, c);
                 break;
             case CHAR_SELECT:
                 //CharLoginHandler.Character_WithoutSecondPassword(slea, c, true, false);
@@ -678,9 +618,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 break;
             case AUTH_SECOND_PASSWORD:
                 CharLoginHandler.Character_WithSecondPassword(slea, c, false);
-                break;
-            case CHARACTER_CARD:
-                CharLoginHandler.updateCCards(slea, c);
                 break;
             case CLIENT_ERROR:
                 //System.out.println("Client error: " + slea.toString());
@@ -721,113 +658,8 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 //c.getSession().write(LoginPacket.getLoginAUTH());
                 // c.getSession().write(LoginPacket.StrangeDATA());
                 break;
-            // END OF LOGIN SERVER
-            case CHANGE_CHANNEL:
-            case CHANGE_ROOM_CHANNEL:
-                InterServerHandler.ChangeChannel(slea, c, c.getPlayer(), header == RecvPacketOpcode.CHANGE_ROOM_CHANNEL);
-                break;
-            case PLAYER_LOGGEDIN:
-                slea.readInt();
-                final int charid = slea.readInt();
-                InterServerHandler.Loggedin(charid, c);
-                break;
-            case ENTER_PVP:
-            case ENTER_PVP_PARTY:
-                PlayersHandler.EnterPVP(slea, c);
-                break;
-            case PVP_RESPAWN:
-                PlayersHandler.RespawnPVP(slea, c);
-                break;
-            case LEAVE_PVP:
-                PlayersHandler.LeavePVP(slea, c);
-                break;
-            case ENTER_AZWAN:
-                PlayersHandler.EnterAzwan(slea, c);
-                break;
-            case ENTER_AZWAN_EVENT:
-                PlayersHandler.EnterAzwanEvent(slea, c);
-                break;
-            case LEAVE_AZWAN:
-                PlayersHandler.LeaveAzwan(slea, c);
-                c.getSession().write(CField.showEffect("hillah/fail"));
-                c.getSession().write(CField.UIPacket.sendAzwanResult());
-                break;
-            case PVP_ATTACK:
-                PlayersHandler.AttackPVP(slea, c);
-                break;
-            case PVP_SUMMON:
-                SummonHandler.SummonPVP(slea, c);
-                break;
-            case ENTER_FARM:
-                InterServerHandler.EnterFarm(c, c.getPlayer());
-                break;
-            case FARM_COMPLETE_QUEST:
-                FarmHandler.completeQuest(slea, c);
-                break;
-            case FARM_NAME:
-                FarmHandler.createFarm(slea, c);
-                break;
-            case PLACE_FARM_OBJECT:
-                FarmHandler.placeBuilding(slea, c);
-                break;
-            case FARM_SHOP_BUY:
-                FarmHandler.buy(slea, c);
-                break;
-            case HARVEST_FARM_BUILDING:
-                FarmHandler.harvest(slea, c);
-                break;
-            case USE_FARM_ITEM:
-                FarmHandler.useItem(slea, c);
-                break;
-            case RENAME_MONSTER:
-                FarmHandler.renameMonster(slea, c);
-                break;
-            case NURTURE_MONSTER:
-                FarmHandler.nurtureMonster(slea, c);
-                break;
-            case FARM_QUEST_CHECK:
-                FarmHandler.checkQuestStatus(slea, c);
-                break;
-            case FARM_FIRST_ENTRY:
-                FarmHandler.firstEntryReward(slea, c);
-                break;
-            case EXIT_FARM:
-                FarmOperation.LeaveFarm(slea, c, c.getPlayer());
-                break;
-            case ENTER_CASH_SHOP:
-                InterServerHandler.EnterCS(c, c.getPlayer());
-                break;
-            case MOVE_PLAYER:
-                PlayerHandler.MovePlayer(slea, c, c.getPlayer());
-                break;
-            case CHAR_INFO_REQUEST:
-                c.getPlayer().updateTick(slea.readInt());
-                PlayerHandler.CharInfoRequest(slea.readInt(), c, c.getPlayer());
-                break;
-            case CLOSE_RANGE_ATTACK:
-                PlayerHandler.closeRangeAttack(slea, c, c.getPlayer(), false);
-                break;
-            case RANGED_ATTACK:
-                PlayerHandler.rangedAttack(slea, c, c.getPlayer());
-                break;
-            case MAGIC_ATTACK:
-                PlayerHandler.MagicDamage(slea, c, c.getPlayer());
-                break;
-            case SPECIAL_MOVE:
-                PlayerHandler.SpecialMove(slea, c, c.getPlayer());
-                break;
-            case PASSIVE_ENERGY:
-                PlayerHandler.closeRangeAttack(slea, c, c.getPlayer(), true);
-                break;
-            case GET_BOOK_INFO:
-                PlayersHandler.MonsterBookInfoRequest(slea, c, c.getPlayer());
-                break;
-            case MONSTER_BOOK_DROPS:
-                PlayersHandler.MonsterBookDropsRequest(slea, c, c.getPlayer());
-                break;
-            case CHANGE_CODEX_SET:
-                PlayersHandler.ChangeSet(slea, c, c.getPlayer());
-                break;
+            // END OF LOGIN SERVER;
+
             case PROFESSION_INFO:
                 ItemMakerHandler.ProfessionInfo(slea, c);
                 break;
@@ -849,65 +681,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case MAKE_EXTRACTOR:
                 ItemMakerHandler.MakeExtractor(slea, c, c.getPlayer());
                 break;
-            case USE_BAG:
-                ItemMakerHandler.UseBag(slea, c, c.getPlayer());
-                break;
-            case USE_FAMILIAR:
-                MobHandler.UseFamiliar(slea, c, c.getPlayer());
-                break;
-            case SPAWN_FAMILIAR:
-                MobHandler.SpawnFamiliar(slea, c, c.getPlayer());
-                break;
-            case RENAME_FAMILIAR:
-                MobHandler.RenameFamiliar(slea, c, c.getPlayer());
-                break;
-            case MOVE_FAMILIAR:
-                MobHandler.MoveFamiliar(slea, c, c.getPlayer());
-                break;
-            case ATTACK_FAMILIAR:
-                MobHandler.AttackFamiliar(slea, c, c.getPlayer());
-                break;
-            case TOUCH_FAMILIAR:
-                MobHandler.TouchFamiliar(slea, c, c.getPlayer());
-                break;
-            case REVEAL_FAMILIAR:
-                break;
-            case USE_RECIPE:
-                ItemMakerHandler.UseRecipe(slea, c, c.getPlayer());
-                break;
-            case MOVE_HAKU:
-                PlayerHandler.MoveHaku(slea, c, c.getPlayer());
-                break;
-            case CHANGE_HAKU:
-                PlayerHandler.MoveHaku(slea, c, c.getPlayer());
-                break;
-            case MOVE_ANDROID:
-                PlayerHandler.MoveAndroid(slea, c, c.getPlayer());
-                break;
-            case FACE_EXPRESSION:
-                PlayerHandler.ChangeEmotion(slea.readInt(), c.getPlayer());
-                break;
-            case FACE_ANDROID:
-                PlayerHandler.ChangeAndroidEmotion(slea.readInt(), c.getPlayer());
-                break;
-            case TAKE_DAMAGE:
-                PlayerHandler.TakeDamage(slea, c, c.getPlayer());
-                break;
-            case HEAL_OVER_TIME:
-                PlayerHandler.Heal(slea, c.getPlayer());
-                break;
-            case LINK_SKILL:
-                c.getPlayer().giveLinkSkill(slea, c);
-                break;
-            case CANCEL_BUFF:
-                PlayerHandler.CancelBuffHandler(slea.readInt(), c.getPlayer());
-                break;
-            case CANCEL_MECH:
-                PlayerHandler.CancelMech(slea, c.getPlayer());
-                break;
-            case CANCEL_ITEM_EFFECT:
-                PlayerHandler.CancelItemEffect(slea.readInt(), c.getPlayer());
-                break;
             case USE_TITLE:
                 PlayerHandler.UseTitle(slea.readInt(), c, c.getPlayer());
                 break;
@@ -917,55 +690,20 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case DRESSUP_TIME:
                 PlayerHandler.DressUpTime(slea, c, c.getPlayer());
                 break;
-            case USE_CHAIR:
-                PlayerHandler.UseChair(slea.readInt(), c, c.getPlayer());
-                break;
-            case CANCEL_CHAIR:
-                PlayerHandler.CancelChair(slea.readShort(), c, c.getPlayer());
-                break;
-            case WHEEL_OF_FORTUNE:
-                break; //whatever
-            case USE_ITEMEFFECT:
-                PlayerHandler.UseItemEffect(slea.readInt(), c, c.getPlayer());
-                break;
+
+
             case SKILL_EFFECT:
                 PlayerHandler.SkillEffect(slea, c.getPlayer());
                 break;
             case QUICK_SLOT:
                 PlayerHandler.QuickSlot(slea, c.getPlayer());
                 break;
-            case MESO_DROP:
-                c.getPlayer().updateTick(slea.readInt());
-                PlayerHandler.DropMeso(slea.readInt(), c.getPlayer());
-                break;
-            case CHANGE_KEYMAP:
-                PlayerHandler.ChangeKeymap(slea, c.getPlayer());
-                break;
-            case PET_BUFF:
-                PlayerHandler.ChangePetBuff(slea, c.getPlayer());
-                break;
+
             case UPDATE_ENV:
                 // We handle this in MapleMap
                 break;
-            case CHANGE_MAP:
-                if (c.getPlayer().getMap() == null) {
-                    CashShopOperation.LeaveCS(slea, c, c.getPlayer());
-                } else {
-                    PlayerHandler.ChangeMap(slea, c, c.getPlayer());
-                }
-                break;
-            case SPECIAL_PORTAL:
-            	SpecialPortalHandler.handlePacket(slea, c);
-                //slea.skip(1);
-                //PlayerHandler.ChangeMapSpecial(slea.readMapleAsciiString(), c, c.getPlayer());
-                break;
-            case USE_INNER_PORTAL:
-                slea.skip(1);
-                PlayerHandler.InnerPortal(slea, c, c.getPlayer());
-                break;
-            case TELEPORT_ROCK_ADD_MAP:
-                PlayerHandler.TrockAddMap(slea, c, c.getPlayer());
-                break;
+
+
             case LIE_DETECTOR:
             case LIE_DETECTOR_SKILL:
                 //PlayersHandler.LieDetector(slea, c, c.getPlayer(), header == RecvPacketOpcode.LIE_DETECTOR);
@@ -980,42 +718,11 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case REMOVE_ARAN_COMBO:
                 PlayerHandler.RemoveAranCombo(c.getPlayer());
                 break;
-            case SKILL_MACRO:
-                PlayerHandler.ChangeSkillMacro(slea, c.getPlayer());
-                break;
-            case GIVE_FAME:
-                PlayersHandler.GiveFame(slea, c, c.getPlayer());
-                break;
             case TRANSFORM_PLAYER:
                 PlayersHandler.TransformPlayer(slea, c, c.getPlayer());
                 break;
             case NOTE_ACTION:
                 PlayersHandler.Note(slea, c.getPlayer());
-                break;
-            case USE_MYSTIC_DOOR:
-                PlayersHandler.UseDoor(slea, c.getPlayer());
-                break;
-            case USE_MECH_DOOR:
-                PlayersHandler.UseMechDoor(slea, c.getPlayer());
-                break;
-            case DAMAGE_REACTOR:
-                PlayersHandler.HitReactor(slea, c);
-                break;
-            case CLICK_REACTOR:
-            case TOUCH_REACTOR:
-                PlayersHandler.TouchReactor(slea, c);
-                break;
-            case CLOSE_CHALKBOARD:
-                c.getPlayer().setChalkboard(null);
-                break;
-            case ITEM_SORT:
-                InventoryHandler.ItemSort(slea, c);
-                break;
-            case ITEM_GATHER:
-                InventoryHandler.ItemGather(slea, c);
-                break;
-            case ITEM_MOVE:
-                InventoryHandler.ItemMove(slea, c);
                 break;
             case MOVE_BAG:
                 InventoryHandler.MoveBag(slea, c);
@@ -1025,33 +732,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 break;
             case ITEM_MAKER:
                 ItemMakerHandler.ItemMaker(slea, c);
-                break;
-            case ITEM_PICKUP:
-                InventoryHandler.Pickup_Player(slea, c, c.getPlayer());
-                break;
-            case USE_CASH_ITEM:
-                InventoryHandler.UseCashItem(slea, c);
-                break;
-            case USE_ITEM:
-                InventoryHandler.UseItem(slea, c, c.getPlayer());
-                break;
-            case USE_COSMETIC:
-                InventoryHandler.UseCosmetic(slea, c, c.getPlayer());
-                break;
-            case USE_MAGNIFY_GLASS:
-                InventoryHandler.UseMagnify(slea, c);
-                break;
-            case USE_SCRIPTED_NPC_ITEM:
-                InventoryHandler.UseScriptedNPCItem(slea, c, c.getPlayer());
-                break;
-            case USE_RETURN_SCROLL:
-                InventoryHandler.UseReturnScroll(slea, c, c.getPlayer());
-                break;
-            case USE_NEBULITE:
-                InventoryHandler.UseNebulite(slea, c);
-                break;
-            case USE_ALIEN_SOCKET:
-                InventoryHandler.UseAlienSocket(slea, c);
                 break;
             case HOLLY:
                 PlayersHandler.HOLLY(c, slea);
@@ -1068,150 +748,22 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 slea.skip(4); // all 0
                 c.getSession().write(CSPacket.ViciousHammer(false, 0));
                 break;
-            case USE_NEBULITE_FUSION:
-                InventoryHandler.UseNebuliteFusion(slea, c);
-                break;
-            case USE_UPGRADE_SCROLL:
-                c.getPlayer().updateTick(slea.readInt());
-                InventoryHandler.UseUpgradeScroll(slea.readShort(), slea.readShort(), slea.readShort(), c, c.getPlayer(), slea.readByte() > 0);
-                break;
-            case USE_FLAG_SCROLL:
-            case USE_POTENTIAL_SCROLL:
-            case USE_EQUIP_SCROLL:
-                c.getPlayer().updateTick(slea.readInt());
-                InventoryHandler.UseUpgradeScroll(slea.readShort(), slea.readShort(), (short) 0, c, c.getPlayer(), slea.readByte() > 0);
-                break;
-            case USE_ABYSS_SCROLL:
-                InventoryHandler.UseAbyssScroll(slea, c);
-                break;
-            case USE_CARVED_SEAL:
-                InventoryHandler.UseCarvedSeal(slea, c);
-                break;
-            case USE_CRAFTED_CUBE:
-                InventoryHandler.UseCube(slea, c);
-                break;
-            case USE_SUMMON_BAG:
-                InventoryHandler.UseSummonBag(slea, c, c.getPlayer());
-                break;
-            case USE_TREASURE_CHEST:
-                InventoryHandler.UseTreasureChest(slea, c, c.getPlayer());
-                break;
-            case USE_SKILL_BOOK:
-                c.getPlayer().updateTick(slea.readInt());
-                InventoryHandler.UseSkillBook((byte) slea.readShort(), slea.readInt(), c, c.getPlayer());
-                break;
-            case USE_EXP_POTION:
-                InventoryHandler.UseExpPotion(slea, c, c.getPlayer());
-                break;
-            case USE_CATCH_ITEM:
-                InventoryHandler.UseCatchItem(slea, c, c.getPlayer());
-                break;
-            case USE_MOUNT_FOOD:
-                InventoryHandler.UseMountFood(slea, c, c.getPlayer());
-                break;
+
             case REWARD_ITEM:
                 InventoryHandler.UseRewardItem(slea, c, c.getPlayer());
                 break;
             case SOLOMON_EXP:
                 InventoryHandler.UseExpItem(slea, c, c.getPlayer());
                 break;
-            case HYPNOTIZE_DMG:
-                MobHandler.HypnotizeDmg(slea, c.getPlayer());
-                break;
-            case MOB_NODE:
-                MobHandler.MobNode(slea, c.getPlayer());
-                break;
-            case DISPLAY_NODE:
-                MobHandler.DisplayNode(slea, c.getPlayer());
-                break;
-            case MOVE_LIFE:
-                MobHandler.MoveMonster(slea, c, c.getPlayer());
-                break;
-            case AUTO_AGGRO:
-                MobHandler.AutoAggro(slea.readInt(), c.getPlayer());
-                break;
-            case FRIENDLY_DAMAGE:
-                MobHandler.FriendlyDamage(slea, c.getPlayer());
-                break;
-            case REISSUE_MEDAL:
-                PlayerHandler.ReIssueMedal(slea, c, c.getPlayer());
-                break;
-            case MONSTER_BOMB:
-                MobHandler.MonsterBomb(slea.readInt(), c.getPlayer());
-                break;
-            case MOB_BOMB:
-                MobHandler.MobBomb(slea, c.getPlayer());
-                break;
-            case NPC_SHOP:
-                NPCHandler.NPCShop(slea, c, c.getPlayer());
-                break;
-            case NPC_TALK:
-                NPCHandler.NPCTalk(slea, c, c.getPlayer());
-                break;
-            case NPC_TALK_MORE:
-                NPCHandler.NPCMoreTalk(slea, c);
-                break;
-            case NPC_ACTION:
-                NPCHandler.NPCAnimation(slea, c);
-                break;
-            case QUEST_ACTION:
-                NPCHandler.QuestAction(slea, c, c.getPlayer());
-                break;
+
             case TOT_GUIDE:
                 break;
-            case STORAGE_OPERATION:
-                NPCHandler.Storage(slea, c, c.getPlayer());
-                break;
-            case GENERAL_CHAT:
-            	System.out.println(slea.toString());
-                if (c.getPlayer() != null && c.getPlayer().getMap() != null) {
-                    c.getPlayer().updateTick(slea.readInt());
-                    ChatHandler.GeneralChat(slea.readMapleAsciiString(), slea.readByte(), c, c.getPlayer());
-                }
-                break;
-            case PARTYCHAT:
-                //c.getPlayer().updateTick(slea.readInt());
-                ChatHandler.Others(slea, c, c.getPlayer());
-                break;
-            case COMMAND:
-                ChatHandler.Command(slea, c);
-                break;
-            case MESSENGER:
-                ChatHandler.Messenger(slea, c);
-                break;
-            case AUTO_ASSIGN_AP:
-                StatsHandling.AutoAssignAP(slea, c, c.getPlayer());
-                break;
-            case DISTRIBUTE_AP:
-                StatsHandling.DistributeAP(slea, c, c.getPlayer());
-                break;
-            case DISTRIBUTE_SP:
-                StatsHandling.DistributeSP(slea, c, c.getPlayer());
-                break;
-            case PLAYER_INTERACTION:
-                PlayerInteractionHandler.PlayerInteraction(slea, c, c.getPlayer());
-                break;
-            case ADMIN_CHAT:
-                ChatHandler.AdminChat(slea, c, c.getPlayer());
-                break;
+
             case ADMIN_COMMAND:
                 PlayerHandler.AdminCommand(slea, c, c.getPlayer());
                 break;
             case ADMIN_LOG:
                 CommandProcessor.logCommandToDB(c.getPlayer(), slea.readMapleAsciiString(), "adminlog");
-                break;
-            case GUILD_OPERATION:
-                GuildHandler.Guild(slea, c);
-                break;
-            case DENY_GUILD_REQUEST:
-                slea.skip(1);
-                GuildHandler.DenyGuildRequest(slea.readMapleAsciiString(), c);
-                break;
-            case ALLIANCE_OPERATION:
-                AllianceHandler.HandleAlliance(slea, c, false);
-                break;
-            case DENY_ALLIANCE_REQUEST:
-                AllianceHandler.HandleAlliance(slea, c, true);
                 break;
             case QUICK_MOVE:
                 NPCHandler.OpenQuickMove(slea, c);
@@ -1219,18 +771,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case BBS_OPERATION:
                 BBSHandler.BBSOperation(slea, c);
                 break;
-            case PARTY_OPERATION:
-                PartyHandler.partyOperation(slea, c);
-                break;
-            case PARTY_REQUEST:
-                PartyHandler.partyRequest(slea, c);
-                break;
-            case ALLOW_PARTY_INVITE:
-                PartyHandler.AllowPartyInvite(slea, c);
-                break;
-            case BUDDYLIST_MODIFY:
-                BuddyListHandler.BuddyOperation(slea, c);
-                break;
+
             case CYGNUS_SUMMON:
                 UserInterfaceHandler.CygnusSummon_NPCRequest(c);
                 break;
@@ -1279,59 +820,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case REWARD_POT:
                 ItemMakerHandler.RewardPot(slea, c);
                 break;
-            case DAMAGE_SUMMON:
-                slea.skip(4);
-                SummonHandler.DamageSummon(slea, c.getPlayer());
-                break;
-            case MOVE_SUMMON:
-                SummonHandler.MoveSummon(slea, c.getPlayer());
-                break;
-            case SUMMON_ATTACK:
-                SummonHandler.SummonAttack(slea, c, c.getPlayer());
-                break;
-            case MOVE_DRAGON:
-                SummonHandler.MoveDragon(slea, c.getPlayer());
-                break;
-            case SUB_SUMMON:
-                SummonHandler.SubSummon(slea, c.getPlayer());
-                break;
-            case REMOVE_SUMMON:
-                SummonHandler.RemoveSummon(slea, c);
-                break;
-            case SPAWN_PET:
-                PetHandler.SpawnPet(slea, c, c.getPlayer());
-                break;
-            case MOVE_PET:
-                PetHandler.MovePet(slea, c.getPlayer());
-                break;
-            case PET_CHAT:
-                //System.out.println("Pet chat: " + slea.toString());
-                if (slea.available() < 12) {
-                    break;
-                }
-                final int petid = c.getPlayer().getPetIndex((int) slea.readLong());
-                c.getPlayer().updateTick(slea.readInt());
-                PetHandler.PetChat(petid, slea.readShort(), slea.readMapleAsciiString(), c.getPlayer());
-                break;
-            case PET_COMMAND:
-                MaplePet pet;
-                pet = c.getPlayer().getPet(c.getPlayer().getPetIndex((int) slea.readLong()));
-                slea.readByte(); //always 0?
-                if (pet == null) {
-                    return;
-                }
-                PetHandler.PetCommand(pet, PetDataFactory.getPetCommand(pet.getPetItemId(), slea.readByte()), c, c.getPlayer());
-                break;
-            case USE_PET_FOOD:
-                PetHandler.PetFood(slea, c, c.getPlayer());
-                break;
-            case PET_LOOT:
-                //System.out.println("PET_LOOT ACCESSED");
-                InventoryHandler.Pickup_Pet(slea, c, c.getPlayer());
-                break;
-            case PET_AUTO_POT:
-                PetHandler.Pet_AutoPotion(slea, c, c.getPlayer());
-                break;
             case MONSTER_CARNIVAL:
                 MonsterCarnivalHandler.MonsterCarnival(slea, c);
                 break;
@@ -1344,9 +832,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case MERCH_ITEM_STORE:
                 HiredMerchantHandler.MerchantItemStore(slea, c);
                 break;
-            case CANCEL_DEBUFF:
-                // Ignore for now
-                break;
+
             //case MAPLETV:
             //    break;
             case LEFT_KNOCK_BACK:
@@ -1495,15 +981,6 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case UPDATE_RED_LEAF:
                 PlayersHandler.updateRedLeafHigh(slea, c);
                 break;
-            case SPECIAL_STAT:
-                PlayersHandler.updateSpecialStat(slea, c);
-                break;
-            case UPDATE_HYPER:
-                StatsHandling.DistributeHyper(slea, c, c.getPlayer());
-                break;
-            case RESET_HYPER:
-                StatsHandling.ResetHyper(slea, c, c.getPlayer());
-                break;
             case DF_COMBO:
                 PlayerHandler.absorbingDF(slea, c);
                 break;
@@ -1545,7 +1022,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
           //  case RANGED_ATTACK: //todo code zero
             case ARAN_COMBO:
             case SPECIAL_STAT:
-            case UPDATE_HYPER:
+            case DISTRIBUTE_HYPER:
             case RESET_HYPER: 
             case NPC_ACTION:
             case ANGELIC_CHANGE: 

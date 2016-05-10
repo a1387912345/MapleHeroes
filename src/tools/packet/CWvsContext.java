@@ -4087,7 +4087,7 @@ public class CWvsContext {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
         mplew.writeShort(SendPacketOpcode.GIVE_FOREIGN_BUFF.getValue());
         mplew.writeInt(cid);
-        PacketHelper.writeBuffMask(mplew, (Map) statups);
+        PacketHelper.writeBuffMask(mplew, statups);
         for (Entry<MapleBuffStat, Integer> statup : statups.entrySet()) {
             if (statup.getKey() == MapleBuffStat.SHADOWPARTNER || statup.getKey() == MapleBuffStat.MECH_CHANGE || statup.getKey() == MapleBuffStat.DARK_AURA || statup.getKey() == MapleBuffStat.YELLOW_AURA || statup.getKey() == MapleBuffStat.BLUE_AURA || statup.getKey() == MapleBuffStat.GIANT_POTION || statup.getKey() == MapleBuffStat.SPIRIT_LINK || statup.getKey() == MapleBuffStat.PYRAMID_PQ || statup.getKey() == MapleBuffStat.WK_CHARGE || statup.getKey() == MapleBuffStat.DAMAGE_R || statup.getKey() == MapleBuffStat.MORPH || statup.getKey() == MapleBuffStat.WATER_SHIELD || statup.getKey() == MapleBuffStat.DARK_METAMORPHOSIS) {
                 mplew.writeShort(statup.getValue().shortValue());
@@ -4099,7 +4099,7 @@ public class CWvsContext {
                 mplew.writeShort(statup.getValue().shortValue());
             }
         }
-        mplew.writeShort(1);//was 0, ourstory does 1?
+        mplew.writeShort(0);
         mplew.write(0);
         if (effect.getSourceId() == 13101024) {
             mplew.writeLong(0);
@@ -4111,7 +4111,7 @@ public class CWvsContext {
         } else if (effect.getSourceId() == 4001003) { // Dark Sight
             mplew.writeLong(0);
             mplew.writeLong(0);
-            mplew.writeZeroBytes(3);
+            mplew.writeZeroBytes(4);
         } else if (/*effect.getSourceId() == 1101013 || effect.getSourceId() == 1120003 ||*/ effect.getSourceId() == 11111001 || effect.getSourceId() == 11110005) { 
             mplew.writeLong(1);
             mplew.writeLong(0);

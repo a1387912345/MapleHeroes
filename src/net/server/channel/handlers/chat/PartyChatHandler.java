@@ -18,32 +18,26 @@ public class PartyChatHandler extends AbstractMaplePacketHandler
 	}
 
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
-	{
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
 		final int type = lea.readByte();
 	    final byte numRecipients = lea.readByte();
-	    if (numRecipients <= 0) 
-	    {
+	    if (numRecipients <= 0) {
 	        return;
 	    }
 	    int recipients[] = new int[numRecipients];
 
-	    for (byte i = 0; i < numRecipients; i++) 
-	    {
+	    for (byte i = 0; i < numRecipients; i++) {
 	        recipients[i] = lea.readInt();
 	    }
 	    final String chattext = lea.readMapleAsciiString();
-	    if (chr == null || !chr.getCanTalk()) 
-	    {
+	    if (chr == null || !chr.getCanTalk()) {
 	        c.getSession().write(CWvsContext.broadcastMsg(6, "You have been muted and are therefore unable to talk."));
 	        return;
 	    }
 
-	    if (c.isMonitored()) 
-	    {
+	    if (c.isMonitored()) {
 	        String chattype = "Unknown";
-	        switch (type) 
-	        {
+	        switch (type) {
 	            case 0:
 	                chattype = "Buddy";
 	                break;
@@ -65,13 +59,11 @@ public class PartyChatHandler extends AbstractMaplePacketHandler
 	                        + " said (" + chattype + "): " + chattext));
 
 	    }
-	    if (chattext.length() <= 0 || CommandProcessor.processCommand(c, chattext, CommandType.NORMAL)) 
-	    {
+	    if (chattext.length() <= 0 || CommandProcessor.processCommand(c, chattext, CommandType.NORMAL)) {
 	        return;
 	    }
 	    chr.getCheatTracker().checkMsg();
-	    switch (type) 
-	    {
+	    switch (type) {
 	        case 0:
 	            World.Buddy.buddyChat(recipients, chr.getId(), chr.getName(), chattext);
 	            break;

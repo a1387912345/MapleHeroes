@@ -17,45 +17,31 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
 	}
 	
 	@Override
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) 
-	{
-		System.out.println(lea.toString());
-        if (c.getPlayer() != null && c.getPlayer().getMap() != null) 
-        {
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
+        if (c.getPlayer() != null && c.getPlayer().getMap() != null) {
             c.getPlayer().updateTick(lea.readInt());
             
             final String text = lea.readMapleAsciiString();
     		final byte unk = lea.readByte();
     		
-            if (text.length() > 0 && chr != null && chr.getMap() != null && !CommandProcessor.processCommand(c, text, CommandType.NORMAL)) 
-            {
-            	if (!chr.isIntern() && text.length() >= 80) 
-            	{
+            if (text.length() > 0 && chr != null && chr.getMap() != null && !CommandProcessor.processCommand(c, text, CommandType.NORMAL)) {
+            	if (!chr.isIntern() && text.length() >= 80) {
             		return;
             	}
-            	if (chr.getCanTalk() || chr.isStaff()) 
-            	{
+            	if (chr.getCanTalk() || chr.isStaff()) {
 	            //Note: This patch is needed to prevent chat packet from being broadcast to people who might be packet sniffing.
-            		if (chr.isHidden()) 
-            		{
-            			if (chr.isIntern() && !chr.isSuperGM() && unk == 0) 
-            			{
+            		if (chr.isHidden()) {
+            			if (chr.isIntern() && !chr.isSuperGM() && unk == 0) {
             				chr.getMap().broadcastGMMessage(chr, CField.getChatText(chr.getId(), text, c.getPlayer().isSuperGM(), (byte) 1), true);
-            				if (unk == 0) 
-            				{
+            				if (unk == 0) {
             					chr.getMap().broadcastGMMessage(chr, CWvsContext.broadcastMsg(2, chr.getName() + " : " + text), true);
             				}
-            			} 
-            			else 
-	                	{
+            			} else {
             				chr.getMap().broadcastGMMessage(chr, CField.getChatText(chr.getId(), text, c.getPlayer().isSuperGM(), unk), true);
 	                	}
-            		} 
-            		else 
-            		{
+            		} else {
             			chr.getCheatTracker().checkMsg();
-            			if (chr.isIntern() && !chr.isSuperGM() && unk == 0) 
-            			{
+            			if (chr.isIntern() && !chr.isSuperGM() && unk == 0) {
             				//chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, false, (byte) 1), c.getPlayer().getTruePosition());
             				chr.getMap().broadcastMessage(ColourChat(chr, text, unk, chr.getChatType()));
             				chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, c.getPlayer().isSuperGM(), 1));
@@ -64,32 +50,25 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
 	                     	chr.getMap().broadcastMessage(ColourChat(chr, text, unk, chr.getChatType()));
 	                     	chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, false, 1));
 	                     	}*/
-            			}
-            			else
-            			{
+            			} else {
             				//chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, c.getPlayer().isSuperGM(), unk), c.getPlayer().getTruePosition());
             				chr.getMap().broadcastMessage(ColourChat(chr, text, unk, chr.getChatType()));
             				chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, c.getPlayer().isSuperGM(), 1));//was1
             			}
             		}
-            		if (text.equalsIgnoreCase(c.getChannelServer().getServerName() + " rocks")) 
-            		{
+            		if (text.equalsIgnoreCase(c.getChannelServer().getServerName() + " rocks")) {
             			chr.finishAchievement(11);
             		}
-            	} 
-            	else 
-            	{
+            	} else {
             		c.getSession().write(CWvsContext.broadcastMsg(6, "You have been muted and are therefore unable to talk."));
             	}
             }	
         }
 	}
 	
-	public static byte[] ColourChat(final MapleCharacter chr, String text, final byte unk, short colour) 
-	{
+	public static byte[] ColourChat(final MapleCharacter chr, String text, final byte unk, short colour) {
         String rank = "";
-        switch (chr.getGMLevel()) 
-        {
+        switch (chr.getGMLevel()) {
             case 1:
                 rank = "[Intern] ";
                 //colour = 5;
@@ -107,17 +86,14 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
                 //colour = 8;
                 break;
         }
-        if (chr.isDonator()) 
-        {
+        if (chr.isDonator()) {
             colour = 13;
-            if (rank.isEmpty()) 
-            {
+            if (rank.isEmpty()) {
                 rank = "[Donor] ";
             }
         }
         byte[] packet;
-        switch (colour) 
-        {
+        switch (colour) {
             case 0:
             case 1:
             case 2:

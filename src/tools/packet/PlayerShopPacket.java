@@ -24,8 +24,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Item;
 import constants.GameConstants;
+import constants.Interaction;
 import net.SendPacketOpcode;
-import net.channel.handler.PlayerInteractionHandler;
 import net.world.MapleCharacterLook;
 
 import java.util.List;
@@ -268,7 +268,7 @@ public class PlayerShopPacket {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-        mplew.write(PlayerInteractionHandler.Interaction.VISIT.action);
+        mplew.write(Interaction.VISIT.action);
 //        mplew.write(19);//was10
         mplew.write(slot);
         PacketHelper.addCharLook(mplew, chr, false, false);
@@ -282,7 +282,7 @@ public class PlayerShopPacket {
         final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.PLAYER_INTERACTION.getValue());
-        mplew.write(PlayerInteractionHandler.Interaction.EXIT.action);
+        mplew.write(Interaction.EXIT.action);
         mplew.write(slot);
 
         return mplew.getPacket();

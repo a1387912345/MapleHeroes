@@ -18,6 +18,19 @@
 - Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
 
+[Rev 4]
+- Added nearly all the channel handlers and removed most of the old handlers
+- Updated MapleBuffStats HYPER_DAMAGE_PERCENT, HYPER_ATTACK_SPEED, SPIRIT_CLAW, ANGEL, BOUNDLESS_RAGE, LEECH_AURA, DASH_SPEED, DASH_JUMP, DIABOLIC_RECOVERY, ASSASSINS_MARK
+- Updated MonsterStatus WATK, WDEF, SPEED, STUN, KNOCKDOWN, SHOWDOWN, SHADOW_WEB, VENOMOUS_WEAPON, DAMAGE_PERCENT
+- Added in AttackInfo a byte flag; This allows DamageParse to read a flag byte and handles skills properly.
+- Updated DamageParse.parseRangeDamage(); This fixes damage not working when using certain skills such as Shadow Partner or Shadow Star. Fixed through the flag byte from previous comment.
+- Updated RecvPacketOpcode and SendPacketOpcodes; Most of them are guesses.
+- Removed some redundant buffstat handlers in MapleStatEffect
+- Added Assassin's Mark; The buff shows, but the effect still needs to be coded.
+- Updated AbstractSkillHandler.giveBuff(); This fixes Dark Sight locally.
+- Updated CWvsContext.giveForeignBuff(); This fixes Dark Sight from d/cing other players.
+
+
 [Rev 3.4]
 - Updated DamageParse.parseMagicDamage & parseCloseRangeDamage to read more unknown bytes
 - Updated CField.addAttackInfo() to GMS-like structure using IDA; This fixes damage and animation display between characters.

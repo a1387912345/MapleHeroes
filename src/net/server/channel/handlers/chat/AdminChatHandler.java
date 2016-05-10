@@ -8,23 +8,19 @@ import net.world.World;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CWvsContext;
 
-public class AdminChatHandler extends AbstractMaplePacketHandler
-{
+public class AdminChatHandler extends AbstractMaplePacketHandler {
 	public AdminChatHandler(RecvPacketOpcode recv) {
 		super(recv);
 	}
 
-	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr)
-	{
-		if (!c.getPlayer().isGM()) 
-		{//if ( (signed int)CWvsContext::GetAdminLevel((void *)v294) > 2 )
+	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
+		if (!c.getPlayer().isGM()) {//if ( (signed int)CWvsContext::GetAdminLevel((void *)v294) > 2 )
             return;
         }
         byte mode = lea.readByte();
         //not saving slides...
         byte[] packet = CWvsContext.broadcastMsg(lea.readByte(), lea.readMapleAsciiString());//maybe I should make a check for the slea.readByte()... but I just hope gm's don't fuck things up :)
-        switch (mode) 
-        {
+        switch (mode) {
             case 0:// /alertall, /noticeall, /slideall
                 World.Broadcast.broadcastMessage(packet);
                 break;
