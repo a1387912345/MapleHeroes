@@ -1001,14 +1001,14 @@ public class World {
         public static void gainGP(int gid, int amount) {
             MapleGuild g = getGuild(gid);
             if (g != null) {
-                g.gainGP(amount);
+                g.gainContribution(amount);
             }
         }
 
         public static void gainGP(int gid, int amount, int cid) {
             MapleGuild g = getGuild(gid);
             if (g != null) {
-                g.gainGP(amount, false, cid);
+                g.gainContribution(amount, false, cid);
             }
         }
 
@@ -1109,10 +1109,10 @@ public class World {
 
         public static void changeEmblem(int gid, int affectedPlayers, MapleGuild mgs) {
             Broadcast.sendGuildPacket(affectedPlayers, GuildPacket.guildEmblemChange(gid, (short) mgs.getLogoBG(), (byte) mgs.getLogoBGColor(), (short) mgs.getLogo(), (byte) mgs.getLogoColor()), -1, gid);
-            setGuildAndRank(affectedPlayers, -1, -1, -1, -1);	//respawn player
+            setGuildAndRank(affectedPlayers, -1, -1, -1, -1, -1);	//respawn player
         }
-
-        public static void setGuildAndRank(int cid, int guildid, int rank, int contribution, int alliancerank) {
+        
+        public static void setGuildAndRank(int cid, int guildid, int rank, int contribution, int individualGP, int alliancerank) {
             int ch = Find.findChannel(cid);
             if (ch == -1) {
                 // System.out.println("ERROR: cannot find player in given channel");
@@ -1130,6 +1130,7 @@ public class World {
                 mc.setGuildId(guildid);
                 mc.setGuildRank((byte) rank);
                 mc.setGuildContribution(contribution);
+                mc.setIndividualGP(individualGP);
                 mc.setAllianceRank((byte) alliancerank);
                 mc.saveGuildStatus();
             }

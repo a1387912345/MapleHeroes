@@ -24,33 +24,34 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
      * Opcode codes are ordered in the order in which they will be sent by the server or received by the client.
      * This will allow for ease in updating future opcodes.
      */
-    CLIENT_AUTH((short) 0x2B), 
-    CLIENT_RESPONSE((short) 0x2F),
-    LOGIN_STATUS((short) 0x00),
+    CLIENT_AUTH((short) 0x2B),     //v172.2 - 0x2B
+    CLIENT_RESPONSE((short) 0x2F), //v172.2 - 0x2F
+    LOGIN_STATUS((short) 0x00),    //v172.2 - 0x00
+    TOS((short) 0x27),             //v172.2 - 0x27
     /*
      * World Select Opcodes
      */
-    CHANGE_BACKGROUND((short) 0x36),//12B   v146 - 0x999   v170 - 0x31; v171.1 - 0x33; v171.2 - 0x34; v172.1 - 0x36
-    SERVERLIST((short) 0x01), // v146 - 0x09;   v160 - 0x09;    v170 - 0x07; v171 - 0x01
-    ENABLE_RECOMMENDED((short) 0x02),//1C v146 - 0x1D  v170 - 0x08; v171 - 0x02
-    SEND_RECOMMENDED((short) 0x03),//1D   v146 - 0x1E  v170 - 0x09; v171 - 0x03
-    SERVERSTATUS((short) 0x25),  // v146 - 0x04; v170 - 0x02; v171 - 0x25
+    CHANGE_BACKGROUND((short) 0x36), //v170 - 0x31; v171.1 - 0x33; v171.2 - 0x34; v172.1 - 0x36
+    SERVERLIST((short) 0x01),        //v146 - 0x09; v170 - 0x07; v171 - 0x01
+    ENABLE_RECOMMENDED((short) 0x02),//v146 - 0x1D  v170 - 0x08; v171 - 0x02
+    SEND_RECOMMENDED((short) 0x03),  //v146 - 0x1E  v170 - 0x09; v171 - 0x03
+    SERVERSTATUS((short) 0x25),      //v146 - 0x04; v170 - 0x02; v171 - 0x25
     /*
      * Character Select Opcodes
      */
-    CHARLIST((short) 0x06), // v146 - 0x0A; v170 - 0x0C; v171 - 0x06
-    CHAR_NAME_RESPONSE((short) 0x0A), // v146 - 0x0C; v170 - 0x10; v171 - 0x0A
-    ADD_NEW_CHAR_ENTRY((short) 0x0B), // v146 - 0x0D; v170 - 0x11; v171 - 0x0B
+    CHARLIST((short) 0x06),             //v146 - 0x0A; v170 - 0x0C; v171 - 0x06
+    CHAR_NAME_RESPONSE((short) 0x0A),   //v146 - 0x0C; v170 - 0x10; v171 - 0x0A
+    ADD_NEW_CHAR_ENTRY((short) 0x0B),   //v146 - 0x0D; v170 - 0x11; v171 - 0x0B
     DELETE_CHAR_RESPONSE((short) 0x0C), //v146 - 0x0E; v170 - 0x12; v171 - 0x0C
-    PIC_RESPONSE((short) 0x18), //v146 - 0x19; v171 - 0x18
-    REGISTER_PIC_RESPONSE((short) 0x2A), // v146 - 0x1A; v170 - 0x1F; v171 - 0x2A
-    SECONDPW_ERROR((short) 0x34), // v146 - 0x25; v170 - 0x2F; v171.3 - 0x32; v172.1 - 0x34
+    PIC_RESPONSE((short) 0x18),         //v146 - 0x19; v171 - 0x18
+    REGISTER_PIC_RESPONSE((short) 0x2A),//v146 - 0x1A; v170 - 0x1F; v171 - 0x2A
+    SECONDPW_ERROR((short) 0x34),       //v146 - 0x25; v170 - 0x2F; v171.3 - 0x32; v172.1 - 0x34
     
-    SERVER_IP((short) 0x07),// v146 - 0x0B; v170 - 0x0D; v171 - 0x07
-    CHANGE_CHANNEL((short) 0x11),//10 v146 - 0x10; v171.3 - 0x11
-    CS_USE((short) 0x14), // v146 - 0x13; v170 - 0x1A; v171 - 0x14
-    PART_TIME((short) 0x1F),  // v146 - 0x1F; v171.3 - 0x1D
-    TOS((short) 0x27), 
+    SERVER_IP((short) 0x07),            //v146 - 0x0B; v170 - 0x0D; v171 - 0x07
+    CHANGE_CHANNEL((short) 0x11),       //v146 - 0x10; v171.3 - 0x11
+    CS_USE((short) 0x14),               //v146 - 0x13; v170 - 0x1A; v171 - 0x14
+    PART_TIME((short) 0x1F),            //v146 - 0x1F; v171.3 - 0x1D
+    CHAR_BURNING_RESPONSE((short) 0x156),            //v172.2 - 0x156
     
     // Char Select Opcodes - Not Updated Yet
     SEND_LINK((short) 0x01),
@@ -266,13 +267,14 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SERVER_BLOCKED((short) 0x130),//etc
     PARTY_BLOCKED((short) 0x131),//etc
     SHOW_EQUIP_EFFECT((short) 0x132),//etc
-    MULTICHAT((short) 0x1A8),    //v146 - 0x134; v171.3 - 0x1A6; v172.1 - 0x1A8
+    MULTICHAT((short) 0x1A7),    //v146 - 0x134; v171.3 - 0x1A6; v172.1 - 0x1A7
+    //ALLIANCE((short) 0x1A8), ?
     WHISPER((short) 0x1A9),      //v146 - 0x138; v171.3 - 0x1A8; v172.1 - 0x1A9
     SPOUSE_CHAT((short) 0x1AA),  //v146 - 0x139; v171.3 - 0x1A9; v172.1 - 0x1AA
     BOSS_ENV((short) 0x1AB),     //v146 - 0x13A; v171 - 0x1A9; v171.2 - 0x1AA; v172.1 - 0x1AB
     MOVE_ENV((short) 0x1AD),     //v146 - 0x13B; v171 - 0x1AA; v171.2 - 0x1AB; v172.1 - 0x1AD ?
     UPDATE_ENV((short) 0x1AE),   //v146 - 0x13C; v171 - 0x1AB; v171.2 - 0x1AC; v172.1 - 0x1AE ?
-    MAP_EFFECT((short) 0x1B4),   //v146 - 0x13E; v171 - 0x1AD; v171.2 - 0x1B2; v172.1 - 0x1B4
+    MAP_EFFECT((short) 0x1B4),   //v146 - 0x13E; v171 - 0x1AD; v171.2 - 0x1B2; v172.1 - 0x1B4, or 0x1B3?
     CASH_SONG((short) 0x14B),//v145 Guess
     GM_EFFECT((short) 0x141),//v145 , No d/c, but is it right?
     OX_QUIZ((short) 0x142),//v145 Guess
@@ -292,9 +294,10 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     DIRECTION_STATUS((short) 0x1CF), // v146 - 0x159; v171.2 - 0x1CE; v172.1 - 0x1CF
     GAIN_FORCE((short) 0x15A),//CONFIRMED
     INTRUSION((short) 0x162),
-    DIFFERENT_IP((short) 0x164),
+    
     ACHIEVEMENT_RATIO((short) 0x159),//13B
-    QUICK_MOVE((short) 0x1D2),// v146 - 0x15C; v171 - 0x1D0; v171.2 - 0x1D1; v172.1 - 0x1D2
+    QUICK_MOVE((short) 0x1D2),   //v146 - 0x15C; v171 - 0x1D0; v171.2 - 0x1D1; v172.1 - 0x1D2
+    DIFFERENT_IP((short) 0x1DD), //v146 - 0x164; v172.2 - 0x1DD
     SPAWN_OBTACLE_ATOM((short) 0x15D),
     SPAWN_PLAYER((short) 0x1EF), // v146 - 0x167; v170 - 0x1EB; v171 - 0x1ED; v171.2 - 0x1EE; v172.1 - 0x1EF
     REMOVE_PLAYER_FROM_MAP((short) 0x1F0), // v146 - 0x168; ; v171.2 - 0x1EF; v172.1 - 0x1F0
@@ -341,7 +344,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     ANDROID_EMOTION((short) 0x289),     //v146 - 0x1A1; v172.1 - 0x289
     ANDROID_UPDATE((short) 0x1A2),      //v146 - 0x1A2; v171.3 - 0x238
     ANDROID_DEACTIVATED((short) 0x1A3), //v146 - 0x1A3; v171.3 - 0x239
-    SPAWN_FAMILIAR((short) 0x249),      //v146 - 0x1AA; v171.3 - 0x249
+    SPAWN_FAMILIAR((short) 0x252),      //v146 - 0x1AA; v171.3 - 0x249; v172.2 - 0x252
     MOVE_FAMILIAR((short) 0x1AB),//+2
     TOUCH_FAMILIAR((short) 0x1AC),//+2
     ATTACK_FAMILIAR((short) 0x1AD),     //v146 - 0x1AD; v171.3 - 0x24F
@@ -404,6 +407,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     PLAY_MINIGAME_SOUND((short) 0x1F4),//1CD
     MAKER_SKILL((short) 0x1F5),//1CE
     OPEN_UI((short) 0x298),//1D1 v146 - 0x1FB; v171 - 0x296; v171.2 - 0x297; v172.1 - 0x298
+    //OPEN_ANOTHER_UI((short) 0x29A), // v172.2 - 0x29A or OPEN_UI_OPTION = 0x29A
     OPEN_UI_OPTION((short) 0x29B),//1D3 v146 - 0x1FD; v171 - 0x299; v171.2 - 0x29A; v172.1 - 0x29B ?
     INTRO_LOCK((short) 0x29C),//1D4 v146 - 0x1FE; v171 - 0x29A; v171.2 - 0x29B; v172.1 - 0x29C
     INTRO_ENABLE_UI((short) 0x29D), // v146 - 0x1FF; v171 - 0x29B; v171.2 - 0x29C; v172.1 - 0x29D
@@ -425,7 +429,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     FOLLOW_MSG((short) 0x211),//1E7
     AP_SP_EVENT((short) 0x215),//1E9
     QUEST_GUIDE_NPC((short) 0x214),//1EA
-    REGISTER_FAMILIAR((short) 0x32E), //v146 - 0x218; v171.3 - 0x32E
+    REGISTER_FAMILIAR((short) 0x330), //v146 - 0x218; v171.3 - 0x32E; v172.2 - 0x330
     FAMILIAR_MESSAGE((short) 0x219),//1F2
     CREATE_ULTIMATE((short) 0x21C),//1F3
     HARVEST_MESSAGE((short) 0x21E),//1F5
@@ -486,7 +490,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     TALK_MONSTER((short) 0x372),  // v172.1 - 0x372?
     CYGNUS_ATTACK((short) 0x28F),
     MONSTER_RESIST((short) 0x290),//
-    MOB_REACTION((short) 0x291), // v146 - 0x291; v171 - 0x38E; v171.2 -  ?
+    MOB_REACTION((short) 0x394), // v146 - 0x291; v171 - 0x38E; v172.2 - 0x394?
     MOB_TO_MOB_DAMAGE((short) 0x1C6),
     AZWAN_MOB_TO_MOB_DAMAGE((short) 0x1C9),
     AZWAN_SPAWN_MONSTER((short) 0x22C),//1CA /0x22b?
@@ -517,12 +521,13 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SPAWN_KITE_ERROR((short) 0x2B7),//27D
     SPAWN_KITE((short) 0x2B8),
     DESTROY_KITE((short) 0x2B9),
-    SPAWN_MIST((short) 0x3BF),//v146 - 0x2BA; v171.3 - 0x3BA; v172.2 - 0x3BF
+    SPAWN_MIST((short) 0x3BF), //v146 - 0x2BA; v171.3 - 0x3BA; v172.2 - 0x3BF
     REMOVE_MIST((short) 0x3C1),//v146 - 0x2BB; v171.3 - 0x3BB; v172.2 - 0x3C1
-    SPAWN_MYSTIC_DOOR((short) 0x3C2),//v146 - 0x2BC; v172.1 - 0x3C2
-    REMOVE_MYSTIC_DOOR((short) 0x2BD), //v146 - 0x2BD; v172.1 - 0x3C3
-    MECH_DOOR_SPAWN((short) 0x2BE),//v145, confirmed.
-    MECH_DOOR_REMOVE((short) 0x2BF),//v145, confirmed.
+    SPAWN_MYSTIC_DOOR((short) 0x3C2),          //v146 - 0x2BC; v172.1 - 0x3C2
+    REMOVE_MYSTIC_DOOR((short) 0x3C3),         //v146 - 0x2BD; v172.1 - 0x3C3
+    SPAWN_MECH_DOOR((short) 0x3C7),            //v146 - 0x2BE; v172.2 - 0x3C7
+    USE_MECH_DOOR((short) 0x3C8),                       //v172.2 - 0x3C8
+    REMOVE_MECH_DOOR((short) 0x3C9),           //v146 - 0x2BF; v172.2 - 0x3C9
     REACTOR_HIT((short) 0x3CA),//2C0 v171 - 0x3C3; v171.2 - 0x3C4; v172.1 - 0x3CA
     REACTOR_MOVE((short) 0x3C5),//2C1
     REACTOR_SPAWN((short) 0x3CC), // v146 - 0x2C2; v170 - 0x398; v171 - 0x3C5; v171.2 - 0x3C6; v172.1 - 0x3CC

@@ -2850,34 +2850,46 @@ public class CWvsContext {
     }
 
     public static class GuildPacket {
+    	
+    	public static byte[] approveGuildName(String guildName) {
+    		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+    		
+    		mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
+    		mplew.write(5);  // Last updated: v172.2
+    		mplew.writeMapleAsciiString(guildName);
+    		
+    		return mplew.getPacket();
+    	}
 
         public static byte[] guildInvite(int gid, String charName, int levelFrom, int jobFrom) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(5);
+            mplew.write(7);  // Last updated: v172.2
             mplew.writeInt(gid);
             mplew.writeMapleAsciiString(charName);
             mplew.writeInt(levelFrom);
             mplew.writeInt(jobFrom);
             mplew.writeInt(0);
+            
             return mplew.getPacket();
         }
 
-        public static byte[] showGuildInfo(MapleCharacter c) {
+        public static byte[] showGuildInfo(MapleCharacter chr) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(32);
-            if ((c == null) || (c.getMGC() == null)) {
+            mplew.write(49); // Last updated: v172.2
+            if ((chr == null) || (chr.getMGC() == null)) {
                 mplew.write(0);
                 return mplew.getPacket();
             }
-            MapleGuild g = World.Guild.getGuild(c.getGuildId());
+            MapleGuild g = World.Guild.getGuild(chr.getGuildId());
             if (g == null) {
                 mplew.write(0);
                 return mplew.getPacket();
             }
+            mplew.write(0);
             mplew.write(1);
             getGuildInfo(mplew, g);
 
@@ -2897,18 +2909,21 @@ public class CWvsContext {
             mplew.writeShort(guild.getLogo());
             mplew.write(guild.getLogoColor());
             mplew.writeMapleAsciiString(guild.getNotice());
-            mplew.writeInt(guild.getGP());
-            mplew.writeInt(guild.getGP());
+            mplew.writeInt(guild.getHonorExp());
+            mplew.writeInt(guild.getHonorExp()); // This honor exp value is a little higher than the previous one.
             mplew.writeInt(guild.getAllianceId() > 0 ? guild.getAllianceId() : 0);
             mplew.write(guild.getLevel());
-            mplew.writeShort(0);
-            mplew.writeShort(guild.getSkills().size());
+            mplew.writeShort(0); // Guild Ranking
+            mplew.writeInt(guild.getGP());
+            mplew.write(0); // idk
+            mplew.writeShort(0); // idk
+            mplew.writeInt(guild.getSkills().size());
             for (MapleGuildSkill i : guild.getSkills()) {
                 mplew.writeInt(i.skillID);
-                mplew.writeShort(i.level);
-                mplew.writeLong(PacketHelper.getTime(i.timestamp));
-                mplew.writeMapleAsciiString(i.purchaser);
-                mplew.writeMapleAsciiString(i.activator);
+                //mplew.writeShort(i.level);
+                //mplew.writeLong(PacketHelper.getTime(i.timestamp));
+                //mplew.writeMapleAsciiString(i.purchaser);
+                //mplew.writeMapleAsciiString(i.activator);
             }
         }
 
@@ -2933,7 +2948,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(45);
+            mplew.write(63); // Last updated: v172.2
             mplew.writeInt(mgc.getGuildId());
             mplew.writeInt(mgc.getId());
             mplew.writeAsciiString(mgc.getName(), 13);
@@ -2943,6 +2958,9 @@ public class CWvsContext {
             mplew.writeInt(mgc.isOnline() ? 1 : 0);
             mplew.writeInt(mgc.getAllianceRank());
             mplew.writeInt(mgc.getGuildContribution());
+            mplew.writeInt(mgc.getGuildContribution());
+            mplew.writeInt(0); // IGP
+            mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
 
             return mplew.getPacket();
         }
@@ -2951,7 +2969,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(bExpelled ? 53 : 50);
+            mplew.write(bExpelled ? 78 : 75); // Last updated: v172.2
             mplew.writeInt(mgc.getGuildId());
             mplew.writeInt(mgc.getId());
             mplew.writeMapleAsciiString(mgc.getName());
@@ -2963,7 +2981,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(56);
+            mplew.write(81); // Last updated: v172.2
             mplew.writeInt(gid);
             mplew.write(1);
 
@@ -2981,14 +2999,17 @@ public class CWvsContext {
             return mplew.getPacket();
         }
 
-        public static byte[] guildContribution(int gid, int cid, int c) {
+        public static byte[] guildContribution(int guildid, int charid, int contribution, int individualGP) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(72);
-            mplew.writeInt(gid);
-            mplew.writeInt(cid);
-            mplew.writeInt(c);
+            mplew.write(98); // Last updated: v172.2
+            mplew.writeInt(guildid);
+            mplew.writeInt(charid);
+            mplew.writeInt(contribution); // Contribution
+            mplew.writeInt((int)(contribution * 0.3)); // Guild Point    // Sidenote: Not sure if we need to create an actual GP column for the characters in the SQL database.
+            mplew.writeInt(individualGP); // Individual Guild Point (IGP)
+            mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
 
             return mplew.getPacket();
         }
@@ -2997,7 +3018,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(70);
+            mplew.write(96); // Last updated: v172.2
             mplew.writeInt(mgc.getGuildId());
             mplew.writeInt(mgc.getId());
             mplew.write(mgc.getGuildRank());
@@ -3009,7 +3030,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(68);
+            mplew.write(94); // Last updated: v172.2
             mplew.writeInt(gid);
             for (String r : ranks) {
                 mplew.writeMapleAsciiString(r);
@@ -3022,7 +3043,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(73);
+            mplew.write(99); // Last updated: v172.2
             mplew.writeInt(gid);
             mplew.writeShort(bg);
             mplew.write(bgcolor);
@@ -3032,14 +3053,15 @@ public class CWvsContext {
             return mplew.getPacket();
         }
 
-        public static byte[] updateGP(int gid, int GP, int glevel) {
+        public static byte[] updateGP(int guildId, int honorexp, int GP, int guildLevel) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(79);
-            mplew.writeInt(gid);
+            mplew.write(105); // Last updated: v172.2
+            mplew.writeInt(guildId);
+            mplew.writeInt(honorexp);
+            mplew.writeInt(guildLevel);
             mplew.writeInt(GP);
-            mplew.writeInt(glevel);
 
             return mplew.getPacket();
         }
@@ -3059,7 +3081,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(66);
+            mplew.write(92); // Last updated: v172.2
             mplew.writeInt(mgc.getGuildId());
             mplew.writeInt(mgc.getId());
             mplew.writeInt(mgc.getLevel());
@@ -3068,14 +3090,15 @@ public class CWvsContext {
             return mplew.getPacket();
         }
 
-        public static byte[] guildMemberOnline(int gid, int cid, boolean bOnline) {
+        public static byte[] guildMemberOnline(int guildId, int charId, boolean bOnline) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-            mplew.write(67);
-            mplew.writeInt(gid);
-            mplew.writeInt(cid);
+            mplew.write(93); // Last updated: v172.2
+            mplew.writeInt(guildId);
+            mplew.writeInt(charId);
             mplew.write(bOnline ? 1 : 0);
+            mplew.write(1); // Unknown boolean
 
             return mplew.getPacket();
         }
@@ -3147,10 +3170,12 @@ public class CWvsContext {
             if (code == 87) {
                 mplew.writeInt(0);
             }
+            /*
             if ((code == 3) || (code == 59) || (code == 60) || (code == 61) || (code == 84) || (code == 87)) {
                 mplew.writeMapleAsciiString("");
             }
-
+            */
+            
             return mplew.getPacket();
         }
 

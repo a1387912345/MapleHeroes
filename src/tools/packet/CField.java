@@ -894,6 +894,16 @@ public class CField {
 
         return mplew.getPacket();
     }
+    
+    public static byte[] differentIP(int minutesLeft) {
+    	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+    	
+    	mplew.writeShort(SendPacketOpcode.DIFFERENT_IP.getValue());
+    	mplew.write(1); // Boolean
+    	mplew.writeInt(minutesLeft);
+    	
+    	return mplew.getPacket();
+    }
 
     /**
      * Note: To find MAX_BUFFSTAT, in an IDA go to 
@@ -2292,7 +2302,6 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         mplew.writeInt(curhp);
         mplew.writeInt(maxhp);
 
-        System.out.println("[UPDATE_PARTYMEMBER_HP] " + mplew.toString());
         return mplew.getPacket();
     }
 
@@ -2301,6 +2310,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
 
         mplew.writeShort(SendPacketOpcode.LOAD_GUILD_NAME.getValue());
         mplew.writeInt(chr.getId());
+        
         if (chr.getGuildId() <= 0) {
             mplew.writeShort(0);
         } else {
@@ -2320,6 +2330,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
 
         mplew.writeShort(SendPacketOpcode.LOAD_GUILD_ICON.getValue());
         mplew.writeInt(chr.getId());
+        
         if (chr.getGuildId() <= 0) {
             mplew.writeZeroBytes(6);
         } else {
@@ -2861,7 +2872,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
     public static byte[] spawnMechDoor(MechDoor md, boolean animated) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-        mplew.writeShort(SendPacketOpcode.MECH_DOOR_SPAWN.getValue());
+        mplew.writeShort(SendPacketOpcode.SPAWN_MECH_DOOR.getValue());
         mplew.write(animated ? 0 : 1);
         mplew.writeInt(md.getOwnerId());
         mplew.writePos(md.getTruePosition());
@@ -2873,7 +2884,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
     public static byte[] removeMechDoor(MechDoor md, boolean animated) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-        mplew.writeShort(SendPacketOpcode.MECH_DOOR_REMOVE.getValue());
+        mplew.writeShort(SendPacketOpcode.REMOVE_MECH_DOOR.getValue());
         mplew.write(animated ? 0 : 1);
         mplew.writeInt(md.getOwnerId());
         mplew.write(md.getId());

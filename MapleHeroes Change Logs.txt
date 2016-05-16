@@ -1,4 +1,6 @@
 [To Do]
+- Sniff and fix guild expand packets, new guild creation packets, guild BBS packets, and guild skill packets
+- Fix characters not able to rejoin a guild after leaving or being expelled
 - Update/write new MagnifyGlassHandler
 - Fix using potions; HP potions work fine, MP potions static values become percentage % values
 - Fix char spawn stance; Not really a big deal.
@@ -15,8 +17,18 @@
 [Notes]
 - Mobs spawn functionality is buggy. Mobs that were previously spawned, freeze when a player re-enters the map.
 - When there are more than two players in the map, mobs' movement becomes buggy and teleports around the map. I suspect this is because when one mob leaves one player's view while it's still in shown in another player's view, the syncing between this event is wrong and causes mobs to teleport.
-- Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat to work.
+- Chat handling is different from Nexon's. Have to code a MapleTalk server in order for buddychat and guildchat to work.
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
+- When creating a guild, the GuildPacket.newGuildInfo() is wrong so it doesn't refresh the guild. You'd have to change channels or relog to see the guild. This is fixable by sending the correct packet, however I forgot to save the guild creation packets.
+- When attempting to change Guild Rank Titles, pressing save shows a "It cannot be used. Please check it again." message in the client.
+
+[Rev 4.1]
+- Added & Updated RecvPacketOpcodes for guilds and familiars
+- Updated SendPacketOpcodes for MULTICHAT, ALLIANCE, DIFFERENT_IP, FAMILIARS, SPAWN_MECH_DOOR, USE_MECH_DOOR, REMOVE_MECH_DOOR
+- Updated Heracle (2010007) NPC Script
+- Added an 'individualGP' integer to MapleCharacter, MapleGuildCharacter, and the SQL database as well as get & set methods
+- Updated MapleGuild.gainContribution(), setOfflineGuildStatus(), setGuildAndRank() to include 'individualGP'
+- Added & Updated GuildOperationHandler & CWvsContext.GuildPacket; This fixes accepting guild invitation, creating guild, inviting players to guild, leaving guild, expelling member from guild, changing guild rank titles, changing member's rank, and changing guild emblem.
 
 [Rev 4]
 - Added nearly all the channel handlers and removed most of the old handlers
@@ -29,7 +41,6 @@
 - Added Assassin's Mark; The buff shows, but the effect still needs to be coded.
 - Updated AbstractSkillHandler.giveBuff(); This fixes Dark Sight locally.
 - Updated CWvsContext.giveForeignBuff(); This fixes Dark Sight from d/cing other players.
-
 
 [Rev 3.4]
 - Updated DamageParse.parseMagicDamage & parseCloseRangeDamage to read more unknown bytes

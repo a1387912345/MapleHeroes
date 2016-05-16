@@ -59,10 +59,10 @@ public class AbstractSkillHandler implements SkillHandler {
         	mplew.writeInt(0);
         }
  
-        mplew.writeShort(1);
+        mplew.writeShort(1); // Buff count. Used 1 as a placeholder for now.
         mplew.write(0);
-        mplew.write(0);
-        mplew.write(0);
+        mplew.write(0); // bJustBuffCheck
+        mplew.write(0); // bFirstSet
         
     	return mplew.getPacket();
 	}

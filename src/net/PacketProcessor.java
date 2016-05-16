@@ -295,7 +295,7 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.PARTY_REQUEST, new PartyRequestHandler(RecvPacketOpcode.PARTY_REQUEST));
         registerHandler(RecvPacketOpcode.ALLOW_PARTY_INVITE, new AllowPartyInviteHandler(RecvPacketOpcode.ALLOW_PARTY_INVITE));
         registerHandler(RecvPacketOpcode.GUILD_OPERATION, new GuildOperationHandler(RecvPacketOpcode.GUILD_OPERATION));
-        registerHandler(RecvPacketOpcode.GUILD_REQUEST, new GuildRequestHandler(RecvPacketOpcode.GUILD_REQUEST));
+        registerHandler(RecvPacketOpcode.GUILD_INVITATION, new GuildInvitationHandler(RecvPacketOpcode.GUILD_INVITATION));
         registerHandler(RecvPacketOpcode.ALLIANCE_OPERATION, new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_OPERATION));
         registerHandler(RecvPacketOpcode.ALLIANCE_REQUEST, new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_REQUEST));
         

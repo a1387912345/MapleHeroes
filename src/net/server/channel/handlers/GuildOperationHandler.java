@@ -32,6 +32,8 @@ public class GuildOperationHandler extends AbstractMaplePacketHandler {
 	@Override
 	public void handlePacket(LittleEndianAccessor lea, MapleClient c, MapleCharacter chr) {
 		final long currentTime = System.currentTimeMillis();
+		int guildId, charid;
+		String charName;
         if (currentTime >= nextPruneTime) {
             Iterator<Entry<String, Pair<Integer, Long>>> itr = getInvited().entrySet().iterator();
             Entry<String, Pair<Integer, Long>> inv;
@@ -44,27 +46,56 @@ public class GuildOperationHandler extends AbstractMaplePacketHandler {
             nextPruneTime += 5 * 60 * 1000;
         }
 
-        switch (lea.readByte()) { //AFTERSHOCK: most are +1
-            case 0x02: // Create guild
+        switch (lea.readByte()) {
+        	case 1: // Accept Guild Invitation
+	            if (c.getPlayer().getGuildId() > 0) {
+	            	c.getPlayer().dropMessage(1, "You have already joined a guild.");
+	                return;
+	            }
+	            guildId = lea.readInt(); // guild leader id or inviter id?
+
+	            charName = c.getPlayer().getName().toLowerCase();
+	            Pair<Integer, Long> gid = getInvited().remove(charName);
+	            if (gid != null && guildId == gid.left) {
+	                c.getPlayer().setGuildId(guildId);
+	                c.getPlayer().setGuildRank((byte) 5);
+	                int s = World.Guild.addGuildMember(c.getPlayer().getMGC());
+	                if (s == 0) {
+	                    c.getPlayer().dropMessage(1, "The guild you are trying to join is already full.");
+	                    c.getPlayer().setGuildId(0);
+	                    return;
+	                }
+	                c.getSession().write(GuildPacket.showGuildInfo(c.getPlayer()));
+	                final MapleGuild gs = World.Guild.getGuild(guildId);
+	                for (byte[] pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), true)) {
+	                    if (pack != null) {
+	                        c.getSession().write(pack);
+	                    }
+	                }
+	                c.getPlayer().saveGuildStatus();
+	                respawnPlayer(c.getPlayer());
+	            }
+	            break;
+            case 4: // Create Guild
                 if (c.getPlayer().getGuildId() > 0 || c.getPlayer().getMapId() != 200000301) {
-                    c.getPlayer().dropMessage(1, "You cannot create a new Guild while in one.");
+                    c.getPlayer().dropMessage(1, "You cannot create a new guild while in one.");
                     return;
                 } else if (c.getPlayer().getMeso() < 500000) {
-                    c.getPlayer().dropMessage(1, "You do not have enough mesos to create a Guild.");
+                    c.getPlayer().dropMessage(1, "You do not have enough mesos to create a guild.");
                     return;
                 }
                 final String guildName = lea.readMapleAsciiString();
 
                 if (!isGuildNameAcceptable(guildName)) {
-                    c.getPlayer().dropMessage(1, "The Guild name you have chosen is not accepted.");
+                    c.getPlayer().dropMessage(1, "The guild name you have chosen is not acceptable.");
                     return;
                 }
-                int guildId = World.Guild.createGuild(c.getPlayer().getId(), guildName);
+                guildId = World.Guild.createGuild(c.getPlayer().getId(), guildName);
                 if (guildId == 0) {
-                    c.getPlayer().dropMessage(1, "Please try again.");
+                    c.getPlayer().dropMessage(1, "An error occured when trying to create a new guild. Please try again.");
                     return;
                 }
-                c.getPlayer().gainMeso(-500000, true, true);
+                c.getPlayer().gainMeso(-5000000, true, true);
                 c.getPlayer().setGuildId(guildId);
                 c.getPlayer().setGuildRank((byte) 1);
                 c.getPlayer().saveGuildStatus();
@@ -74,77 +105,47 @@ public class GuildOperationHandler extends AbstractMaplePacketHandler {
                 c.getSession().write(GuildPacket.newGuildInfo(c.getPlayer()));
                 World.Guild.gainGP(c.getPlayer().getGuildId(), 500, c.getPlayer().getId());
                 //c.getPlayer().dropMessage(1, "You have successfully created a Guild.");
-                //respawnPlayer(c.getPlayer());
+                respawnPlayer(c.getPlayer());
                 break;
-            case 0x05: // invitation
+            case 7: // Invite Player to Guild
                 if (c.getPlayer().getGuildId() <= 0 || c.getPlayer().getGuildRank() > 2) { // 1 == guild master, 2 == jr
                     return;
                 }
-                String name = lea.readMapleAsciiString().toLowerCase();
-                if (getInvited().containsKey(name)) {
+                charName = lea.readMapleAsciiString().toLowerCase();
+                if (getInvited().containsKey(charName)) {
                     c.getPlayer().dropMessage(5, "The player is currently handling an invitation.");
-                    return;
+                    //return;
                 }
-                final MapleGuildResponse mgr = MapleGuild.sendInvite(c, name);
+                final MapleGuildResponse mgr = MapleGuild.sendInvite(c, charName);
 
                 if (mgr != null) {
                     c.getSession().write(mgr.getPacket());
                 } else {
-            Pair<Integer, Long> put = getInvited().put(name, new Pair<>(c.getPlayer().getGuildId(), currentTime + (20 * 60000))); //20 mins expire
+                	Pair<Integer, Long> put = getInvited().put(charName, new Pair<>(c.getPlayer().getGuildId(), currentTime + (20 * 60000))); //20 mins expire
                 }
                 break;
-            case 0x06: // accepted guild invitation
-                if (c.getPlayer().getGuildId() > 0) {
-                    return;
-                }
-                guildId = lea.readInt(); // guild leader id or inviter id?
-                int cid = lea.readInt();
+            
+            case 11: // Leave Guild
+                charid = lea.readInt();
+                charName = lea.readMapleAsciiString();
 
-                if (cid != c.getPlayer().getId()) {
-                    return;
-                }
-                name = c.getPlayer().getName().toLowerCase();
-                Pair<Integer, Long> gid = getInvited().remove(name);
-                if (gid != null && guildId == gid.left) {
-                    c.getPlayer().setGuildId(guildId);
-                    c.getPlayer().setGuildRank((byte) 5);
-                    int s = World.Guild.addGuildMember(c.getPlayer().getMGC());
-                    if (s == 0) {
-                        c.getPlayer().dropMessage(1, "The Guild you are trying to join is already full.");
-                        c.getPlayer().setGuildId(0);
-                        return;
-                    }
-                    c.getSession().write(GuildPacket.showGuildInfo(c.getPlayer()));
-                    final MapleGuild gs = World.Guild.getGuild(guildId);
-                    for (byte[] pack : World.Alliance.getAllianceInfo(gs.getAllianceId(), true)) {
-                        if (pack != null) {
-                            c.getSession().write(pack);
-                        }
-                    }
-                    c.getPlayer().saveGuildStatus();
-                    respawnPlayer(c.getPlayer());
-                }
-                break;
-            case 0x07: // leaving
-                cid = lea.readInt();
-                name = lea.readMapleAsciiString();
-
-                if (cid != c.getPlayer().getId() || !name.equals(c.getPlayer().getName()) || c.getPlayer().getGuildId() <= 0) {
+                if (charid != c.getPlayer().getId() || !charName.equals(c.getPlayer().getName()) || c.getPlayer().getGuildId() <= 0) {
                     return;
                 }
                 World.Guild.leaveGuild(c.getPlayer().getMGC());
-                c.getSession().write(GuildPacket.showGuildInfo(null));
+                respawnPlayer(c.getPlayer());
+                //c.getSession().write(GuildPacket.showGuildInfo(null));
                 break;
-            case 0x08: // Expel
-                cid = lea.readInt();
-                name = lea.readMapleAsciiString();
+            case 12: // Expel Member from Guild
+                charid = lea.readInt();
+                charName = lea.readMapleAsciiString();
 
                 if (c.getPlayer().getGuildRank() > 2 || c.getPlayer().getGuildId() <= 0) {
                     return;
                 }
-                World.Guild.expelMember(c.getPlayer().getMGC(), name, cid);
+                World.Guild.expelMember(c.getPlayer().getMGC(), charName, charid);
                 break;
-            case 0x0e: // Guild rank titles change
+            case 18: // Change Guild Rank Titles
                 if (c.getPlayer().getGuildId() <= 0 || c.getPlayer().getGuildRank() != 1) {
                     return;
                 }
@@ -155,18 +156,18 @@ public class GuildOperationHandler extends AbstractMaplePacketHandler {
 
                 World.Guild.changeRankTitle(c.getPlayer().getGuildId(), ranks);
                 break;
-            case 0x0F: // Rank change
-                cid = lea.readInt();
+            case 19: // Change Guild Member's Rank
+                charid = lea.readInt();
                 byte newRank = lea.readByte();
 
                 if ((newRank <= 1 || newRank > 5) || c.getPlayer().getGuildRank() > 2 || (newRank <= 2 && c.getPlayer().getGuildRank() != 1) || c.getPlayer().getGuildId() <= 0) {
                     return;
                 }
 
-                World.Guild.changeRank(c.getPlayer().getGuildId(), cid, newRank);
+                World.Guild.changeRank(c.getPlayer().getGuildId(), charid, newRank);
                 break;
-            case 0x10: // guild emblem change
-                if (c.getPlayer().getGuildId() <= 0 || c.getPlayer().getGuildRank() != 1 || c.getPlayer().getMapId() != 200000301) {
+            case 20: // Change Guild Emblem
+                if (c.getPlayer().getGuildId() <= 0 || c.getPlayer().getGuildRank() != 1) {
                     return;
                 }
 
@@ -226,11 +227,11 @@ public class GuildOperationHandler extends AbstractMaplePacketHandler {
                 }
                 break;
             case 0x1f: //guild leader change
-                cid = lea.readInt();
+                charid = lea.readInt();
                 if (c.getPlayer().getGuildId() <= 0 || c.getPlayer().getGuildRank() > 1) {
                     return;
                 }
-                World.Guild.setGuildLeader(c.getPlayer().getGuildId(), cid);
+                World.Guild.setGuildLeader(c.getPlayer().getGuildId(), charid);
                 break;
         }
 	}

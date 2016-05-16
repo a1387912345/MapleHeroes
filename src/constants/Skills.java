@@ -17,4 +17,8 @@ public enum Skills {
 	public int getId() {
 		return skillid;
 	}
+	
+	public boolean equals(final int skillid) { // Debating if this method should be named is() or equals(). is() is shorter to type, but equals() is conventional.
+		return this.skillid == skillid;
+	}
 }

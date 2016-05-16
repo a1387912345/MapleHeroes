@@ -1230,6 +1230,22 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             sendNext("Please check if your guild capacity is full, if you have the GP needed or if subtracting GP would decrease a guild level. (Limit: 200)");
         }
     }
+    
+    public int getGuildCapacity() {
+    	MapleGuild mg = getChar().getGuild();
+    	if (mg != null) {
+    		return mg.getCapacity();
+    	}
+    	return 0;
+    }
+    
+    public int getGP() {
+    	MapleGuild mg = getChar().getGuild();
+    	if (mg != null) {
+    		return mg.getGP();
+    	}
+    	return 0;
+    }
 
     public void displayGuildRanks() {
         c.getSession().write(GuildPacket.showGuildRanks(id, MapleGuildRanking.getInstance().getRank()));

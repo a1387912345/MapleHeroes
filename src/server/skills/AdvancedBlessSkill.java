@@ -4,6 +4,7 @@ import java.util.Map;
 
 import client.MapleBuffStat;
 import constants.GameConstants;
+import constants.Skills;
 import net.SendPacketOpcode;
 import server.AbstractSkillHandler;
 import tools.data.MaplePacketLittleEndianWriter;
@@ -44,8 +45,14 @@ public class AdvancedBlessSkill extends AbstractSkillHandler {
             }
         } 
 
-        mplew.writeLong(0);
+        if (Skills.ADVANCED_BLESS.equals(buffid)) {
+        	mplew.writeInt(0);
+        }
+ 
+        mplew.writeShort(1); // Buff count. Used 1 as a placeholder for now.
         mplew.write(0);
+        mplew.write(0); // bJustBuffCheck
+        mplew.write(0); // bFirstSet
         
     	return mplew.getPacket();
 	}

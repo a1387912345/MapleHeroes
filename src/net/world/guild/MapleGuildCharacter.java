@@ -27,22 +27,22 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
     public static final long serialVersionUID = 2058609046116597760L;
     private byte channel = -1, guildrank, allianceRank;
     private short level;
-    private int id, jobid, guildid, guildContribution;
+    private int id, jobid, guildid, guildContribution, individualGP;
     private boolean online;
     private final String name;
 
     // either read from active character...
     // if it's online
-    public MapleGuildCharacter(final MapleCharacter c) {
-        name = c.getName();
-        level = (short) c.getLevel();
-        id = c.getId();
-        channel = (byte) c.getClient().getChannel();
-        jobid = c.getJob();
-        guildrank = c.getGuildRank();
-        guildid = c.getGuildId();
-        guildContribution = c.getGuildContribution();
-        allianceRank = c.getAllianceRank();
+    public MapleGuildCharacter(final MapleCharacter chr) {
+        name = chr.getName();
+        level = (short) chr.getLevel();
+        id = chr.getId();
+        channel = (byte) chr.getClient().getChannel();
+        jobid = chr.getJob();
+        guildrank = chr.getGuildRank();
+        guildid = chr.getGuildId();
+        guildContribution = chr.getGuildContribution();
+        allianceRank = chr.getAllianceRank();
         online = true;
     }
 
@@ -94,8 +94,8 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
         return guildid;
     }
 
-    public void setGuildId(int gid) {
-        guildid = gid;
+    public void setGuildId(int guildid) {
+        this.guildid = guildid;
     }
 
     public void setGuildRank(byte rank) {
@@ -106,12 +106,20 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
         return guildrank;
     }
 
-    public void setGuildContribution(int c) {
-        this.guildContribution = c;
+    public void setGuildContribution(int contribution) {
+        this.guildContribution = contribution;
     }
 
     public int getGuildContribution() {
         return guildContribution;
+    }
+    
+    public void setIndividualGP(int individualGP) {
+    	this.individualGP = individualGP;
+    }
+    
+    public int getIndividualGP() {
+    	return individualGP;
     }
 
     public boolean isOnline() {
@@ -133,4 +141,5 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
     public byte getAllianceRank() {
         return allianceRank;
     }
+
 }

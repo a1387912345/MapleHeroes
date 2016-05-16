@@ -83,7 +83,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public int accountid, id, hair, face, secondHair, secondFace, faceMarking, ears, tail, elf, mapid, fame, pvpExp, pvpPoints, totalWins, totalLosses,
             guildid = 0, fallcounter, maplepoints, acash, nxcredit, chair, itemEffect, points, vpoints, dpoints, epoints,
             rank = 1, rankMove = 0, jobRank = 1, jobRankMove = 0, marriageId, marriageItemId, dotHP,
-            currentrep, totalrep, coconutteam, followid, battleshipHP, gachexp, challenge, guildContribution = 0,
+            currentrep, totalrep, coconutteam, followid, battleshipHP, gachexp, challenge, guildContribution = 0, individualGP = 0,
             remainingAp, honourExp, honorLevel, runningLight, runningLightSlot, runningDark, runningDarkSlot, luminousState, starterquest, starterquestid, evoentry;
     private Point old;
     private MonsterFamiliar summonedFamiliar;
@@ -415,6 +415,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         ret.guildid = ct.guildid;
         ret.guildrank = ct.guildrank;
         ret.guildContribution = ct.guildContribution;
+        ret.individualGP = ct.individualGP;
         ret.allianceRank = ct.alliancerank;
         ret.points = ct.points;
         ret.vpoints = ct.vpoints;
@@ -614,6 +615,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             ret.guildrank = rs.getByte("guildrank");
             ret.allianceRank = rs.getByte("allianceRank");
             ret.guildContribution = rs.getInt("guildContribution");
+            ret.individualGP = rs.getInt("individualGP");
             ret.totalWins = rs.getInt("totalWins");
             ret.totalLosses = rs.getInt("totalLosses");
             ret.currentrep = rs.getInt("currentrep");
@@ -5929,6 +5931,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public int getGuildContribution() {
         return guildContribution;
     }
+    
+    public int getIndividualGP() {
+    	return individualGP;
+    }
 
     public void setGuildId(int _id) {
         guildid = _id;
@@ -5941,6 +5947,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         } else {
             mgc = null;
             guildContribution = 0;
+            individualGP = 0;
         }
     }
 
@@ -5955,6 +5962,13 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         this.guildContribution = _c;
         if (mgc != null) {
             mgc.setGuildContribution(_c);
+        }
+    }
+    
+    public void setIndividualGP(int _c) {
+        this.individualGP = _c;
+        if (mgc != null) {
+            mgc.setIndividualGP(_c);
         }
     }
 
@@ -5994,7 +6008,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     }
 
     public void saveGuildStatus() {
-        MapleGuild.setOfflineGuildStatus(guildid, guildrank, guildContribution, allianceRank, id);
+        MapleGuild.setOfflineGuildStatus(guildid, guildrank, guildContribution, individualGP, allianceRank, id);
     }
 
     public void familyUpdate() {
@@ -6612,6 +6626,9 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void dropMessage(int type, String message) {
         switch (type) {
+        	case 1 :
+        		client.getSession().write(CField.getGameMessage((short) 11, message)); // Pink error message
+        		break;
             case -1:
                 client.getSession().write(CWvsContext.getTopMsg(message));
                 break;
@@ -7247,6 +7264,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         ret.dispelSummons();
         ret.guildrank = guildrank;
         ret.guildContribution = guildContribution;
+        ret.individualGP = individualGP;
         ret.allianceRank = allianceRank;
         ret.setPosition(getTruePosition());
         for (Item equip : getInventory(MapleInventoryType.EQUIPPED).newList()) {

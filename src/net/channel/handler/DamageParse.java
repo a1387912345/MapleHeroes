@@ -1155,86 +1155,90 @@ public class DamageParse {
     }
 
     public static AttackInfo parseMagicDamage(LittleEndianAccessor lea, MapleCharacter chr) {
-        try {
-            AttackInfo ret = new AttackInfo();
+        AttackInfo ret = new AttackInfo();
 
-            lea.skip(1);
-            ret.tbyte = lea.readByte();
-
-            ret.targets = ((byte) (ret.tbyte >>> 4 & 0xF));
-            ret.hits = ((byte) (ret.tbyte & 0xF));
-            ret.skillid = lea.readInt();
-            if (ret.skillid >= 91000000 && ret.skillid < 100000000) {
-                return null;
-            }
-            
-            ret.skillLevel = lea.readByte();
-            lea.readInt();
-            if (GameConstants.isMagicChargeSkill(ret.skillid)) {
-                ret.charge = lea.readInt();
-            } else {
-                ret.charge = -1;
-            }
-            lea.readByte(); 
-            ret.unk = lea.readByte();
-
-            ret.display = lea.readUShort();
-            
-            lea.skip(5);
-            ret.speed = lea.readByte();
-            lea.skip(4);
-            ret.lastAttackTickCount = lea.readInt();
-            ret.allDamage = new ArrayList();
-
-            for (int i = 0; i < ret.targets; i++) {
-                int oid = lea.readInt();                
-                byte unkByte = lea.readByte();
-                byte unkBool1 = lea.readByte();
-                byte unkBool2 = lea.readByte();
-                lea.skip(15);
-                short unkShort = lea.readShort();
-                
-                List allDamageNumbers = new ArrayList();
-                for (int j = 0; j < ret.hits; j++) {
-                    int damage = lea.readInt();
-                    allDamageNumbers.add(new Pair(damage, false));
-                }
-                
-                //lea.skip(8);
-                lea.skip(4); // CRC of monster [Wz Editing]
-                lea.readInt(); //idk
-                ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers));
-            }
-            if (lea.available() >= 4L) {
-                ret.position = lea.readPos();
-                lea.skip(1);
-            }
-       //     if (ret.skill == 2321054){//Asura - Mixtamal6
-       //     lea.skip(3); //new
-     //   } 
-            return ret;
-        } catch (Exception e) {
+        lea.readByte();
+        ret.tbyte = lea.readByte();
+        ret.targets = ((byte) (ret.tbyte >>> 4 & 0xF));
+        ret.hits = ((byte) (ret.tbyte & 0xF));
+        ret.skillid = lea.readInt();
+        if (ret.skillid >= 91000000 && ret.skillid < 100000000) {
+            return null;
         }
-        return null;
+        
+        ret.skillLevel = lea.readByte();
+        lea.readInt(); // SkillLevelData::GetCrc
+        if (GameConstants.isMagicChargeSkill(ret.skillid)) {
+            ret.charge = lea.readInt();
+        } else {
+            ret.charge = -1;
+        }
+        ret.flag = lea.readByte(); 
+        ret.unk = lea.readByte();
+        ret.display = lea.readUShort();
+        
+        lea.readInt();
+        lea.readByte();
+        
+        //if (isEvanForceSkill(ret.skillid)) lea.readByte();
+        
+        ret.speed = lea.readByte();
+        ret.lastAttackTickCount = lea.readInt();
+        lea.readInt();
+        
+        ret.allDamage = new ArrayList<AttackPair>();
+
+        for (int i = 0; i < ret.targets; i++) {
+            int oid = lea.readInt();                
+            byte unkByte = lea.readByte();
+            byte unkBool1 = lea.readByte();
+            byte unkBool2 = lea.readByte();
+            lea.readByte();
+            lea.readByte();
+            lea.readInt();
+            lea.readByte();
+            lea.readShort();
+            lea.readShort();
+            lea.readShort();
+            lea.readShort();
+            short unkShort = lea.readShort();
+            
+            List<Pair<Integer, Boolean>> allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
+            for (int j = 0; j < ret.hits; j++) {
+                int damage = lea.readInt();
+                allDamageNumbers.add(new Pair<Integer, Boolean>(damage, false));
+            }
+            
+            lea.readInt(); // Monster CRC
+            lea.readInt(); // GetMobUpDownYRange
+            ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers));
+        }
+        if (lea.available() >= 4L) {
+            ret.position = lea.readPos();
+            lea.skip(1);
+        }
+   //     if (ret.skill == 2321054){//Asura - Mixtamal6
+   //     lea.skip(3); //new
+ //   } 
+        return ret;
     }
 
     public static AttackInfo parseCloseRangeDamage(LittleEndianAccessor lea, MapleCharacter chr) {
         AttackInfo ret = new AttackInfo();
-        lea.skip(1);
+        
+        lea.readByte();
         ret.tbyte = lea.readByte();
-
         ret.targets = ((byte) (ret.tbyte >>> 4 & 0xF));
         ret.hits = ((byte) (ret.tbyte & 0xF));
         ret.skillid = lea.readInt();
-        if (GameConstants.isZero(chr.getJob()) && ret.skillid != 0) {
-            lea.skip(1); //zero has byte
-        }
+        
         if (ret.skillid == 2221012|| ret.skillid == 36101001 || ret.skillid == 42120003) {
             lea.skip(1);
         }
         ret.skillLevel = lea.readByte();
-        lea.readByte(); // some boolean?
-        lea.readInt();  // idk
+        lea.readByte(); // bAddAttackProc
+        lea.readInt();  // SkillLevelData::GetCrc
+        
         switch (ret.skillid) {
             case 1311011:// La Mancha Spear
             case 2221012:
@@ -1254,8 +1258,7 @@ public class DamageParse {
             case 27101202:
             case 27111100:
             case 27120211:
-            case 27121201:
-                
+            case 27121201: 
             case 31001000:
             case 31101000:
             case 31111005:
@@ -1281,7 +1284,16 @@ public class DamageParse {
                 ret.charge = 0;
         }
 
-        lea.readByte(); // maybe flag?
+        if (GameConstants.isZero(chr.getJob()) && ret.skillid != 0) {
+            lea.skip(1); //zero has byte
+        }
+        /*
+        if (isUserCloneSummonedAbleSkill(ret.skill)) {
+        	lea.readInt(); // nBySummonedID
+        }
+        */
+        
+        ret.flag = lea.readByte();
         ret.unk = lea.readByte();
         ret.display = lea.readUShort();
         if (ret.skillid == 2221012 || ret.skillid == 36101001 ||ret.skillid == 42120003 || ret.skillid == 2311007) {
@@ -1302,24 +1314,31 @@ public class DamageParse {
         	lea.skip(8);
         }
 
-        ret.allDamage = new ArrayList();
+        ret.allDamage = new ArrayList<AttackPair>();
 
         for (int i = 0; i < ret.targets; i++) {
         	int oid = lea.readInt();                
             byte unkByte = lea.readByte();
             byte unkBool1 = lea.readByte();
             byte unkBool2 = lea.readByte();
-            lea.skip(15);
+            lea.readByte();
+            lea.readByte();
+            lea.readInt();
+            lea.readByte();
+            lea.readShort();
+            lea.readShort();
+            lea.readShort();
+            lea.readShort();
             short unkShort = lea.readShort();
             
-            List allDamageNumbers = new ArrayList();
+            List<Pair<Integer, Boolean>> allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
             for (int j = 0; j < ret.hits; j++) {
                 int damage = lea.readInt();
-                allDamageNumbers.add(new Pair(damage, false));
+                allDamageNumbers.add(new Pair<Integer, Boolean>(damage, false));
             }
             
-            lea.skip(4); // CRC of monster [Wz Editing]
-            lea.readInt(); //idk
+            lea.readInt(); // Monster CRC
+            lea.readInt(); // GetMobUpDownYRange
             ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers));
         }
         ret.position = lea.readPos();
@@ -1327,22 +1346,27 @@ public class DamageParse {
         return ret;
     }
 
+    /**
+     * 
+     * @param lea
+     * @param chr
+     * @return
+     * @see <code> CUserLocal::TryDoingShootAttack </code>
+     */
     public static AttackInfo parseRangeDamage(LittleEndianAccessor lea, MapleCharacter chr) {
         AttackInfo ret = new AttackInfo();
-        lea.readShort();
+        
+        lea.readByte(); // Default value of 0
+        lea.readByte(); // g_pStage.baseclass_0.vfptr
         ret.tbyte = lea.readByte();
-
         ret.targets = ((byte) (ret.tbyte >>> 4 & 0xF));
         ret.hits = ((byte) (ret.tbyte & 0xF));
         ret.skillid = lea.readInt();
-        if (GameConstants.isZero(chr.getJob())) {
-            lea.skip(1); //zero has byte
-        }
         ret.skillLevel = lea.readByte();
-        lea.readByte(); // some boolean?
-        lea.readInt();
-        ret.flag = lea.readByte(); // Shadow Star
-        switch (ret.skillid) {
+        lea.readByte(); // bAddAttackProc
+        lea.readInt(); // SkillLevelData::GetCrc
+
+        switch (ret.skillid) { // If the skill is a hold down/charge skill
             case 3121004:
             case 3221001:
             case 5321052:
@@ -1364,15 +1388,28 @@ public class DamageParse {
             case 3121013:// Arrow Blaster
             case 3120019:
             case 5221022:
-                lea.skip(4);
-            default:
-            	ret.charge = -1;
+                lea.readInt(); // tKeyDown
+                break;
         }
         
-        ret.unk = lea.readByte();
-        lea.readByte(); // Expert Handling Boolean
+        if (GameConstants.isZero(chr.getJob())) { // If the skill is a Zero skill
+            lea.readByte(); // Default value of 0
+        }
+        
+        /*
+        if (isUserCloneSummonedAbleSkill(ret.skill)) {
+        	lea.readInt(); // nBySummonedID
+        }
+        */
+        
+        ret.charge = -1;
+        ret.flag = lea.readByte(); // Shadow Star
+        ret.unk = lea.readByte();  // 2 * ((value.y > 1) | (4 * ptStartByDir) | 2*(nBySummonedID != 0))
+        lea.readByte(); // Expert Handling Boolean (CUserLocal::CheckApplyExJablin)
         ret.display = lea.readUShort();
-        lea.skip(5);
+        lea.readInt(); // pExcept
+        lea.readByte(); // nAttackActionType
+        
         if (ret.skillid == 23111001 || ret.skillid == 36111010) {
             lea.skip(12);
         } else if (ret.skillid == 3121013) {// Arrow Blaster
@@ -1383,38 +1420,49 @@ public class DamageParse {
             lea.readInt();//newv144
         }  
         ret.speed = lea.readByte();
-        ret.lastAttackTickCount = lea.readInt();
-        lea.skip(4);
-        lea.skip(4);
+        ret.lastAttackTickCount = lea.readInt(); // nTotalBulletCount
+        lea.readInt();
+        lea.readInt();
         ret.slot = ((byte) lea.readShort());
         ret.csstar = ((byte) lea.readShort());
-        ret.AOE = lea.readByte();
-        
+        ret.AOE = lea.readByte(); // nShootRange
         
         if ((ret.flag & 0x40) != 0) { // if Shadow Star is active
-        	lea.readInt(); // Star ID
+        	lea.readInt(); // Star Item ID
         }
         
-        ret.allDamage = new ArrayList();
+        ret.allDamage = new ArrayList<AttackPair>();
 
         for (int i = 0; i < ret.targets; i++) {
             int oid = lea.readInt();
             byte unkByte = lea.readByte();
             byte unkBool1 = lea.readByte();
             byte unkBool2 = lea.readByte();
-            lea.skip(15);
+            lea.readByte();
+            lea.readByte();
+            lea.readInt();
+            lea.readByte();
+            lea.readShort();
+            lea.readShort();
+            lea.readShort();
+            lea.readShort();
             short unkShort = lea.readShort();
             
-            List allDamageNumbers = new ArrayList();
+            List<Pair<Integer, Boolean>> allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
             for (int j = 0; j < ret.hits; j++) {
                 int damage = lea.readInt();
-                allDamageNumbers.add(new Pair(Integer.valueOf(damage), Boolean.valueOf(false)));
+                allDamageNumbers.add(new Pair<Integer, Boolean>(Integer.valueOf(damage), Boolean.valueOf(false)));
             }
-            lea.skip(4); // CRC of monster [Wz Editing]
-            lea.readInt(); //idk
-            ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers));
+            lea.readInt(); // Monster CRC
+            lea.readInt(); // GetMobUpDownYRange
+            ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers)); // It's technically no longer an AttackPair. We should refactor the class name into another name :]
         }
         
+        /*
+        if (isScreenCenterAttackSkill(ret.skill)) {
+        	lea.readShort();
+    	}
+    	*/
         ret.position = lea.readPos();
         
         if (lea.available() > 4) {

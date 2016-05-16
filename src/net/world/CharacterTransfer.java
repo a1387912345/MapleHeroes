@@ -34,7 +34,7 @@ public class CharacterTransfer implements Externalizable {
             faceMarking, ears, tail, elf, mapid, honourexp, honourlevel, guildid,
             partyid, messengerid, ACash, nxCredit, MaplePoints,
             mount_itemid, mount_exp, points, vpoints, dpoints, epoints, marriageId, maxhp, maxmp, hp, mp,
-            familyid, seniorid, junior1, junior2, currentrep, totalrep, battleshipHP, gachexp, guildContribution, totalWins, totalLosses;
+            familyid, seniorid, junior1, junior2, currentrep, totalrep, battleshipHP, gachexp, guildContribution, individualGP, totalWins, totalLosses;
     public byte channel, gender, gmLevel, guildrank, alliancerank, clonez,
             fairyExp, cardStack, buddysize, world, initialSpawnPoint, skinColor, mount_level, mount_Fatigue, subcategory;
     public long lastfametime, TranferTime, exp, meso;
@@ -130,6 +130,7 @@ public class CharacterTransfer implements Externalizable {
         this.guildid = chr.getGuildId();
         this.guildrank = (byte) chr.getGuildRank();
         this.guildContribution = chr.getGuildContribution();
+        this.individualGP = chr.getIndividualGP();
         this.alliancerank = (byte) chr.getAllianceRank();
         this.gmLevel = (byte) chr.getGMLevel();
         this.points = chr.getPoints();
@@ -286,6 +287,7 @@ public class CharacterTransfer implements Externalizable {
         this.guildid = in.readInt();
         this.guildrank = in.readByte();
         this.guildContribution = in.readInt();
+        //this.individualGP = in.readInt();
         this.alliancerank = in.readByte();
         this.gmLevel = in.readByte();
         this.points = in.readInt();
