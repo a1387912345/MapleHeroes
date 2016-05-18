@@ -95,26 +95,31 @@ public class MapleStatEffect implements Serializable {
         if (variables == null) {
             return MapleDataTool.getIntConvert(path, source, def);
         } else {
-            final MapleData dd = source.getChildByPath(path);
-            if (dd == null) {
+            final MapleData imgdirName = source.getChildByPath(path);
+            if (imgdirName == null) {
                 return def;
             }
-            if (dd.getType() != MapleDataType.STRING) {
+            if (imgdirName.getType() != MapleDataType.STRING) {
                 return MapleDataTool.getIntConvert(path, source, def);
             }
-            String dddd = MapleDataTool.getString(dd).replace(variables, String.valueOf(level));
-            if (dddd.substring(0, 1).equals("-")) { //-30+3*x
-                if (dddd.substring(1, 2).equals("u") || dddd.substring(1, 2).equals("d")) { //-u(x/2)
-                    dddd = "n(" + dddd.substring(1, dddd.length()) + ")"; //n(u(x/2))
+            String value = MapleDataTool.getString(imgdirName).toLowerCase().replace(variables, String.valueOf(level));
+            if (value.substring(0, 1).equals("-")) { //-30+3*x
+                if (value.substring(1, 2).equals("u") || value.substring(1, 2).equals("d")) { //-u(x/2)
+                    value = "n(" + value.substring(1, value.length()) + ")"; //n(u(x/2))
                 } else {
-                    dddd = "n" + dddd.substring(1, dddd.length()); //n30+3*x
+                    value = "n" + value.substring(1, value.length()); //n30+3*x
                 }
-            } else if (dddd.substring(0, 1).equals("=")) { //lol nexon and their mistakes
-                dddd = dddd.substring(1, dddd.length());
-            } else if (dddd.contains("y")) { // AngelicBuster Exception
-                dddd = "0";
+            } else if (value.substring(0, 1).equals("=")) { //lol nexon and their mistakes
+                value = value.substring(1, value.length());
+            } else if (value.contains("y")) { // AngelicBuster Exception
+                value = "0";
             }
-            return (int) (new CaltechEval(dddd).evaluate());
+            // If the expression contains a ceiling function 'u' without parameters, add '(1)' to make it 'u(1)'.
+            // Example: 2*u => 2*u(1)
+            if (value.endsWith("u")) { 
+            	value += "(1)";
+            }
+            return (int) (new CaltechEval(value).evaluate());
         }
     }
     
@@ -142,6 +147,7 @@ public class MapleStatEffect implements Serializable {
             return ret;
         }
         ret.info = new EnumMap<>(MapleStatInfo.class);
+        
         for (final MapleStatInfo i : MapleStatInfo.values()) {
             if (i.isSpecial()) {
                 ret.info.put(i, parseEval(i.name().substring(0, i.name().length() - 1), source, i.getDefault(), variables, level));
@@ -149,6 +155,7 @@ public class MapleStatEffect implements Serializable {
                 ret.info.put(i, parseEval(i.name(), source, i.getDefault(), variables, level));
             }
         }
+        
         ret.hpR = parseEval("hpR", source, 0, variables, level) / 100.0;
         ret.mpR = parseEval("mpR", source, 0, variables, level) / 100.0;
         ret.ignoreMob = (short) parseEval("ignoreMobpdpR", source, 0, variables, level);
@@ -1086,8 +1093,7 @@ public class MapleStatEffect implements Serializable {
                             ret.info.put(MapleStatInfo.attackCount, ret.info.get(MapleStatInfo.w));
                             ret.info.put(MapleStatInfo.mobCount, ret.info.get(MapleStatInfo.x));
                             break;
-                        case 4111003: // shadow web
-                        case 14111001:
+                        case 14111001: // shadow web
                             ret.monsterStatus.put(MonsterStatus.SHADOW_WEB, 1);
                             break;  
                         case 14111007: // Shadow Stars
@@ -2294,6 +2300,7 @@ public class MapleStatEffect implements Serializable {
     }
 
     public final void applyMonsterBuff(final MapleCharacter applyfrom) {
+    	System.out.println("apply monster buff?");
         final Rectangle bounds = calculateBoundingBox(applyfrom.getTruePosition(), applyfrom.isFacingLeft());
         final boolean pvp = applyfrom.inPVP();
         final MapleMapObjectType objType = pvp ? MapleMapObjectType.PLAYER : MapleMapObjectType.MONSTER;
@@ -3567,6 +3574,7 @@ public class MapleStatEffect implements Serializable {
             case 1201006: // threaten
             case 2101003: // fp slow
             case 2201003: // il slow
+            case 2301002: // Heal
             case 5011002:
             case 12101001: // cygnus slow
             case 2211004: // il seal

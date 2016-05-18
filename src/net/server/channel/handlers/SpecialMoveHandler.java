@@ -45,6 +45,7 @@ public class SpecialMoveHandler extends AbstractMaplePacketHandler {
         }
         lea.skip(4);
         int skillid = lea.readInt();
+        System.out.println("skill id: " + skillid);
         if (skillid >= 91000000 && skillid < 100000000) {
             c.getSession().write(CWvsContext.enableActions());
             return;
@@ -97,7 +98,6 @@ public class SpecialMoveHandler extends AbstractMaplePacketHandler {
                 levelCheckSkill = 24121001;
             }
         }
-        System.out.println("Total skill level " + chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)));
         if ((levelCheckSkill == 0) && ((chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) || (chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) != skillLevel))) {
             if ((!GameConstants.isMulungSkill(skillid)) && (!GameConstants.isPyramidSkill(skillid)) && (chr.getTotalSkillLevel(GameConstants.getLinkedAttackSkill(skillid)) <= 0) && !GameConstants.isAngel(skillid)) {
                 c.getSession().write(CWvsContext.enableActions());

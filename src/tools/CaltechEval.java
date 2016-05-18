@@ -401,7 +401,7 @@ public class CaltechEval {
 
             String st = (String) tokens.elementAt(it);
             int iop = getOperator(st);
-            // System.out.println("     Precedence Operator: "+it+" " + st);
+            //System.out.println("     Precedence Operator: "+it+" " + st);
 
             if (OperatorsLeftRight[iop]) {
                 if (!st.equals(",")) {

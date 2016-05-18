@@ -42,7 +42,7 @@ import net.channel.MapleGuildRanking;
 import net.channel.handler.HiredMerchantHandler;
 import net.channel.handler.InventoryHandler;
 import net.channel.handler.PlayersHandler;
-import net.login.LoginInformationProvider;
+import net.server.login.LoginInformationProvider;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.World;

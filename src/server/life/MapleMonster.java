@@ -934,9 +934,9 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (!isAlive() || getLinkCID() > 0) {
             return;
         }
-        Skill skilz = SkillFactory.getSkill(status.getSkill());
-        if (skilz != null) {
-            switch (stats.getEffectiveness(skilz.getElement())) {
+        Skill skill = SkillFactory.getSkill(status.getSkill());
+        if (skill != null) {
+            switch (stats.getEffectiveness(skill.getElement())) {
                 case IMMUNE:
                 case STRONG:
                     return;
@@ -1030,8 +1030,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
         duration += from.getStat().dotTime * 1000;
         long aniTime = duration;
-        if (skilz != null) {
-            aniTime += skilz.getAnimationTime();
+        if (skill != null) {
+            aniTime += skill.getAnimationTime();
         }
         status.setCancelTask(aniTime);
         if (poison && getHp() > 1) {
@@ -1078,10 +1078,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         } else {
             stati.put(stat, status);
             if (con != null) {
-                map.broadcastMessage(con, MobPacket.applyMonsterStatus(this, status), getTruePosition());
-                con.getClient().getSession().write(MobPacket.applyMonsterStatus(this, status));
+            	System.out.println("applystatus 1");
+                map.broadcastMessage(con, MobPacket.applyMonsterStatus(this, status, con), getTruePosition());
+                con.getClient().getSession().write(MobPacket.applyMonsterStatus(this, status, con));
             } else {
-                map.broadcastMessage(MobPacket.applyMonsterStatus(this, status), getTruePosition());
+                map.broadcastMessage(MobPacket.applyMonsterStatus(this, status, con), getTruePosition());
             }
         }
     }
@@ -1091,7 +1092,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             cancelStatus(status.getStati());
         }
         stati.put(status.getStati(), status);
-        map.broadcastMessage(MobPacket.applyMonsterStatus(this, status), getTruePosition());
+        map.broadcastMessage(MobPacket.applyMonsterStatus(this, status, null), getTruePosition());
     }
 
     public final void dispelSkill(final MobSkill skillId) {

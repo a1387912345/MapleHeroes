@@ -5,7 +5,9 @@
 package server.buffs.buffclasses.adventurer;
 
 import client.MapleBuffStat;
+import client.MonsterStatus;
 import constants.GameConstants;
+import constants.Skills;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.buffs.AbstractBuffClass;
@@ -27,6 +29,7 @@ public class MagicianBuff extends AbstractBuffClass {
             2301008, //Magic Booster
             2101008, //Magic Booster
             2201010, //Magic Booster
+            2301002, //Heal
             2301003, //Invicible
             2111005, //Spell Booster
             2111007, //Teleport Mastery
@@ -84,6 +87,9 @@ public class MagicianBuff extends AbstractBuffClass {
             case 2301008: //Magic Booster
                 eff.statups.put(MapleBuffStat.BOOSTER, eff.info.get(MapleStatInfo.x));
                 break;
+            case 2301002: //Heal
+            	eff.monsterStatus.put(MonsterStatus.DAMAGE_PERCENT, eff.info.get(MapleStatInfo.x));
+            	break;
             case 2301003: //Invicible
                 eff.statups.put(MapleBuffStat.INVINCIBLE, eff.info.get(MapleStatInfo.x));
                 break;

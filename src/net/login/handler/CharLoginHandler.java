@@ -18,10 +18,10 @@ import constants.ServerConstants;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
 import net.channel.ChannelServer;
-import net.login.LoginInformationProvider;
-import net.login.LoginServer;
-import net.login.LoginWorker;
-import net.login.LoginInformationProvider.JobType;
+import net.server.login.LoginInformationProvider;
+import net.server.login.LoginServer;
+import net.server.login.LoginWorker;
+import net.server.login.LoginInformationProvider.JobType;
 import net.world.World;
 import constants.WorldConstants.TespiaWorldOption;
 

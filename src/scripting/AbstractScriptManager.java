@@ -52,6 +52,7 @@ public abstract class AbstractScriptManager {
         return getInvocable(path, c, false);
     }
 
+    /*
     protected Invocable getInvocable(String path, MapleClient c, boolean npc) {
         FileReader fr = null;
         try {
@@ -113,5 +114,41 @@ public abstract class AbstractScriptManager {
             }
         }
 		return null;*/
+    //}
+    
+    protected Invocable getInvocable(String path, MapleClient c, boolean npc) {
+        path = "scripts/" + path;
+        ScriptEngine engine = null;
+
+        if (c != null) {
+            engine = c.getScriptEngine(path);
+        }
+ 
+        if (engine == null) {
+            File scriptFile = new File(path);
+            if (!scriptFile.exists()) {
+                return null;
+            }
+            engine = sem.getEngineByName("javascript");
+            if (c != null) {
+                c.setScriptEngine(path, engine);
+            }
+            
+            try (Stream<String> stream = Files.lines(scriptFile.toPath())) { 
+            	String lines = "load('nashorn:mozilla_compat.js');"; 
+	            lines += stream.collect(Collectors.joining(System.lineSeparator())); 
+	            engine.eval(lines); 
+	        } catch (final ScriptException | IOException t) {
+	        	if (ServerConstants.VPS) {
+	        		FilePrinter.printError(FilePrinter.INVOCABLE + path.substring(12, path.length()), t, path); 
+	        	} else  {
+	        		System.out.println(t); 
+	        		return null; 
+	        	}
+	        }
+        } else if (c != null && npc) {
+            //c.getPlayer().dropMessage(-1, "You already are talking to this NPC. Use @ea if this is not intended.");
+        }
+        return (Invocable) engine;
     }
 }

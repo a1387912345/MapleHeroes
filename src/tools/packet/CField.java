@@ -44,7 +44,6 @@ public class CField {
 
         mplew.writeShort(SendPacketOpcode.SERVER_IP.getValue());
         mplew.writeShort(0);
-        
         mplew.write(Nexon_IP);
         mplew.writeShort(port);
         mplew.write(MapleTalk_IP); // MapleTalk IP
@@ -52,7 +51,6 @@ public class CField {
         mplew.writeInt(charId);
         mplew.writeZeroBytes(15);
 
-        System.out.println("[ServerIPPacket] " + mplew.toString());
         return mplew.getPacket();
     }
 

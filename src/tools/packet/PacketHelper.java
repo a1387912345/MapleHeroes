@@ -1524,11 +1524,30 @@ public static void addRedLeafInfo(MaplePacketLittleEndianWriter mplew, MapleChar
         mplew.write(parttime.getReward() > 0);
     }
 
+    public static <E extends Buffstat> void writeMobMask(MaplePacketLittleEndianWriter mplew, E statup) {
+        for (int i = 1; i <= 3; i++) {
+            mplew.writeInt(i == statup.getPosition() ? statup.getValue() : 0);
+        }
+    }
+    
     public static <E extends Buffstat> void writeSingleMask(MaplePacketLittleEndianWriter mplew, E statup) {
         for (int i = GameConstants.MAX_BUFFSTAT; i >= 1; i--) {
             mplew.writeInt(i == statup.getPosition() ? statup.getValue() : 0);
         }
     }
+    
+    /*
+    public static <E extends Buffstat> void writeMobStatFlag(MaplePacketLittleEndianWriter mplew, MonsterStatus mse) {
+    	int[] flag = new int[GameConstants.MAX_MOBSTAT];
+    	
+    	for (Buffstat statup : mse) {
+            flag[(statup.getPosition() - 1)] += statup.getValue();
+        }
+        for(int i = 0; i < flag.length; i++) {
+        	mplew.writeInt(flag[i]);
+        }
+    }
+    */
 
    public static <E extends Buffstat> void writeMask(MaplePacketLittleEndianWriter mplew, Collection<E> statups) {
         int[] mask = new int[GameConstants.MAX_BUFFSTAT];
@@ -1537,7 +1556,6 @@ public static void addRedLeafInfo(MaplePacketLittleEndianWriter mplew, MapleChar
             mask = new int[12];
         }
         */
-        System.out.println("Cancel stats" + statups.toString());
         for (Buffstat statup : statups) {
             mask[(statup.getPosition() - 1)] += statup.getValue();
             System.out.println(statup.getValue());
@@ -1573,7 +1591,7 @@ public static void addRedLeafInfo(MaplePacketLittleEndianWriter mplew, MapleChar
            mask[(((Buffstat) statup.left).getPosition() - 1)] |= ((Buffstat) statup.left).getValue();
        }
        for(int i = 0; i < mask.length; i++) {
-       	mplew.writeInt(mask[i]);
+    	   mplew.writeInt(mask[i]);
        }
    }
    

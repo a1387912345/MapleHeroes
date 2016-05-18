@@ -12,7 +12,7 @@ import constants.GameConstants;
 import database.DatabaseConnection;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
-import net.login.LoginServer;
+import net.server.login.LoginServer;
 import net.world.CharacterTransfer;
 import net.world.World;
 

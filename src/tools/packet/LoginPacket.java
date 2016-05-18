@@ -10,7 +10,7 @@ import constants.ServerConfig;
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
 import net.SendPacketOpcode;
-import net.login.LoginServer;
+import net.server.login.LoginServer;
 
 import java.util.LinkedList;
 import java.util.List;

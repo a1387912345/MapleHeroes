@@ -5,7 +5,7 @@ import client.MapleCharacterUtil;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
-import net.login.LoginInformationProvider;
+import net.server.login.LoginInformationProvider;
 import tools.data.LittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packet.LoginPacket;

@@ -4,7 +4,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
-import net.login.LoginServer;
+import net.server.login.LoginServer;
 import tools.data.LittleEndianAccessor;
 import tools.packet.LoginPacket;
 

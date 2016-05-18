@@ -182,7 +182,7 @@ public class GameConstants {
     public static final int[] rankA = {70000027, 70000028, 70000029, 70000030, 70000031, 70000032, 70000033, 70000034, 70000035, 70000036, 70000039, 70000040, 70000041, 70000042};
     public static final int[] rankS = {70000043, 70000044, 70000045, 70000047, 70000048, 70000049, 70000050, 70000051, 70000052, 70000053, 70000054, 70000055, 70000056, 70000057, 70000058, 70000059, 70000060, 70000061, 70000062};
     public static final int[] circulators = {2702000, 2700000, 2700100, 2700200, 2700300, 2700400, 2700500, 2700600, 2700700, 2700800, 2700900, 2701000};
-    public static final int JAIL = 180000004, MAX_BUFFSTAT = 16;
+    public static final int JAIL = 180000004, MAX_BUFFSTAT = 16, MAX_MOBSTAT = 3;
     public static final int[] blockedSkills = {4341003, 36120045};
     public static final String[] RESERVED = {"Alpha", "Aristocat", "Donor", "MapleNews", "Hack"};
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};

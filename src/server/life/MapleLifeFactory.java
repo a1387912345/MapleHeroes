@@ -222,10 +222,14 @@ public class MapleLifeFactory {
 
             final MapleData banishData = monsterInfoData.getChildByPath("ban");
             if (banishData != null) {
-                stats.setBanishInfo(new BanishInfo(
-                        MapleDataTool.getString("banMsg", banishData),
-                        MapleDataTool.getInt("banMap/0/field", banishData, -1),
-                        MapleDataTool.getString("banMap/0/portal", banishData, "sp")));
+            	try { // This try-catch block is incase the mob doesn't have a banMsg and banType = 2. banType2 does something different, see Mob 9450004 & 9450062.
+	                stats.setBanishInfo(new BanishInfo(
+	                	MapleDataTool.getString("banMsg", banishData),
+		                MapleDataTool.getInt("banMap/0/field", banishData, -1),
+		                MapleDataTool.getString("banMap/0/portal", banishData, "sp")));
+            	} catch (NullPointerException e) {
+            		
+            	}
             }
 
             final MapleData reviveInfo = monsterInfoData.getChildByPath("revive");

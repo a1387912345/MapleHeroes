@@ -1,5 +1,6 @@
 package tools.packet;
 
+import client.MapleCharacter;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import net.SendPacketOpcode;
@@ -682,16 +683,20 @@ public class MobPacket {
         mplew.write(2);//was 1
         mplew.writeZeroBytes(30);
 
+        System.out.println("ams 2");
         return mplew.getPacket();
     }
+   
 
-    public static byte[] applyMonsterStatus(MapleMonster mons, MonsterStatusEffect ms) {
+    public static byte[] applyMonsterStatus(MapleMonster mons, MonsterStatusEffect ms, MapleCharacter chr) {
         MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
         mplew.writeShort(SendPacketOpcode.APPLY_MONSTER_STATUS.getValue());
         mplew.writeInt(mons.getObjectId());
-        PacketHelper.writeSingleMask(mplew, ms.getStati());
-
+        
+        PacketHelper.writeMobMask(mplew, ms.getStati());
+        
+        
         mplew.writeInt(ms.getX().intValue());
         if (ms.isMonsterSkill()) {
             mplew.writeShort(ms.getMobSkill().getSkillId());
@@ -701,10 +706,24 @@ public class MobPacket {
         }
         mplew.writeShort((short) ((ms.getCancelTask() - System.currentTimeMillis()) / 1000));
 
-        mplew.writeLong(0L);
-        mplew.writeShort(0);
+        mplew.writeInt(chr.getId()); // Char ID
+        /*
+        mplew.writeInt(20000);
+        mplew.writeInt(1000);
+        mplew.writeInt(0); // Update tick? or CRC
+        mplew.writeInt(7468);
+        mplew.writeInt(6); //Duration?
+        mplew.writeZeroBytes(20);
+        mplew.writeInt(7850);
+        mplew.writeShort(468);
         mplew.write(1);
+        */
+        
+        mplew.write(HexTool.getByteArrayFromHexString("70 13 00 00 00 00 00 00 00 00 0B"));
 
+        //mplew.write(HexTool.getByteArrayFromHexString("01 00 00 00 9B BA 3E 00 0C 00 01 61 87 9D 00 9B BA 3E 00 AA 1E 00 00 E8 03 00 00 1A 46 B7 15 2C 1D 00 00 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA 1E 00 00 D4 01 0A"));
+        System.out.println("ams 3");
+        System.out.println(mplew.toString());
         return mplew.getPacket();
     }
 
@@ -718,7 +737,7 @@ public class MobPacket {
         mplew.writeInt(mons.getObjectId());
         MonsterStatusEffect ms = (MonsterStatusEffect) mse.get(0);
         if (ms.getStati() == MonsterStatus.POISON) {
-            PacketHelper.writeSingleMask(mplew, MonsterStatus.EMPTY);
+            PacketHelper.writeMobMask(mplew, MonsterStatus.EMPTY);
             mplew.write(mse.size());
             for (MonsterStatusEffect m : mse) {
                 mplew.writeInt(m.getFromID());
@@ -734,12 +753,14 @@ public class MobPacket {
                 mplew.writeInt(8000);//new v141
                 mplew.writeInt(6);
                 mplew.writeInt(0);
+                mplew.writeZeroBytes(20);
+                mplew.writeInt(7850);  
             }
             mplew.writeShort(1000);//was 300
-            mplew.write(2);//was 1
+            mplew.write(11);//was 1
             //mplew.write(1);
         } else {
-            PacketHelper.writeSingleMask(mplew, ms.getStati());
+            PacketHelper.writeMobMask(mplew, ms.getStati());
 
             mplew.writeInt(ms.getX().intValue());
             if (ms.isMonsterSkill()) {
@@ -754,6 +775,8 @@ public class MobPacket {
             mplew.write(1);
         }
 //System.out.println("Monsterstatus3");
+        System.out.println("ams 4");
+        System.out.println(mplew.toString());
         return mplew.getPacket();
     }
 
@@ -781,6 +804,8 @@ public class MobPacket {
             size /= 2;
         }
         mplew.write(size);
+        
+        System.out.println("ams 1");
         return mplew.getPacket();
     }
 
@@ -821,12 +846,13 @@ public class MobPacket {
 
         mplew.writeShort(SendPacketOpcode.CANCEL_MONSTER_STATUS.getValue());
         mplew.writeInt(oid);
-        PacketHelper.writeSingleMask(mplew, stat);
-        mplew.write(5);
-        mplew.writeZeroBytes(5);  // v145+
-        mplew.write(2);
-        mplew.writeZeroBytes(30); // v145+
+        PacketHelper.writeMobMask(mplew, stat);
+        mplew.writeInt(1);
+        mplew.writeInt(1);
+        mplew.writeInt(0); // Char ID
+        mplew.write(HexTool.getByteArrayFromHexString("B0 A9 EB 03 0C"));
 
+        System.out.println("cancel status");
         return mplew.getPacket();
     }
 
@@ -835,7 +861,7 @@ public class MobPacket {
 
         mplew.writeShort(SendPacketOpcode.CANCEL_MONSTER_STATUS.getValue());
         mplew.writeInt(oid);
-        PacketHelper.writeSingleMask(mplew, MonsterStatus.EMPTY);
+        PacketHelper.writeMobMask(mplew, MonsterStatus.EMPTY);
         mplew.writeInt(0);
         mplew.writeInt(1);
         mplew.writeInt(m.getFromID());
@@ -843,10 +869,12 @@ public class MobPacket {
             mplew.writeShort(m.getMobSkill().getSkillId());
             mplew.writeShort(m.getMobSkill().getSkillLevel());
         } else if (m.getSkill() > 0) {
-            mplew.writeInt(m.getSkill());
+            //mplew.writeInt(m.getSkill());
         }
-        mplew.write(3);
+        mplew.write(HexTool.getByteArrayFromHexString("B0 DC ED 03")); // Update tick?
+        mplew.write(1); // This is just a counter. It increments by 1 each time APPLY or CANCEL_MONSTER_STATUS is sent.
 
+        System.out.println("cancelpoison");
         return mplew.getPacket();
     }
 

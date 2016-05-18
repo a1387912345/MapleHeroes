@@ -24,8 +24,8 @@ import client.MapleCharacter;
 import constants.ServerConfig;
 import constants.WorldConstants.WorldOption;
 import net.MapleServerHandler;
-import net.login.LoginServer;
 import net.mina.MapleCodecFactory;
+import net.server.login.LoginServer;
 import net.world.CheaterData;
 
 import java.io.IOException;

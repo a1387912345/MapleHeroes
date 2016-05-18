@@ -22,6 +22,14 @@
 - When creating a guild, the GuildPacket.newGuildInfo() is wrong so it doesn't refresh the guild. You'd have to change channels or relog to see the guild. This is fixable by sending the correct packet, however I forgot to save the guild creation packets.
 - When attempting to change Guild Rank Titles, pressing save shows a "It cannot be used. Please check it again." message in the client.
 
+[Rev 4.2]
+- Added TalkPackets and opcodes
+- Updated AbstractScriptManager.getInvocable() to support Java 8 nashorn scripting engine; This fixes import errors from event scripts at startup.
+- Updated MobPacket.applyMonsterStatus(); Does not support all skills, only Heal at the moment. Will need to sniff more packets in order to properly implement structure.
+- Updated MapleStatEffect.parseEval(); This fixes v172+ Skill.wz.xml files causing exception errors during launches.
+- Updated MapleLifeFactory.getMonsterStats(); This fixes v172+ Mob.wz.xml files causing exception errors during launches.
+- Updated LoginInformationProvider(); This fixes v172+ Etc.wz.xml files causing exception errors during launches.
+
 [Rev 4.1]
 - Added & Updated RecvPacketOpcodes for guilds and familiars
 - Updated SendPacketOpcodes for MULTICHAT, ALLIANCE, DIFFERENT_IP, FAMILIARS, SPAWN_MECH_DOOR, USE_MECH_DOOR, REMOVE_MECH_DOOR

@@ -29,10 +29,10 @@ import constants.ServerConfig;
 import constants.ServerConstants;
 import net.cashshop.handler.*;
 import net.channel.handler.*;
-import net.login.LoginServer;
 import net.login.handler.*;
 import net.mina.MaplePacketDecoder;
 import net.server.channel.handlers.monster.MobHelper;
+import net.server.login.LoginServer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -1005,7 +1005,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             case AUTH_REQUEST:
             case MOVE_LIFE:
             case MOVE_PLAYER:
-            case SPECIAL_MOVE:
+            //case SPECIAL_MOVE:
             case MOVE_ANDROID:
             case MOVE_DRAGON:
             case MOVE_SUMMON:

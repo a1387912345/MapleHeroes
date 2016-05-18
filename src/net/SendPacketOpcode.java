@@ -10,13 +10,15 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
      * General Opcodes
      * Used for general purposes.
      */
-    PING((short) 0x12),//11            v146 - 0x12;   v170 - 0x18; v171 - 0x12
-    AUTH_RESPONSE((short) 0x17), //15  v146 - 0x16;   v160 - 0x17;   v170 - 0x1D; v171 - 0x17
+    PING((short) 0x12),         //v146 - 0x12;   v170 - 0x18; v171 - 0x12
+    AUTH_RESPONSE((short) 0x17),//v146 - 0x16;   v160 - 0x17;   v170 - 0x1D; v171 - 0x17
     /*
      * MapleTalk Opcodes
      */
-    UNK_TALK((short) 0x01),
+    MIGRATE_RESPONSE((short) 0x01),
     PING_TALK((short) 0x0D),
+    UNK_RESPONSE((short) 0x0F),
+    GUILDCHAT((short) 0x12),
     BUDDYCHAT((short) 0x13),
     /*
      * Login Opcodes
@@ -474,7 +476,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     SPAWN_MONSTER_CONTROL((short) 0x35F),//23F v146 - 0x279; v171 - 0x35C; v171.2 - 0x35D; v172.1 - 0x35F
     MOVE_MONSTER((short) 0x363),//241 v146 - 0x27B; v171 - 0x360; v171.2 - 0x361; v172.1 - 0x363
     MOVE_MONSTER_RESPONSE((short) 0x364),//242 v171 - 0x361; v171.2 - 0x362; v172.1 - 0x364
-    APPLY_MONSTER_STATUS((short) 0x366),//244 v146 - 0x27E; v171 - 0x363; v171.2 - 0x364; v172.1 - 0x366 ?
+    APPLY_MONSTER_STATUS((short) 0x366),//244 v146 - 0x27E; v171 - 0x363; v171.2 - 0x364; v172.1 - 0x366
     CANCEL_MONSTER_STATUS((short) 0x367),//245 v146 - 0x27F; v171 - 0x364; v171.2 - 0x365; v172.1 - 0x367 ?
     DAMAGE_MONSTER((short) 0x36A),//248 v146 - 0x282; v172.1 - 0x36A ?
     SKILL_EFFECT_MOB((short) 0x369),//249 v146 - 0x283; v172.1 - 0x369 ?

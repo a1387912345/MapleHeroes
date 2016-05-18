@@ -18,7 +18,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.login;
+package net.server.login;
 
 import constants.GameConstants;
 import constants.ServerConfig;
@@ -123,7 +123,8 @@ public class LoginInformationProvider {
             ForbiddenName.add(MapleDataTool.getString(data));
         }
         nameData = prov.getData("Curse.img");
-        for (final MapleData data : nameData.getChildren()) {
+        MapleData blacklist = nameData.getChildByPath("BlackList");
+        for (final MapleData data : blacklist.getChildren()) {
             ForbiddenName.add(MapleDataTool.getString(data).split(",")[0]);
         }
         final MapleData infoData = prov.getData("MakeCharInfo.img");

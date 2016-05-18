@@ -9,18 +9,19 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     RSA_KEY(false),
     STRANGE_DATA,
     LOGIN_REDIRECTOR(false, (short) 0x01),
-    CRASH_INFO(false, (short) 0x95),  // v146 -  0x2E; v170 - 0xA0; v171 - 0x95
-    PONG(false, (short) 0x93),//2F   v146 - 0x46; v170 - 0x9E; v171 - 0x93
-    AUTH_REQUEST(false, (short) 0x86), // v146 - 0x30; v170 - 0x90; v171 - 0x86
+    CRASH_INFO(false, (short) 0x95),    //v146 -  0x2E; v170 - 0xA0; v171 - 0x95
+    PONG(false, (short) 0x93),          //v146 - 0x46; v170 - 0x9E; v171 - 0x93
+    AUTH_REQUEST(false, (short) 0x86),  //v146 - 0x30; v170 - 0x90; v171 - 0x86
     CLIENT_ERROR(false, (short) 0x85),  //v146 - 0x4A; v170 - 0x8F; v171 - 0x85
     /*
      * MapleTalk Opcodes
      */
-    MIGRATE_IN(false, (short) 0x01),
-    UNK_IN(false, (short) 0x06),
-    PONG_TALK(false, (short) 0x0E),
-    GUILDCHAT(false, (short) 0x13),
-    BUDDYCHAT(false, (short) 0x14),
+    MIGRATE_IN(true, (short) 0x01),
+    UNK_IN(true, (short) 0x06),
+    PONG_TALK(true, (short) 0x0E),
+    TALK_GUILD_INFO(true, (short) 0x10),
+    GUILDCHAT(true, (short) 0x13),
+    BUDDYCHAT(true, (short) 0x14),
     /*
      * Login Opcodes
      * Used for login packets.

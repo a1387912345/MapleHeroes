@@ -5,7 +5,9 @@
 package server.buffs.buffclasses.adventurer;
 
 import client.MapleBuffStat;
+import client.MonsterStatus;
 import constants.GameConstants;
+import constants.Skills;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.buffs.AbstractBuffClass;
@@ -26,6 +28,7 @@ public class ThiefBuff extends AbstractBuffClass {
             4201009, //Channel Karma
             4201011, //Meso Guard
             4111002, //Shadow Partner
+            4111003, //Shadow Web
             4111009, //Shadow Star
             4211003, //Pick Pocket
             4211008, //Shadow Partner
@@ -92,6 +95,8 @@ public class ThiefBuff extends AbstractBuffClass {
             case 4331002: // Mirror Image
                 eff.statups.put(MapleBuffStat.SHADOWPARTNER, eff.info.get(MapleStatInfo.x));
                 break;
+            case 4111003: //Shadow Web
+            	eff.monsterStatus.put(MonsterStatus.SHADOW_WEB, 1);
             case 4111009: //Shadow Star
                 eff.statups.put(MapleBuffStat.SPIRIT_CLAW, eff.info.get(MapleStatInfo.x));
                 break;

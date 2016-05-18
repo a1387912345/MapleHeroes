@@ -6,7 +6,7 @@ import database.DatabaseConnection;
 import database.DatabaseException;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
-import net.login.LoginServer;
+import net.server.login.LoginServer;
 import net.world.MapleMessengerCharacter;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;

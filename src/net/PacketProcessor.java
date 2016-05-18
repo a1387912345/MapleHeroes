@@ -27,6 +27,8 @@ import java.util.Map;
 
 import net.server.handlers.*;
 import net.server.login.handlers.*;
+import net.server.talk.handlers.GuildInfoInHandler;
+import net.server.talk.handlers.MigrateInHandler;
 import net.server.channel.handlers.*;
 import net.server.channel.handlers.chat.*;
 import net.server.channel.handlers.inventory.*;
@@ -91,6 +93,12 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.AUTH_REQUEST, new AuthRequestHandler(RecvPacketOpcode.AUTH_REQUEST));
         registerHandler(RecvPacketOpcode.PONG, new PongHandler(RecvPacketOpcode.PONG));
         registerHandler(RecvPacketOpcode.CRASH_INFO, new CrashHandler(RecvPacketOpcode.CRASH_INFO));
+        /*
+         * Talk Handlers
+         */
+        registerHandler(RecvPacketOpcode.MIGRATE_IN, new MigrateInHandler(RecvPacketOpcode.MIGRATE_IN));
+        registerHandler(RecvPacketOpcode.TALK_GUILD_INFO, new GuildInfoInHandler(RecvPacketOpcode.TALK_GUILD_INFO));
+        //registerHandler(RecvPacketOpcode.PONG_TALK, new PongTalkHandler(RecvPacketOpcode.PONG_TALK));
     	/*
     	 * Login Handlers
     	 */

@@ -1,4 +1,4 @@
-package net.talk;
+package net.server.talk;
 
 import constants.ServerConfig;
 import net.MapleServerHandler;
@@ -14,7 +14,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
-public class MapleTalkServer {
+public class TalkServer {
 	
 	private static String ip;
     private static InetSocketAddress InetSocketadd;
@@ -23,7 +23,7 @@ public class MapleTalkServer {
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
     
-    public static void run_startup_configurations() {
+    public static void runStartupConfigurations() {
         System.out.print("Loading Talk Server...");
         ip = ServerConfig.interface_ + ":" + PORT;
 
@@ -63,7 +63,7 @@ public class MapleTalkServer {
         }
         System.out.println("Saving all connected clients (Talk)...");
         players.disconnectAll();
-        System.out.println("Shutting down Talk...");
+        System.out.println("Shutting down Talk Server...");
         //acceptor.unbindAll();
         finishedShutdown = true;
     }
