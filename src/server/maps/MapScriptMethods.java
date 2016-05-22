@@ -1547,7 +1547,6 @@ public class MapScriptMethods {
                     c.getSession().write(UIPacket.getDirectionInfo(1, 3000));
                     Thread.sleep(3000);
                     c.getSession().write(CWvsContext.getTopMsg("Go to where the portal is and press the up key to move to the next map."));
-                    
 //                    MapleQuest.getInstance(32200).forceStart(c.getPlayer(), 0, null);
 //                    MapleQuest.getInstance(32200).forceComplete(c.getPlayer(), 0);
 //                    Thread.sleep(6000);

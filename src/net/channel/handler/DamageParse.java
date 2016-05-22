@@ -14,6 +14,8 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
+import constants.Skills;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -778,14 +780,14 @@ public class DamageParse {
         		}
         	}
 
-            if (attack.skillid == 2321008) { // Genesis
-            	MapleStatEffect bigbang = SkillFactory.getSkill(2321001).getEffect(attack.skillLevel);
+            if (attack.skillid == Skills.Bishop.GENESIS) { // Genesis
+            	MapleStatEffect bigbang = SkillFactory.getSkill(Skills.Bishop.GENESIS).getEffect(attack.skillLevel);
             	if (bigbang != null) {
             		bigbang.applyTo(player);
                 }
             } 
 
-            if (attack.skillid != 2301002 && attack.skillid != 2321001) {
+            if (attack.skillid != Skills.Bishop.HEAL && attack.skillid != Skills.Bishop.BIG_BANG) {
                 effect.applyTo(player);
             }
 

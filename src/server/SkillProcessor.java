@@ -61,7 +61,7 @@ public class SkillProcessor {
 		
 		registerHandler(Skills.HASTE, new HasteSkill());
 		*/
-		handlers.put(Skills.HASTE.getId(), new HasteSkill());
-		handlers.put(Skills.ADVANCED_BLESS.getId(), new AdvancedBlessSkill());
+		//handlers.put(Skills.NightLord.HASTE, new HasteSkill());
+		//handlers.put(Skills.Bishop.ADVANCED_BLESS, new AdvancedBlessSkill());
 	}
 }

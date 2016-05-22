@@ -615,7 +615,7 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     ONE_A_DAY((short) 0x258),
     NX_SPEND_GIFT((short) 0x25A),
     RECEIVE_GIFT((short) 0x25A),//new v145
-    KEYMAP((short) 0x540), //v146 - 0x37C; v170 - 0x514; v171.1 - 0x517; v171.2 - 0x537; v172.1 - 0x540
+    KEYMAP((short) 0x542), //v146 - 0x37C; v170 - 0x514; v171.1 - 0x517; v171.2 - 0x537; v172.1 - 0x540; v173.1 - 0x542
     PET_AUTO_HP((short) 0x377),//321
     PET_AUTO_MP((short) 0x378),//322
     PET_AUTO_CURE((short) 0x379),//323

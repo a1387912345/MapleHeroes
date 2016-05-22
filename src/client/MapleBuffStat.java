@@ -26,9 +26,9 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     JUMP(0x8, 2), // Last updated: v171
     STATUS_RESIST(0x10, 2),
     ELEMENT_RESIST(0x20, 2),
-    MAGIC_GUARD(0x4, 2), // Last updated: v171
-    DARKSIGHT(0x2, 2), // Last updated: v171
     BOOSTER(0x1, 2), // Last updated: v171
+    DARKSIGHT(0x2, 2), // Last updated: v171
+    MAGIC_GUARD(0x4, 2), // Last updated: v171
     HOLY_SYMBOL(0x100000, 3), // Last updated: v171.3
     INVINCIBLE(0x10000000, 3), // Last updated: v171.3
     MAXHP(0x20000000, 3), // Last updated: v171
@@ -324,7 +324,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     CROSS_SURGE(0x400000, 11), // Last updated: v171.3
     HP_RECOVER(0x4000000, 10),
     PARASHOCK_GUARD(0x80000000, 10, true),
-    BLESSED_ENSEMBLE(0x4, 11), // Last updated: v171.3
+    BLESSED_ENSEMBLE(0x10000, 11), // Last updated: v173.1
     DIVINE_FORCE_AURA(0x1000, 11),
     DIVINE_SPEED_AURA(0x2000, 11),
     WDEF_BOOST2(0x4000, 6, true),

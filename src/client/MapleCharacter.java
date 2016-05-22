@@ -971,8 +971,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     ret.skills.put(SkillFactory.getSkill(GameConstants.getEmpress_ForJob(ret.job)), new SkillEntry(maxlevel_2, (byte) 0, -1));
                 }
                 
-                if (SkillFactory.getSkill(Skills.LEVELUP.getId()) != null) { // Manually add the LEVELUP skill
-                	ret.skills.put(SkillFactory.getSkill(Skills.LEVELUP.getId()), new SkillEntry(1, (byte) 1, -1));
+                if (SkillFactory.getSkill(Skills.LEVELUP) != null) { // Manually add the LEVELUP skill
+                	ret.skills.put(SkillFactory.getSkill(Skills.LEVELUP), new SkillEntry(1, (byte) 1, -1));
                 }
                 ps.close();
                 rs.close();

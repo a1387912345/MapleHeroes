@@ -116,6 +116,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     HOLLY(true, (short) 0xF0),
     OWL(true, (short) 0x8C),//8A
     OWL_WARP(true, (short) 0x8D),//8A
+    USE_HOLY_FOUNTAIN(true, (short) 0xE4),                 //v173.1 - 0xE4
     ITEM_GATHER(true, (short) 0xEA),                       //v171 - 0xEA
     ITEM_SORT(true, (short) 0xEB),            //v146 - 0x92; v171 - 0xEB
     ITEM_MOVE(true, (short) 0xEC),            //v146 - 0x94; v171 - 0xEC
@@ -313,7 +314,7 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     MONSTER_CARNIVAL(true, (short) 0x1F8),
     NPC_ACTION(true, (short) 0x32D),//203 v146 - 0x222; v171 - 0x329; v172.1 - 0x32D
     ITEM_PICKUP(true, (short) 0x332),//208 v146 - 0x22A; v171 - 0x32E; v172.1 - 0x332
-    DAMAGE_REACTOR(true, (short) 0x335),//v146 - 0x22D; v171 - 0x331; v172.1 - 0x335
+    DAMAGE_REACTOR(true, (short) 0x336),//v146 - 0x22D; v171 - 0x331; v172.1 - 0x335; v173.1 - 0x336
     TOUCH_REACTOR(true, (short) 0x22E),//v145 Confirmed
     CLICK_REACTOR(true, (short) 0x22E),//v145 Confirmed v146 - 0x22F
     MAKE_EXTRACTOR(true, (short) 0x22E),//v145 Confirmed v146 - 0x22F

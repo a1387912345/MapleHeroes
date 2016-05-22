@@ -4,6 +4,7 @@ import client.*;
 import client.MapleStat.Temp;
 import client.inventory.*;
 import constants.GameConstants;
+import constants.Skills;
 import net.SendPacketOpcode;
 import net.WritableIntValueHolder;
 import net.channel.DojoRankingsData;
@@ -3784,11 +3785,7 @@ public class CWvsContext {
         	
         	mplew.writeShort(SendPacketOpcode.GIVE_BUFF.getValue());
         	PacketHelper.writeBuffMask(mplew, statups);
-        	boolean MW = false;
-            if (buffid == 2022746 || buffid == 2022747 || buffid == 2022823) {
-                buffid *= -1;
-            }
-            // mplew.writeZeroBytes(16);
+
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (!stat.getKey().canStack()) {
                     if (GameConstants.isSpecialBuff(buffid)) {
@@ -3798,15 +3795,11 @@ public class CWvsContext {
                     }
                     mplew.writeInt(buffid);
                     mplew.writeInt(bufflength);
-                    MW = stat.getKey().equals(MapleBuffStat.MAPLE_WARRIOR);
                 }
             }
 
-            // Leeched that from KMS source - have to look at this in IDA
-            if (buffid == 32001003 || buffid == 32120013 || buffid == 32101003 || buffid == 32120014 || buffid == 32111012 || buffid == 32120015 || buffid == 2221054 || buffid == 36121003 || buffid == 11101022 || buffid == 11111022 || buffid == 2311012 || buffid == 100001263 || buffid == 100001264) {
-                mplew.write(1);
-            }
-
+            mplew.writeZeroBytes(13);
+            
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (stat.getKey().canStack()) {
                     mplew.writeInt(1); // stacks size
@@ -3816,26 +3809,19 @@ public class CWvsContext {
                     mplew.writeInt(1); 
                     mplew.writeInt(bufflength);
                 }
-            }
-            if (MW) {
-                mplew.write(0);
             } 
             
-            mplew.writeZeroBytes(13);
-            
-            switch(buffid) {
-            case 1002: // Nimble Feet
-            	mplew.write(1);
-            	break;
-            case 4001005: // Haste
+            if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR) || statups.containsKey(MapleBuffStat.SPEED)) {
             	mplew.write(0);
-            	break;
             }
-            
-            mplew.writeShort(1);
+            if (statups.containsKey(MapleBuffStat.DARKSIGHT) || buffid == Skills.Bishop.ADVANCED_BLESS) {
+            	mplew.writeInt(0);
+            }
+     
+            mplew.writeShort(1); // Buff count. Used 1 as a placeholder for now.
             mplew.write(0);
-            mplew.write(0);
-            mplew.write(0);
+            mplew.write(0); // bJustBuffCheck
+            mplew.write(0); // bFirstSet
             
         	return mplew.getPacket();
         }

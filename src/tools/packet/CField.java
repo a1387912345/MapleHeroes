@@ -4411,7 +4411,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             mplew.writeInt(0);
             mplew.write(1);
             mplew.writeInt(npc);
-            mplew.write(0);
+            mplew.write(1);
             mplew.write(0);
 
 

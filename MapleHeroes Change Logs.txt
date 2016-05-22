@@ -1,8 +1,6 @@
 [To Do]
 - Sniff and fix guild expand packets, new guild creation packets, guild BBS packets, and guild skill packets
 - Fix characters not able to rejoin a guild after leaving or being expelled
-- Update/write new MagnifyGlassHandler
-- Fix using potions; HP potions work fine, MP potions static values become percentage % values
 - Fix char spawn stance; Not really a big deal.
 - Fix character creation for other classes
 - Fix MP heal over time
@@ -21,6 +19,14 @@
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
 - When creating a guild, the GuildPacket.newGuildInfo() is wrong so it doesn't refresh the guild. You'd have to change channels or relog to see the guild. This is fixable by sending the correct packet, however I forgot to save the guild creation packets.
 - When attempting to change Guild Rank Titles, pressing save shows a "It cannot be used. Please check it again." message in the client.
+
+[Rev 5]
+- Updated to v173.1
+- Changed Skills enum to a class of constants
+- Added HolyFountainHandler and appropriate recv opcode
+- Updated MapleBuffStat BLESSED_ENSEMBLE
+- Added a hacky Blessed Ensemble; It's not properly implemented at all. Will redo.
+- Removed SkillProcessor; Didn't see a point to this by design.
 
 [Rev 4.2]
 - Added TalkPackets and opcodes

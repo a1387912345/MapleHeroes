@@ -310,6 +310,7 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.BUDDYLIST_MODIFY, new BuddylistModifyHandler(RecvPacketOpcode.BUDDYLIST_MODIFY));
         registerHandler(RecvPacketOpcode.USE_MYSTIC_DOOR, new MysticDoorHandler(RecvPacketOpcode.USE_MYSTIC_DOOR));
         registerHandler(RecvPacketOpcode.USE_MECH_DOOR, new MechDoorHandler(RecvPacketOpcode.USE_MECH_DOOR));
+        registerHandler(RecvPacketOpcode.USE_HOLY_FOUNTAIN, new HolyFountainHandler(RecvPacketOpcode.USE_HOLY_FOUNTAIN));
         registerHandler(RecvPacketOpcode.CHANGE_KEYMAP, new ChangeKeymapHandler(RecvPacketOpcode.CHANGE_KEYMAP)); 
         
         /*

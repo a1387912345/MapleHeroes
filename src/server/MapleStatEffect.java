@@ -15,6 +15,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
+import constants.Skills;
 import custom.CustomSkills;
 import net.channel.ChannelServer;
 import net.world.MaplePartyCharacter;
@@ -2106,6 +2107,11 @@ public class MapleStatEffect implements Serializable {
                 }
             }
         }
+        if (isBishopPartyBuff()/* && applyto.getSkillLevel(Skills.BLESSED_ENSEMBLE.getId()) > 0*/) {
+        	MapleStatEffect blessedEnsemble = SkillFactory.getSkill(Skills.Bishop.BLESSED_ENSEMBLE).getEffect(1);
+        	blessedEnsemble.info.put(MapleStatInfo.time, newDuration);
+        	blessedEnsemble.applyBuffEffect(applyfrom, applyto, primary, newDuration);
+        } 
         if (applyto.getJob() == 132) {
         	if (applyto.getBuffedValue(MapleBuffStat.IGNORE_DEF) != 1); { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
                 applyto.cancelBuffStats(MapleBuffStat.BEHOLDER);
@@ -3373,12 +3379,11 @@ public class MapleStatEffect implements Serializable {
         if (!isMonsterRiding() && !isMechDoor() && getSummonMovementType() == null) {
             applyto.cancelEffect(this, false, -1, localstatups);
         }
-        SkillProcessor processor = SkillProcessor.getProcessor();
-        SkillHandler skillHandler = processor.getHandler(sourceid);
+        //SkillHandler skillHandler = SkillProcessor.getProcessor().getHandler(sourceid);
         // Broadcast effect to self
         if (normal && localstatups.size() > 0) {
-            //applyto.getClient().getSession().write(BuffPacket.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups, this));
-            applyto.getClient().getSession().write(skillHandler.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups));
+            applyto.getClient().getSession().write(BuffPacket.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups, this));
+            //applyto.getClient().getSession().write(skillHandler.giveBuff((skill ? sourceid : -sourceid), localDuration, maskedStatups == null ? localstatups : maskedStatups));
 
         }
         final long starttime = System.currentTimeMillis();
@@ -3962,7 +3967,11 @@ public class MapleStatEffect implements Serializable {
         return skill && (sourceid == 2111003 || sourceid == 4221006 || sourceid == 12111005 || sourceid == 14111006 || sourceid == 22161003 || sourceid == 32121006 || sourceid == 1076 || sourceid == 11076 || sourceid == 2311011 || sourceid == 4121015 || sourceid == 42111004 || sourceid == 42121005); // poison mist, smokescreen and flame gear, recovery aura
     }
 
-private boolean isSpiritClaw() {
+    public boolean isBishopPartyBuff() {
+    	return skill && (sourceid == Skills.Bishop.BLESS || sourceid == Skills.Bishop.ADVANCED_BLESS || sourceid == Skills.Bishop.HOLY_SYMBOL || sourceid == Skills.Bishop.HOLY_MAGIC_SHELL);
+    }
+    
+    private boolean isSpiritClaw() {
         return skill && sourceid == 4111009 || sourceid == 14111007 || sourceid == 5201008;
     }
 
