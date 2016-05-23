@@ -50,7 +50,6 @@ import server.shops.MapleShop;
 import server.shops.MapleShopFactory;
 import server.shops.MapleShopItem;
 import server.stores.IMaplePlayerShop;
-import server.MapleInventoryManipulator;
 import server.Timer;
 import tools.*;
 import tools.data.LittleEndianAccessor;
@@ -161,6 +160,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public boolean keyvalue_changed = false, innerskill_changed = true;
     private boolean changed_wishlist, changed_trocklocations, changed_regrocklocations, changed_hyperrocklocations, changed_skillmacros, changed_achievements, changed_moonlight_achievements,
             changed_savedlocations, changed_questinfo, changed_skills, changed_reports, changed_extendedSlots, update_skillswipe;
+    private List<MapleCharacter> blessedEnsembleAffected;
+    private ScheduledFuture<?> blessedEnsembleSchedule;
     /*
      * Start of Custom Feature
      */
@@ -305,6 +306,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             friendshippoints = new int[4];
             coreAura = new MapleCoreAura(id, 24 * 60);
             potionPots = new ArrayList<>();
+            blessedEnsembleAffected = new LinkedList<MapleCharacter>();
         }
     }
 
@@ -2109,6 +2111,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         final MapleBuffStatValueHolder mbsvh = effects.get(stat);
         return mbsvh == null ? -1 : (mbsvh.effect.isSkill() ? mbsvh.effect.getSourceId() : -mbsvh.effect.getSourceId());
     }
+    
+    public int getBuffOwner(MapleBuffStat stat) {
+    	return effects.get(stat).cid;
+    }
 
     public int getItemQuantity(int itemid, boolean checkEquipped) {
         int possesed = inventory[GameConstants.getInventoryType(itemid).ordinal()].countById(itemid);
@@ -2470,6 +2476,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     acaneAim = 0;        
             }
         }
+        
+        
+        MapleBuffStat buff = buffstats.get(0);
+		int buffOwnerID = getBuffOwner(buff);
+        
         final boolean clonez = deregisterBuffStats(buffstats);
         if (effect.isMagicDoor()) {
             // remove for all on maps
@@ -2489,7 +2500,6 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             combo = 0;
         }
         // check if we are still logged in o.o
-        System.out.println("does it run this cancelEffect?");
         cancelPlayerBuffs(buffstats, overwrite);
         if (!overwrite) {
             if (effect.isHide() && client.getChannelServer().getPlayerStorage().getCharacterById(this.getId()) != null) { //Wow this is so fking hacky...
@@ -2516,6 +2526,32 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     chr.get().cancelEffect(effect, overwrite, startTime);
                 }
             }
+        }
+        
+        if (effect.isBishopPartyBuff()) {
+        	if (!effects.containsKey(MapleBuffStat.ADVANCED_BLESSING) && !effects.containsKey(MapleBuffStat.BLESS) && !effects.containsKey(MapleBuffStat.HOLY_MAGIC_SHELL) && !effects.containsKey(MapleBuffStat.HOLY_SYMBOL)) {
+        		
+		        int channel = World.Find.findChannel(buffOwnerID);
+		        if (channel > 0) {
+		        	MapleCharacter buffOwner = World.getStorage(channel).getCharacterById(buffOwnerID);
+	    			if (GameConstants.isBishop(buffOwner.getJob()) && buffOwner != null) { // Removes this character instance from Bishop's Blessed Ensemble list
+	    				buffOwner.getBlessedEnsembleAffected().remove(this);
+	    	        }
+		        } 
+        	}
+	        /*
+        	for (MapleBuffStat buff : buffstats) {
+	        	int buffOwnerID = getBuffOwner(buff);
+		        int channel = World.Find.findChannel(buffOwnerID);
+		        if (channel > 0) {
+		        	MapleCharacter buffOwner = World.getStorage(channel).getCharacterById(buffOwnerID);
+	    			if (GameConstants.isBishop(buffOwner.getJob()) && buffOwner != null) { // Removes this character instance from Bishop's Blessed Ensemble list
+	    	        	effects.containsKey(key)
+	    				buffOwner.getBlessedEnsembleAffected().remove(this);
+	    	        }
+		        }
+	        }
+	        */
         }
         //System.out.println("Effect deregistered. Effect: " + effect.getSourceId());
     }
@@ -6263,7 +6299,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public void giveDebuff(MapleDisease disease, int x, long duration, int skillid, int level) {
         if ((this.map != null) && (!hasDisease(disease))) {
             if ((disease != MapleDisease.SEDUCE) && (disease != MapleDisease.STUN) && (disease != MapleDisease.FLAG)
-                    && (getBuffedValue(MapleBuffStat.HOLY_SHIELD) != null)) {
+                    && (getBuffedValue(MapleBuffStat.ADVANCED_BLESSING) != null)) {
                 return;
             }
 
@@ -10523,5 +10559,37 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         updateSingleStat(MapleStat.FACE, this.face);
         updateSingleStat(MapleStat.HAIR, this.hair);
         equipChanged();
+    }
+    
+    public List<MapleCharacter> getBlessedEnsembleAffected() {
+    	return blessedEnsembleAffected;
+    }
+    
+    public final void applyBlessedEnsemble() {
+    	MapleCharacter bishop = this;
+    	if (blessedEnsembleSchedule != null) { // Get rid of any previous instances
+    		blessedEnsembleSchedule.cancel(false);
+        	blessedEnsembleSchedule = null;
+    	}
+    	blessedEnsembleSchedule = BuffTimer.getInstance().register(new Runnable() {
+			@Override
+			public void run() {
+				if (blessedEnsembleAffected.isEmpty() || bishop == null) {
+					blessedEnsembleSchedule.cancel(false);
+					blessedEnsembleSchedule = null;
+				}
+				int blessedSkillID = bishop.getJob() == 232 ? Skills.Bishop.BLESSED_HARMONY : Skills.Bishop.BLESSED_ENSEMBLE;
+				MapleStatEffect blessedEnsemble = SkillFactory.getSkill(blessedSkillID).getEffect(1); // If player is a Bishop, use Blessed Harmony instead
+
+				blessedEnsemble.statups.put(MapleBuffStat.BLESSED_ENSEMBLE, blessedEnsemble.info.get(MapleStatInfo.x) * blessedEnsembleAffected.size());
+
+		    	System.out.println("Blessed Ensemble Dmg % " + blessedEnsemble.info.get(MapleStatInfo.x) * (blessedEnsembleAffected.size()));
+		    	System.out.println("Size:" + getBlessedEnsembleAffected().size());
+		    	client.getSession().write(BuffPacket.giveBuff(blessedSkillID, 0, blessedEnsemble.statups, blessedEnsemble));
+		    	registerEffect(blessedEnsemble, 0, null, getId());
+			}
+    		
+    	}, 10000);
+    	
     }
 }

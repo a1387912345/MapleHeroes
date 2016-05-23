@@ -47,7 +47,8 @@ public class HolyFountainHandler extends AbstractMaplePacketHandler {
 		}
 		
 		chr.addHP(chr.getStat().getMaxHp() / 100 * holyFountain.getSource().getX());
-		c.getSession().write(EffectPacket.showBuffEffect(-1, skillId, 3, chr.getLevel(), holyFountain.getSource().getLevel()));
+		c.getSession().write(EffectPacket.showOwnBuffEffect(skillId, 3, chr.getLevel(), holyFountain.getSource().getLevel()));
+		chr.getMap().broadcastMessage(EffectPacket.showBuffEffect(chr.getId(), skillId, 3, chr.getLevel(), holyFountain.getSource().getLevel()));
 	}
 
 }

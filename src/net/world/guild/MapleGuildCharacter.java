@@ -42,12 +42,13 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
         guildrank = chr.getGuildRank();
         guildid = chr.getGuildId();
         guildContribution = chr.getGuildContribution();
+        individualGP = chr.getIndividualGP();
         allianceRank = chr.getAllianceRank();
         online = true;
     }
 
     // or we could just read from the database
-    public MapleGuildCharacter(final int id, final short lv, final String name, final byte channel, final int job, final byte rank, final int guildContribution, final byte allianceRank, final int gid, final boolean on) {
+    public MapleGuildCharacter(final int id, final short lv, final String name, final byte channel, final int job, final byte rank, final int guildContribution, int individualGP, final byte allianceRank, final int gid, final boolean on) {
         this.level = lv;
         this.id = id;
         this.name = name;
@@ -59,6 +60,7 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
         this.guildrank = rank;
         this.allianceRank = allianceRank;
         this.guildContribution = guildContribution;
+        this.individualGP = individualGP;
         this.guildid = gid;
     }
 

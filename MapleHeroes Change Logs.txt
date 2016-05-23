@@ -20,6 +20,10 @@
 - When creating a guild, the GuildPacket.newGuildInfo() is wrong so it doesn't refresh the guild. You'd have to change channels or relog to see the guild. This is fixable by sending the correct packet, however I forgot to save the guild creation packets.
 - When attempting to change Guild Rank Titles, pressing save shows a "It cannot be used. Please check it again." message in the client.
 
+[Rev 5.1]
+- Updated MapleGuild & MapleGuildCharacter; Fixed an issue where individualGP was not being loaded from the database.
+- Added Blessed Ensemble and Blessed Harmony; This is a more proper implementation which includes the use of Timer. It currently works for all cases except for when there are two Bishops in the party, and when you reinvite a party member that already had your buff; the latter is easily fixed by rebuffing. The current working cases are 1) buffing party members, 2) cancelling owner and party members' buffs, and 3) party member leaving. There is a bug in which the Timer does not cancel if the player quits the game.
+
 [Rev 5]
 - Updated to v173.1
 - Changed Skills enum to a class of constants

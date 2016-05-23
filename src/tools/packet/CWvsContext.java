@@ -3798,7 +3798,14 @@ public class CWvsContext {
                 }
             }
 
-            mplew.writeZeroBytes(13);
+            
+            
+            mplew.writeShort(0); // Size for a for loop
+            mplew.write(0); // nDefenseAtt
+            mplew.write(0); // nDefenseState
+            mplew.write(0); // nPVPDamage
+            
+            mplew.writeZeroBytes(8);
             
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (stat.getKey().canStack()) {
@@ -3819,10 +3826,11 @@ public class CWvsContext {
             }
      
             mplew.writeShort(1); // Buff count. Used 1 as a placeholder for now.
-            mplew.write(0);
+            mplew.write(0); // nSubID
             mplew.write(0); // bJustBuffCheck
             mplew.write(0); // bFirstSet
             
+            System.out.println(mplew.toString());
         	return mplew.getPacket();
         }
         

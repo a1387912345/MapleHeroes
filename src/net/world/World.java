@@ -12,6 +12,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.inventory.PetDataFactory;
 import client.MonsterStatusEffect;
+import constants.GameConstants;
 import constants.WorldConstants.WorldOption;
 import database.DatabaseConnection;
 import net.cashshop.CashShopServer;
@@ -156,6 +157,32 @@ public class World {
             return FarmServer.getPlayerStorage();
         }
         return ChannelServer.getInstance(channel).getPlayerStorage();
+    }
+    
+    /**
+     * Retrieves a character from PlayerStorage using the character's ID.
+     * @param charid
+     * @return
+     */
+    public static MapleCharacter getCharacterFromPlayerStorage(int charid) {
+    	int channel = Find.findChannel(charid);
+    	if (channel > 0) {
+    		return getStorage(channel).getCharacterById(charid);
+    	}
+    	return null;
+    }
+    
+    /**
+     * Retrieves a character from PlayerStorage using the character's name.
+     * @param charName
+     * @return
+     */
+    public static MapleCharacter getCharacterFromPlayerStorage(String charName) {
+    	int channel = Find.findChannel(charName);
+    	if (channel > 0) {
+    		return getStorage(channel).getCharacterByName(charName);
+    	}
+    	return null;
     }
 
     public static int getPendingCharacterSize() {
@@ -334,15 +361,24 @@ public class World {
                     throw new RuntimeException("Unhandeled updateParty operation " + operation.name());
             }
             if (operation == PartyOperation.LEAVE || operation == PartyOperation.EXPEL) {
-                int chz = Find.findChannel(target.getName());
-                if (chz > 0) {
-                    MapleCharacter chr = getStorage(chz).getCharacterByName(target.getName());
+                int channel = Find.findChannel(target.getName());
+                if (channel > 0) {
+                    MapleCharacter chr = getStorage(channel).getCharacterByName(target.getName());
                     if (chr != null) {
                         chr.setParty(null);
                         if (oldExped > 0) {
                             chr.getClient().getSession().write(ExpeditionPacket.expeditionMessage(80));
                         }
                         chr.getClient().getSession().write(PartyPacket.updateParty(chr.getClient().getChannel(), party, operation, target));
+                        
+                        for (MaplePartyCharacter partyChar : party.getMembers()) { // Remove party member from Bishop's Blessed Ensemble list
+                        	if (GameConstants.isBishop(partyChar.getJobId())) { // Do only if the party member is a Bishop
+	                        	MapleCharacter bishop = getCharacterFromPlayerStorage(partyChar.getId());
+                        		if (bishop != null) {
+                        			bishop.getBlessedEnsembleAffected().remove(chr);
+                        		}
+                        	}
+                        }
                     }
                 }
                 if (target.getId() == party.getLeader().getId() && party.getMembers().size() > 0) { //pass on lead
@@ -364,9 +400,9 @@ public class World {
                 if (partychar == null) {
                     continue;
                 }
-                int ch = Find.findChannel(partychar.getName());
-                if (ch > 0) {
-                    MapleCharacter chr = getStorage(ch).getCharacterByName(partychar.getName());
+                int channel = Find.findChannel(partychar.getName());
+                if (channel > 0) {
+                    MapleCharacter chr = getStorage(channel).getCharacterByName(partychar.getName());
                     if (chr != null) {
                         if (operation == PartyOperation.DISBAND) {
                             chr.setParty(null);

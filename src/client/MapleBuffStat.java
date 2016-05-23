@@ -64,7 +64,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     MANA_REFLECTION(0x40, 2),
     SEDUCE(0x80, 2),
     SPIRIT_CLAW(0x10, 3), // Last updated: v172.2
-    HOLY_SHIELD(0x4, 3), // Last updated: v171.3
+    ADVANCED_BLESSING(0x4, 3), // Last updated: v171.3
     INFINITY(0x8, 3), // Last updated: v171.3
     HAMSTRING(0x800, 2),
     BLIND(0x1000, 2),

@@ -29,5 +29,4 @@ public class Skills {
 		
 		public static final int SHADOW_WEB = 4111003;
 	}
-
 }

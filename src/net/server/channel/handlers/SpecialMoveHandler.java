@@ -13,6 +13,7 @@ import client.Skill;
 import client.SkillFactory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
+import constants.Skills;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.channel.ChannelServer;
@@ -340,6 +341,7 @@ public class SpecialMoveHandler extends AbstractMaplePacketHandler {
                 }
             }
         }
+
 	}
 
 }

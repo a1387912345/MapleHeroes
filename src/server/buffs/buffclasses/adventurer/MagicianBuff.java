@@ -77,7 +77,7 @@ public class MagicianBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.MAGIC_GUARD, eff.info.get(MapleStatInfo.x));
                 break;
             case 2300009: //Blessed Ensemble
-                eff.statups.put(MapleBuffStat.BLESSED_ENSEMBLE, eff.info.get(MapleStatInfo.x));
+                //eff.statups.put(MapleBuffStat.BLESSED_ENSEMBLE, eff.info.get(MapleStatInfo.x));
                 break;
             case 2301004: //Bless   
                 eff.statups.put(MapleBuffStat.BLESS, eff.info.get(MapleStatInfo.x));
@@ -127,7 +127,7 @@ public class MagicianBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.STANCE, eff.info.get(MapleStatInfo.prop));
                 break;
             case 2321005: //Advanced Blessing
-                eff.statups.put(MapleBuffStat.HOLY_SHIELD, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(MapleBuffStat.ADVANCED_BLESSING, eff.info.get(MapleStatInfo.x));
                 eff.statups.put(MapleBuffStat.HP_BOOST, eff.info.get(MapleStatInfo.indieMhp));
                 eff.statups.put(MapleBuffStat.MP_BOOST, eff.info.get(MapleStatInfo.indieMmp));
                 break;

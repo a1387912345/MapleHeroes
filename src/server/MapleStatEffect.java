@@ -16,6 +16,7 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.Skills;
+import constants.Skills.Bishop;
 import custom.CustomSkills;
 import net.channel.ChannelServer;
 import net.world.MaplePartyCharacter;
@@ -1610,7 +1611,7 @@ public class MapleStatEffect implements Serializable {
             //        ret.statups.put(MapleBuffStat.SUPPLY_SURPLUS, Integer.valueOf(16));
              //       break;
                     case 8005:
-                        ret.statups.put(MapleBuffStat.HOLY_SHIELD, 1);
+                        ret.statups.put(MapleBuffStat.ADVANCED_BLESSING, 1);
                         break;
                     case 8006:
                         ret.statups.put(MapleBuffStat.SPEED_INFUSION, ret.info.get(MapleStatInfo.x));
@@ -1709,7 +1710,7 @@ public class MapleStatEffect implements Serializable {
             applyfrom.dropMessage(5, "You may not use this skill in towns.");
             applyfrom.getClient().getSession().write(CWvsContext.enableActions());
             return false;
-        } else if (sourceid == 2301004 && applyfrom.getBuffedValue(MapleBuffStat.HOLY_SHIELD) != null) {
+        } else if (sourceid == 2301004 && applyfrom.getBuffedValue(MapleBuffStat.ADVANCED_BLESSING) != null) {
         	applyfrom.getClient().getSession().write(CWvsContext.enableActions());
         	return false;
         }
@@ -2107,11 +2108,6 @@ public class MapleStatEffect implements Serializable {
                 }
             }
         }
-        if (isBishopPartyBuff()/* && applyto.getSkillLevel(Skills.BLESSED_ENSEMBLE.getId()) > 0*/) {
-        	MapleStatEffect blessedEnsemble = SkillFactory.getSkill(Skills.Bishop.BLESSED_ENSEMBLE).getEffect(1);
-        	blessedEnsemble.info.put(MapleStatInfo.time, newDuration);
-        	blessedEnsemble.applyBuffEffect(applyfrom, applyto, primary, newDuration);
-        } 
         if (applyto.getJob() == 132) {
         	if (applyto.getBuffedValue(MapleBuffStat.IGNORE_DEF) != 1); { //Sacrifice is the only skill Dark Knights have that give Ignore Def hacky but works
                 applyto.cancelBuffStats(MapleBuffStat.BEHOLDER);
@@ -2164,8 +2160,16 @@ public class MapleStatEffect implements Serializable {
         if (GameConstants.isTownSkill(sourceid)) {
             applyto.changeMap(info.get(MapleStatInfo.x), 0);
         }
+        if (GameConstants.isBishop(applyfrom.getJob()) && isBishopPartyBuff() && primary) { // Check for Blessed Ensemble
+        	if (!applyfrom.getBlessedEnsembleAffected().contains(applyfrom)) {
+        		applyto.getBlessedEnsembleAffected().add(applyfrom); // Add self to Blessed Ensemble list
+        	}
+        	applyfrom.applyBlessedEnsemble(); // Start Blessed Ensemble timer
+        }
         return true;
     }
+    
+    
 
     public final boolean applyReturnScroll(final MapleCharacter applyto) {
         if (moveTo != -1) {
@@ -2259,6 +2263,12 @@ public class MapleStatEffect implements Serializable {
                         applyTo(applyfrom, affected, false, null, newDuration);
                         affected.getClient().getSession().write(EffectPacket.showOwnBuffEffect(sourceid, 3, applyfrom.getLevel(), level));
                         affected.getMap().broadcastMessage(affected, EffectPacket.showBuffEffect(affected.getId(), sourceid, 3, applyfrom.getLevel(), level), false);
+                        
+                        if (GameConstants.isBishop(applyfrom.getJob()) && isBishopPartyBuff()) { // Check for Blessed Ensemble
+                        	if (!applyfrom.getBlessedEnsembleAffected().contains(affected)) { 
+                        		applyfrom.getBlessedEnsembleAffected().add(affected); // Add party members to the bishop's Blessed Ensemble list
+                        	}
+                        }
                     }
                     if (isTimeLeap()) {
                         for (MapleCoolDownValueHolder i : affected.getCooldowns()) {
@@ -3966,10 +3976,6 @@ public class MapleStatEffect implements Serializable {
     public boolean isMist() {
         return skill && (sourceid == 2111003 || sourceid == 4221006 || sourceid == 12111005 || sourceid == 14111006 || sourceid == 22161003 || sourceid == 32121006 || sourceid == 1076 || sourceid == 11076 || sourceid == 2311011 || sourceid == 4121015 || sourceid == 42111004 || sourceid == 42121005); // poison mist, smokescreen and flame gear, recovery aura
     }
-
-    public boolean isBishopPartyBuff() {
-    	return skill && (sourceid == Skills.Bishop.BLESS || sourceid == Skills.Bishop.ADVANCED_BLESS || sourceid == Skills.Bishop.HOLY_SYMBOL || sourceid == Skills.Bishop.HOLY_MAGIC_SHELL);
-    }
     
     private boolean isSpiritClaw() {
         return skill && sourceid == 4111009 || sourceid == 14111007 || sourceid == 5201008;
@@ -4597,4 +4603,9 @@ public class MapleStatEffect implements Serializable {
         }
         return sourceid == 4221013;
     }
+
+	public boolean isBishopPartyBuff() {
+		return skill && (sourceid == Bishop.BLESS || sourceid == Bishop.ADVANCED_BLESS || sourceid == Bishop.HOLY_SYMBOL || sourceid == Bishop.HOLY_MAGIC_SHELL);
+	}
+	
 }

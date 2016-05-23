@@ -2517,7 +2517,7 @@ public class PlayerStats implements Serializable {
         if (buff != null) {
             mpconReduce += buff.intValue();
         }
-        eff = chra.getStatForBuff(MapleBuffStat.HOLY_SHIELD);
+        eff = chra.getStatForBuff(MapleBuffStat.ADVANCED_BLESSING);
         if (eff != null) {
             watk += eff.getX();
             magic += eff.getY();

@@ -287,7 +287,7 @@ public class CharacterTransfer implements Externalizable {
         this.guildid = in.readInt();
         this.guildrank = in.readByte();
         this.guildContribution = in.readInt();
-        //this.individualGP = in.readInt();
+        this.individualGP = in.readInt();
         this.alliancerank = in.readByte();
         this.gmLevel = in.readByte();
         this.points = in.readInt();
@@ -528,6 +528,7 @@ public class CharacterTransfer implements Externalizable {
         out.writeInt(this.guildid);
         out.writeByte(this.guildrank);
         out.writeInt(this.guildContribution);
+        out.writeInt(this.individualGP);
         out.writeByte(this.alliancerank);
         out.writeByte(this.gmLevel);
         out.writeInt(this.points);

@@ -99,7 +99,7 @@ public class MapleGuild implements java.io.Serializable {
                 allianceid = 0;
             }
 
-            ps = con.prepareStatement("SELECT id, name, level, job, guildrank, guildContribution, alliancerank FROM characters WHERE guildid = ? ORDER BY guildrank ASC, name ASC", ResultSet.CONCUR_UPDATABLE);
+            ps = con.prepareStatement("SELECT id, name, level, job, guildrank, guildContribution, individualGP, alliancerank FROM characters WHERE guildid = ? ORDER BY guildrank ASC, name ASC", ResultSet.CONCUR_UPDATABLE);
             ps.setInt(1, guildid);
             rs = ps.executeQuery();
 
@@ -142,7 +142,7 @@ public class MapleGuild implements java.io.Serializable {
                         aFix = 3;
                     }
                 }
-                members.add(new MapleGuildCharacter(cid, rs.getShort("level"), rs.getString("name"), (byte) -1, rs.getInt("job"), gRank, rs.getInt("guildContribution"), aRank, guildid, false));
+                members.add(new MapleGuildCharacter(cid, rs.getShort("level"), rs.getString("name"), (byte) -1, rs.getInt("job"), gRank, rs.getInt("guildContribution"), rs.getInt("individualGP"), aRank, guildid, false));
             } while (rs.next());
             rs.close();
             ps.close();

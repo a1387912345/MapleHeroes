@@ -486,6 +486,15 @@ public class GameConstants {
     public static boolean isAdventurer(final int job) {
         return job >= 0 && job < 1000;
     }
+    
+    /**
+     * Checks if a character is a Cleric, Priest, or Bishop.
+     * @param job
+     * @return
+     */
+    public static boolean isBishop(final int job) {
+    	return job >= 230 && job <= 232;
+    }
 
     public static boolean isCannon(final int job) {
         return job == 1 || job == 501 || (job >= 530 && job <= 532);
