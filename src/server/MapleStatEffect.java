@@ -17,6 +17,8 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.Skills;
 import constants.Skills.Bishop;
+import constants.Skills.FirePoisonMage;
+import constants.Skills.IceLightningMage;
 import custom.CustomSkills;
 import net.channel.ChannelServer;
 import net.world.MaplePartyCharacter;
@@ -1660,10 +1662,10 @@ public class MapleStatEffect implements Serializable {
      */
     public final void applyPassive(final MapleCharacter applyto, final MapleMapObject obj) {
         if (makeChanceResult() && !GameConstants.isDemonSlayer(applyto.getJob())) { // demon can't heal mp
-            switch (sourceid) { // MP eater
-                case 2100000:
-                case 2200000:
-                case 2300000:
+            switch (sourceid) {
+                case FirePoisonMage.MP_EATER:
+                case IceLightningMage.MP_EATER:
+                case Bishop.MP_EATER:
                     if (obj == null || obj.getType() != MapleMapObjectType.MONSTER) {
                         return;
                     }
@@ -3530,7 +3532,7 @@ public class MapleStatEffect implements Serializable {
         if (!skill) { // RecoveryUP only used for hp items and skills
             return (val * (100 + (withX ? chr.getStat().RecoveryUP : chr.getStat().BuffUP)) / 100);
         }
-        return (val * (100 + (withX ? chr.getStat().RecoveryUP : (chr.getStat().BuffUP_Skill + (getSummonMovementType() == null ? 0 : chr.getStat().BuffUP_Summon)))) / 100);
+        return (val * (100 + (withX ? chr.getStat().RecoveryUP : (chr.getStat().buffDuration + (getSummonMovementType() == null ? 0 : chr.getStat().BuffUP_Summon)))) / 100);
     }
 
     public final int calcPowerChange(final MapleCharacter applyfrom) {
@@ -4336,6 +4338,10 @@ public class MapleStatEffect implements Serializable {
     public final int getLevelToMatk() {
         return info.get(MapleStatInfo.lv2mdX);
     }
+    
+    public final int getLevelToMaxMP() {
+    	return info.get(MapleStatInfo.lv2mmp);
+    }
 
     public final int getEXPLossRate() {
         return info.get(MapleStatInfo.expLossReduceR);
@@ -4564,6 +4570,10 @@ public class MapleStatEffect implements Serializable {
         return info.get(MapleStatInfo.mddR);
     }
     
+    public int getMagicDefToWeaponDef() {
+    	return info.get(MapleStatInfo.mdd2pdd);
+    }
+    
     public int getWeapon() {
         return weapon;
     }
@@ -4605,7 +4615,7 @@ public class MapleStatEffect implements Serializable {
     }
 
 	public boolean isBishopPartyBuff() {
-		return skill && (sourceid == Bishop.BLESS || sourceid == Bishop.ADVANCED_BLESS || sourceid == Bishop.HOLY_SYMBOL || sourceid == Bishop.HOLY_MAGIC_SHELL);
+		return skill && (sourceid == Bishop.BLESS || sourceid == Bishop.ADVANCED_BLESSING || sourceid == Bishop.HOLY_SYMBOL || sourceid == Bishop.HOLY_MAGIC_SHELL);
 	}
 	
 }

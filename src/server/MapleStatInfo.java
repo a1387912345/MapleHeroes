@@ -115,6 +115,7 @@ public enum MapleStatInfo {
     lv2damX(0), //Additional damage per character level
     lv2mad(0), //Additional magic damage per character level
     lv2mdX(0), //Additional magic defense per character level
+    lv2mmp(0), //Additional Max MP per character level
     lv2pad(0), //Additional damage per character level
     lv2pdX(0), //Additional defense per character level
     mad(0), //Magic ATT +

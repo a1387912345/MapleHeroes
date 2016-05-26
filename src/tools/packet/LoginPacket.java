@@ -30,7 +30,8 @@ public class LoginPacket {
         mplew.writeShort(ServerConstants.MAPLE_VERSION);            // MapleStory Version
         mplew.writeMapleAsciiString(ServerConstants.MAPLE_PATCH);   // MapleStory Patch Location/Subversion
         if (ServerConfig.USE_FIXED_IV) {
-            mplew.write(HexTool.getByteArrayFromHexString("66 75 63 6B 79 6F 75 21"));
+        	mplew.write(ServerConfig.Static_RemoteIV);
+        	mplew.write(ServerConfig.Static_LocalIV);
         } else {
             mplew.write(recvIv);                                    // Local Initializing Vector 
             mplew.write(sendIv);                                    // Remote Initializing Vector

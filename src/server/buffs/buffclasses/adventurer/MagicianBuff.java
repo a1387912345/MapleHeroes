@@ -80,7 +80,7 @@ public class MagicianBuff extends AbstractBuffClass {
                 //eff.statups.put(MapleBuffStat.BLESSED_ENSEMBLE, eff.info.get(MapleStatInfo.x));
                 break;
             case 2301004: //Bless   
-                eff.statups.put(MapleBuffStat.BLESS, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(MapleBuffStat.BLESS, (int)eff.getLevel());
                 break;
             case 2101008: //Magic Booster
             case 2201010: //Magic Booster
@@ -96,7 +96,7 @@ public class MagicianBuff extends AbstractBuffClass {
             case 2111011: //Elemental Adaptation (Fire, Poison)
             case 2211012: //Elemental Adaptation (Ice, Lightning)
             case 2311012: //Divine Protection
-                eff.statups.put(MapleBuffStat.PRESSURE_VOID, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(MapleBuffStat.PRESSURE_VOID, 1);
                 break;
             case 2111008: //Elemental Decrease
             case 2211008: //Elemental Decrease
@@ -127,7 +127,7 @@ public class MagicianBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.STANCE, eff.info.get(MapleStatInfo.prop));
                 break;
             case 2321005: //Advanced Blessing
-                eff.statups.put(MapleBuffStat.ADVANCED_BLESSING, eff.info.get(MapleStatInfo.x));
+                eff.statups.put(MapleBuffStat.ADVANCED_BLESSING, (int)eff.getLevel());
                 eff.statups.put(MapleBuffStat.HP_BOOST, eff.info.get(MapleStatInfo.indieMhp));
                 eff.statups.put(MapleBuffStat.MP_BOOST, eff.info.get(MapleStatInfo.indieMmp));
                 break;

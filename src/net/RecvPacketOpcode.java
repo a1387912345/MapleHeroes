@@ -312,8 +312,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     MOB_NODE(true, (short) 0x1F6),
     DISPLAY_NODE(true, (short) 0x1F7),
     MONSTER_CARNIVAL(true, (short) 0x1F8),
-    NPC_ACTION(true, (short) 0x32D),//203 v146 - 0x222; v171 - 0x329; v172.1 - 0x32D
-    ITEM_PICKUP(true, (short) 0x332),//208 v146 - 0x22A; v171 - 0x32E; v172.1 - 0x332
+    NPC_ACTION(true, (short) 0x32E),//203 v146 - 0x222; v171 - 0x329; v172.1 - 0x32D; v173.1 - 0x32E
+    ITEM_PICKUP(true, (short) 0x333),//208 v146 - 0x22A; v171 - 0x32E; v172.1 - 0x332; v173.1 - 0x333
     DAMAGE_REACTOR(true, (short) 0x336),//v146 - 0x22D; v171 - 0x331; v172.1 - 0x335; v173.1 - 0x336
     TOUCH_REACTOR(true, (short) 0x22E),//v145 Confirmed
     CLICK_REACTOR(true, (short) 0x22E),//v145 Confirmed v146 - 0x22F

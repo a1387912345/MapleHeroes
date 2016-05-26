@@ -178,9 +178,9 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), chr.getTruePosition()); // Unnecessary parameters? Could just access them within the method
+            chr.getMap().broadcastMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk, attack.charge), chr.getTruePosition()); // Unnecessary parameters? Could just access them within the method
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk, attack.charge), false);
+            chr.getMap().broadcastGMMessage(chr, CField.closeRangeAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, energy, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk, attack.charge), false);
         }
         DamageParse.applyAttack(attack, skill, c.getPlayer(), attackCount, maxdamage, effect, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
         WeakReference<MapleCharacter>[] clones = chr.getClones();
@@ -196,9 +196,9 @@ public class CloseRangeDamageHandler extends AbstractMaplePacketHandler {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            clone.getMap().broadcastMessage(CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge));
+                            clone.getMap().broadcastMessage(CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk, attack2.charge));
                         } else {
-                            clone.getMap().broadcastGMMessage(clone, CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().passive_mastery(), attack2.unk, attack2.charge), false);
+                            clone.getMap().broadcastGMMessage(clone, CField.closeRangeAttack(clone.getId(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, energy, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk, attack2.charge), false);
                         }
                         DamageParse.applyAttack(attack2, skil2, chr, attackCount2, maxdamage2, eff2, mirror ? AttackType.NON_RANGED_WITH_MIRROR : AttackType.NON_RANGED);
                     }

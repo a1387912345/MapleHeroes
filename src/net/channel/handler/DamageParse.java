@@ -15,6 +15,7 @@ import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.Skills;
+import constants.Skills.Bishop;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -781,8 +782,9 @@ public class DamageParse {
         	}
 
             if (attack.skillid == Skills.Bishop.GENESIS) { // Genesis
-            	MapleStatEffect bigbang = SkillFactory.getSkill(Skills.Bishop.GENESIS).getEffect(attack.skillLevel);
-            	if (bigbang != null) {
+            	int bigBangLevel = player.getTotalSkillLevel(Bishop.BIG_BANG);
+            	MapleStatEffect bigbang = SkillFactory.getSkill(Bishop.BIG_BANG).getEffect(bigBangLevel);
+            	if (bigBangLevel > 0) {
             		bigbang.applyTo(player);
                 }
             } 
@@ -1102,7 +1104,7 @@ public class DamageParse {
         List damages;
         List damage;
         if ((attack.skillid != 4211006) && (attack.skillid != 3211003) && (attack.skillid != 4111004)) {
-            CriticalRate = chr.getStat().passive_sharpeye_rate() + (effect == null ? 0 : effect.getCr());
+            CriticalRate = chr.getStat().getCritRate() + (effect == null ? 0 : effect.getCr());
             shadow = (chr.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null) && ((type == 1) || (type == 2));
             damages = new ArrayList();
             damage = new ArrayList();

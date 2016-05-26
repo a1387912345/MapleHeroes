@@ -38,8 +38,8 @@ public class ServerConfig {
     
     /*Anti-Sniff*/
     public static boolean USE_FIXED_IV;
-    public static final byte[] Static_LocalIV = new byte[]{71, 113, 26, 44};
     public static final byte[] Static_RemoteIV = new byte[]{70, 112, 25, 43};
+    public static final byte[] Static_LocalIV = new byte[]{71, 113, 26, 44};
 
     public static enum Events {
 

@@ -2528,30 +2528,13 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             }
         }
         
-        if (effect.isBishopPartyBuff()) {
+        if (Skills.affectsBlessedEnsemble(effect.getSourceId())) {
         	if (!effects.containsKey(MapleBuffStat.ADVANCED_BLESSING) && !effects.containsKey(MapleBuffStat.BLESS) && !effects.containsKey(MapleBuffStat.HOLY_MAGIC_SHELL) && !effects.containsKey(MapleBuffStat.HOLY_SYMBOL)) {
-        		
-		        int channel = World.Find.findChannel(buffOwnerID);
-		        if (channel > 0) {
-		        	MapleCharacter buffOwner = World.getStorage(channel).getCharacterById(buffOwnerID);
-	    			if (GameConstants.isBishop(buffOwner.getJob()) && buffOwner != null) { // Removes this character instance from Bishop's Blessed Ensemble list
-	    				buffOwner.getBlessedEnsembleAffected().remove(this);
-	    	        }
-		        } 
+	        	MapleCharacter buffOwner = World.getCharacterFromPlayerStorage(buffOwnerID);
+    			if (GameConstants.isBishop(buffOwner.getJob()) && buffOwner != null) { // Removes this character instance from Bishop's Blessed Ensemble list
+    				buffOwner.getBlessedEnsembleAffected().remove(this);
+    			}
         	}
-	        /*
-        	for (MapleBuffStat buff : buffstats) {
-	        	int buffOwnerID = getBuffOwner(buff);
-		        int channel = World.Find.findChannel(buffOwnerID);
-		        if (channel > 0) {
-		        	MapleCharacter buffOwner = World.getStorage(channel).getCharacterById(buffOwnerID);
-	    			if (GameConstants.isBishop(buffOwner.getJob()) && buffOwner != null) { // Removes this character instance from Bishop's Blessed Ensemble list
-	    	        	effects.containsKey(key)
-	    				buffOwner.getBlessedEnsembleAffected().remove(this);
-	    	        }
-		        }
-	        }
-	        */
         }
         //System.out.println("Effect deregistered. Effect: " + effect.getSourceId());
     }
@@ -10565,31 +10548,45 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     	return blessedEnsembleAffected;
     }
     
+    /**
+     * Applies Blessed Ensemble or Blessed Harmony to the player depending on whether they are a Cleric or a Bishop.
+     * Registers a schedule instance of {@code blessedEnsembleSchedule} which is called every {@code rebuffDelay}.
+     */
     public final void applyBlessedEnsemble() {
     	MapleCharacter bishop = this;
-    	if (blessedEnsembleSchedule != null) { // Get rid of any previous instances
-    		blessedEnsembleSchedule.cancel(false);
-        	blessedEnsembleSchedule = null;
-    	}
+    	int rebuffDelay = 10000; // Rebuff delay in milliseconds.
+    	cancelBlessedEnsemble(); // Get rid of any previous instances
+    	
     	blessedEnsembleSchedule = BuffTimer.getInstance().register(new Runnable() {
 			@Override
 			public void run() {
-				if (blessedEnsembleAffected.isEmpty() || bishop == null) {
-					blessedEnsembleSchedule.cancel(false);
-					blessedEnsembleSchedule = null;
-				}
 				int blessedSkillID = bishop.getJob() == 232 ? Skills.Bishop.BLESSED_HARMONY : Skills.Bishop.BLESSED_ENSEMBLE;
 				MapleStatEffect blessedEnsemble = SkillFactory.getSkill(blessedSkillID).getEffect(1); // If player is a Bishop, use Blessed Harmony instead
 
 				blessedEnsemble.statups.put(MapleBuffStat.BLESSED_ENSEMBLE, blessedEnsemble.info.get(MapleStatInfo.x) * blessedEnsembleAffected.size());
 
-		    	System.out.println("Blessed Ensemble Dmg % " + blessedEnsemble.info.get(MapleStatInfo.x) * (blessedEnsembleAffected.size()));
-		    	System.out.println("Size:" + getBlessedEnsembleAffected().size());
+				System.out.println("Blessed Ensemble Affected: " + getBlessedEnsembleAffected().size());
+		    	System.out.println("Blessed Ensemble Damage: " + blessedEnsemble.info.get(MapleStatInfo.x) * (blessedEnsembleAffected.size()) + "%");
+		    	
 		    	client.getSession().write(BuffPacket.giveBuff(blessedSkillID, 0, blessedEnsemble.statups, blessedEnsemble));
 		    	registerEffect(blessedEnsemble, 0, null, getId());
+		    	
+		    	if (blessedEnsembleAffected.isEmpty() || bishop == null) {
+		    		bishop.cancelEffect(blessedEnsemble, false, 0, blessedEnsemble.statups);
+					blessedEnsembleSchedule.cancel(false);
+					blessedEnsembleSchedule = null;
+				}
 			}
-    		
-    	}, 10000);
-    	
+    	}, rebuffDelay);
+    }
+    
+    /**
+     * Cancels and removes any instances of {@code blessedEnsembleSchedule} from {@code MapleCharacter}.
+     */
+    public final void cancelBlessedEnsemble() {
+    	if (blessedEnsembleSchedule != null) { // Get rid of any previous instances
+    		blessedEnsembleSchedule.cancel(false);
+        	blessedEnsembleSchedule = null;
+    	}
     }
 }

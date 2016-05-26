@@ -198,7 +198,7 @@ public class InternCommand {
             builder.append(" || BOSSDAMAGE% : ");
             builder.append(other.getStat().bossdam_r);
             builder.append(" || CRIT CHANCE : ");
-            builder.append(other.getStat().passive_sharpeye_rate());
+            builder.append(other.getStat().getCritRate());
             builder.append(" || CRIT DAMAGE : ");
             builder.append(other.getStat().passive_sharpeye_percent());
 

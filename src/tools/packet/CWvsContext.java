@@ -5,6 +5,7 @@ import client.MapleStat.Temp;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.Skills;
+import constants.Skills.Bishop;
 import net.SendPacketOpcode;
 import net.WritableIntValueHolder;
 import net.channel.DojoRankingsData;
@@ -3805,7 +3806,11 @@ public class CWvsContext {
             mplew.write(0); // nDefenseState
             mplew.write(0); // nPVPDamage
             
-            mplew.writeZeroBytes(8);
+            if (buffid == Bishop.DIVINE_PROTECTION) {
+            	mplew.write(1);
+            }
+            
+            mplew.writeLong(0);
             
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (stat.getKey().canStack()) {
@@ -3821,7 +3826,7 @@ public class CWvsContext {
             if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR) || statups.containsKey(MapleBuffStat.SPEED)) {
             	mplew.write(0);
             }
-            if (statups.containsKey(MapleBuffStat.DARKSIGHT) || buffid == Skills.Bishop.ADVANCED_BLESS) {
+            if (statups.containsKey(MapleBuffStat.DARKSIGHT) || statups.containsKey(MapleBuffStat.ADVANCED_BLESSING)) {
             	mplew.writeInt(0);
             }
      

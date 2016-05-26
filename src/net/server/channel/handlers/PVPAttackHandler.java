@@ -54,7 +54,7 @@ public class PVPAttackHandler extends AbstractMaplePacketHandler {
         final int type = Integer.parseInt(chr.getEventInstance().getProperty("type"));
         final int ice = Integer.parseInt(chr.getEventInstance().getProperty("ice"));
         final int ourScore = Integer.parseInt(chr.getEventInstance().getProperty(String.valueOf(chr.getId())));
-        int addedScore = 0, skillLevel = 0, trueSkillLevel = 0, animation = -1, attackCount, mobCount = 1, fakeMastery = chr.getStat().passive_mastery(), ignoreDEF = chr.getStat().ignoreTargetDEF, critRate = chr.getStat().passive_sharpeye_rate(), skillDamage = 100;
+        int addedScore = 0, skillLevel = 0, trueSkillLevel = 0, animation = -1, attackCount, mobCount = 1, fakeMastery = chr.getStat().getPassiveMastery(), ignoreDEF = chr.getStat().ignoreTargetDEF, critRate = chr.getStat().getCritRate(), skillDamage = 100;
         boolean magic = false, move = false, pull = false, push = false;
 
         double maxdamage = lvl == 3 ? chr.getStat().getCurrentMaxBasePVPDamageL() : chr.getStat().getCurrentMaxBasePVPDamage();

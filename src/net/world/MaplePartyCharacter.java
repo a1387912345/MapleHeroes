@@ -41,17 +41,19 @@ public class MaplePartyCharacter implements Serializable {
     private int doorSkill = 0;
     private Point doorPosition = new Point(0, 0);
     private boolean online;
+    private MapleCharacter chr;
 
-    public MaplePartyCharacter(MapleCharacter maplechar) {
-        this.name = maplechar.getName();
-        this.level = maplechar.getLevel();
-        this.channel = maplechar.getClient().getChannel();
-        this.id = maplechar.getId();
-        this.jobid = maplechar.getJob();
-        this.mapid = maplechar.getMapId();
+    public MaplePartyCharacter(MapleCharacter chr) {
+        this.name = chr.getName();
+        this.level = chr.getLevel();
+        this.channel = chr.getClient().getChannel();
+        this.id = chr.getId();
+        this.jobid = chr.getJob();
+        this.mapid = chr.getMapId();
         this.online = true;
+        this.chr = chr;
 
-        final List<MapleDoor> doors = maplechar.getDoors();
+        final List<MapleDoor> doors = chr.getDoors();
         if (doors.size() > 0) {
             final MapleDoor door = doors.get(0);
 
@@ -60,7 +62,7 @@ public class MaplePartyCharacter implements Serializable {
             this.doorSkill = door.getSkill();
             this.doorPosition = door.getTargetPosition();
         } else {
-            this.doorPosition = maplechar.getPosition();
+            this.doorPosition = chr.getPosition();
         }
     }
 
@@ -115,6 +117,10 @@ public class MaplePartyCharacter implements Serializable {
 
     public Point getDoorPosition() {
         return doorPosition;
+    }
+    
+    public MapleCharacter getCharacter() {
+    	return chr;
     }
 
     @Override

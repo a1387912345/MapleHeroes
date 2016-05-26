@@ -13,6 +13,9 @@ import client.inventory.MaplePet;
 import client.inventory.PetDataFactory;
 import client.MonsterStatusEffect;
 import constants.GameConstants;
+import constants.Job;
+import constants.Skills;
+import constants.Skills.Bishop;
 import constants.WorldConstants.WorldOption;
 import database.DatabaseConnection;
 import net.cashshop.CashShopServer;
@@ -360,6 +363,9 @@ public class World {
                 default:
                     throw new RuntimeException("Unhandeled updateParty operation " + operation.name());
             }
+            
+            updateBlessedEnsemble(party, target, operation);
+            
             if (operation == PartyOperation.LEAVE || operation == PartyOperation.EXPEL) {
                 int channel = Find.findChannel(target.getName());
                 if (channel > 0) {
@@ -370,15 +376,6 @@ public class World {
                             chr.getClient().getSession().write(ExpeditionPacket.expeditionMessage(80));
                         }
                         chr.getClient().getSession().write(PartyPacket.updateParty(chr.getClient().getChannel(), party, operation, target));
-                        
-                        for (MaplePartyCharacter partyChar : party.getMembers()) { // Remove party member from Bishop's Blessed Ensemble list
-                        	if (GameConstants.isBishop(partyChar.getJobId())) { // Do only if the party member is a Bishop
-	                        	MapleCharacter bishop = getCharacterFromPlayerStorage(partyChar.getId());
-                        		if (bishop != null) {
-                        			bishop.getBlessedEnsembleAffected().remove(chr);
-                        		}
-                        	}
-                        }
                     }
                 }
                 if (target.getId() == party.getLeader().getId() && party.getMembers().size() > 0) { //pass on lead
@@ -418,6 +415,59 @@ public class World {
             }
             if (oldExped > 0) {
                 expedPacket(oldExped, ExpeditionPacket.expeditionUpdate(oldInd, party), operation == PartyOperation.LOG_ONOFF || operation == PartyOperation.SILENT_UPDATE ? target : null);
+            }
+        }
+        
+        /**
+         * Updates Cleric, Priest, and Bishop {@code blessedEnsembleAffected} list. 
+         * <p>If a party member rejoins the party and has a buff from a holy mage, this will re-add the member back into the mage's {@code blessedEnsembleAffected}.
+         * Similarly, if a holy mage rejoins the party, this will re-add all party members that are currently buffed by the mage back into the {@code blessedEnsembleAffected}.</p>
+         * <p>If a party member leaves the party or logs off and has a buff from a holy mage, this will remove the member from the mage's {@code blessedEnsembleAffected}.
+         * Simlarly, if a holy mage leaves the party, this will remove all party members that are currently buffed by the mage from the {@code blessedEnsembleAffected}.</p>
+         * @param party the affected party
+         * @param target the character to perform the operation on
+         * @param operation the party operation that takes in an argument of {@code JOIN, LEAVE, EXPEL}
+         */
+        public static void updateBlessedEnsemble(MapleParty party, MaplePartyCharacter target, PartyOperation operation) {
+        	MapleCharacter targetCharacter = target.getCharacter();
+        	
+        	if (operation == PartyOperation.JOIN) { // This entire operation is for re-adding party members to a Bishop's Blessed Ensemble list if they currently have a buff from that Bishop.
+            	for (MaplePartyCharacter partyMember : party.getMembers()) { // Loop through each party member
+            		MapleCharacter chr = partyMember.getCharacter();
+            		for (PlayerBuffValueHolder buffValue : chr.getAllBuffs()) { // Loop through party member's buff
+            			if (Skills.affectsBlessedEnsemble(buffValue.effect.getSourceId())) {
+            				if (buffValue.cid == targetCharacter.getId() && !targetCharacter.getBlessedEnsembleAffected().contains(chr)) { // If you're the bishop that buffed other players and you rejoin
+            					targetCharacter.getBlessedEnsembleAffected().add(chr);
+            					targetCharacter.applyBlessedEnsemble();
+            				} else { // If you're a member that was buffed by a bishop and rejoined
+            					MapleCharacter holyMage = getCharacterFromPlayerStorage(buffValue.cid);
+            					if (holyMage != null && !holyMage.getBlessedEnsembleAffected().contains(chr)) {
+            						holyMage.getBlessedEnsembleAffected().add(chr);
+            						holyMage.applyBlessedEnsemble();
+            					}
+            				}
+            				break;
+            			}
+            		}
+            	}
+            } else if (operation == PartyOperation.LEAVE || operation == PartyOperation.EXPEL || operation == PartyOperation.LOG_ONOFF) {
+	        	for (MaplePartyCharacter partyMember : party.getMembers()) { // Remove yourself from every holy mage's ensemble list
+	        		final int partyMemberJobID = partyMember.getJobId();
+	        		if ((Job.CLERIC.equals(partyMemberJobID) || Job.PRIEST.equals(partyMemberJobID) || Job.BISHOP.equals(partyMemberJobID))) { // Do only if the party member is a cleric, priest, or bishop.
+	        			if (partyMember.getId() != targetCharacter.getId()) {
+		        			MapleCharacter holyMage = partyMember.getCharacter();
+		            		if (holyMage != null) {
+		            			holyMage.getBlessedEnsembleAffected().remove(targetCharacter);
+		            		}
+	        			}
+	            	}
+	            }
+	        	
+	        	for (MapleCharacter partyMember : targetCharacter.getBlessedEnsembleAffected()) {
+	        		if (partyMember.getId() != targetCharacter.getId()) { // Remove everyone but yourself
+    					targetCharacter.getBlessedEnsembleAffected().remove(partyMember);
+    				}
+	        	}
             }
         }
 
