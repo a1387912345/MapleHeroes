@@ -34,9 +34,10 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import scripting.EventInstanceManager;
-import scripting.EventManager;
-import scripting.NPCScriptManager;
+
+import scripting.event.EventInstanceManager;
+import scripting.event.EventManager;
+import scripting.npc.NPCScriptManager;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.Timer.EventTimer;

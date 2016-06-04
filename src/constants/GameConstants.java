@@ -31,6 +31,8 @@ import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
+import scripting.npc.NPCConversationManager;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +41,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import scripting.NPCConversationManager;
+
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;

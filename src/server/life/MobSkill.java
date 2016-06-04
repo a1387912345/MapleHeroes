@@ -54,8 +54,8 @@ public class MobSkill {
     private boolean summonOnce;
 
     public MobSkill(int skillId, int level) {
-        skillId = skillId;
-        skillLevel = level;
+        this.skillId = skillId;
+        this.skillLevel = level;
     }
 
     public void setOnce(boolean o) {
@@ -299,12 +299,12 @@ public class MobSkill {
             case 173:
                  disease = MapleDisease.TORNADO;
                 break;
-            case 184: //반반 강제위치이동 - 자쿰
+            case 184: //ë°˜ë°˜ ê°•ì œìœ„ì¹˜ì�´ë�™ - ìž�ì¿°
                 disease = MapleDisease.TELEPORT;
                 this.setX(player.getPosition().x);
                 this.setY(player.getPosition().y);
                 break;
-            case 191: //반반 타임워프 - 자쿰
+            case 191: //ë°˜ë°˜ íƒ€ìž„ì›Œí”„ - ìž�ì¿°
                 Point posFrom = monster.getPosition();
                 Point mylt = new Point(lt.x + posFrom.x, lt.y + posFrom.y);
                 Point myrb = new Point(rb.x + posFrom.x, rb.y + posFrom.y);

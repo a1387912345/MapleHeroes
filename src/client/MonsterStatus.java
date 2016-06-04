@@ -26,25 +26,25 @@ import net.Buffstat;
 
 public enum MonsterStatus implements Serializable, Buffstat {
 
-    WATK(0x80000000, 1), // Last updated: v172.2
-    WDEF(0x40000000, 1), // Last updated: v172.2
+    WATK(0x80000000, 1),    // Last updated: v172.2
+    WDEF(0x40000000, 1),    // Last updated: v172.2
     MATK(0x4, 1),
     MDEF(0x8, 1),
     ACC(0x10, 1),
     AVOID(0x20, 1),
-    SPEED(0x2000000, 1), // Last updated: v172.2
-    STUN(0x1000000, 1), // Last updated: v172.2
+    SPEED(0x2000000, 1),    // Last updated: v172.2
+    STUN(0x1000000, 1),     // Last updated: v172.2
     KNOCKDOWN(0x800000, 1), // Last updated: v172.2
     FREEZE(0x100, 1),
     POISON(0x200, 1),
     SEAL(0x400, 1),
-    SHOWDOWN(0x2, 1), // Last updated: v172.2
+    SHOWDOWN(0x2, 1),       // Last updated: v172.2
     WEAPON_ATTACK_UP(0x1000, 1),
     WEAPON_DEFENSE_UP(0x2000, 1),
     MAGIC_ATTACK_UP(0x4000, 1),
     MAGIC_DEFENSE_UP(0x8000, 1),
     DOOM(0x10000, 1),
-    SHADOW_WEB(0x2000, 1), // Last updated: v172.2
+    SHADOW_WEB(0x2000, 1),  // Last updated: v172.2
     WEAPON_IMMUNITY(0x40000, 1),
     MAGIC_IMMUNITY(0x80000, 1),
     DAMAGE_IMMUNITY(0x200000, 1),

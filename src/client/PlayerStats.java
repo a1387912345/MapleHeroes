@@ -1527,8 +1527,8 @@ public class PlayerStats implements Serializable {
         switch (chra.getJob()) {
             case 210:
             case 211:
-            case 212: { // IL
-                skill = SkillFactory.getSkill(2100007);
+            case 212: { // FP
+                skill = SkillFactory.getSkill(FirePoisonMage.HIGH_WISDOM);
                 skillLevel = chra.getTotalSkillLevel(skill);
                 if (skillLevel > 0) {
                     localint_ += skill.getEffect(skillLevel).getIntX();
@@ -1584,7 +1584,7 @@ public class PlayerStats implements Serializable {
             case 220:
             case 221:
             case 222: { // IL
-                skill = SkillFactory.getSkill(2200007);
+                skill = SkillFactory.getSkill(IceLightningMage.HIGH_WISDOM);
                 skillLevel = chra.getTotalSkillLevel(skill);
                 if (skillLevel > 0) {
                     localint_ += skill.getEffect(skillLevel).getIntX();
@@ -3020,7 +3020,7 @@ public class PlayerStats implements Serializable {
             case WAND:
             case STAFF:
                 acc = false;
-                skillid = GameConstants.isResist(player.getJob()) ? 32100006 : (player.getJob() <= 212 ? 2100006 : (player.getJob() <= 222 ? 2200006 : (player.getJob() <= 232 ? Bishop.SPELL_MASTERY : (player.getJob() <= 2000 ? 12100007 : 22120002))));
+                skillid = GameConstants.isResist(player.getJob()) ? 32100006 : (player.getJob() <= 212 ? FirePoisonMage.SPELL_MASTERY : (player.getJob() <= 222 ? IceLightningMage.SPELL_MASTERY : (player.getJob() <= 232 ? Bishop.SPELL_MASTERY : (player.getJob() <= 2000 ? 12100007 : 22120002))));
                 break;
             default:
                 passiveMastery = 0;
@@ -3055,10 +3055,10 @@ public class PlayerStats implements Serializable {
         }
         
         critRate += eff.getCr();
-        System.out.println("Passive Mastery " + passiveMastery);
-        System.out.println("True Mastery Before " + trueMastery);
+        //System.out.println("Passive Mastery " + passiveMastery);
+        //System.out.println("True Mastery Before " + trueMastery);
         trueMastery += passiveMastery + weaponType.getBaseMastery();
-        System.out.println("True Mastery After " + trueMastery);
+        //System.out.println("True Mastery After " + trueMastery);
         if (player.getJob() == 412) {
             final Skill skill = SkillFactory.getSkill(4120012); // Claw Expert
             final int skillLevel = player.getTotalSkillLevel(skill);

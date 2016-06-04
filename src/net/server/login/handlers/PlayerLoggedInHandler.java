@@ -38,7 +38,7 @@ import net.world.PlayerBuffStorage;
 import net.world.World;
 import net.world.exped.MapleExpedition;
 import net.world.guild.MapleGuild;
-import scripting.NPCScriptManager;
+import scripting.npc.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.quest.MapleQuest;
 import tools.FileoutputUtil;

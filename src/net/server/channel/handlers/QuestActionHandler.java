@@ -5,7 +5,7 @@ import client.MapleClient;
 import constants.GameConstants;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
-import scripting.NPCScriptManager;
+import scripting.npc.NPCScriptManager;
 import server.quest.MapleQuest;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CWvsContext;

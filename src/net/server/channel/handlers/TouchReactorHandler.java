@@ -5,7 +5,7 @@ import client.MapleClient;
 import constants.GameConstants;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
-import scripting.ReactorScriptManager;
+import scripting.reactor.ReactorScriptManager;
 import server.MapleInventoryManipulator;
 import server.maps.MapleReactor;
 import tools.data.LittleEndianAccessor;

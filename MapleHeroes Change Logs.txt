@@ -1,4 +1,5 @@
 [To Do]
+- Fix MP heal bug; After using skills that drain MP, the MP passive heal will regenerate to the original MP + 3. Ex: 3000MP - 1000MP (skill use) then heals to 3003, not 2003.
 - Add a functionality that will not overwrite buffs if the former buff values are higher
 - Sniff and fix guild expand packets, new guild creation packets, guild BBS packets, and guild skill packets
 - Fix characters not able to rejoin a guild after leaving or being expelled
@@ -20,6 +21,15 @@
 - When new players spawn into a map with existing players, the former views the latter in the jump state. 
 - When creating a guild, the GuildPacket.newGuildInfo() is wrong so it doesn't refresh the guild. You'd have to change channels or relog to see the guild. This is fixable by sending the correct packet, however I forgot to save the guild creation packets.
 - When attempting to change Guild Rank Titles, pressing save shows a "It cannot be used. Please check it again." message in the client.
+
+[Rev 5.3]
+- Added MapleExp & MapleExpStatus class; Added for clean object and structural organization
+- Added proper CWvsContext.InfoPacket.gainExpMessage(); This fixes exp status messages not showing anymore than 1 line and GMS like.
+- Added PacketHelper.writeExpMask()
+- Added MapleMonster.calculateBlessedEnsembleExp(); Doesn't do anything yet.
+- Updated DamageParse.applyMagicAttack(); This allows active skills to apply monster statuses.
+- Updated PartyOperationHandler party invitation case; This fixes an overlooked NullPointerException.
+- Updated MapleBuffStat ELEMENT_RESET
 
 [Rev 5.2]
 - Added MapleCharacter.cancelBlessedEnsemble() to MapleClient.removeTask(); This fixes Blessed Ensemble still running after the player has logged off.

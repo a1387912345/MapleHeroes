@@ -30,6 +30,9 @@ import net.world.MaplePartyCharacter;
 import net.world.World;
 import net.world.exped.MapleExpedition;
 import net.world.guild.MapleGuild;
+import scripting.event.EventInstanceManager;
+import scripting.event.EventManager;
+import scripting.npc.NPCScriptManager;
 
 import java.awt.Point;
 import java.util.List;

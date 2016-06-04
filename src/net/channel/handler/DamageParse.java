@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import server.MapleStatEffect;
 import server.Randomizer;
 import server.life.Element;
@@ -787,7 +789,18 @@ public class DamageParse {
             	if (bigBangLevel > 0) {
             		bigbang.applyTo(player);
                 }
-            } 
+            }
+            
+            // This block applies monster statuses which are defined by their skills in their respective BuffClasses.
+            int skillLevel = player.getTotalSkillLevel(attack.skillid);
+            MapleStatEffect eff = SkillFactory.getSkill(attack.skillid).getEffect(skillLevel);
+            if (skillLevel > 0) {
+            	if (effect.makeChanceResult()) {
+            		for (Entry<MonsterStatus, Integer> mobStatus : eff.monsterStatus.entrySet()) {
+            			monster.applyStatus(player, new MonsterStatusEffect(mobStatus.getKey(), mobStatus.getValue(), eff.getSourceId(), null, false), eff.isPoison(), eff.getDuration(), true, eff);
+            		}
+            	}
+            }
 
             if (attack.skillid != Skills.Bishop.HEAL && attack.skillid != Skills.Bishop.BIG_BANG) {
                 effect.applyTo(player);

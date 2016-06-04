@@ -58,8 +58,8 @@ public class CharacterTransfer implements Externalizable {
     public final Map<Integer, SkillEntry> Skills = new LinkedHashMap<>(); // Skillid instead of Skill.java, as it's huge. Cant be transporting Skill.java and MapleStatEffect.java
     public final Map<Integer, CardData> cardsInfo = new LinkedHashMap<>();
     public MapleMarriage marriage;
+    
     /*Start of Custom Feature*/
-    /*All custom shit declare here*/
     public int reborns, apstorage, str, dex, int_, luk, remainingAp;
     /*End of Custom Feature*/
 

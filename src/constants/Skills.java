@@ -12,10 +12,18 @@ public class Skills {
 	
 	public class FirePoisonMage {
 		public static final int MP_EATER = 2100000;
+		public static final int SPELL_MASTERY = 2100006;
+		public static final int HIGH_WISDOM = 2100007;
+		public static final int MEDITATION = 2101001;
+		public static final int ELEMENTAL_ADAPATION = 2111011;
 	}
 	
 	public class IceLightningMage {
 		public static final int MP_EATER = 2200000;
+		public static final int SPELL_MASTERY = 2200006;
+		public static final int HIGH_WISDOM = 2200007;
+		public static final int MEDITATION = 2201001;
+		public static final int ELEMENTAL_ADAPTATION = 2211012;
 	}
 	
 	public class Bishop {
@@ -28,6 +36,7 @@ public class Skills {
 		public static final int HOLY_FOCUS = 2310008;
 		public static final int ARCANE_OVERDRIVE = 2310010;
 		public static final int HOLY_SYMBOL = 2311003;
+		public static final int SHINING_RAY = 2311004;
 		public static final int HOLY_MAGIC_SHELL = 2311009;
 		public static final int HOLY_FOUNTAIN = 2311011;
 		public static final int DIVINE_PROTECTION = 2311012;

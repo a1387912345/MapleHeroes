@@ -7,7 +7,6 @@ package server.buffs.buffclasses.adventurer;
 import client.MapleBuffStat;
 import client.MonsterStatus;
 import constants.GameConstants;
-import constants.Skills;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.buffs.AbstractBuffClass;
@@ -21,10 +20,9 @@ public class MagicianBuff extends AbstractBuffClass {
     public MagicianBuff() {
         buffs = new int[]{
             2001002, //Magic Guard
-            2001003, //Magic Armour
             2101001, //Meditation
             2201001, //Meditation
-            2300009, //Blessed Ensemble - passive but buff?
+            2300009, //Blessed Ensemble
             2301004, //Bless    
             2301008, //Magic Booster
             2101008, //Magic Booster
@@ -43,6 +41,7 @@ public class MagicianBuff extends AbstractBuffClass {
             2111011, //Elemental Adaptation (Fire, Poison)
             2311002, //Mystic Door
             2311003, //Holy Symbol
+            2311004, //Shining Ray
             2311007, //Teleport Mastery
             2311009, //Holy Magic Shield
             2121000, //Maple Warrior
@@ -77,11 +76,15 @@ public class MagicianBuff extends AbstractBuffClass {
                 eff.statups.put(MapleBuffStat.MAGIC_GUARD, eff.info.get(MapleStatInfo.x));
                 break;
             case 2300009: //Blessed Ensemble
-                //eff.statups.put(MapleBuffStat.BLESSED_ENSEMBLE, eff.info.get(MapleStatInfo.x));
+            	// Blessed Ensemble & Blessed Harmony buffstats are defined in MapleCharacter.applyBlessedEnsemble()
                 break;
             case 2301004: //Bless   
                 eff.statups.put(MapleBuffStat.BLESS, (int)eff.getLevel());
                 break;
+            case 2101001: // Meditation
+            case 2201001: // Meditation
+            	eff.statups.put(MapleBuffStat.MATK, eff.info.get(MapleStatInfo.indieMad));
+            	break;
             case 2101008: //Magic Booster
             case 2201010: //Magic Booster
             case 2301008: //Magic Booster
@@ -105,13 +108,16 @@ public class MagicianBuff extends AbstractBuffClass {
             case 2311003: //Holy Symbol
                 eff.statups.put(MapleBuffStat.HOLY_SYMBOL, eff.info.get(MapleStatInfo.x));
                 break;
+            case 2311004: //Shining Ray
+            	eff.monsterStatus.put(MonsterStatus.STUN, 1);
+            	break;
             case 2111007: //Teleport Mastery
             case 2211007: //Teleport Mastery
             case 2311007: //Teleport Mastery
                 eff.info.put(MapleStatInfo.mpCon, eff.info.get(MapleStatInfo.y));
                 eff.info.put(MapleStatInfo.time, 2100000000);
                 eff.statups.put(MapleBuffStat.TELEPORT_MASTERY, eff.info.get(MapleStatInfo.x));
-                //eff.monsterStatus.put(MonsterStatus.STUN, Integer.valueOf(1));
+                eff.monsterStatus.put(MonsterStatus.STUN, 1);
                 break;
             case 2311009: //Holy Magic Shield
                 eff.statups.put(MapleBuffStat.HOLY_MAGIC_SHELL, eff.info.get(MapleStatInfo.x));

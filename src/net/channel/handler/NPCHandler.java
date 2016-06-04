@@ -31,6 +31,8 @@ import client.RockPaperScissors;
 import client.inventory.ItemFlag;
 import constants.QuickMove;
 import net.SendPacketOpcode;
+import scripting.npc.NPCConversationManager;
+import scripting.npc.NPCScriptManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,8 +52,6 @@ import server.MapleInventoryManipulator;
 import server.MapleStorage;
 import server.life.MapleNPC;
 import server.quest.MapleQuest;
-import scripting.NPCScriptManager;
-import scripting.NPCConversationManager;
 import server.MapleItemInformationProvider;
 import server.maps.MapScriptMethods;
 import tools.FileoutputUtil;

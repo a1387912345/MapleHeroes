@@ -4368,7 +4368,37 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             
             mplew.write((byte) type);
             mplew.writeInt(value);
-
+                        
+            return mplew.getPacket();
+        }
+        
+        /**
+         * Delays map events for a {@code delay} of milliseconds.
+         * @param delay
+         * @return
+         * @see CInGameDirectionEvent::OnInGameDirectionEvent
+         */
+        public static byte[] delayDirectionInfo(int delay) {
+        	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+            
+        	mplew.writeShort(SendPacketOpcode.DIRECTION_INFO.getValue());
+            mplew.write(1);
+            mplew.writeInt(delay);
+                        
+            return mplew.getPacket();
+        }
+        
+        /**
+         * Forces the character to move in a certain direction during map events.
+         * @param input
+         * @return
+         */
+        public static byte[] forceMoveCharacter(int input) {
+        	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+            
+        	mplew.writeShort(SendPacketOpcode.DIRECTION_INFO.getValue());
+            mplew.write(3);
+            mplew.writeInt(input);
                         
             return mplew.getPacket();
         }
@@ -4410,10 +4440,9 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             mplew.write(1);
             mplew.writeInt(0);
             mplew.write(1);
-            mplew.writeInt(npc);
-            mplew.write(1);
+            mplew.writeInt(npc); // dwNpcID
+            mplew.write(1); // bNotOrigin
             mplew.write(0);
-
 
             return mplew.getPacket();
         }

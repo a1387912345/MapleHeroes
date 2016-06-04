@@ -42,6 +42,7 @@ public class HolyFountainHandler extends AbstractMaplePacketHandler {
 		final int skillId = lea.readInt();
 		final Point pos = lea.readPos();
 		
+		System.out.println("Holy Fountain Used " + timesUsed);
 		if (!holyFountain.getBox().contains(pos)) { // If the player is using Holy Fountain from a far distance.
 			return;
 		}

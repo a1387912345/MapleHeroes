@@ -18,7 +18,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package scripting;
+package scripting.reactor;
 
 import client.MapleClient;
 import client.inventory.Equip;
@@ -26,6 +26,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import net.channel.ChannelServer;
+import scripting.AbstractPlayerInteraction;
 
 import java.awt.Point;
 import java.util.Iterator;

@@ -1530,6 +1530,21 @@ public static void addRedLeafInfo(MaplePacketLittleEndianWriter mplew, MapleChar
         }
     }
     
+    /**
+     * Writes a long exp mask to {@code mplew} from {@code expStats}.
+     * @param mplew
+     * @param expStats
+     */
+    public static void writeExpMask(MaplePacketLittleEndianWriter mplew, Map<MapleExpStatus, Integer> expStats) {
+    	long mask = 0;
+    	
+    	for (MapleExpStatus expStat : expStats.keySet()) {
+    		mask += expStat.getFlag();
+    	}
+    	
+    	mplew.writeLong(mask);
+    }
+    
     public static <E extends Buffstat> void writeSingleMask(MaplePacketLittleEndianWriter mplew, E statup) {
         for (int i = GameConstants.MAX_BUFFSTAT; i >= 1; i--) {
             mplew.writeInt(i == statup.getPosition() ? statup.getValue() : 0);

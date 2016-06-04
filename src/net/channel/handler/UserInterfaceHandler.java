@@ -21,7 +21,7 @@
 package net.channel.handler;
 
 import client.MapleClient;
-import scripting.NPCScriptManager;
+import scripting.npc.NPCScriptManager;
 import tools.data.LittleEndianAccessor;
 
 public class UserInterfaceHandler {

@@ -34,9 +34,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.mina.common.WriteFuture;
-import scripting.EventInstanceManager;
-import scripting.EventManager;
-import scripting.NPCScriptManager;
+
+import scripting.event.EventInstanceManager;
+import scripting.event.EventManager;
+import scripting.npc.NPCScriptManager;
 import server.*;
 import server.MapleStatEffect.CancelEffectAction;
 import server.Timer.BuffTimer;
@@ -162,6 +163,8 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             changed_savedlocations, changed_questinfo, changed_skills, changed_reports, changed_extendedSlots, update_skillswipe;
     private List<MapleCharacter> blessedEnsembleAffected;
     private ScheduledFuture<?> blessedEnsembleSchedule;
+    private Map<Integer, Integer> holyFountain; 
+    
     /*
      * Start of Custom Feature
      */
@@ -307,6 +310,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             coreAura = new MapleCoreAura(id, 24 * 60);
             potionPots = new ArrayList<>();
             blessedEnsembleAffected = new LinkedList<MapleCharacter>();
+            holyFountain = new LinkedHashMap<>();
         }
     }
 
@@ -972,10 +976,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                     }
                     ret.skills.put(SkillFactory.getSkill(GameConstants.getEmpress_ForJob(ret.job)), new SkillEntry(maxlevel_2, (byte) 0, -1));
                 }
-                
+                /*
                 if (SkillFactory.getSkill(Skills.LEVELUP) != null) { // Manually add the LEVELUP skill
                 	ret.skills.put(SkillFactory.getSkill(Skills.LEVELUP), new SkillEntry(1, (byte) 1, -1));
                 }
+                */
                 ps.close();
                 rs.close();
                 // END
@@ -2479,7 +2484,12 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         
         
         MapleBuffStat buff = buffstats.get(0);
-		int buffOwnerID = getBuffOwner(buff);
+        int buffOwnerID = 0;
+        try {
+        	buffOwnerID = getBuffOwner(buff);
+        } catch (NullPointerException e) {
+        	
+        }
         
         final boolean clonez = deregisterBuffStats(buffstats);
         if (effect.isMagicDoor()) {
@@ -4082,8 +4092,11 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         cancelEffectFromBuffStat(MapleBuffStat.ENHANCED_MAXMP);
         cancelEffectFromBuffStat(MapleBuffStat.MAXHP);
         cancelEffectFromBuffStat(MapleBuffStat.MAXMP);
+        cancelEffectFromBuffStat(MapleBuffStat.HOLY_SYMBOL);
         dispelSummons();
         checkFollow();
+        cancelBlessedEnsemble();
+        cancelAllBuffs(); // Shouldn't this be used instead of all of those lines above?
         dotHP = 0;
         lastDOTTime = 0;
         if (GameConstants.isAzwanMap(getMapId())) {
@@ -4383,28 +4396,126 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             }
             updateSingleStat(MapleStat.EXP, getExp());
             if (getSkillLevel(80001040) >= 1) { // still show the expgain even if it's not there
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain2, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                }   
-                   for (Item item : getInventory(MapleInventoryType.CASH).newList()) {
-                if (item.getItemId() / 100000 == 52) {
-                if ((item.getItemId() == 5211060 || item.getItemId() == 5211050 || item.getItemId() == 5211051 || item.getItemId() == 5211052 || item.getItemId() == 5211053 || item.getItemId() == 5211054)) {
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                    show = false;
-                } else if ((item.getItemId() == 5210000 || item.getItemId() == 5210001 || item.getItemId() == 5210002 || item.getItemId() == 5210003 || item.getItemId() == 5210004 || item.getItemId() == 5210005 || item.getItemId() == 5211061 || item.getItemId() == 5211000 || item.getItemId() == 5211001 || item.getItemId() == 5211002 || item.getItemId() == 5211003 || item.getItemId() == 5211046 || item.getItemId() == 5211047 || item.getItemId() == 5211048 || item.getItemId() == 5211049)) {
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                    show = false;
-                } else if ((item.getItemId() == 5211068)) {
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
-                     show = false;
-                }
+                client.getSession().write(InfoPacket.gainExpMessage(gain2, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+            }   
+            for (Item item : getInventory(MapleInventoryType.CASH).newList()) {
+				if (item.getItemId() / 100000 == 52) {
+					if ((item.getItemId() == 5211060 || item.getItemId() == 5211050 || item.getItemId() == 5211051 || item.getItemId() == 5211052 || item.getItemId() == 5211053 || item.getItemId() == 5211054)) {
+					    client.getSession().write(InfoPacket.gainExpMessage(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    client.getSession().write(InfoPacket.gainExpMessage(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    show = false;
+					} else if ((item.getItemId() == 5210000 || item.getItemId() == 5210001 || item.getItemId() == 5210002 || item.getItemId() == 5210003 || item.getItemId() == 5210004 || item.getItemId() == 5210005 || item.getItemId() == 5211061 || item.getItemId() == 5211000 || item.getItemId() == 5211001 || item.getItemId() == 5211002 || item.getItemId() == 5211003 || item.getItemId() == 5211046 || item.getItemId() == 5211047 || item.getItemId() == 5211048 || item.getItemId() == 5211049)) {
+					    client.getSession().write(InfoPacket.gainExpMessage(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    client.getSession().write(InfoPacket.gainExpMessage(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    show = false;
+					} else if ((item.getItemId() == 5211068)) {
+					    client.getSession().write(InfoPacket.gainExpMessage(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    client.getSession().write(InfoPacket.gainExpMessage(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					     show = false;
+					}
+				}
+            }
+            if (show) {
+            	client.getSession().write(InfoPacket.gainExpMessage(gain, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));  
             }
         }
-                 if (show) {
-                    client.getSession().write(InfoPacket.GainEXP_Monster(gain, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));  
+    }
+    
+    public void gainExpMonster(MapleExp mapleExp, byte pty) {
+        if (!isAlive()) {
+            return;
+        }
+        
+        final int gain = mapleExp.getTotalExp();
+        
+        int gain2 = gain /10;
+        long total = gain;
+        long total2 = gain2;
+        int partyinc = 0;
+        int gain3 = (int) (total /2);
+        long prevexp = getExp();
+        if (pty > 1) {
+            final double rate = (mapleExp.getPartyBonusExpRate() > 0 ? (mapleExp.getPartyBonusExpRate() / 100.0) : (map == null || !mapleExp.isPartyBonus() || map.getPartyBonusRate() <= 0 ? 0.05 : (map.getPartyBonusRate() / 100.0)));
+            partyinc = (int) (((float) (gain * rate)) * (pty + (rate > 0.05 ? -1 : 1)));
+            total += partyinc;
+        }
+
+        if (gain > 0 && total < gain) { //just in case
+            total = Integer.MAX_VALUE;
+        }
+        if (total > 0) {
+            stats.checkEquipLevels(this, total); //gms like
+        }
+        long needed = getNeededExp();
+        if (level >= maxLevel) {
+            setExp(0);
+            //if (exp + total > needed) {
+            //    setExp(needed);
+            //} else {
+            //    exp += total;
+            //}
+        } else {
+            boolean leveled = false;
+            if (exp + total >= needed || exp >= needed) {
+                exp += total;
+                exp += total2;
+                while (exp > needed) {
+                    levelUp();
+                    needed = getNeededExp();
                 }
+                leveled = true;
+                if (level >= maxLevel && !isIntern()) {
+                    setExp(0);
+                } else {
+                    needed = getNeededExp();
+                    if (exp >= needed) {
+                        setExp(needed);
+                    }
+                }
+            } else {
+                exp += total;
+               if (getSkillLevel(80001040) >= 1) { // still show the expgain even if it's not there
+                exp += total2;
+                }   
+            }
+            if (total > 0) {
+                familyRep(prevexp, needed, leveled);
+            }
+        }
+        if (gain != 0) {
+            if (exp < 0) { // After adding, and negative
+                if (gain > 0) {
+                    setExp(getNeededExp());
+                } else if (gain < 0) {
+                    setExp(0);
+                }
+            }
+            updateSingleStat(MapleStat.EXP, getExp());
+            if (getSkillLevel(80001040) >= 1) { // still show the expgain even if it's not there
+                //client.getSession().write(InfoPacket.gainExpMessage(gain2, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+            }
+            boolean show = true;
+            for (Item item : getInventory(MapleInventoryType.CASH).newList()) {
+				if (item.getItemId() / 100000 == 52) {
+					if ((item.getItemId() == 5211060 || item.getItemId() == 5211050 || item.getItemId() == 5211051 || item.getItemId() == 5211052 || item.getItemId() == 5211053 || item.getItemId() == 5211054)) {
+					    //client.getSession().write(InfoPacket.gainExpMessage(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    //client.getSession().write(InfoPacket.gainExpMessage(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    show = false;
+					} else if ((item.getItemId() == 5210000 || item.getItemId() == 5210001 || item.getItemId() == 5210002 || item.getItemId() == 5210003 || item.getItemId() == 5210004 || item.getItemId() == 5210005 || item.getItemId() == 5211061 || item.getItemId() == 5211000 || item.getItemId() == 5211001 || item.getItemId() == 5211002 || item.getItemId() == 5211003 || item.getItemId() == 5211046 || item.getItemId() == 5211047 || item.getItemId() == 5211048 || item.getItemId() == 5211049)) {
+					    //client.getSession().write(InfoPacket.gainExpMessage(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    //client.getSession().write(InfoPacket.gainExpMessage(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    show = false;
+					} else if ((item.getItemId() == 5211068)) {
+					    //client.getSession().write(InfoPacket.gainExpMessage(gain/2, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+					    //client.getSession().write(InfoPacket.gainExpMessage(gain3, false, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+						show = false;
+					}
+				}
+            }
+            if (show) {
+            	//client.getSession().write(InfoPacket.gainExpMessage(gain, white, partyinc, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP));
+            	client.getSession().write(InfoPacket.gainExpMessage(mapleExp));
+            }
         }
     }
 

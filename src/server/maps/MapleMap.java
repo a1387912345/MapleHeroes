@@ -64,7 +64,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import scripting.EventManager;
+
+import scripting.event.EventManager;
+import scripting.map.MapScriptManager;
 import server.MapleCarnivalFactory;
 import server.MapleCarnivalFactory.MCSkill;
 import server.MapleInventoryManipulator;
@@ -2377,7 +2379,13 @@ public final class MapleMap {
 //                for (int i = 0; i < 50; i++) {
 //                    System.out.println("1");
 //                }
-                MapScriptMethods.startScript_User(chr.getClient(), onUserEnter);
+            	//if (MapScriptManager.getInstance().hasScript(chr.getClient(), onUserEnter, false)) {
+            	//	System.out.println("tried to launch from script");
+            	//	MapScriptManager.getInstance().start(chr.getClient(), onUserEnter, false);
+            	//} else {
+            	//	System.out.println("launched from mapscript");
+            		MapScriptMethods.startScript_User(chr.getClient(), onUserEnter);
+            	//}
             }
 
             GameConstants.achievementRatio(chr.getClient());

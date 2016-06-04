@@ -50,6 +50,7 @@ import database.DatabaseConnection;
 import net.channel.ChannelServer;
 import net.world.MaplePartyCharacter;
 import net.world.World;
+import scripting.npc.NPCScriptManager;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -65,7 +66,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
-import scripting.NPCScriptManager;
+
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.shops.MapleShopFactory;

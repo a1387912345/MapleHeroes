@@ -24,9 +24,10 @@ import client.MapleClient;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
 import net.channel.ChannelServer;
+import scripting.portal.PortalScriptManager;
 
 import java.awt.Point;
-import scripting.PortalScriptManager;
+
 import server.maps.MapleMap;
 import tools.packet.CWvsContext;
 

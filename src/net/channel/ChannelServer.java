@@ -27,6 +27,7 @@ import net.MapleServerHandler;
 import net.mina.MapleCodecFactory;
 import net.server.login.LoginServer;
 import net.world.CheaterData;
+import scripting.event.EventScriptManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -39,7 +40,7 @@ import org.apache.mina.common.SimpleByteBufferAllocator;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
-import scripting.EventScriptManager;
+
 import server.MapleSquad;
 import server.MapleSquad.MapleSquadType;
 import server.events.*;

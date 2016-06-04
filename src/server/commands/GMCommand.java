@@ -24,9 +24,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import scripting.EventInstanceManager;
-import scripting.EventManager;
-import scripting.NPCScriptManager;
+
+import scripting.event.EventInstanceManager;
+import scripting.event.EventManager;
+import scripting.npc.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MaplePortal;

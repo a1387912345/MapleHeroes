@@ -6,6 +6,8 @@ import client.inventory.*;
 import constants.GameConstants;
 import constants.Skills;
 import constants.Skills.Bishop;
+import constants.Skills.IceLightningMage;
+import constants.Skills.FirePoisonMage;
 import net.SendPacketOpcode;
 import net.WritableIntValueHolder;
 import net.channel.DojoRankingsData;
@@ -3365,7 +3367,57 @@ public class CWvsContext {
             return mplew.getPacket();
         }
 
-        public static byte[] GainEXP_Monster(int gain, boolean white, int partyinc, int Class_Bonus_EXP, int Equipment_Bonus_EXP, int Premium_Bonus_EXP) {
+        /**
+         * Sends a gain experience message with additional exp status lines based on the exp mask. The type of exp stats that can be used
+         * are found in the class {@code MapleExpStatus}.
+         * @param exp
+         * @return
+         * 
+         * @see CWvsContext::OnIncEXPMessage()
+         */
+        public static byte[] gainExpMessage(MapleExp exp) {
+        	MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        	
+        	mplew.writeShort(SendPacketOpcode.SHOW_STATUS_INFO.getValue());
+        	mplew.write(3);
+        	mplew.write(exp.isLastHit());
+        	mplew.writeInt(exp.getExp());
+        	mplew.write(exp.isQuest());
+        	
+        	PacketHelper.writeExpMask(mplew, exp.getExpStats());
+        	
+        	/* not implemented yet, just a place holder
+        	if (flag & 1 != 0) {
+        		mplew.writeInt(0); // nSelectedMobBonusExp
+        	}
+        	if (flag & 4 != 0) {
+        		mplew.write(0); // nPartyBonusPercentage
+        	}
+        	*/
+        	if (exp.isPartyBonus()) { // if (flag & 4 != 0) { i think
+        		mplew.write(exp.getPartyBonusExpRate()); // nPartyBonusPercentage
+        	}
+        	if (exp.isQuest()) {
+        		mplew.write(exp.getQuestBonusExpRate()); // nQuestBonusRate
+        	}
+        	if (exp.getQuestBonusExpRate() > 0) {
+        		mplew.write(0); // nQuestBonusRemainCount
+        	}
+        	for (Map.Entry<MapleExpStatus, Integer> expStat : exp.getExpStats().entrySet()) {
+        		if (expStat.getKey() == MapleExpStatus.BURNING_FIELD) {
+        			mplew.writeInt(exp.getBurningFieldBonusExp());
+        			mplew.writeInt(exp.getBurningFieldExpRate());
+        		} else {
+        			mplew.writeInt(expStat.getValue());
+        		}
+        	}
+
+        	System.out.println("[Exp Packet] " + mplew.toString());
+        	return mplew.getPacket();
+        }
+        
+        // Old dysfunctional one
+        public static byte[] gainExpMessage(int gain, boolean white, int partyinc, int Class_Bonus_EXP, int Equipment_Bonus_EXP, int Premium_Bonus_EXP) {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.SHOW_STATUS_INFO.getValue());
@@ -3523,7 +3575,7 @@ public class CWvsContext {
             MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
             mplew.writeShort(SendPacketOpcode.SHOW_STATUS_INFO.getValue());
-            mplew.write(16);
+            mplew.write(18); // Last updated: v173.1
             mplew.writeLong(trait.getStat().getValue());
             mplew.writeInt(amount);
 
@@ -3799,8 +3851,6 @@ public class CWvsContext {
                 }
             }
 
-            
-            
             mplew.writeShort(0); // Size for a for loop
             mplew.write(0); // nDefenseAtt
             mplew.write(0); // nDefenseState
@@ -3808,9 +3858,11 @@ public class CWvsContext {
             
             if (buffid == Bishop.DIVINE_PROTECTION) {
             	mplew.write(1);
+            } else if (buffid == FirePoisonMage.ELEMENTAL_ADAPATION || buffid == IceLightningMage.ELEMENTAL_ADAPTATION) {
+            	mplew.write(0);
             }
             
-            mplew.writeLong(0);
+            mplew.writeInt(0);
             
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (stat.getKey().canStack()) {
@@ -3821,7 +3873,9 @@ public class CWvsContext {
                     mplew.writeInt(1); 
                     mplew.writeInt(bufflength);
                 }
-            } 
+            }
+            
+            mplew.writeInt(0);
             
             if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR) || statups.containsKey(MapleBuffStat.SPEED)) {
             	mplew.write(0);

@@ -16,7 +16,7 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package scripting;
+package scripting.npc;
 
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
@@ -72,6 +72,8 @@ import provider.MapleDataDirectoryEntry;
 import provider.MapleDataFileEntry;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
+import scripting.AbstractPlayerInteraction;
+import scripting.event.EventInstanceManager;
 import server.MapleCarnivalChallenge;
 import server.MapleCarnivalParty;
 import server.MapleInventoryManipulator;

@@ -17,7 +17,6 @@ import server.MapleStatEffect;
 import server.Timer;
 import server.events.MapleEvent;
 import server.events.MapleEventType;
-import tools.HexTool;
 import tools.data.LittleEndianAccessor;
 import tools.packet.CField;
 import tools.packet.CWvsContext;
@@ -31,7 +30,6 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
 
 	@Override
 	public void handlePacket(final LittleEndianAccessor lea, final MapleClient c, MapleCharacter chr) {
-		
 		if ((chr == null) || (chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
@@ -78,7 +76,7 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
         double maxdamage = chr.getStat().getCurrentMaxBaseDamage() * (effect.getDamage() + chr.getStat().getDamageIncrease(attack.skillid)) / 100.0D;
         int bulletCount = 1;
         switch (attack.skillid) {
-            case 27101100: // Sylvan Lance
+        	case 27101100: // Sylvan Lance
             case 27101202: // Pressure Void
             case 27111100: // Spectral Light
             case 27111202: // Moonlight Spear

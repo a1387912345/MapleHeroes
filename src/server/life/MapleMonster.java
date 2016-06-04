@@ -32,9 +32,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import constants.GameConstants;
+import constants.Job;
 import client.Skill;
 import client.inventory.Item;
 import client.MapleDisease;
+import client.MapleExp;
+import client.MapleExpStatus;
 import client.MapleBuffStat;
 import client.MapleCharacter;
 import client.inventory.MapleInventoryType;
@@ -48,10 +51,11 @@ import constants.ServerConstants;
 import net.channel.ChannelServer;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
+import scripting.event.EventInstanceManager;
 
 import java.awt.Rectangle;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import scripting.EventInstanceManager;
+
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.Randomizer;
@@ -399,7 +403,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
 
     private void giveExpToCharacter(final MapleCharacter attacker, int exp, final boolean highestDamage, final int numExpSharers, byte pty, final byte Class_Bonus_EXP_PERCENT, final byte Premium_Bonus_EXP_PERCENT, final int lastskillID) {
-        if (highestDamage) {
+        int blessedEnsembleExp = 0;
+    	if (highestDamage) {
             if (eventInstance != null) {
                 eventInstance.monsterKilled(attacker, this);
             } else {
@@ -412,13 +417,21 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
         
         if (exp > 0) {
+        	exp = (int) Math.min(Integer.MAX_VALUE, exp * ChannelServer.getInstance(map.getChannel()).getExpRate(attacker.getWorld())); // exp * server rate
+        	MapleExp mapleExp = new MapleExp(exp);
+        	mapleExp.setLastHit(highestDamage);
+        	int jobid = attacker.getJob();
+        	if (Job.CLERIC.equals(jobid) || Job.PRIEST.equals(jobid) || Job.BISHOP.equals(jobid)) {
+        		blessedEnsembleExp = calculateBlessedEnsembleExp(attacker, exp);
+        	}
             final MonsterStatusEffect ms = stati.get(MonsterStatus.SHOWDOWN);
             if (ms != null) {
                 exp += (int) (exp * (ms.getX() / 100.0));
             }
             final Integer holySymbol = attacker.getBuffedValue(MapleBuffStat.HOLY_SYMBOL);
             if (holySymbol != null) {
-                exp *= 1.0 + (holySymbol.doubleValue() / 100.0);
+            	mapleExp.addIncreaseBonusExp((int) (exp * holySymbol.doubleValue() / 100.0));
+                
             }
             if (attacker.hasDisease(MapleDisease.CURSE)) {
                 exp /= 2;
@@ -433,8 +446,6 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             }
             exp *= attacker.getStat().expBuff / 100.0;
 
-
-            exp = (int) Math.min(Integer.MAX_VALUE, exp * ChannelServer.getInstance(map.getChannel()).getExpRate(attacker.getWorld()));
 
             int Class_Bonus_EXP = 0;
             if (Class_Bonus_EXP_PERCENT > 0) {
@@ -465,9 +476,33 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                     pty = 0;
                 }
             }
-            attacker.gainExpMonster(exp, true, highestDamage, pty, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP, stats.isPartyBonus(), stats.getPartyBonusRate());
+            if (mapleExp.getIncreaseBonusExp() > 0) {
+            	mapleExp.getExpStats().put(MapleExpStatus.INCREASE_EXP_RATE, mapleExp.getIncreaseBonusExp());
+            }
+            
+            //attacker.gainExpMonster(exp, true, highestDamage, pty, Class_Bonus_EXP, Equipment_Bonus_EXP, Premium_Bonus_EXP, stats.isPartyBonus(), stats.getPartyBonusRate());
+            attacker.gainExpMonster(mapleExp, pty);
         }
         attacker.mobKilled(getId(), lastskillID);
+    }
+    
+    public final int calculateBlessedEnsembleExp(MapleCharacter holyMage, int exp) {
+    	int numberOfHolyMages = 0;
+    	
+    	if (holyMage.getParty() == null) {
+    		return 0;
+    	}
+    	
+    	for (MaplePartyCharacter partyMember : holyMage.getParty().getMembers()) {
+    		int jobid = partyMember.getJobId();
+    		if ((Job.CLERIC.equals(jobid) || Job.PRIEST.equals(jobid) || Job.BISHOP.equals(jobid)) && partyMember.getId() != holyMage.getId()) {
+    			numberOfHolyMages++;
+    		}
+    	}
+    	if (numberOfHolyMages > 3) { // The maximum count can only be 3
+    		numberOfHolyMages = 3;
+    	}
+    	return (int)(exp * 0.2 * numberOfHolyMages);
     }
 
     public final int killBy(final MapleCharacter killer, final int lastSkill) {

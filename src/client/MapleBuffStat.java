@@ -16,7 +16,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
 	WATK(0x80000000, 1), // Last updated: v171
     WDEF(0x20000000, 1), // Last updated: v171
     MATK(0x40000000, 1), // Last updated: v171
-    HP_BOOST(0x4000000, 1, true), //Last updated: v171.3 Note: weapon acc/magic acc pct boost 
+    HP_BOOST(0x4000000, 1, true), //Last updated: v171.3
     MP_BOOST(0x6000000, 1, true), // Last updated: v171.3
     MDEF(0x500, 2), // Last Updated: v171.3
     ACC(0x10, 1),
@@ -91,7 +91,7 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     FINALATTACK(0x80000000, 2),
     //4 = unknown
     //0x1?
-    ELEMENT_RESET(0x2, 3),
+    ELEMENT_RESET(0x4000, 4), // Last updated: v173.1
     WIND_WALK(0x4, 3),
     //0x8
     ARAN_COMBO(0x4, 3),//0x10, 3

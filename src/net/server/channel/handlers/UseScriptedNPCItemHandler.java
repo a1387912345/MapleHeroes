@@ -18,7 +18,7 @@ import client.inventory.MaplePet;
 import constants.GameConstants;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
-import scripting.NPCScriptManager;
+import scripting.npc.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;

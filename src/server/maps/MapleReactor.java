@@ -21,8 +21,10 @@
 package server.maps;
 
 import client.MapleClient;
+import scripting.reactor.ReactorScriptManager;
+
 import java.awt.Rectangle;
-import scripting.ReactorScriptManager;
+
 import server.Timer.MapTimer;
 import tools.Pair;
 import tools.packet.CField;

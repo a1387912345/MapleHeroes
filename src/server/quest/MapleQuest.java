@@ -4,6 +4,8 @@ import client.MapleCharacter;
 import client.MapleQuestStatus;
 import constants.GameConstants;
 import database.DatabaseConnection;
+import scripting.npc.NPCScriptManager;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import scripting.NPCScriptManager;
+
 import server.farm.MapleFarmQuestRequirement;
 import tools.Pair;
 import tools.StringUtil;

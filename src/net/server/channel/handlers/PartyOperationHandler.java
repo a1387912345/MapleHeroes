@@ -126,11 +126,9 @@ public class PartyOperationHandler extends AbstractMaplePacketHandler {
                 }
 
                 String inviteName = lea.readMapleAsciiString();
-                int ch = World.Find.findChannel(inviteName);
-                if (ch > 0) {
-                    //MapleCharacter partyInvitee = ChannelServer.getInstance(ch).getPlayerStorage().getCharacterByName(inviteName);
-                	MapleCharacter partyInvitee = World.getStorage(ch).getCharacterByName(inviteName);
-                    if ((partyInvitee != null) && (partyInvitee.getParty() == null) && (partyInvitee.getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
+                MapleCharacter partyInvitee = World.getCharacterFromPlayerStorage(inviteName);
+                if (partyInvitee != null) {
+                	if ((partyInvitee.getParty() == null) && (partyInvitee.getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
                         if (party.getExpeditionId() > 0) {
                             c.getPlayer().dropMessage(5, "You may not do party operations while in a raid.");
                             return;

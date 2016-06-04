@@ -1,4 +1,4 @@
-package scripting;
+package scripting.event;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import net.channel.ChannelServer;
+import scripting.AbstractScriptManager;
 import tools.FileoutputUtil;
 
 /**

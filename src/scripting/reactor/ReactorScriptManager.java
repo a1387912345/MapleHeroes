@@ -18,10 +18,12 @@
  You should have received a copy of the GNU Affero General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package scripting;
+package scripting.reactor;
 
 import client.MapleClient;
 import database.DatabaseConnection;
+import scripting.AbstractScriptManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

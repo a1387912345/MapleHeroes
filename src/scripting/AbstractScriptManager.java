@@ -21,7 +21,6 @@
 package scripting;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.stream.Collectors;
@@ -34,11 +33,9 @@ import javax.script.ScriptEngineManager;
 import client.MapleClient;
 import constants.ServerConstants;
 
-import java.io.FileNotFoundException;
 import javax.script.ScriptException;
 
 import tools.FilePrinter;
-import tools.FileoutputUtil;
 
 /**
  *
@@ -51,70 +48,6 @@ public abstract class AbstractScriptManager {
     protected Invocable getInvocable(String path, MapleClient c) {
         return getInvocable(path, c, false);
     }
-
-    /*
-    protected Invocable getInvocable(String path, MapleClient c, boolean npc) {
-        FileReader fr = null;
-        try {
-            path = "scripts/" + path;
-            ScriptEngine engine = null;
-
-            if (c != null) {
-                engine = c.getScriptEngine(path);
-            }
-     
-            if (engine == null) {
-                File scriptFile = new File(path);
-                if (!scriptFile.exists()) {
-                    return null;
-                }
-                engine = sem.getEngineByName("javascript");
-                if (c != null) {
-                    c.setScriptEngine(path, engine);
-                }
-                
-                fr = new FileReader(scriptFile);
-                engine.eval(fr);
-            } else if (c != null && npc) {
-                //c.getPlayer().dropMessage(-1, "You already are talking to this NPC. Use @ea if this is not intended.");
-            }
-            return (Invocable) engine;
-        } catch (FileNotFoundException | ScriptException e) {
-            System.err.println("Error executing script. Path: " + path + "\nException " + e);
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Error executing script. Path: " + path + "\nException " + e);
-            return null;
-        } finally {
-            try {
-                if (fr != null) {
-                    fr.close();
-                }
-            } catch (IOException ignore) {
-            }
-        } 
-                /*
-	            try (Stream<String> stream = Files.lines(scriptFile.toPath())) { 
-	            	String lines = "load('nashorn:mozilla_compat.js');"; 
-		            lines += stream.collect(Collectors.joining(System.lineSeparator())); 
-		            engine.eval(lines); 
-		        }  catch (final ScriptException | IOException t) {
-		        	if (ServerConstants.VPS) {
-		        		FilePrinter.printError(FilePrinter.INVOCABLE + path.substring(12, path.length()), t, path); 
-		        	} else  {
-		        		System.out.println(t); 
-		        		return null; 
-		        	}
-		        }
-            }
-        } finally {
-            try {
-                if (fr != null) {
-                    fr.close();
-                }
-            } catch (IOException ignore) {
-            }
-        }
-		return null;*/
-    //}
     
     protected Invocable getInvocable(String path, MapleClient c, boolean npc) {
         path = "scripts/" + path;
