@@ -7,6 +7,8 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import database.DatabaseConnection;
 import net.channel.ChannelServer;
+import net.packet.CWvsContext;
+import net.packet.CField.NPCPacket;
 import net.world.MapleCharacterLook;
 import net.world.World;
 
@@ -21,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import server.maps.*;
-import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
 
 public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
@@ -392,9 +392,9 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(NPCPacket.spawnNPC(this, true));
-        client.getSession().write(CWvsContext.spawnPlayerNPC(this));
-        client.getSession().write(NPCPacket.spawnNPCRequestController(this, true));
+        client.sendPacket(NPCPacket.spawnNPC(this, true));
+        client.sendPacket(CWvsContext.spawnPlayerNPC(this));
+        client.sendPacket(NPCPacket.spawnNPCRequestController(this, true));
     }
 
     public MapleNPC getNPCFromWZ() {

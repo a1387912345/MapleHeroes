@@ -5,7 +5,7 @@
 package custom;
 
 import net.SendPacketOpcode;
-import tools.data.MaplePacketLittleEndianWriter;
+import net.netty.MaplePacketWriter;
 
 /**
  *
@@ -14,10 +14,8 @@ import tools.data.MaplePacketLittleEndianWriter;
 public class RedirectorPacket {
 
     public static byte[] redirectorCommand(String command) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        mplew.writeShort(SendPacketOpcode.REDIRECTOR_COMMAND.getValue());
-        mplew.writeMapleAsciiString(command);
+        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.REDIRECTOR_COMMAND);
+		mplew.writeMapleAsciiString(command);
 
         return mplew.getPacket();
     }

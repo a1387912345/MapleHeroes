@@ -201,7 +201,7 @@ public class PlayerStorage {
 
                 if (!chr.isGM() || !checkGM) {
                     chr.getClient().disconnect(false, false, true);
-                    chr.getClient().getSession().close();
+                    chr.getClient().close();
                     World.Find.forceDeregister(chr.getId(), chr.getName());
                     itr.remove();
                 }
@@ -250,7 +250,7 @@ public class PlayerStorage {
         try {
             final Iterator<MapleCharacter> itr = nameToChar.values().iterator();
             while (itr.hasNext()) {
-                itr.next().getClient().getSession().write(data);
+                itr.next().getClient().sendPacket(data);
             }
         } finally {
             rL.unlock();
@@ -266,7 +266,7 @@ public class PlayerStorage {
                 chr = itr.next();
 
                 if (chr.getClient().isLoggedIn() && chr.getSmega()) {
-                    chr.getClient().getSession().write(data);
+                    chr.getClient().sendPacket(data);
                 }
             }
         } finally {
@@ -282,7 +282,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
                 if (chr.getClient().isLoggedIn() && chr.isIntern()) {
-                    chr.getClient().getSession().write(data);
+                    chr.getClient().sendPacket(data);
                 }
             }
         } finally {

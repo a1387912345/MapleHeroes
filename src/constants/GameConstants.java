@@ -31,7 +31,7 @@ import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
-import scripting.npc.NPCConversationManager;
+import net.packet.CField;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -48,7 +48,6 @@ import server.Randomizer;
 import server.maps.MapleMapObjectType;
 import tools.FileoutputUtil;
 import tools.Pair;
-import tools.packet.CField;
 
 public class GameConstants {
 
@@ -1203,7 +1202,7 @@ public class GameConstants {
     }
 
     public static boolean isOverPoweredEquip(final MapleClient c, final int itemId, short slot) {
-        Equip source = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(slot);
+        Equip source = (Equip) c.getCharacter().getInventory(MapleInventoryType.EQUIP).getItem(slot);
         return source.getAcc() > 600
                 || source.getAvoid() > 600
                 || source.getDex() > 200
@@ -1225,7 +1224,7 @@ public class GameConstants {
     }
 
     public static boolean isMadeByGM(final MapleClient c, final int itemId, short slot) {
-        Equip source = (Equip) c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem(slot);
+        Equip source = (Equip) c.getCharacter().getInventory(MapleInventoryType.EQUIP).getItem(slot);
         MapleCharacter gm = c.getChannelServer().getPlayerStorage().getCharacterByName(source.getOwner());
         if (source.getOwner() == null || source.getOwner().isEmpty() || gm == null) {
             return false;
@@ -3089,7 +3088,7 @@ public class GameConstants {
     }// 112xxxx - pendants, 113xxxx - belts
 
     public static boolean icsog(int itemId) {
-    return itemId == 2049122;
+    	return itemId == 2049122;
     }  
     //if only there was a way to find in wz files -.-
     public static boolean isEffectRing(int itemid) {
@@ -4737,7 +4736,7 @@ public class GameConstants {
 
     public static void achievementRatio(MapleClient c) {
         //PQs not affected: Amoria, MV, CWK, English, Zakum, Horntail(?), Carnival, Ghost, Guild, LudiMaze, Elnath(?) 
-        switch (c.getPlayer().getMapId()) {
+        switch (c.getCharacter().getMapId()) {
             case 240080600:
             case 920010000:
             case 930000000:
@@ -4752,7 +4751,7 @@ public class GameConstants {
             case 932000100:
             case 923040100:
             case 921160100:
-                c.getSession().write(CField.achievementRatio(0));
+                c.sendPacket(CField.achievementRatio(0));
                 break;
             case 930000200:
             case 922010200:
@@ -4767,7 +4766,7 @@ public class GameConstants {
             case 926100001:
             case 926110001:
             case 921160200:
-                c.getSession().write(CField.achievementRatio(10));
+                c.sendPacket(CField.achievementRatio(10));
                 break;
             case 930000300:
             case 910340200:
@@ -4787,7 +4786,7 @@ public class GameConstants {
             case 921160330:
             case 921160340:
             case 921160350:
-                c.getSession().write(CField.achievementRatio(25));
+                c.sendPacket(CField.achievementRatio(25));
                 break;
             case 930000400:
             case 926100200:
@@ -4797,7 +4796,7 @@ public class GameConstants {
             case 926100202:
             case 926110202:
             case 921160400:
-                c.getSession().write(CField.achievementRatio(35));
+                c.sendPacket(CField.achievementRatio(35));
                 break;
             case 910340300:
             case 922010700:
@@ -4813,7 +4812,7 @@ public class GameConstants {
             case 240080800:
             case 923040300:
             case 921160500:
-                c.getSession().write(CField.achievementRatio(50));
+                c.sendPacket(CField.achievementRatio(50));
                 break;
             case 910340400:
             case 922010800:
@@ -4833,7 +4832,7 @@ public class GameConstants {
             case 932000400:
             case 923040400:
             case 921160600:
-                c.getSession().write(CField.achievementRatio(70));
+                c.sendPacket(CField.achievementRatio(70));
                 break;
             case 910340500:
             case 922010900:
@@ -4846,7 +4845,7 @@ public class GameConstants {
             case 926110401:
             case 921120400:
             case 921160700:
-                c.getSession().write(CField.achievementRatio(85));
+                c.sendPacket(CField.achievementRatio(85));
                 break;
             case 922011000:
             case 922011100:
@@ -4862,7 +4861,7 @@ public class GameConstants {
             case 926110600:
             case 921120500:
             case 921120600:
-                c.getSession().write(CField.achievementRatio(100));
+                c.sendPacket(CField.achievementRatio(100));
                 break;
         }
     }

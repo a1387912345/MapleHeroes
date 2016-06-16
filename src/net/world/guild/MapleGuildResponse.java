@@ -20,7 +20,7 @@
  */
 package net.world.guild;
 
-import tools.packet.CWvsContext.GuildPacket;
+import net.packet.CWvsContext.GuildPacket;
 
 public enum MapleGuildResponse {
 

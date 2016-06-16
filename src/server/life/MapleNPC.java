@@ -22,10 +22,10 @@ package server.life;
 
 import client.MapleClient;
 import custom.MoonlightRevamp;
+import net.packet.CField.NPCPacket;
 import custom.CustomShop;
 import server.shops.MapleShopFactory;
 import server.maps.MapleMapObjectType;
-import tools.packet.CField.NPCPacket;
 
 public class MapleNPC extends AbstractLoadedMapleLife {
 
@@ -49,15 +49,15 @@ public class MapleNPC extends AbstractLoadedMapleLife {
     public void sendSpawnData(final MapleClient client) {
         if (getId() >= 9901000) {
         } else {
-            client.getSession().write(NPCPacket.spawnNPC(this, true));
-            client.getSession().write(NPCPacket.spawnNPCRequestController(this, true));
+            client.sendPacket(NPCPacket.spawnNPC(this, true));
+            client.sendPacket(NPCPacket.spawnNPCRequestController(this, true));
         }
     }
 
     @Override
     public final void sendDestroyData(final MapleClient client) {
-        client.getSession().write(NPCPacket.removeNPCController(getObjectId()));
-        client.getSession().write(NPCPacket.removeNPC(getObjectId()));
+        client.sendPacket(NPCPacket.removeNPCController(getObjectId()));
+        client.sendPacket(NPCPacket.removeNPC(getObjectId()));
     }
 
     @Override

@@ -28,7 +28,7 @@ package server.maps;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import tools.packet.CField;
+import net.packet.CField;
 
 public class MapleDragon extends AnimatedMapleMapObject {
 
@@ -47,12 +47,12 @@ public class MapleDragon extends AnimatedMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(CField.spawnDragon(this));
+        client.sendPacket(CField.spawnDragon(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.removeDragon(this.owner));
+        client.sendPacket(CField.removeDragon(this.owner));
     }
 
     public int getOwner() {

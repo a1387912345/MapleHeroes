@@ -5,6 +5,8 @@
 package tools.export;
 
 import constants.GameConstants;
+import net.netty.MaplePacketReader;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -14,7 +16,6 @@ import java.util.Properties;
 import server.MapleItemInformationProvider;
 import tools.HexTool;
 import tools.data.ByteArrayByteStream;
-import tools.data.LittleEndianAccessor;
 
 /**
  *
@@ -65,9 +66,9 @@ public class ShopAnalyzer {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         for (int size = 1; size < data.split("@").length; size++) {
             byte[] hexdata = HexTool.getByteArrayFromHexString(data.split("@")[size]);
-            final LittleEndianAccessor slea = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) hexdata));
+            final MaplePacketReader slea = new MaplePacketReader(new ByteArrayByteStream((byte[]) hexdata));
             StringBuilder sb = new StringBuilder();
-            final LittleEndianAccessor slea2 = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) hexdata));
+            final MaplePacketReader slea2 = new MaplePacketReader(new ByteArrayByteStream((byte[]) hexdata));
             int header = slea2.readShort(); //Header
             if (header > 1 && header < 0xFFFF) {
                 slea.readShort(); //header

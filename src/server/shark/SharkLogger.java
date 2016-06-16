@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import constants.ServerConstants;
+import net.netty.MaplePacketWriter;
 import tools.HexTool;
-import tools.data.MaplePacketLittleEndianWriter;
 
 public class SharkLogger {
 
@@ -32,7 +32,7 @@ public class SharkLogger {
      * @param value
      * @param mplew
      */
-    private void write7BitInt(int value, MaplePacketLittleEndianWriter mplew) {
+    private void write7BitInt(int value, MaplePacketWriter mplew) {
         int intValue = value;
 
         if ((intValue & 0xffffff80) == 0) {
@@ -66,7 +66,7 @@ public class SharkLogger {
         if (!ServerConstants.LOG_SHARK) {
             return;
         }
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        MaplePacketWriter mplew = new MaplePacketWriter();
         String localend = "127.0.0.1";
         String remoteend = "8.31.99.140";
         mplew.writeShort(0x2015);
@@ -77,7 +77,7 @@ public class SharkLogger {
         mplew.writeAsciiString(remoteend); // mRemoteEndpoint
         mplew.writeShort(6969); // mRemotePort
         mplew.write(8); // mLocale
-        mplew.writeShort(ServerConstants.MAPLE_VERSION); // mBuild
+        mplew.writeShort(ServerConstants.CLIENT_VERSION); // mBuild
         try {
 	        for (SharkPacket b : stored) {
 	            b.dump(mplew);

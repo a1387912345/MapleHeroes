@@ -26,6 +26,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import net.channel.ChannelServer;
+import net.packet.CField;
 import scripting.AbstractPlayerInteraction;
 
 import java.awt.Point;
@@ -40,14 +41,13 @@ import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.maps.MapleReactor;
 import server.maps.ReactorDropEntry;
-import tools.packet.CField;
 
 public class ReactorActionManager extends AbstractPlayerInteraction {
 
     private final MapleReactor reactor;
 
     public ReactorActionManager(MapleClient c, MapleReactor reactor) {
-        super(c, reactor.getReactorId(), c.getPlayer().getMapId(), null);
+        super(c, reactor.getReactorId(), c.getCharacter().getMapId(), null);
         this.reactor = reactor;
     }
 
@@ -96,7 +96,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         for (final ReactorDropEntry d : items) {
             if (d.itemId == 0) {
                 range = maxMeso - minMeso;
-                mesoDrop = Randomizer.nextInt(range) + minMeso * ChannelServer.getInstance(getClient().getChannel()).getMesoRate(getClient().getPlayer() != null ? getClient().getPlayer().getWorld() : 0);
+                mesoDrop = Randomizer.nextInt(range) + minMeso * ChannelServer.getInstance(getClient().getChannel()).getMesoRate(getClient().getCharacter() != null ? getClient().getCharacter().getWorld() : 0);
                 reactor.getMap().spawnMesoDrop(mesoDrop, dropPos, reactor, getPlayer(), false, (byte) 0);
             } else {
                 Item drop;

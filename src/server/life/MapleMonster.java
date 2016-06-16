@@ -49,6 +49,8 @@ import client.MonsterStatusEffect;
 import constants.EventConstants;
 import constants.ServerConstants;
 import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.MobPacket;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import scripting.event.EventInstanceManager;
@@ -65,8 +67,6 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.ConcurrentEnumMap;
 import tools.Pair;
-import tools.packet.CField;
-import tools.packet.MobPacket;
 
 public class MapleMonster extends AbstractLoadedMapleLife {
 
@@ -297,7 +297,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                         for (final AttackingMapleCharacter cattacker : mattacker.getAttackers()) {
                             if (cattacker.getAttacker().getMap() == from.getMap()) { // current attacker is on the map of the monster
                                 if (cattacker.getLastAttackTime() >= System.currentTimeMillis() - 4000) {
-                                    cattacker.getAttacker().getClient().getSession().write(MobPacket.showMonsterHP(getObjectId(), getHPPercent()));
+                                    cattacker.getAttacker().getClient().sendPacket(MobPacket.showMonsterHP(getObjectId(), getHPPercent()));
                                 }
                             }
                         }
@@ -349,7 +349,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                                     for (final AttackingMapleCharacter cattacker : mattacker.getAttackers()) {
                                         if (cattacker != null && cattacker.getAttacker().getMap() == from.getMap()) { // current attacker is on the map of the monster
                                             if (cattacker.getLastAttackTime() >= System.currentTimeMillis() - 4000) {
-                                                cattacker.getAttacker().getClient().getSession().write(MobPacket.showMonsterHP(getObjectId(), getHPPercent()));
+                                                cattacker.getAttacker().getClient().sendPacket(MobPacket.showMonsterHP(getObjectId(), getHPPercent()));
                                             }
                                         }
                                     }
@@ -530,9 +530,9 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         final MapleCharacter controll = controller.get();
         if (controll != null) { // this can/should only happen when a hidden gm attacks the monster
             if (GameConstants.isAzwanMap(killer.getMapId())) {
-                controll.getClient().getSession().write(MobPacket.stopControllingMonster(this, true));
+                controll.getClient().sendPacket(MobPacket.stopControllingMonster(this, true));
             } else {
-                controll.getClient().getSession().write(MobPacket.stopControllingMonster(this, false));
+                controll.getClient().sendPacket(MobPacket.stopControllingMonster(this, false));
             }
             controll.stopControllingMonster(this);
         }
@@ -783,9 +783,9 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         } else if (controllers != null) {
             controllers.stopControllingMonster(this);
             if (GameConstants.isAzwanMap(newController.getMapId())) {
-                controllers.getClient().getSession().write(MobPacket.stopControllingMonster(this, true));
+                controllers.getClient().sendPacket(MobPacket.stopControllingMonster(this, true));
             } else {
-                controllers.getClient().getSession().write(MobPacket.stopControllingMonster(this, false));
+                controllers.getClient().sendPacket(MobPacket.stopControllingMonster(this, false));
             }
             sendStatus(controllers.getClient());
         }
@@ -810,12 +810,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
     public final void sendStatus(final MapleClient client) {
         if (reflectpack != null) {
-            client.getSession().write(reflectpack);
+            client.sendPacket(reflectpack);
         }
         if (poisons.size() > 0) {
             poisonsLock.readLock().lock();
             try {
-                client.getSession().write(MobPacket.applyMonsterStatus(this, poisons));
+                client.sendPacket(MobPacket.applyMonsterStatus(this, poisons));
             } finally {
                 poisonsLock.readLock().unlock();
             }
@@ -867,13 +867,13 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (!isAlive()) {
             return;
         }
-        if (GameConstants.isAzwanMap(client.getPlayer().getMapId())) {
-            client.getSession().write(MobPacket.spawnMonster(this, fake && linkCID <= 0 ? -4 : -1, 0, true));
+        if (GameConstants.isAzwanMap(client.getCharacter().getMapId())) {
+            client.sendPacket(MobPacket.spawnMonster(this, fake && linkCID <= 0 ? -4 : -1, 0, true));
         } else {
-            client.getSession().write(MobPacket.spawnMonster(this, fake && linkCID <= 0 ? -4 : -1, 0, false));
+            client.sendPacket(MobPacket.spawnMonster(this, fake && linkCID <= 0 ? -4 : -1, 0, false));
         }
         sendStatus(client);
-        if (map != null && !stats.isEscort() && client.getPlayer() != null && client.getPlayer().getTruePosition().distanceSq(getTruePosition()) <= GameConstants.maxViewRangeSq_Half()) {
+        if (map != null && !stats.isEscort() && client.getCharacter() != null && client.getCharacter().getTruePosition().distanceSq(getTruePosition()) <= GameConstants.maxViewRangeSq_Half()) {
             map.updateMonsterController(this);
         }
     }
@@ -883,13 +883,13 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (stats.isEscort() && getEventInstance() != null && lastNode >= 0) { //shammos
             map.resetShammos(client);
         } else {
-            if (GameConstants.isAzwanMap(client.getPlayer().getMapId())) {
-                client.getSession().write(MobPacket.killMonster(getObjectId(), 0, true));
+            if (GameConstants.isAzwanMap(client.getCharacter().getMapId())) {
+                client.sendPacket(MobPacket.killMonster(getObjectId(), 0, true));
             } else {
-                client.getSession().write(MobPacket.killMonster(getObjectId(), 0, false));
+                client.sendPacket(MobPacket.killMonster(getObjectId(), 0, false));
             }
-            if (getController() != null && client.getPlayer() != null && client.getPlayer().getId() == getController().getId()) {
-                client.getPlayer().stopControllingMonster(this);
+            if (getController() != null && client.getCharacter() != null && client.getCharacter().getId() == getController().getId()) {
+                client.getCharacter().stopControllingMonster(this);
             }
         }
     }
@@ -1103,7 +1103,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 poisons.add(status);
                 if (con != null) {
                     map.broadcastMessage(con, MobPacket.applyMonsterStatus(this, poisons), getTruePosition());
-                    con.getClient().getSession().write(MobPacket.applyMonsterStatus(this, poisons));
+                    con.getClient().sendPacket(MobPacket.applyMonsterStatus(this, poisons));
                 } else {
                     map.broadcastMessage(MobPacket.applyMonsterStatus(this, poisons), getTruePosition());
                 }
@@ -1115,7 +1115,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             if (con != null) {
             	System.out.println("applystatus 1");
                 map.broadcastMessage(con, MobPacket.applyMonsterStatus(this, status, con), getTruePosition());
-                con.getClient().getSession().write(MobPacket.applyMonsterStatus(this, status, con));
+                con.getClient().sendPacket(MobPacket.applyMonsterStatus(this, status, con));
             } else {
                 map.broadcastMessage(MobPacket.applyMonsterStatus(this, status, con), getTruePosition());
             }
@@ -1157,7 +1157,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             this.reflectpack = MobPacket.applyMonsterStatus(getObjectId(), effect, reflection, skill);
             if (con != null) {
                 map.broadcastMessage(con, reflectpack, getTruePosition());
-                con.getClient().getSession().write(this.reflectpack);
+                con.getClient().sendPacket(this.reflectpack);
             } else {
                 map.broadcastMessage(reflectpack, getTruePosition());
             }
@@ -1165,7 +1165,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             for (Entry<MonsterStatus, Integer> z : effect.entrySet()) {
                 if (con != null) {
                     map.broadcastMessage(con, MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill), getTruePosition());
-                    con.getClient().getSession().write(MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill));
+                    con.getClient().sendPacket(MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill));
                 } else {
                     map.broadcastMessage(MobPacket.applyMonsterStatus(getObjectId(), z.getKey(), z.getValue(), skill), getTruePosition());
                 }
@@ -1669,7 +1669,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         final MapleCharacter con = getController();
         if (con != null) {
             map.broadcastMessage(con, MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
-            con.getClient().getSession().write(MobPacket.cancelMonsterStatus(getObjectId(), stat));
+            con.getClient().sendPacket(MobPacket.cancelMonsterStatus(getObjectId(), stat));
         } else {
             map.broadcastMessage(MobPacket.cancelMonsterStatus(getObjectId(), stat), getTruePosition());
         }
@@ -1697,7 +1697,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             final MapleCharacter con = getController();
             if (con != null) {
                 map.broadcastMessage(con, MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
-                con.getClient().getSession().write(MobPacket.cancelPoison(this.getObjectId(), stat));
+                con.getClient().sendPacket(MobPacket.cancelPoison(this.getObjectId(), stat));
             } else {
                 map.broadcastMessage(MobPacket.cancelPoison(this.getObjectId(), stat), getTruePosition());
             }

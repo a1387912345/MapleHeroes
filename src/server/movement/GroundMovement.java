@@ -18,7 +18,8 @@
 package server.movement;
 
 import java.awt.Point;
-import tools.data.MaplePacketLittleEndianWriter;
+
+import net.netty.MaplePacketWriter;
 
 public class GroundMovement extends AbstractLifeMovement {
 
@@ -27,7 +28,7 @@ public class GroundMovement extends AbstractLifeMovement {
     }
 
     @Override
-    public void serialize(MaplePacketLittleEndianWriter lew) {
+    public void serialize(MaplePacketWriter lew) {
         lew.write(getType());
         lew.write(getMoveAction());
         lew.writeShort(getDuration());

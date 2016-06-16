@@ -22,10 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.events;
 
 import client.MapleCharacter;
+import net.packet.CField;
+import net.packet.CWvsContext;
+
 import java.util.concurrent.ScheduledFuture;
 import server.Timer.EventTimer;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class MapleSurvival extends MapleEvent {
 
@@ -46,7 +47,7 @@ public class MapleSurvival extends MapleEvent {
     public void onMapLoad(MapleCharacter chr) {
 	super.onMapLoad(chr);
         if (isTimerStarted()) {
-            chr.getClient().getSession().write(CField.getClock((int) (getTimeLeft() / 1000)));
+            chr.getClient().sendPacket(CField.getClock((int) (getTimeLeft() / 1000)));
         }
     }
 

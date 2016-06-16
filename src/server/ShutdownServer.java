@@ -3,6 +3,7 @@ package server;
 import database.DatabaseConnection;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
+import net.packet.CWvsContext;
 import net.world.World;
 
 import java.lang.management.ManagementFactory;
@@ -20,7 +21,6 @@ import server.Timer.EventTimer;
 import server.Timer.MapTimer;
 import server.Timer.PingTimer;
 import server.Timer.WorldTimer;
-import tools.packet.CWvsContext;
 
 public class ShutdownServer implements ShutdownServerMBean {
 

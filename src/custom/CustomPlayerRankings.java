@@ -22,6 +22,7 @@ package custom;
 
 import database.DatabaseConnection;
 import net.SendPacketOpcode;
+import net.netty.MaplePacketWriter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import tools.data.MaplePacketLittleEndianWriter;
 
 public class CustomPlayerRankings {
 
@@ -99,10 +99,8 @@ public class CustomPlayerRankings {
     }
 
     public byte[] customRanks(int npcid) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-
-        mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-        mplew.write(0x50);
+        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
+		mplew.write(0x50);
         mplew.writeInt(npcid);
         mplew.writeInt(getRank().size());
         for (CustomPlayerRankings.CustomRankingInfo info : getRank()) {
@@ -121,8 +119,8 @@ public class CustomPlayerRankings {
     /*public static byte[] customRanks(int npcid, List<CustomPlayerRankings.CustomRankingInfo> all) {
      MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-     mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
-     mplew.write(80);
+     mplew.writeShort(SendPacketOpcode.GUILD_OPERATION);
+		mplew.write(80);
      mplew.writeInt(npcid);
      mplew.writeInt(all.size());
      for (CustomPlayerRankings.CustomRankingInfo info : all) {

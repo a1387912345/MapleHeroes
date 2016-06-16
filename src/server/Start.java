@@ -10,15 +10,15 @@ import constants.WorldConstants.TespiaWorldOption;
 import constants.WorldConstants.WorldOption;
 import custom.CustomPlayerRankings;
 import database.DatabaseConnection;
-import net.MapleServerHandler;
+import net.PacketProcessor;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
 import net.channel.MapleDojoRanking;
 import net.channel.MapleGuildRanking;
-import net.server.farm.FarmServer;
-import net.server.login.LoginInformationProvider;
-import net.server.login.LoginServer;
-import net.server.talk.TalkServer;
+import net.farm.FarmServer;
+import net.login.LoginInformationProvider;
+import net.login.LoginServer;
+import net.talk.TalkServer;
 import net.world.World;
 import net.world.family.MapleFamily;
 import net.world.guild.MapleGuild;
@@ -40,19 +40,18 @@ import server.Timer.WorldTimer;
 import server.events.MapleOxQuizFactory;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonsterInformationProvider;
-import server.life.MobSkillFactory;
 import server.life.PlayerNPC;
 import server.maps.MapleMapFactory;
 import server.quest.MapleQuest;
-import tools.MapleAESOFB;
 
-public class Start {
+public class Start implements Runnable {
 
     public static long startTime = System.currentTimeMillis();
     public static final Start instance = new Start();
     public static AtomicInteger CompletedLoadingThreads = new AtomicInteger(0);
 
-    public void run() throws InterruptedException, IOException {
+    @Override
+    public void run()/* throws InterruptedException, IOException */ {
         long start = System.currentTimeMillis();
 //        System.setProperty("wzpath", "wz"); // test only..?
         /*System.out.println("Pick a SQL Setting.");
@@ -85,6 +84,7 @@ public class Start {
          System.out.println("Want the Server to Log Packets? (true/false)");
          inputBool = input.nextBoolean();
          ServerConfig.logPackets = inputBool;*/
+        
         Properties p = new Properties();
         try {
             p.load(new FileInputStream("config.ini"));
@@ -92,6 +92,7 @@ public class Start {
             System.out.println("Failed to load config.ini");
             System.exit(0);
         }
+        
         ServerConfig.interface_ = p.getProperty("ip");
         ServerConfig.logPackets = Boolean.parseBoolean(p.getProperty("logOps"));
         ServerConfig.adminOnly = Boolean.parseBoolean(p.getProperty("adminOnly"));
@@ -144,7 +145,7 @@ public class Start {
 
         World.init();
         System.out.println("Host: " + ServerConfig.interface_ + ":" + LoginServer.PORT);
-        System.out.println("In-game Version: " + ServerConstants.MAPLE_VERSION + "." + ServerConstants.MAPLE_PATCH);
+        System.out.println("In-game Version: " + ServerConstants.CLIENT_VERSION + "." + ServerConstants.CLIENT_SUBVERSION);
         System.out.println("Source Revision: " + ServerConstants.SOURCE_REVISION);
 
         int servers = 0;
@@ -162,17 +163,6 @@ public class Start {
             }
         }
         System.out.println("Worlds: Total: " + (ServerConstants.TESPIA ? TespiaWorldOption.values().length : WorldOption.values().length) + " Visible: " + servers + (WorldConstants.gmserver > -1 ? " GM Server: " + WorldConstants.getNameById(WorldConstants.gmserver) : ""));
-        boolean encryptionfound = false;
-        for (MapleAESOFB.EncryptionKey encryptkey : MapleAESOFB.EncryptionKey.values()) {
-            if (("V" + ServerConstants.MAPLE_VERSION).equals(encryptkey.name())) {
-                System.out.println("Packet Encryption Detected");
-                encryptionfound = true;
-                break;
-            }
-        }
-        if (!encryptionfound) {
-            System.out.println("System could not locate the packet encryption for the current version, It is using the lastest packet encryption.");
-        }
         System.out.print("Running Threads");
         WorldTimer.getInstance().start();
         EtcTimer.getInstance().start();
@@ -218,12 +208,12 @@ public class Start {
         }
         System.out.println(" Complete!");
         CashItemFactory.getInstance().initialize();
-        MapleServerHandler.initiate();
-        LoginServer.run_startup_configurations();
-        ChannelServer.startChannel_Main();
-        CashShopServer.run_startup_configurations();
-        FarmServer.run_startup_configurations();
-        TalkServer.runStartupConfigurations();
+        PacketProcessor.getInstance().initialize();
+        LoginServer.run();
+        ChannelServer.startChannels();
+        CashShopServer.run();
+        FarmServer.run();
+        TalkServer.run();
         Runtime.getRuntime().addShutdownHook(new Thread(new Shutdown()));
         World.registerRespawn();
         ShutdownServer.registerMBean();

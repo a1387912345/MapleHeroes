@@ -1,6 +1,8 @@
 package client;
 
 import constants.GameConstants;
+import net.netty.MaplePacketWriter;
+
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -10,7 +12,6 @@ import java.util.Map.Entry;
 import server.CharacterCardFactory;
 import tools.Pair;
 import tools.Triple;
-import tools.data.MaplePacketLittleEndianWriter;
 
 /**
  *
@@ -104,7 +105,7 @@ public class MapleCharacterCards {
         }
     }
 
-    public final void connectData(final MaplePacketLittleEndianWriter mplew) {
+    public final void connectData(final MaplePacketWriter mplew) {
         if (cards.isEmpty()) { // we don't show for new characters 
             mplew.writeZeroBytes(54); // 9 x 6
             return;

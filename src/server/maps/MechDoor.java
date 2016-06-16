@@ -28,8 +28,9 @@ package server.maps;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import net.packet.CField;
+
 import java.awt.Point;
-import tools.packet.CField;
 
 public class MechDoor extends MapleMapObject {
 
@@ -45,12 +46,12 @@ public class MechDoor extends MapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(CField.spawnMechDoor(this, false));
+        client.sendPacket(CField.spawnMechDoor(this, false));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.removeMechDoor(this, false));
+        client.sendPacket(CField.removeMechDoor(this, false));
     }
 
     public int getOwnerId() {

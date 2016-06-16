@@ -23,23 +23,16 @@ package net.channel;
 import client.MapleCharacter;
 import constants.ServerConfig;
 import constants.WorldConstants.WorldOption;
-import net.MapleServerHandler;
-import net.mina.MapleCodecFactory;
-import net.server.login.LoginServer;
+import net.Acceptor;
+import net.login.LoginServer;
+import net.packet.CWvsContext;
 import net.world.CheaterData;
 import scripting.event.EventScriptManager;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.apache.mina.common.ByteBuffer;
-import org.apache.mina.common.IoAcceptor;
-import org.apache.mina.common.SimpleByteBufferAllocator;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
 import server.MapleSquad;
 import server.MapleSquad.MapleSquadType;
@@ -50,19 +43,20 @@ import server.maps.MapleMapFactory;
 import server.maps.MapleMapObject;
 import server.stores.HiredMerchant;
 import tools.ConcurrentEnumMap;
-import tools.packet.CWvsContext;
 
 public class ChannelServer {
 
     public static long serverStartTime;
+    
+    private static final int DEFAULT_PORT = 8584;
     private final int cashRate = 0, traitRate = 10, BossDropRate = 3;
-    private short port = 8585;
-    private static final short DEFAULT_PORT = 8584;
+    private final int port;
+    
     private int channel, running_MerchantID = 0, flags = 0;
     private String serverMessage, ip, serverName;
     private boolean shutdown = false, finishedShutdown = false, MegaphoneMuteState = false, adminOnly = false;
     private PlayerStorage players;
-    private IoAcceptor acceptor;
+    private Acceptor acceptor;
     private final MapleMapFactory mapFactory;
     private EventScriptManager eventSM;
     private final AramiaFireWorks works = new AramiaFireWorks();
@@ -85,6 +79,7 @@ public class ChannelServer {
     private ChannelServer(final int channel) {
         this.channel = channel;
         mapFactory = new MapleMapFactory(channel);
+        port = DEFAULT_PORT + channel;
     }
 
     public static Set<Integer> getAllInstance() {
@@ -104,7 +99,7 @@ public class ChannelServer {
         events.put(MapleEventType.Survival, new MapleSurvival(channel, MapleEventType.Survival));
     }
 
-    public final void run_startup_configurations() {
+    public final void run() {
         setChannel(channel); //instances.put
         try {
             serverMessage = ServerConfig.scrollingMessage;
@@ -112,28 +107,20 @@ public class ChannelServer {
             flags = ServerConfig.flags;
             adminOnly = ServerConfig.adminOnly;
             eventSM = new EventScriptManager(this, ServerConfig.events.split(","));
-            port = (short) (DEFAULT_PORT + channel);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         ip = ServerConfig.interface_ + ":" + port;
 
-        ByteBuffer.setUseDirectBuffers(false);
-        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
-
-        acceptor = new SocketAcceptor();
-        final SocketAcceptorConfig acceptor_config = new SocketAcceptorConfig();
-        acceptor_config.getSessionConfig().setTcpNoDelay(true);
-        acceptor_config.setDisconnectOnUnbind(true);
-        acceptor_config.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
         players = new PlayerStorage(channel);
         loadEvents();
 
         try {
-            acceptor.bind(new InetSocketAddress(port), new MapleServerHandler(), acceptor_config);
+        	acceptor = new Acceptor(new InetSocketAddress(port));
+        	acceptor.run();
             System.out.println("Channel " + channel + " is listening on port " + port + ".");
             eventSM.init();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Could not bind port " + port + " (ch: " + getChannel() + ")" + e);
         }
     }
@@ -270,12 +257,12 @@ public class ChannelServer {
         return BossDropRate;
     }
 
-    public static void startChannel_Main() {
+    public static void startChannels() {
         System.out.println("Loading Channels...");
         serverStartTime = System.currentTimeMillis();
 
         for (int i = 0; i < ServerConfig.channelCount; i++) {
-            newInstance(i + 1).run_startup_configurations();
+            newInstance(i + 1).run();
         }
     }
 

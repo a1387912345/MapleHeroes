@@ -23,12 +23,13 @@ package server.events;
 
 import client.MapleCharacter;
 import client.MapleDisease;
+import net.packet.CField;
+import net.packet.CWvsContext;
+
 import java.util.concurrent.ScheduledFuture;
 import server.Timer.EventTimer;
 import server.life.MobSkillFactory;
 import server.maps.MapleMap;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class MapleSnowball extends MapleEvent {
 
@@ -147,7 +148,7 @@ public class MapleSnowball extends MapleEvent {
         public void broadcast(MapleMap map, int message) {
             for (MapleCharacter chr : map.getCharactersThreadsafe()) {
                 //if ((team == 0 && chr.getPosition().y > -80) || (team == 1 && chr.getPosition().y <= -80)) {
-                chr.getClient().getSession().write(CField.snowballMessage(team, message));
+                chr.getClient().sendPacket(CField.snowballMessage(team, message));
                 //}
             }
         }
@@ -196,8 +197,8 @@ public class MapleSnowball extends MapleEvent {
                     chr.getMap().broadcastMessage(CField.hitSnowBall(team, damage, 0, 1));
                     if (damage == 0) {
                         if (Math.random() < 0.2) {
-                            chr.getClient().getSession().write(CField.leftKnockBack());
-                            chr.getClient().getSession().write(CWvsContext.enableActions());
+                            chr.getClient().sendPacket(CField.leftKnockBack());
+                            chr.getClient().sendPacket(CWvsContext.enableActions());
                         }
                     } else {
                         ball.setPositionX(ball.getPosition() + 1);

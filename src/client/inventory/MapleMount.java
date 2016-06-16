@@ -29,8 +29,8 @@ import java.sql.SQLException;
 import java.io.Serializable;
 
 import database.DatabaseConnection;
+import net.packet.CWvsContext;
 import server.Randomizer;
-import tools.packet.CWvsContext;
 
 public class MapleMount implements Serializable {
 

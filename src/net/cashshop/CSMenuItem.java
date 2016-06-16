@@ -1,14 +1,15 @@
 package net.cashshop;
 
 import database.DatabaseConnection;
+import net.netty.MaplePacketWriter;
+import net.packet.PacketHelper;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import tools.HexTool;
-import tools.data.MaplePacketLittleEndianWriter;
-import tools.packet.PacketHelper;
 
 public class CSMenuItem {
 
@@ -56,7 +57,7 @@ public class CSMenuItem {
         this.likes = likes;
     }
 
-    public static void writeData(CSMenuItem csmi, MaplePacketLittleEndianWriter mplew) {
+    public static void writeData(CSMenuItem csmi, MaplePacketWriter mplew) {
         mplew.writeInt(csmi.c);
         mplew.writeInt(csmi.sc);
         mplew.writeInt(csmi.p);

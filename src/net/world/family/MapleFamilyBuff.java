@@ -23,13 +23,14 @@ package net.world.family;
 
 import client.MapleBuffStat;
 import client.MapleCharacter;
+import net.packet.CWvsContext.BuffPacket;
+
 import java.util.EnumMap;
 import java.util.concurrent.ScheduledFuture;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.MapleStatEffect.CancelEffectAction;
 import server.Timer.BuffTimer;
-import tools.packet.CWvsContext.BuffPacket;
 
 public enum MapleFamilyBuff {
 
@@ -92,7 +93,7 @@ public enum MapleFamilyBuff {
     }
 
     public void applyTo(MapleCharacter chr) {
-        chr.getClient().getSession().write(BuffPacket.giveBuff(-getEffectId(), duration * 60000, effects, null));
+        chr.getClient().sendPacket(BuffPacket.giveBuff(-getEffectId(), duration * 60000, effects, null));
         final MapleStatEffect eff = MapleItemInformationProvider.getInstance().getItemEffect(getEffectId());
         chr.cancelEffect(eff, true, -1, effects);
         final long starttime = System.currentTimeMillis();

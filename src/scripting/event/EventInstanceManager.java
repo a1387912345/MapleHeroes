@@ -37,6 +37,8 @@ import client.MapleTrait.MapleTraitType;
 import client.SkillFactory;
 import constants.GameConstants;
 import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.CWvsContext.InfoPacket;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.World;
@@ -55,9 +57,7 @@ import server.life.MapleMonster;
 import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
 import tools.FileoutputUtil;
-import tools.packet.CField;
 import tools.Pair;
-import tools.packet.CWvsContext.InfoPacket;
 
 public class EventInstanceManager {
 
@@ -161,9 +161,9 @@ public class EventInstanceManager {
 
             for (MapleCharacter chr : getPlayers()) {
                 if (name.startsWith("PVP")) {
-                    chr.getClient().getSession().write(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
+                    chr.getClient().sendPacket(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
                 } else {
-                    chr.getClient().getSession().write(CField.getClock(timesend));
+                    chr.getClient().sendPacket(CField.getClock(timesend));
                 }
             }
             timeOut(time, this);
@@ -626,7 +626,7 @@ public class EventInstanceManager {
             return;
         }
         for (MapleCharacter chr : getPlayers()) {
-            chr.getClient().getSession().write(p);
+            chr.getClient().sendPacket(p);
         }
     }
 
@@ -636,7 +636,7 @@ public class EventInstanceManager {
         }
         for (MapleCharacter chr : getPlayers()) {
             if (chr.getTeam() == team) {
-                chr.getClient().getSession().write(p);
+                chr.getClient().sendPacket(p);
             }
         }
     }
@@ -915,7 +915,7 @@ public class EventInstanceManager {
 
     public void applyBuff(final MapleCharacter chr, final int id) {
         MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(chr);
-        chr.getClient().getSession().write(InfoPacket.getStatusMsg(id));
+        chr.getClient().sendPacket(InfoPacket.getStatusMsg(id));
     }
 
     public void applySkill(final MapleCharacter chr, final int id) {

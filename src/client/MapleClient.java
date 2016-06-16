@@ -4,9 +4,14 @@ import constants.GameConstants;
 import constants.ServerConstants;
 import database.DatabaseConnection;
 import database.DatabaseException;
+import io.netty.channel.Channel;
+import io.netty.util.*;
+import net.MapleCrypto;
 import net.cashshop.CashShopServer;
 import net.channel.ChannelServer;
-import net.server.login.LoginServer;
+import net.login.LoginServer;
+import net.packet.CWvsContext;
+import net.packet.LoginPacket;
 import net.world.MapleMessengerCharacter;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
@@ -37,8 +42,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.script.ScriptEngine;
-import org.apache.mina.common.IoSession;
 import server.CharacterCardFactory;
+import server.Randomizer;
 import server.Timer.PingTimer;
 import server.farm.MapleFarm;
 import server.maps.MapleMap;
@@ -46,11 +51,7 @@ import server.quest.MapleQuest;
 import server.shark.SharkLogger;
 import server.stores.IMaplePlayerShop;
 import tools.FileoutputUtil;
-import tools.MapleAESOFB;
 import tools.Pair;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.LoginPacket;
 
 public class MapleClient implements Serializable {
 
@@ -60,10 +61,10 @@ public class MapleClient implements Serializable {
             LOGIN_LOGGEDIN = 2,
             CHANGE_CHANNEL = 3;
     public static final int DEFAULT_CHARSLOT = 8;
-    public static final String CLIENT_KEY = "CLIENT";
-    private final transient MapleAESOFB send, receive;
-    private final transient IoSession session;
-    private MapleCharacter player;
+    public static final AttributeKey<MapleClient> CLIENT_KEY = AttributeKey.valueOf("C");
+    private final transient MapleCrypto send, receive;
+    private final transient Channel socketChannel;
+    private MapleCharacter character;
     private int channel = 1, accId = -1, world, birthday;
     private int charslots = DEFAULT_CHARSLOT;
     private boolean loggedIn = false, serverTransition = false;
@@ -89,24 +90,32 @@ public class MapleClient implements Serializable {
     private MapleFarm farm;
     private String redirectorUsername;
     public SharkLogger sl = new SharkLogger(); // no boilerplate because i'm lazy
-
-    public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
-        this.send = send;
-        this.receive = receive;
-        this.session = session;
+    
+    public MapleClient(Channel socketChannel) {
+        this.send = new MapleCrypto(Randomizer.nextBytes(4), (short) (0xFFFF - ServerConstants.CLIENT_VERSION));
+        this.receive = new MapleCrypto(Randomizer.nextBytes(4), ServerConstants.CLIENT_VERSION);
+        this.socketChannel = socketChannel;
     }
 
-    public final MapleAESOFB getReceiveCrypto() {
+    public final MapleCrypto getReceiveCrypto() {
         return receive;
     }
 
-    public final MapleAESOFB getSendCrypto() {
+    public final MapleCrypto getSendCrypto() {
         return send;
     }
 
-    public final IoSession getSession() {
-        return session;
+    public final Channel getSocketChannel() {
+        return socketChannel;
     }
+    
+    public void close() {
+		socketChannel.close();
+	}
+    
+    public void sendPacket(byte[] message) {
+		socketChannel.writeAndFlush(message);
+	}
 
     public final Lock getLock() {
         return mutex;
@@ -116,12 +125,12 @@ public class MapleClient implements Serializable {
         return npc_mutex;
     }
 
-    public MapleCharacter getPlayer() {
-        return player;
+    public MapleCharacter getCharacter() {
+        return character;
     }
 
-    public void setPlayer(MapleCharacter player) {
-        this.player = player;
+    public void setCharacter(MapleCharacter character) {
+        this.character = character;
     }
 
     public void createdChar(final int id) {
@@ -601,7 +610,7 @@ public class MapleClient implements Serializable {
                                 ps.executeUpdate();
                                 ps.close();
                                 disconnect(true, false);//test disconnect.
-                                getSession().write(CWvsContext.broadcastMsg(1, "Account has been successfully unstuck!"));
+                                sendPacket(CWvsContext.broadcastMsg(1, "Account has been successfully unstuck!"));
                             } catch (SQLException se) {
                             }
                         }
@@ -807,7 +816,7 @@ public class MapleClient implements Serializable {
                 if (!rs.next() || rs.getInt("banned") > 0) {
                     ps.close();
                     rs.close();
-                    session.close();
+                    socketChannel.close();
                     throw new DatabaseException("Account doesn't exist or is banned");
                 }
                 birthday = rs.getInt("bday");
@@ -834,12 +843,12 @@ public class MapleClient implements Serializable {
 
     public final void removalTask(boolean shutdown) {
         try {
-            player.cancelAllBuffs_();
-            player.cancelAllDebuffs();
-            player.cancelBlessedEnsemble();
-            if (player.getMarriageId() > 0) {
-                final MapleQuestStatus stat1 = player.getQuestNoAdd(MapleQuest.getInstance(160001));
-                final MapleQuestStatus stat2 = player.getQuestNoAdd(MapleQuest.getInstance(160002));
+            character.cancelAllBuffs_();
+            character.cancelAllDebuffs();
+            character.cancelBlessedEnsemble();
+            if (character.getMarriageId() > 0) {
+                final MapleQuestStatus stat1 = character.getQuestNoAdd(MapleQuest.getInstance(160001));
+                final MapleQuestStatus stat2 = character.getQuestNoAdd(MapleQuest.getInstance(160002));
                 if (stat1 != null && stat1.getCustomData() != null && (stat1.getCustomData().equals("2_") || stat1.getCustomData().equals("2"))) {
                     //dc in process of marriage
                     if (stat2 != null && stat2.getCustomData() != null) {
@@ -848,9 +857,9 @@ public class MapleClient implements Serializable {
                     stat1.setCustomData("3");
                 }
             }
-            if (player.getMapId() == GameConstants.JAIL) {
-                final MapleQuestStatus stat1 = player.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME));
-                final MapleQuestStatus stat2 = player.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST));
+            if (character.getMapId() == GameConstants.JAIL) {
+                final MapleQuestStatus stat1 = character.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME));
+                final MapleQuestStatus stat2 = character.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST));
                 if (stat1.getCustomData() == null) {
                     stat1.setCustomData(String.valueOf(System.currentTimeMillis()));
                 } else if (stat2.getCustomData() == null) {
@@ -863,29 +872,29 @@ public class MapleClient implements Serializable {
                     stat2.setCustomData(String.valueOf(seconds));
                 }
             }
-            player.changeRemoval(true);
-            if (player.getEventInstance() != null) {
-                player.getEventInstance().playerDisconnected(player, player.getId());
+            character.changeRemoval(true);
+            if (character.getEventInstance() != null) {
+                character.getEventInstance().playerDisconnected(character, character.getId());
             }
             synchronized (this) {
-            final IMaplePlayerShop shop = player.getPlayerShop();
+            final IMaplePlayerShop shop = character.getPlayerShop();
                   if (shop != null) {
-                    shop.removeVisitor(player);
-                    if (shop.isOwner(player)) {
+                    shop.removeVisitor(character);
+                    if (shop.isOwner(character)) {
                       if (shop.getShopType() == 1 && shop.isAvailable() && !shutdown) {
                         shop.setOpen(true);
                       } else {
                         shop.closeShop(true, !shutdown);
-                        player.setPlayerShop(null);
+                        character.setPlayerShop(null);
                       }
                     }
                   }
             }
-            player.setMessenger(null);
-            if (player.getMap() != null) {
+            character.setMessenger(null);
+            if (character.getMap() != null) {
                 if (shutdown || (getChannelServer() != null && getChannelServer().isShutdown())) {
                     int questID = -1;
-                    switch (player.getMapId()) {
+                    switch (character.getMapId()) {
                         case 240060200: //HT
                             questID = 160100;
                             break;
@@ -926,18 +935,18 @@ public class MapleClient implements Serializable {
                             break;
                     }
                     if (questID > 0) {
-                        player.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData("0"); //reset the time.
+                        character.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData("0"); //reset the time.
                     }
-                } else if (player.isAlive()) {
-                    switch (player.getMapId()) {
+                } else if (character.isAlive()) {
+                    switch (character.getMapId()) {
                         case 541010100: //latanica
                         case 541020800: //krexel
                         case 220080001: //pap
-                            player.getMap().addDisconnected(player.getId());
+                            character.getMap().addDisconnected(character.getId());
                             break;
                     }
                 }
-                player.getMap().removePlayer(player);
+                character.getMap().removePlayer(character);
             }
         } catch (final NumberFormatException e) {
             FileoutputUtil.outputFileError(FileoutputUtil.Acc_Stuck, e);
@@ -950,23 +959,23 @@ public class MapleClient implements Serializable {
 
     public final void disconnect(final boolean RemoveInChannelServer, final boolean fromCS, final boolean shutdown) {
         this.sl.dump();
-        if (player != null) {
-            MapleMap map = player.getMap();
-            final MapleParty party = player.getParty();
-            final boolean clone = player.isClone();
-            final String namez = player.getName();
-            final int idz = player.getId(), messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId(), gid = player.getGuildId(), fid = player.getFamilyId();
-            final BuddyList bl = player.getBuddylist();
-            final MaplePartyCharacter chrp = new MaplePartyCharacter(player);
-            final MapleMessengerCharacter chrm = new MapleMessengerCharacter(player);
-            final MapleGuildCharacter chrg = player.getMGC();
-            final MapleFamilyCharacter chrf = player.getMFC();
+        if (character != null) {
+            MapleMap map = character.getMap();
+            final MapleParty party = character.getParty();
+            final boolean clone = character.isClone();
+            final String namez = character.getName();
+            final int idz = character.getId(), messengerid = character.getMessenger() == null ? 0 : character.getMessenger().getId(), gid = character.getGuildId(), fid = character.getFamilyId();
+            final BuddyList bl = character.getBuddylist();
+            final MaplePartyCharacter chrp = new MaplePartyCharacter(character);
+            final MapleMessengerCharacter chrm = new MapleMessengerCharacter(character);
+            final MapleGuildCharacter chrg = character.getMGC();
+            final MapleFamilyCharacter chrf = character.getMFC();
 
             removalTask(shutdown);
-            LoginServer.getLoginAuth(player.getId());
-            player.saveToDB(true, fromCS);
+            LoginServer.getLoginAuth(character.getId());
+            character.saveToDB(true, fromCS);
             if (shutdown) {
-                player = null;
+                character = null;
                 receiving = false;
                 return;
             }
@@ -980,7 +989,7 @@ public class MapleClient implements Serializable {
                 }
                 try {
                     if (chz == -1 || ch == null || clone || ch.isShutdown()) {
-                        player = null;
+                        character = null;
                         return;//no idea
                     }
                     if (messengerid > 0) {
@@ -1022,7 +1031,7 @@ public class MapleClient implements Serializable {
                     if (RemoveInChannelServer && ch != null) {
                         ch.removePlayer(idz, namez);
                     }
-                    player = null;
+                    character = null;
                 }
             } else {
                 final int ch = World.Find.findChannel(idz);
@@ -1046,8 +1055,8 @@ public class MapleClient implements Serializable {
                     if (fid > 0 && chrf != null) {
                         World.Family.setFamilyMemberOnline(chrf, false, -1);
                     }
-                    if (player != null) {
-                        player.setMessenger(null);
+                    if (character != null) {
+                        character.setMessenger(null);
                     }
                 } catch (final Exception e) {
                     FileoutputUtil.outputFileError(FileoutputUtil.Acc_Stuck, e);
@@ -1056,7 +1065,7 @@ public class MapleClient implements Serializable {
                     if (RemoveInChannelServer && ch > 0) {
                         CashShopServer.getPlayerStorage().deregisterPlayer(idz, namez);
                     }
-                    player = null;
+                    character = null;
                 }
             }
         }
@@ -1067,7 +1076,7 @@ public class MapleClient implements Serializable {
     }
 
     public final String getSessionIPAddress() {
-        return session.getRemoteAddress().toString().split(":")[0];
+    	return socketChannel.remoteAddress().toString().split(":")[0].substring(1);
     }
 
     public final boolean CheckIPAddress() {
@@ -1098,17 +1107,17 @@ public class MapleClient implements Serializable {
     }
 
     public final void DebugMessage(final StringBuilder sb) {
-        sb.append(getSession().getRemoteAddress());
+        sb.append(getSocketChannel().remoteAddress());
         sb.append("Connected: ");
-        sb.append(getSession().isConnected());
+        sb.append(getSocketChannel().isActive());
         sb.append(" Closing: ");
-        sb.append(getSession().isClosing());
+        sb.append(!getSocketChannel().isActive());
         sb.append(" ClientKeySet: ");
-        sb.append(getSession().getAttribute(MapleClient.CLIENT_KEY) != null);
+        sb.append(getSocketChannel().attr(MapleClient.CLIENT_KEY).get() != null);
         sb.append(" loggedin: ");
         sb.append(isLoggedIn());
         sb.append(" has char: ");
-        sb.append(getPlayer() != null);
+        sb.append(getCharacter() != null);
     }
 
     public final int getChannel() {
@@ -1230,7 +1239,7 @@ public class MapleClient implements Serializable {
 
     public final void sendPing() {
         lastPing = System.currentTimeMillis();
-        session.write(LoginPacket.getPing());
+        sendPacket(LoginPacket.getPing());
 
         PingTimer.getInstance().schedule(new Runnable() {
             @Override
@@ -1238,8 +1247,8 @@ public class MapleClient implements Serializable {
                 try {
                     if (getLatency() < 0) {
                         disconnect(true, false);
-                        if (getSession().isConnected()) {
-                            getSession().close();
+                        if (getSocketChannel().isActive()) {
+                            getSocketChannel().close();
                         }
                     }
                 } catch (final NullPointerException e) {
@@ -1264,11 +1273,11 @@ public class MapleClient implements Serializable {
     public static String getLogMessage(final MapleClient cfor, final String message, final Object... parms) {
         final StringBuilder builder = new StringBuilder();
         if (cfor != null) {
-            if (cfor.getPlayer() != null) {
+            if (cfor.getCharacter() != null) {
                 builder.append("<");
-                builder.append(MapleCharacterUtil.makeMapleReadable(cfor.getPlayer().getName()));
+                builder.append(MapleCharacterUtil.makeMapleReadable(cfor.getCharacter().getName()));
                 builder.append(" (cid: ");
-                builder.append(cfor.getPlayer().getId());
+                builder.append(cfor.getCharacter().getId());
                 builder.append(")> ");
             }
             if (cfor.getAccountName() != null) {

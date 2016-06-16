@@ -92,8 +92,8 @@ public class PortalScriptManager {
                 System.err.println("Error entering Portalscript: " + portal.getScriptName() + " : " + e);
             }
         } else {
-            System.out.println("Unhandled portal script " + portal.getScriptName() + " on map " + c.getPlayer().getMapId());
-            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Unhandled portal script " + portal.getScriptName() + " on map " + c.getPlayer().getMapId());
+            System.out.println("Unhandled portal script " + portal.getScriptName() + " on map " + c.getCharacter().getMapId());
+            FileoutputUtil.log(FileoutputUtil.ScriptEx_Log, "Unhandled portal script " + portal.getScriptName() + " on map " + c.getCharacter().getMapId());
         }
     }
 

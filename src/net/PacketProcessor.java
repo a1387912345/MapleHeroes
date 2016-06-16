@@ -1,54 +1,32 @@
-/*
- This file is part of the OdinMS Maple Story Server
- Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
- Matthias Butz <matze@odinms.de>
- Jan Christian Meyer <vimes@odinms.de>
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as
- published by the Free Software Foundation version 3 as published by
- the Free Software Foundation. You may not use, modify or distribute
- this program under any other version of the GNU Affero General Public
- License.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package net;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.server.handlers.*;
-import net.server.login.handlers.*;
-import net.server.talk.handlers.GuildInfoInHandler;
-import net.server.talk.handlers.MigrateInHandler;
-import net.server.channel.handlers.*;
-import net.server.channel.handlers.chat.*;
-import net.server.channel.handlers.inventory.*;
-import net.server.channel.handlers.monster.*;
-import net.server.channel.handlers.pet.*;
-import net.server.channel.handlers.player.*;
-import net.server.channel.handlers.stat.*;
-import net.server.channel.handlers.summon.*;
-import net.server.farm.handlers.*;
+import net.talk.handler.*;
+import net.channel.handler.*;
+import net.channel.handler.chat.*;
+import net.channel.handler.inventory.*;
+import net.channel.handler.monster.*;
+import net.channel.handler.pet.*;
+import net.channel.handler.player.*;
+import net.channel.handler.stat.*;
+import net.channel.handler.summon.*;
+import net.farm.handler.*;
+import net.handler.*;
+import net.login.handler.*;
 
 public final class PacketProcessor {
 
-    private final static Map<String, PacketProcessor> instances = new LinkedHashMap<>();
+	private static final PacketProcessor instance = new PacketProcessor();
+    //private final static Map<String, PacketProcessor> instances = new LinkedHashMap<>();
     private MaplePacketHandler[] handlers;
 
     private PacketProcessor() {
         int maxRecvOp = 0;
         for (RecvPacketOpcode op : RecvPacketOpcode.values()) {
-            if (op.getValue() > maxRecvOp) {
-                maxRecvOp = op.getValue();
+            if (op.getOpcode() > maxRecvOp) {
+                maxRecvOp = op.getOpcode();
             }
         }
         handlers = new MaplePacketHandler[maxRecvOp + 1];
@@ -67,24 +45,30 @@ public final class PacketProcessor {
     
     public void registerHandler(RecvPacketOpcode code, MaplePacketHandler handler) {
         try {
-            handlers[code.getValue()] = handler;
+            handlers[code.getOpcode()] = handler;
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Error registering packet handler - " + code.name());
         }
     }
+    
+    public static PacketProcessor getInstance() {
+    	return instance;
+    }
 
+    /*
     public synchronized static PacketProcessor getProcessor(int world, int channel) {
-        final String lolpair = world + " " + channel;
-        PacketProcessor processor = instances.get(lolpair);
+        final String key = world + " " + channel;
+        PacketProcessor processor = instances.get(key);
         if (processor == null) {
             processor = new PacketProcessor();
             processor.reset(channel);
-            instances.put(lolpair, processor);
+            instances.put(key, processor);
         }
         return processor;
     }
+    */
 
-    public void reset(int channel) {
+    public void initialize() {
         handlers = new MaplePacketHandler[handlers.length];
         
         /*
@@ -331,8 +315,7 @@ public final class PacketProcessor {
         registerHandler(RecvPacketOpcode.DAMAGE_REACTOR, new DamageReactorHandler(RecvPacketOpcode.DAMAGE_REACTOR));
         registerHandler(RecvPacketOpcode.CLICK_REACTOR, new TouchReactorHandler(RecvPacketOpcode.CLICK_REACTOR));
         registerHandler(RecvPacketOpcode.TOUCH_REACTOR, new TouchReactorHandler(RecvPacketOpcode.TOUCH_REACTOR));
-        
-        
+    
     }
 }
 

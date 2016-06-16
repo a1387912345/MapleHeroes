@@ -4,10 +4,10 @@ package server.buffs.buffclasses.sengoku;
 import client.MapleBuffStat;
 import client.MonsterStatus;
 import constants.GameConstants;
+import net.packet.CWvsContext;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import server.buffs.AbstractBuffClass;
-import tools.packet.CWvsContext;
 
 
 /**

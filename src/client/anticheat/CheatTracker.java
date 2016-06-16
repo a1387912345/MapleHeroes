@@ -215,7 +215,7 @@ public class CheatTracker {
             dropsPerSecond++;
             if (dropsPerSecond >= (dc ? 32 : 16) && chr.get() != null && !chr.get().isGM()) {
                 if (dc) {
-                    chr.get().getClient().getSession().close();
+                    chr.get().getClient().getSocketChannel().close();
                 } else {
                     chr.get().getClient().setMonitored(true);
                 }
@@ -230,7 +230,7 @@ public class CheatTracker {
         if ((System.currentTimeMillis() - lastMsgTime) < 1000) { //luckily maplestory has auto-check for too much msging
             msgsPerSecond++;
             if (msgsPerSecond > 10 && chr.get() != null && !chr.get().isGM()) {
-                chr.get().getClient().getSession().close();
+                chr.get().getClient().getSocketChannel().close();
             }
         } else {
             msgsPerSecond = 0;
@@ -284,7 +284,7 @@ public class CheatTracker {
             if (type == 1) {
                 // AutobanManager.getInstance().autoban(chrhardref.getClient(), StringUtil.makeEnumHumanReadable(offense.name()));
             } else if (type == 2) {
-                chrhardref.getClient().getSession().close();
+                chrhardref.getClient().getSocketChannel().close();
             }
             gm_message = 0;
             return;
@@ -329,7 +329,7 @@ public class CheatTracker {
     public void updateTick(int newTick) {
         if (newTick <= lastTickCount) { //definitely packet spamming or the added feature in many PEs which is to generate random tick
             if (tickSame >= 5 && chr.get() != null && !chr.get().isGM()) {
-                chr.get().getClient().getSession().close();
+                chr.get().getClient().getSocketChannel().close();
             } else {
                 tickSame++;
             }

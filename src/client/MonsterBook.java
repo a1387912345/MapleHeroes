@@ -4,6 +4,9 @@ import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import database.DatabaseConnection;
+import net.netty.MaplePacketWriter;
+import net.packet.CField;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,8 +23,6 @@ import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import tools.Pair;
 import tools.Triple;
-import tools.data.MaplePacketLittleEndianWriter;
-import tools.packet.CField;
 
 public final class MonsterBook
         implements Serializable {
@@ -113,7 +114,7 @@ public final class MonsterBook
         return returnval;
     }
 
-    public void writeCharInfoPacket(MaplePacketLittleEndianWriter mplew) {
+    public void writeCharInfoPacket(MaplePacketWriter mplew) {
         List cardSize = new ArrayList(10);
         for (int i = 0; i < 10; i++) {
             cardSize.add(Integer.valueOf(0));
@@ -132,7 +133,7 @@ public final class MonsterBook
         mplew.writeInt(this.finishedSets);
     }
 
-    public void writeFinished(MaplePacketLittleEndianWriter mplew) {
+    public void writeFinished(MaplePacketWriter mplew) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         mplew.write(1);
         mplew.writeShort(this.cardItems.size());
@@ -161,7 +162,7 @@ public final class MonsterBook
         }
     }
 
-    public void writeUnfinished(MaplePacketLittleEndianWriter mplew) {
+    public void writeUnfinished(MaplePacketWriter mplew) {
         mplew.write(0);
         mplew.writeShort(this.cardItems.size());
         for (Iterator i$ = this.cardItems.iterator(); i$.hasNext();) {
@@ -323,25 +324,25 @@ public final class MonsterBook
     public final boolean monsterCaught(MapleClient c, int cardid, String cardname) {
         if ((!this.cards.containsKey(Integer.valueOf(cardid))) || ((this.cards.get(Integer.valueOf(cardid))).intValue() < 2)) {
             this.changed = true;
-            c.getPlayer().dropMessage(-6, new StringBuilder().append("[").append(cardname).append("] has been successfully recorded on the Monster Book.").toString());
-            c.getSession().write(CField.EffectPacket.showForeignEffect(18));
+            c.getCharacter().dropMessage(-6, new StringBuilder().append("[").append(cardname).append("] has been successfully recorded on the Monster Book.").toString());
+            c.sendPacket(CField.EffectPacket.showForeignEffect(18));
             this.cards.put(Integer.valueOf(cardid), Integer.valueOf(2));
             if (GameConstants.GMS) {
-                if (c.getPlayer().getQuestStatus(50195) != 1) {
-                    MapleQuest.getInstance(50195).forceStart(c.getPlayer(), 9010000, "1");
+                if (c.getCharacter().getQuestStatus(50195) != 1) {
+                    MapleQuest.getInstance(50195).forceStart(c.getCharacter(), 9010000, "1");
                 }
-                if (c.getPlayer().getQuestStatus(50196) != 1) {
-                    MapleQuest.getInstance(50196).forceStart(c.getPlayer(), 9010000, "1");
+                if (c.getCharacter().getQuestStatus(50196) != 1) {
+                    MapleQuest.getInstance(50196).forceStart(c.getCharacter(), 9010000, "1");
                 }
                 addCardItem(cardid, 2);
                 byte rr = calculateScore();
                 if (rr > 0) {
-                    if (c.getPlayer().getQuestStatus(50197) != 1) {
-                        MapleQuest.getInstance(50197).forceStart(c.getPlayer(), 9010000, "1");
+                    if (c.getCharacter().getQuestStatus(50197) != 1) {
+                        MapleQuest.getInstance(50197).forceStart(c.getCharacter(), 9010000, "1");
                     }
-                    c.getSession().write(CField.EffectPacket.showForeignEffect(59));//was43
+                    c.sendPacket(CField.EffectPacket.showForeignEffect(59));//was43
                     if (rr > 1) {
-                        applyBook(c.getPlayer(), false);
+                        applyBook(c.getCharacter(), false);
                     }
                 }
             }
@@ -360,8 +361,8 @@ public final class MonsterBook
         }
         this.changed = true;
 
-        c.getPlayer().dropMessage(-6, new StringBuilder().append("[").append(cardname).append("] has been successfully recorded on the Monster Book.").toString());
+        c.getCharacter().dropMessage(-6, new StringBuilder().append("[").append(cardname).append("] has been successfully recorded on the Monster Book.").toString());
         this.cards.put(Integer.valueOf(cardid), Integer.valueOf(1));
-        c.getSession().write(CField.EffectPacket.showForeignEffect(18));
+        c.sendPacket(CField.EffectPacket.showForeignEffect(18));
     }
 }

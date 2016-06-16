@@ -22,11 +22,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.events;
 
 import client.MapleCharacter;
+import net.packet.CField;
+import net.packet.CWvsContext;
+
 import java.util.LinkedList;
 import java.util.List;
 import server.Timer.EventTimer;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class MapleCoconut extends MapleEvent {
 
@@ -60,7 +61,7 @@ public class MapleCoconut extends MapleEvent {
     @Override
     public void onMapLoad(MapleCharacter chr) {
 	super.onMapLoad(chr);
-        chr.getClient().getSession().write(CField.coconutScore(getCoconutScore()));
+        chr.getClient().sendPacket(CField.coconutScore(getCoconutScore()));
     }
 
     public MapleCoconuts getCoconut(int id) {
@@ -153,11 +154,11 @@ public class MapleCoconut extends MapleEvent {
                 } else {
                     for (MapleCharacter chr : getMap(0).getCharactersThreadsafe()) {
                         if (chr.getTeam() == (getMapleScore() > getStoryScore() ? 0 : 1)) {
-                            chr.getClient().getSession().write(CField.showEffect("event/coconut/victory"));
-                            chr.getClient().getSession().write(CField.playSound("Coconut/Victory"));
+                            chr.getClient().sendPacket(CField.showEffect("event/coconut/victory"));
+                            chr.getClient().sendPacket(CField.playSound("Coconut/Victory"));
                         } else {
-                            chr.getClient().getSession().write(CField.showEffect("event/coconut/lose"));
-                            chr.getClient().getSession().write(CField.playSound("Coconut/Failed"));
+                            chr.getClient().sendPacket(CField.showEffect("event/coconut/lose"));
+                            chr.getClient().sendPacket(CField.playSound("Coconut/Failed"));
                         }
                     }
                     warpOut();
@@ -174,18 +175,18 @@ public class MapleCoconut extends MapleEvent {
             public void run() {
                 if (getMapleScore() == getStoryScore()) {
                     for (MapleCharacter chr : getMap(0).getCharactersThreadsafe()) {
-                        chr.getClient().getSession().write(CField.showEffect("event/coconut/lose"));
-                        chr.getClient().getSession().write(CField.playSound("Coconut/Failed"));
+                        chr.getClient().sendPacket(CField.showEffect("event/coconut/lose"));
+                        chr.getClient().sendPacket(CField.playSound("Coconut/Failed"));
                     }
                     warpOut();
                 } else {
                     for (MapleCharacter chr : getMap(0).getCharactersThreadsafe()) {
                         if (chr.getTeam() == (getMapleScore() > getStoryScore() ? 0 : 1)) {
-                            chr.getClient().getSession().write(CField.showEffect("event/coconut/victory"));
-                            chr.getClient().getSession().write(CField.playSound("Coconut/Victory"));
+                            chr.getClient().sendPacket(CField.showEffect("event/coconut/victory"));
+                            chr.getClient().sendPacket(CField.playSound("Coconut/Victory"));
                         } else {
-                            chr.getClient().getSession().write(CField.showEffect("event/coconut/lose"));
-                            chr.getClient().getSession().write(CField.playSound("Coconut/Failed"));
+                            chr.getClient().sendPacket(CField.showEffect("event/coconut/lose"));
+                            chr.getClient().sendPacket(CField.playSound("Coconut/Failed"));
                         }
                     }
                     warpOut();

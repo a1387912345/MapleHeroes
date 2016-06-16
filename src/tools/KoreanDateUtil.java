@@ -22,7 +22,8 @@ package tools;
 
 import java.util.Date;
 import java.util.SimpleTimeZone;
-import tools.packet.PacketHelper;
+
+import net.packet.PacketHelper;
 
 /**
  * Provides a suite of tools for manipulating Korean Timestamps.

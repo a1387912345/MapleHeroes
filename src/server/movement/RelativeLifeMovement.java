@@ -19,7 +19,7 @@ package server.movement;
 
 import java.awt.Point;
 
-import tools.data.MaplePacketLittleEndianWriter;
+import net.netty.MaplePacketWriter;
 
 public class RelativeLifeMovement extends AbstractLifeMovement {
 
@@ -38,7 +38,7 @@ public class RelativeLifeMovement extends AbstractLifeMovement {
     }
 
     @Override
-    public void serialize(MaplePacketLittleEndianWriter lew) {
+    public void serialize(MaplePacketWriter lew) {
         lew.write(getType());
         lew.writePos(getPosition());
         if (getType() == 18 || getType() == 19) {

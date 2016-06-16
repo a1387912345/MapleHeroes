@@ -33,8 +33,9 @@ import client.SkillFactory;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import custom.MoonlightRevamp;
+import net.packet.CWvsContext;
+
 import java.util.Map;
-import tools.packet.CWvsContext;
 
 public class SpawnPoint extends Spawns {
 

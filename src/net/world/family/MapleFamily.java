@@ -30,6 +30,8 @@ import java.util.Iterator;
 
 import client.MapleCharacter;
 import database.DatabaseConnection;
+import net.packet.CWvsContext;
+import net.packet.CWvsContext.FamilyPacket;
 import net.world.World;
 
 import java.sql.Statement;
@@ -37,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.FamilyPacket;
 
 public final class MapleFamily implements java.io.Serializable {
 

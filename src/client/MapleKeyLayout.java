@@ -2,6 +2,8 @@ package client;
 
 import constants.GameConstants;
 import database.DatabaseConnection;
+import net.netty.MaplePacketWriter;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import tools.Pair;
-import tools.data.MaplePacketLittleEndianWriter;
 
 public class MapleKeyLayout implements Serializable {
 
@@ -36,7 +37,7 @@ public class MapleKeyLayout implements Serializable {
         changed = false;
     }
 
-    public final void writeData(final MaplePacketLittleEndianWriter mplew) {
+    public final void writeData(final MaplePacketWriter mplew) {
         mplew.write(keymap.isEmpty() ? 1 : 0);
         if (keymap.isEmpty()) {
             return;

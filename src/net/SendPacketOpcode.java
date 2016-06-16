@@ -1,10 +1,6 @@
 package net;
 
-import constants.ServerConfig;
-import tools.FileoutputUtil;
-import tools.HexTool;
-
-public enum SendPacketOpcode implements WritableIntValueHolder {
+public enum SendPacketOpcode {
 
 	/*
      * General Opcodes
@@ -677,58 +673,31 @@ public enum SendPacketOpcode implements WritableIntValueHolder {
     
     SHOW_DAMAGE_SKIN((short) 0xDA);//:v
 
-    private short code = -2;
+    private short opcode;
 
-    @Override
-    public void setValue(short code) {
-        this.code = code;
+    private SendPacketOpcode(short opcode) {
+        this.opcode = opcode;
     }
-
-    @Override
-    public short getValue() {
-        return getValue(true);
+    
+    public short getOpcode() {
+        return opcode;
     }
-
-    public short getValue(boolean show) {
-        if (show && ServerConfig.logPackets && !isSpamHeader(this)) {
-            String tab = "";
-            for (int i = 4; i > Integer.valueOf(this.name().length() / 8); i--) {
-                tab += "\t";
-            }
-            System.out.println("[Send]\t" + this.name() + tab + "|\t" + this.code + "\t|\t" + HexTool.getOpcodeToString(this.code)/* + "\r\nCaller: " + Thread.currentThread().getStackTrace()[2] */);
-            FileoutputUtil.log("PacketLog.txt", "\r\n\r\n[Send]\t" + this.name() + tab + "|\t" + this.code + "\t|\t" + HexTool.getOpcodeToString(this.code) + "\r\n\r\n");
-        }
-        return code;
-    }
-
-    private SendPacketOpcode(short code) {
-        this.code = code;
-    }
-
-    public String getType(short code) {
-        String type = null;
-        if (code >= 0 && code < 0xE || code >= 0x17 && code < 0x21) {
-            type = "CLogin";
-        } else if (code >= 0xE && code < 0x17) {
-            type = "LoginSecure";
-        } else if (code >= 0x21 && code < 0xCB) {
-            type = "CWvsContext";
-        } else if (code >= 0xD2) {
-            type = "CField";
-        }
-        return type;
+    
+    public void setOpcode(short opcode) {
+    	this.opcode = opcode;
     }
 
     public static String getOpcodeName(int value) {
         for (SendPacketOpcode opcode : SendPacketOpcode.values()) {
-            if (opcode.getValue(false) == value) {
+            if (opcode.getOpcode() == value) {
                 return opcode.name();
             }
         }
         return "UNKNOWN";
     }
 
-    public boolean isSpamHeader(SendPacketOpcode opcode) {
+    @SuppressWarnings("incomplete-switch")
+	public static boolean isSpam(SendPacketOpcode opcode) {
         switch (opcode) {
             case AUTH_RESPONSE:
             case SERVERLIST:

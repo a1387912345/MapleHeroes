@@ -21,13 +21,13 @@
 package server.maps;
 
 import client.MapleClient;
+import net.packet.CField;
 import scripting.reactor.ReactorScriptManager;
 
 import java.awt.Rectangle;
 
 import server.Timer.MapTimer;
 import tools.Pair;
-import tools.packet.CField;
 
 public class MapleReactor extends MapleMapObject {
 
@@ -123,12 +123,12 @@ public class MapleReactor extends MapleMapObject {
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.destroyReactor(this));
+        client.sendPacket(CField.destroyReactor(this));
     }
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(CField.spawnReactor(this));
+        client.sendPacket(CField.spawnReactor(this));
     }
 
     public void forceStartReactor(MapleClient c) {
@@ -170,7 +170,7 @@ public class MapleReactor extends MapleMapObject {
                     if ((stats.getType(state) < 100 || stats.getType(state) == 999) && delay > 0) { //reactor broken
                         map.destroyReactor(getObjectId());
                     } else { //item-triggered on final step
-                        map.broadcastMessage(CField.triggerReactor(this, stance, c.getPlayer()));
+                        map.broadcastMessage(CField.triggerReactor(this, stance, c.getCharacter()));
                     }
                     //if (rid > 200011) {
                     ReactorScriptManager.getInstance().act(c, this);

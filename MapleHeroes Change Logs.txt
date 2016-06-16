@@ -22,6 +22,9 @@
 - When creating a guild, the GuildPacket.newGuildInfo() is wrong so it doesn't refresh the guild. You'd have to change channels or relog to see the guild. This is fixable by sending the correct packet, however I forgot to save the guild creation packets.
 - When attempting to change Guild Rank Titles, pressing save shows a "It cannot be used. Please check it again." message in the client.
 
+[Rev 6]
+- Updated source for Netty implementation
+
 [Rev 5.3]
 - Added MapleExp & MapleExpStatus class; Added for clean object and structural organization
 - Added proper CWvsContext.InfoPacket.gainExpMessage(); This fixes exp status messages not showing anymore than 1 line and GMS like.

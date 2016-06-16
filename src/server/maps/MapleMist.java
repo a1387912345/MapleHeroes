@@ -4,13 +4,14 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
+import net.packet.CField;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.concurrent.ScheduledFuture;
 import server.MapleStatEffect;
 import server.life.MapleMonster;
 import server.life.MobSkill;
-import tools.packet.CField;
 
 public class MapleMist extends MapleMapObject {
 
@@ -22,8 +23,8 @@ public class MapleMist extends MapleMapObject {
     private boolean isMobMist, isShelter, isRecovery, isTimeCapsule;
     private int skillDelay, skilllevel, isPoisonMist, ownerId;
     private ScheduledFuture<?> schedule = null, poisonSchedule = null;
-        private int clockType; //반반
-         private boolean isUsed;
+    private int clockType;
+    private boolean isUsed;
 
     public MapleMist(Rectangle mistPosition, MapleMonster mob, MobSkill skill) {
         this.mistPosition = mistPosition;
@@ -69,7 +70,7 @@ public class MapleMist extends MapleMapObject {
                 break;
             case 22161003: // Recovery Aura
                 this.isPoisonMist = 4;
-            case 36121007: //타임 캡슐
+            case 36121007:
                 skillDelay = 15;
                 isTimeCapsule = true;
                 break;
@@ -222,12 +223,12 @@ public class MapleMist extends MapleMapObject {
 
     @Override
     public void sendSpawnData(final MapleClient c) {
-        c.getSession().write(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
+        c.sendPacket(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
     }
 
     @Override
     public void sendDestroyData(final MapleClient c) {
-        c.getSession().write(CField.removeMist(getObjectId(), false));
+        c.sendPacket(CField.removeMist(getObjectId(), false));
     }
 
     public boolean makeChanceResult() {

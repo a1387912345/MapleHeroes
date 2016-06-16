@@ -23,6 +23,8 @@ package scripting.event;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.CWvsContext;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.exped.MapleExpedition;
@@ -51,8 +53,6 @@ import server.maps.MapleMapObject;
 import server.maps.MapleReactor;
 import server.maps.MapleReactorFactory;
 import tools.FileoutputUtil;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class EventManager {
 

@@ -87,22 +87,22 @@ public class CommandProcessor {
     }
 
     private static void sendDisplayMessage(MapleClient c, String msg, CommandType type) {
-        if (c.getPlayer() == null) {
+        if (c.getCharacter() == null) {
             return;
         }
         switch (type) {
             case NORMAL:
-                c.getPlayer().dropMessage(6, msg);
+                c.getCharacter().dropMessage(6, msg);
                 break;
             case TRADE:
-                c.getPlayer().dropMessage(-2, "Error : " + msg);
+                c.getCharacter().dropMessage(-2, "Error : " + msg);
                 break;
         }
     }
 
     public static void dropHelp(MapleClient c) {
         final StringBuilder sb = new StringBuilder("Command list: ");
-        for (int i = 0; i <= c.getPlayer().getGMLevel(); i++) {
+        for (int i = 0; i <= c.getCharacter().getGMLevel(); i++) {
             if (commandList.containsKey(i)) {
                 for (String s : commandList.get(i)) {
                     sb.append(s);
@@ -110,7 +110,7 @@ public class CommandProcessor {
                 }
             }
         }
-        c.getPlayer().dropMessage(6, sb.toString());
+        c.getCharacter().dropMessage(6, sb.toString());
     }
 
     public static boolean processCommand(MapleClient c, String line, CommandType type) {
@@ -132,7 +132,7 @@ public class CommandProcessor {
                 int ret = co.execute(c, splitted); //Don't really care about the return value. ;D
             } catch (Exception e) {
                 sendDisplayMessage(c, "There was an error.", type);
-                if (c.getPlayer().isGM()) {
+                if (c.getCharacter().isGM()) {
                     sendDisplayMessage(c, "Error: " + e, type);
                     FileoutputUtil.outputFileError(FileoutputUtil.PacketEx_Log, e);
                 }
@@ -140,10 +140,10 @@ public class CommandProcessor {
             return true;
         }
 
-        if (c.getPlayer().getGMLevel() > PlayerGMRank.NORMAL.getLevel()) {
-            if (line.charAt(0) == '`' && c.getPlayer().getGMLevel() > 2) {
+        if (c.getCharacter().getGMLevel() > PlayerGMRank.NORMAL.getLevel()) {
+            if (line.charAt(0) == '`' && c.getCharacter().getGMLevel() > 2) {
                 for (final ChannelServer cserv : ChannelServer.getAllInstances()) {
-                    cserv.broadcastGMMessage(tools.packet.CField.multiChat("[GM Chat] " + c.getPlayer().getName(), line.substring(1), 6));
+                    cserv.broadcastGMMessage(net.packet.CField.multiChat("[GM Chat] " + c.getCharacter().getName(), line.substring(1), 6));
                 }
                 return true;
             }
@@ -160,7 +160,7 @@ public class CommandProcessor {
                     sendDisplayMessage(c, "That command does not exist.", type);
                     return true;
                 }
-                if (c.getPlayer().getGMLevel() >= co.getReqGMLevel()) {
+                if (c.getCharacter().getGMLevel() >= co.getReqGMLevel()) {
                     int ret = 0;
                     try {
                         ret = co.execute(c, splitted);
@@ -169,11 +169,11 @@ public class CommandProcessor {
                     } catch (Exception e) {
                         FileoutputUtil.outputFileError(FileoutputUtil.CommandEx_Log, e);
                     }
-                    if (ret > 0 && c.getPlayer() != null) { //incase d/c after command or something
-                        if (c.getPlayer().isGM()) {
-                            logCommandToDB(c.getPlayer(), line, "gmlog");
+                    if (ret > 0 && c.getCharacter() != null) { //incase d/c after command or something
+                        if (c.getCharacter().isGM()) {
+                            logCommandToDB(c.getCharacter(), line, "gmlog");
                         } else {
-                            logCommandToDB(c.getPlayer(), line, "internlog");
+                            logCommandToDB(c.getCharacter(), line, "internlog");
                         }
                     }
                 } else {

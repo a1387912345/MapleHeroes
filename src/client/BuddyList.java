@@ -1,6 +1,8 @@
 package client;
 
 import database.DatabaseConnection;
+import net.packet.CWvsContext.BuddylistPacket;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +11,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import tools.packet.CWvsContext.BuddylistPacket;
 
 public class BuddyList implements Serializable {
 
@@ -117,7 +118,7 @@ public class BuddyList implements Serializable {
 
     public void addBuddyRequest(MapleClient c, int cidFrom, String nameFrom, int channelFrom, int levelFrom, int jobFrom) {
         put(new BuddylistEntry(nameFrom, cidFrom, "ETC", channelFrom, false));
-        c.getSession().write(BuddylistPacket.requestBuddylistAdd(cidFrom, nameFrom, levelFrom, jobFrom));
+        c.sendPacket(BuddylistPacket.requestBuddylistAdd(cidFrom, nameFrom, levelFrom, jobFrom));
     }
 
     public void setChanged(boolean v) {

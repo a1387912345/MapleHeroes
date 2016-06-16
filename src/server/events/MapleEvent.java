@@ -24,6 +24,8 @@ package server.events;
 import client.MapleCharacter;
 import constants.GameConstants;
 import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.CWvsContext;
 import net.world.World;
 import server.MapleInventoryManipulator;
 import server.RandomRewards;
@@ -34,8 +36,6 @@ import server.maps.MapleMap;
 import server.maps.SavedLocationType;
 import tools.FileoutputUtil;
 import tools.StringUtil;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public abstract class MapleEvent {
     protected MapleEventType type;
@@ -131,7 +131,7 @@ public abstract class MapleEvent {
 
     public void onMapLoad(MapleCharacter chr) { //most dont do shit here
 	if (GameConstants.isEventMap(chr.getMapId()) && FieldLimitType.Event.check(chr.getMap().getFieldLimit()) && FieldLimitType.Event2.check(chr.getMap().getFieldLimit())) {
-	    chr.getClient().getSession().write(CField.showEventInstructions());
+	    chr.getClient().sendPacket(CField.showEventInstructions());
 	}
     }
 

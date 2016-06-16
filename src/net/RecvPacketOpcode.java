@@ -1,6 +1,6 @@
 package net;
 
-public enum RecvPacketOpcode implements WritableIntValueHolder {
+public enum RecvPacketOpcode {
 
     /*
      * General Opcodes
@@ -365,17 +365,8 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
     OS_INFORMATION(true, (short) 0x1E6),//1D6
     LUCKY_LOGOUT(true, (short) 0x2B6),
     MESSENGER_RANKING(true, (short) 0x1DD);
-    private short code = -2;
-
-    @Override
-    public void setValue(short code) {
-        this.code = code;
-    }
-
-    @Override
-    public final short getValue() {
-        return code;
-    }
+	
+	private short opcode;
     private final boolean CheckState;
 
     private RecvPacketOpcode() {
@@ -386,21 +377,52 @@ public enum RecvPacketOpcode implements WritableIntValueHolder {
         this.CheckState = CheckState;
     }
 
-    private RecvPacketOpcode(final boolean CheckState, short code) {
+    private RecvPacketOpcode(final boolean CheckState, short opcode) {
         this.CheckState = CheckState;
-        this.code = code;
+        this.opcode = opcode;
     }
-
-    public final boolean NeedsChecking() {
-        return CheckState;
-    }
-
-    public static String getOpcodeName(short value) {
-        for (RecvPacketOpcode header : RecvPacketOpcode.values()) {
-            if (header.getValue() == value) {
-                return header.name();
-            }
+    
+    public int getOpcode() {
+		return opcode;
+	}
+    
+    public void setOpcode(short opcode) {
+		this.opcode = opcode;
+	}
+    
+    @SuppressWarnings("incomplete-switch")
+	public static boolean isSpam(RecvPacketOpcode header) {
+        switch (header) {
+            case AUTH_REQUEST:
+            case MOVE_LIFE:
+            case MOVE_PLAYER:
+            //case SPECIAL_MOVE:
+            case MOVE_ANDROID:
+            case MOVE_DRAGON:
+            case MOVE_SUMMON:
+            case MOVE_FAMILIAR:
+            case MOVE_PET:
+            case QUEST_ACTION:
+            case HEAL_OVER_TIME:
+            case CHANGE_KEYMAP:
+            case USE_INNER_PORTAL:
+            case MOVE_HAKU:
+            //case TAKE_DAMAGE:
+            case FRIENDLY_DAMAGE:
+           // case CLOSE_RANGE_ATTACK: //todo code zero
+          //  case RANGED_ATTACK: //todo code zero
+            case ARAN_COMBO:
+            case SPECIAL_STAT:
+            case DISTRIBUTE_HYPER:
+            case RESET_HYPER: 
+            case NPC_ACTION:
+            case ANGELIC_CHANGE: 
+          //  case QUEST_ACTION
+//            case DRESSUP_TIME:
+            case BUTTON_PRESSED: 
+                return true;
         }
-        return "UNKNOWN";
+        return false;
     }
+	
 }

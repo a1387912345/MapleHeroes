@@ -10,6 +10,10 @@ import constants.GameConstants;
 import constants.Job;
 import constants.Skills;
 import constants.Skills.*;
+import net.netty.MaplePacketWriter;
+import net.packet.JobPacket;
+import net.packet.CField.EffectPacket;
+import net.packet.CWvsContext.InventoryPacket;
 import net.world.World;
 import net.world.guild.MapleGuild;
 import net.world.guild.MapleGuildSkill;
@@ -32,10 +36,6 @@ import server.StructSetItem.SetItem;
 import server.life.Element;
 import tools.Pair;
 import tools.Triple;
-import tools.data.MaplePacketLittleEndianWriter;
-import tools.packet.CField.EffectPacket;
-import tools.packet.CWvsContext.InventoryPacket;
-import tools.packet.JobPacket;
 
 public class PlayerStats implements Serializable {
 
@@ -588,7 +588,7 @@ public class PlayerStats implements Serializable {
             localmaxmp = 100;
         }
         if (GameConstants.isDemonAvenger(chra.getJob())) {
-            chra.getClient().getSession().write(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
+            chra.getClient().sendPacket(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
         }
         calculateCritical(chra);
         calculatePassiveMastery(chra);
@@ -2703,7 +2703,7 @@ public class PlayerStats implements Serializable {
         }
         if (changed) {
             chr.equipChanged();
-            chr.getClient().getSession().write(EffectPacket.showItemLevelupEffect());
+            chr.getClient().sendPacket(EffectPacket.showItemLevelupEffect());
             chr.getMap().broadcastMessage(chr, EffectPacket.showForeignItemLevelupEffect(chr.getId()), false);
         }
         return changed;
@@ -2729,8 +2729,8 @@ public class PlayerStats implements Serializable {
         for (Equip eqq : all) {
             if (eqq != null && eqq.getDurability() == 0 && eqq.getPosition() < 0) { //> 0 went to negative
                 if (chr.getInventory(MapleInventoryType.EQUIP).isFull()) {
-                    chr.getClient().getSession().write(InventoryPacket.getInventoryFull());
-                    chr.getClient().getSession().write(InventoryPacket.getShowInventoryFull());
+                    chr.getClient().sendPacket(InventoryPacket.getInventoryFull());
+                    chr.getClient().sendPacket(InventoryPacket.getShowInventoryFull());
                     return false;
                 }
                 durabilityHandling.remove(eqq);
@@ -3231,7 +3231,7 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    public final void connectData(final MaplePacketLittleEndianWriter mplew) {
+    public final void connectData(final MaplePacketWriter mplew) {
         mplew.writeShort(str);
         mplew.writeShort(dex);
         mplew.writeShort(int_);
@@ -3242,7 +3242,7 @@ public class PlayerStats implements Serializable {
         mplew.writeInt(maxmp);
     }
 
-    public final void zeroData(final MaplePacketLittleEndianWriter mplew, final MapleCharacter chr) {
+    public final void zeroData(final MaplePacketWriter mplew, final MapleCharacter chr) {
         mplew.writeInt(0);
         mplew.write(0xFF);
         mplew.write(0);
@@ -3678,7 +3678,7 @@ public class PlayerStats implements Serializable {
             }
         }
         if (GameConstants.isDemonAvenger(chra.getJob())) {
-            chra.getClient().getSession().write(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
+            chra.getClient().sendPacket(JobPacket.AvengerPacket.giveAvengerHpBuff(hp));
         }
         return hp != oldHp;
     }

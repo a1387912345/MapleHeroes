@@ -6,6 +6,13 @@ import client.MapleClient;
 import client.SkillFactory;
 import constants.GameConstants;
 import database.DatabaseConnection;
+import net.netty.MaplePacketWriter;
+import net.packet.CField;
+import net.packet.CWvsContext;
+import net.packet.PacketHelper;
+import net.packet.CWvsContext.AlliancePacket;
+import net.packet.CWvsContext.GuildPacket;
+import net.packet.CWvsContext.InfoPacket;
 import net.world.World;
 import net.world.guild.MapleBBSThread.MapleBBSReply;
 
@@ -27,13 +34,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import server.MapleStatEffect;
-import tools.data.MaplePacketLittleEndianWriter;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.PacketHelper;
-import tools.packet.CWvsContext.AlliancePacket;
-import tools.packet.CWvsContext.GuildPacket;
-import tools.packet.CWvsContext.InfoPacket;
 
 public class MapleGuild implements java.io.Serializable {
 
@@ -1038,7 +1038,7 @@ public class MapleGuild implements java.io.Serializable {
         return 10;
     }
 
-    public final void addMemberData(final MaplePacketLittleEndianWriter mplew) {
+    public final void addMemberData(final MaplePacketWriter mplew) {
         mplew.writeShort(members.size());
         for (final MapleGuildCharacter mgc : members) {
             mplew.writeInt(mgc.getId());
@@ -1086,7 +1086,7 @@ public class MapleGuild implements java.io.Serializable {
         if (mc.getGuildId() > 0) {
             return MapleGuildResponse.ALREADY_IN_GUILD;
         }
-        mc.getClient().getSession().write(GuildPacket.guildInvite(c.getPlayer().getGuildId(), c.getPlayer().getName(), c.getPlayer().getLevel(), c.getPlayer().getJob()));
+        mc.getClient().sendPacket(GuildPacket.guildInvite(c.getCharacter().getGuildId(), c.getCharacter().getName(), c.getCharacter().getLevel(), c.getCharacter().getJob()));
         return null;
     }
 

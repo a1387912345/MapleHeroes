@@ -2,12 +2,12 @@ package server;
 
 import client.MapleCharacter;
 import net.channel.ChannelServer;
+import net.packet.CField;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.lang.ref.WeakReference;
 import server.maps.MapleMap;
-import tools.packet.CField;
 
 public class MapleCarnivalParty {
 
@@ -111,8 +111,8 @@ public class MapleCarnivalParty {
         for (int chr : members) {
             final MapleCharacter c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
             if (c != null) {
-                c.getClient().getSession().write(CField.showEffect(effect));
-                c.getClient().getSession().write(CField.playSound(sound));
+                c.getClient().sendPacket(CField.showEffect(effect));
+                c.getClient().sendPacket(CField.playSound(sound));
                 if (!done) {
                     done = true;
                     c.getMap().killAllMonsters(true);

@@ -6,7 +6,8 @@
 package server.shark;
 
 import java.util.Arrays;
-import tools.data.MaplePacketLittleEndianWriter;
+
+import net.netty.MaplePacketWriter;
 
 public class SharkPacket {
 
@@ -28,7 +29,7 @@ public class SharkPacket {
         }
     }
 
-    public void dump(MaplePacketLittleEndianWriter mplew) {
+    public void dump(MaplePacketWriter mplew) {
         if (invalid) {
             return;
         }

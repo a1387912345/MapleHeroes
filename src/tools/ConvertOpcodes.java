@@ -28,13 +28,13 @@ public class ConvertOpcodes {
         decimal = "decimal".equals(input.next().toLowerCase());
         sb.append("RecvOps.txt converted to hex data:").append("\r\n");
         for (RecvPacketOpcode recv : RecvPacketOpcode.values()) {
-            sb.append("\r\n").append(recv.name()).append(" = ").append(decimal ? recv.getValue() : HexTool.getOpcodeToString(recv.getValue()));
+            sb.append("\r\n").append(recv.name()).append(" = ").append(decimal ? recv.getOpcode() : HexTool.getOpcodeToString(recv.getOpcode()));
         }
         System.out.println("\r\nPlease enter the file name of the text file the new opcodes will be saved into: \r\n");
         FileOutputStream out = new FileOutputStream(input.next() + ".txt", false);
         sb.append("SendOps.txt converted to hex data:").append("\r\n");
         for (SendPacketOpcode send : SendPacketOpcode.values()) {
-            sb.append("\r\n").append(send.name()).append(" = ").append(decimal ? send.getValue() : HexTool.getOpcodeToString(send.getValue()));
+            sb.append("\r\n").append(send.name()).append(" = ").append(decimal ? send.getOpcode() : HexTool.getOpcodeToString(send.getOpcode()));
         }
         System.out.println("\r\n\r\n");
         out.write(sb.toString().getBytes());
