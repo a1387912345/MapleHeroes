@@ -7,7 +7,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import net.channel.ChannelServer;
+import net.server.channel.ChannelServer;
 import scripting.AbstractScriptManager;
 import tools.FileoutputUtil;
 

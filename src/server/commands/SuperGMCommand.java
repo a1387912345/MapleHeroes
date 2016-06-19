@@ -6,6 +6,7 @@ package server.commands;
 
 import client.*;
 import client.anticheat.CheatingOffense;
+import client.character.MapleCharacter;
 import client.inventory.*;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -14,15 +15,14 @@ import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
 import io.netty.channel.ChannelHandlerContext;
-import net.MapleServerHandler;
 import net.MapleSession;
 import net.RecvPacketOpcode;
 import net.SendPacketOpcode;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.MobPacket;
 import net.packet.CField.NPCPacket;
+import net.server.channel.ChannelServer;
 import net.world.World;
 
 import java.awt.Point;
@@ -571,7 +571,7 @@ public class SuperGMCommand {
                             MapleInventoryManipulator.addbyItem(chrz[i].getClient(), eq.copy());
                             chrz[i].dropMessage(6, "Successfully married with " + chrz[i == 0 ? 1 : 0].getName());
                         }
-                        MapleRing.addToDB(itemId, c.getCharacter(), fff.getName(), fff.getId(), ringID);
+                        MapleRing.addToDB(itemId, c.getCharacter(), fff.getName(), fff.getID(), ringID);
                     } catch (SQLException e) {
                     }
                 }
@@ -641,8 +641,8 @@ public class SuperGMCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (MapleCharacter victim : c.getCharacter().getMap().getCharactersThreadsafe()) {
-                if (victim.getId() != c.getCharacter().getId()) {
-                    victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
+                if (victim.getID() != c.getCharacter().getID()) {
+                    victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
                 }
             }
             return 1;
@@ -654,8 +654,8 @@ public class SuperGMCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (MapleCharacter victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                if (victim.getId() != c.getCharacter().getId()) {
-                    victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
+                if (victim.getID() != c.getCharacter().getID()) {
+                    victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
                 }
             }
             return 1;
@@ -668,8 +668,8 @@ public class SuperGMCommand {
         public int execute(MapleClient c, String[] splitted) {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (MapleCharacter victim : cserv.getPlayerStorage().getAllCharacters()) {
-                    if (victim.getId() != c.getCharacter().getId()) {
-                        victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
+                    if (victim.getID() != c.getCharacter().getID()) {
+                        victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
                     }
                 }
             }

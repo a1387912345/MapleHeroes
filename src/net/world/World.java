@@ -3,9 +3,9 @@ package net.world;
 import client.BuddyList;
 import client.BuddyList.BuddyAddResult;
 import client.BuddyList.BuddyOperation;
+import client.character.MapleCharacter;
 import client.BuddylistEntry;
 import client.MapleBuffStat;
-import client.MapleCharacter;
 import client.MapleCoolDownValueHolder;
 import client.MapleDiseaseValueHolder;
 import client.inventory.MapleInventoryType;
@@ -16,10 +16,6 @@ import constants.Job;
 import constants.Skills;
 import constants.WorldConstants.WorldOption;
 import database.DatabaseConnection;
-import net.cashshop.CashShopServer;
-import net.channel.ChannelServer;
-import net.channel.PlayerStorage;
-import net.farm.FarmServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.PetPacket;
@@ -28,6 +24,10 @@ import net.packet.CWvsContext.BuddylistPacket;
 import net.packet.CWvsContext.ExpeditionPacket;
 import net.packet.CWvsContext.GuildPacket;
 import net.packet.CWvsContext.PartyPacket;
+import net.server.cashshop.CashShopServer;
+import net.server.channel.ChannelServer;
+import net.server.channel.PlayerStorage;
+import net.server.farm.FarmServer;
 import net.world.exped.ExpeditionType;
 import net.world.exped.MapleExpedition;
 import net.world.exped.PartySearch;
@@ -434,7 +434,7 @@ public class World {
             		MapleCharacter chr = partyMember.getCharacter();
             		for (PlayerBuffValueHolder buffValue : chr.getAllBuffs()) { // Loop through party member's buff
             			if (Skills.affectsBlessedEnsemble(buffValue.effect.getSourceId())) {
-            				if (buffValue.cid == targetCharacter.getId() && !targetCharacter.getBlessedEnsembleAffected().contains(chr)) { // If you're the bishop that buffed other players and you rejoin
+            				if (buffValue.cid == targetCharacter.getID() && !targetCharacter.getBlessedEnsembleAffected().contains(chr)) { // If you're the bishop that buffed other players and you rejoin
             					targetCharacter.getBlessedEnsembleAffected().add(chr);
             					targetCharacter.applyBlessedEnsemble();
             				} else { // If you're a member that was buffed by a bishop and rejoined
@@ -452,7 +452,7 @@ public class World {
 	        	for (MaplePartyCharacter partyMember : party.getMembers()) { // Remove yourself from every holy mage's ensemble list
 	        		final int partyMemberJobID = partyMember.getJobId();
 	        		if ((Job.CLERIC.equals(partyMemberJobID) || Job.PRIEST.equals(partyMemberJobID) || Job.BISHOP.equals(partyMemberJobID))) { // Do only if the party member is a cleric, priest, or bishop.
-	        			if (partyMember.getId() != targetCharacter.getId()) {
+	        			if (partyMember.getId() != targetCharacter.getID()) {
 		        			MapleCharacter holyMage = partyMember.getCharacter();
 		            		if (holyMage != null) {
 		            			holyMage.getBlessedEnsembleAffected().remove(targetCharacter);
@@ -462,7 +462,7 @@ public class World {
 	            }
 	        	
 	        	for (MapleCharacter partyMember : targetCharacter.getBlessedEnsembleAffected()) {
-	        		if (partyMember.getId() != targetCharacter.getId()) { // Remove everyone but yourself
+	        		if (partyMember.getID() != targetCharacter.getID()) { // Remove everyone but yourself
     					targetCharacter.getBlessedEnsembleAffected().remove(partyMember);
     				}
 	        	}

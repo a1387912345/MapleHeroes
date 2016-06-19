@@ -22,12 +22,12 @@ package server.maps;
 
 import java.awt.Point;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillFactory;
 import constants.GameConstants;
 import net.packet.CField.SummonPacket;
 import client.anticheat.CheatingOffense;
+import client.character.MapleCharacter;
 import server.MapleStatEffect;
 
 public class MapleSummon extends AnimatedMapleMapObject {
@@ -50,7 +50,7 @@ public class MapleSummon extends AnimatedMapleMapObject {
 
     public MapleSummon(final MapleCharacter owner, final int sourceid, final int level, final Point pos, final SummonMovementType movementType) {
         super();
-        this.ownerid = owner.getId();
+        this.ownerid = owner.getID();
         this.ownerLevel = owner.getLevel();
         this.skill = sourceid;
         this.map = owner.getMap();

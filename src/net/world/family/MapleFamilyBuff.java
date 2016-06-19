@@ -22,7 +22,7 @@
 package net.world.family;
 
 import client.MapleBuffStat;
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 import net.packet.CWvsContext.BuffPacket;
 
 import java.util.EnumMap;
@@ -99,6 +99,6 @@ public enum MapleFamilyBuff {
         final long starttime = System.currentTimeMillis();
         final CancelEffectAction cancelAction = new CancelEffectAction(chr, eff, starttime, effects);
         final ScheduledFuture<?> schedule = BuffTimer.getInstance().schedule(cancelAction, duration * 60000);
-        chr.registerEffect(eff, starttime, schedule, effects, false, duration, chr.getId());
+        chr.registerEffect(eff, starttime, schedule, effects, false, duration, chr.getID());
     }
 }

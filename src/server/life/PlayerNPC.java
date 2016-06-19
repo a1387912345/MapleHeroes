@@ -1,14 +1,14 @@
 package server.life;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import database.DatabaseConnection;
-import net.channel.ChannelServer;
 import net.packet.CWvsContext;
 import net.packet.CField.NPCPacket;
+import net.server.channel.ChannelServer;
 import net.world.MapleCharacterLook;
 import net.world.World;
 
@@ -75,7 +75,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
 
     public PlayerNPC(MapleCharacter cid, int npc, MapleMap map, MapleCharacter base) {
         super(npc, cid.getName());
-        this.charId = cid.getId();
+        this.charId = cid.getID();
         this.mapid = map.getId();
         setCoords(base.getTruePosition().x, base.getTruePosition().y, 0, base.getFH()); //0 = facing dir? no idea, but 1 dosnt work
         update(cid);
@@ -107,8 +107,8 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
     }
 
     public static void updateByCharId(MapleCharacter chr) {
-        if (World.Find.findChannel(chr.getId()) > 0) { //if character is in cserv
-            for (PlayerNPC npc : ChannelServer.getInstance(World.Find.findChannel(chr.getId())).getAllPlayerNPC()) {
+        if (World.Find.findChannel(chr.getID()) > 0) { //if character is in cserv
+            for (PlayerNPC npc : ChannelServer.getInstance(World.Find.findChannel(chr.getID())).getAllPlayerNPC()) {
                 npc.update(chr);
             }
         }
@@ -127,7 +127,7 @@ public class PlayerNPC extends MapleNPC implements MapleCharacterLook {
     }
 
     private void update(MapleCharacter chr) {
-        if (chr == null || charId != chr.getId()) {
+        if (chr == null || charId != chr.getID()) {
             return; //cant use name as it mightve been change actually..
         }
         setName(chr.getName());

@@ -1,6 +1,7 @@
 package client;
 
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -2704,7 +2705,7 @@ public class PlayerStats implements Serializable {
         if (changed) {
             chr.equipChanged();
             chr.getClient().sendPacket(EffectPacket.showItemLevelupEffect());
-            chr.getMap().broadcastMessage(chr, EffectPacket.showForeignItemLevelupEffect(chr.getId()), false);
+            chr.getMap().broadcastMessage(chr, EffectPacket.showForeignItemLevelupEffect(chr.getID()), false);
         }
         return changed;
     }
@@ -3231,28 +3232,28 @@ public class PlayerStats implements Serializable {
         }
     }
 
-    public final void connectData(final MaplePacketWriter mplew) {
-        mplew.writeShort(str);
-        mplew.writeShort(dex);
-        mplew.writeShort(int_);
-        mplew.writeShort(luk);
-        mplew.writeInt(hp);
-        mplew.writeInt(maxhp);
-        mplew.writeInt(mp);
-        mplew.writeInt(maxmp);
+    public final void connectData(final MaplePacketWriter mpw) {
+        mpw.writeShort(str);
+        mpw.writeShort(dex);
+        mpw.writeShort(int_);
+        mpw.writeShort(luk);
+        mpw.writeInt(hp);
+        mpw.writeInt(maxhp);
+        mpw.writeInt(mp);
+        mpw.writeInt(maxmp);
     }
 
-    public final void zeroData(final MaplePacketWriter mplew, final MapleCharacter chr) {
-        mplew.writeInt(0);
-        mplew.write(0xFF);
-        mplew.write(0);
-        mplew.writeInt(maxhp);
-        mplew.writeInt(maxmp);
-        mplew.write(0);
-        mplew.writeInt(chr.getSecondHair());
-        mplew.writeInt(chr.getSecondFace());
-        mplew.writeInt(maxhp);
-        mplew.writeInt(maxmp);
+    public final void zeroData(final MaplePacketWriter mpw, final MapleCharacter chr) {
+        mpw.writeInt(0);
+        mpw.write(0xFF);
+        mpw.write(0);
+        mpw.writeInt(maxhp);
+        mpw.writeInt(maxmp);
+        mpw.write(0);
+        mpw.writeInt(chr.getSecondHair());
+        mpw.writeInt(chr.getSecondFace());
+        mpw.writeInt(maxhp);
+        mpw.writeInt(maxmp);
     }
     private final static int[] allJobs = {0, 10000, 10000000, 20000000, 20010000, 20020000, 20030000, 20040000, 30000000, 30010000, 50000000};
     public final static int[] pvpSkills = {1000007, 2000007, 3000006, 4000010, 5000006, 5010004, 11000006, 12000006, 13000005, 14000006, 15000005, 21000005, 22000002, 23000004, 31000005, 32000012, 33000004, 35000005};

@@ -25,8 +25,8 @@ import java.util.List;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import net.packet.PlayerShopPacket;
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import server.MapleInventoryManipulator;
 
 public class MaplePlayerShop extends AbstractPlayerStore {

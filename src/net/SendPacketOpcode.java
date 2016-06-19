@@ -17,6 +17,12 @@ public enum SendPacketOpcode {
     GUILDCHAT((short) 0x12),
     BUDDYCHAT((short) 0x13),
     /*
+     * Login Auth Opcodes
+     */
+    LOGIN_AUTH_RESPONSE1((short) 0x34),
+    LOGIN_AUTH_RESPONSE2((short) 0x2E),
+    LOGIN_AUTH_RESPONSE3((short) 0x36),
+    /*
      * Login Opcodes
      * Used for login packets.
      * Opcode codes are ordered in the order in which they will be sent by the server or received by the client.
@@ -700,6 +706,10 @@ public enum SendPacketOpcode {
 	public static boolean isSpam(SendPacketOpcode opcode) {
         switch (opcode) {
             case AUTH_RESPONSE:
+            case PING:
+            case LOGIN_AUTH_RESPONSE1:
+			case LOGIN_AUTH_RESPONSE2:
+			case LOGIN_AUTH_RESPONSE3:
             case SERVERLIST:
             case UPDATE_STATS:
             case MOVE_PLAYER:

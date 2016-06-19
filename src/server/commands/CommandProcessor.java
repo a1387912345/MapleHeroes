@@ -20,12 +20,12 @@
  */
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import constants.ServerConstants.CommandType;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
-import net.channel.ChannelServer;
+import net.server.channel.ChannelServer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -189,7 +189,7 @@ public class CommandProcessor {
         PreparedStatement ps = null;
         try {
             ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO " + table + " (cid, command, mapid) VALUES (?, ?, ?)");
-            ps.setInt(1, player.getId());
+            ps.setInt(1, player.getID());
             ps.setString(2, command);
             ps.setInt(3, player.getMap().getId());
             ps.executeUpdate();

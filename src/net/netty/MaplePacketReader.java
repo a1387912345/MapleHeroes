@@ -71,7 +71,7 @@ public class MaplePacketReader {
 	public String readNullTerminatedAsciiString() {
         ByteBuf buf = Unpooled.directBuffer().order(ByteOrder.LITTLE_ENDIAN);
         byte b;
-        while ((b = readByte()) != 0)
+        while ((b = readByte()) != 0) 
             buf.writeByte(b);
         byte[] bytes = buf.array();
         char[] string = new char[bytes.length];
@@ -82,6 +82,10 @@ public class MaplePacketReader {
 
     public String readMapleAsciiString() {
         return readAsciiString(readShort());
+    }
+    
+    public String readLoginAuthString() {
+    	return readAsciiString(readShort() * 2);
     }
 
     public long getBytesRead() {

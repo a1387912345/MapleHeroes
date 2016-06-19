@@ -21,7 +21,8 @@
 package client.inventory;
 
 import client.MapleBuffStat;
-import client.MapleCharacter;
+import client.character.MapleCharacter;
+
 import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

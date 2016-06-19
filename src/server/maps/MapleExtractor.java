@@ -1,7 +1,7 @@
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import net.packet.CField;
 
 public class MapleExtractor extends MapleMapObject {
@@ -12,7 +12,7 @@ public class MapleExtractor extends MapleMapObject {
 
     public MapleExtractor(MapleCharacter owner, int itemId, int fee, int timeLeft) {
         super();
-        this.owner = owner.getId();
+        this.owner = owner.getID();
         this.itemId = itemId;
         this.fee = fee;
         this.ownerName = owner.getName();

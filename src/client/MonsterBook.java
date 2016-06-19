@@ -1,5 +1,6 @@
 package client;
 
+import client.character.MapleCharacter;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -114,7 +115,7 @@ public final class MonsterBook
         return returnval;
     }
 
-    public void writeCharInfoPacket(MaplePacketWriter mplew) {
+    public void writeCharInfoPacket(MaplePacketWriter mpw) {
         List cardSize = new ArrayList(10);
         for (int i = 0; i < 10; i++) {
             cardSize.add(Integer.valueOf(0));
@@ -126,21 +127,21 @@ public final class MonsterBook
         }
         for (Iterator i$ = cardSize.iterator(); i$.hasNext();) {
             int i = ((Integer) i$.next()).intValue();
-            mplew.writeInt(i);
+            mpw.writeInt(i);
         }
-        mplew.writeInt(this.setScore);
-        mplew.writeInt(this.currentSet);
-        mplew.writeInt(this.finishedSets);
+        mpw.writeInt(this.setScore);
+        mpw.writeInt(this.currentSet);
+        mpw.writeInt(this.finishedSets);
     }
 
-    public void writeFinished(MaplePacketWriter mplew) {
+    public void writeFinished(MaplePacketWriter mpw) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        mplew.write(1);
-        mplew.writeShort(this.cardItems.size());
+        mpw.write(1);
+        mpw.writeShort(this.cardItems.size());
         List mbList = new ArrayList(ii.getMonsterBookList());
         Collections.sort(mbList);
         int fullCards = mbList.size() / 8 + (mbList.size() % 8 > 0 ? 1 : 0);
-        mplew.writeShort(fullCards);
+        mpw.writeShort(fullCards);
 
         for (int i = 0; i < fullCards; i++) {
             int currentMask = 1;
@@ -152,23 +153,23 @@ public final class MonsterBook
                 }
                 currentMask *= 2;
             }
-            mplew.write(maskToWrite);
+            mpw.write(maskToWrite);
         }
 
         int fullSize = this.cardItems.size() / 2 + (this.cardItems.size() % 2 > 0 ? 1 : 0);
-        mplew.writeShort(fullSize);
+        mpw.writeShort(fullSize);
         for (int i = 0; i < fullSize; i++) {
-            mplew.write(i == this.cardItems.size() / 2 ? 1 : 17);
+            mpw.write(i == this.cardItems.size() / 2 ? 1 : 17);
         }
     }
 
-    public void writeUnfinished(MaplePacketWriter mplew) {
-        mplew.write(0);
-        mplew.writeShort(this.cardItems.size());
+    public void writeUnfinished(MaplePacketWriter mpw) {
+        mpw.write(0);
+        mpw.writeShort(this.cardItems.size());
         for (Iterator i$ = this.cardItems.iterator(); i$.hasNext();) {
             int i = ((Integer) i$.next()).intValue();
-            mplew.writeShort(i % 10000);
-            mplew.write(1);
+            mpw.writeShort(i % 10000);
+            mpw.write(1);
         }
     }
 

@@ -26,8 +26,8 @@
  */
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import net.packet.CField;
 
 public class MapleDragon extends AnimatedMapleMapObject {
@@ -36,7 +36,7 @@ public class MapleDragon extends AnimatedMapleMapObject {
 
     public MapleDragon(MapleCharacter owner) {
         super();
-        this.owner = owner.getId();
+        this.owner = owner.getID();
         this.jobid = owner.getJob();
         if (jobid < 2200 || jobid > 2218) {
             throw new RuntimeException("Trying to create a dragon for a non-Evan");

@@ -21,13 +21,13 @@
 package constants;
 
 import client.MapleBuffStat;
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleJob;
 import client.MonsterStatus;
 import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
@@ -5471,22 +5471,22 @@ public class GameConstants {
      }
 
      public static byte[] getQuickMoveData(MapleCharacter chr) { //Not completed yet
-     MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+     MaplePacketLittleEndianWriter mpw = new MaplePacketLittleEndianWriter();
      MapleMap map = chr.getMap();
 
      for (MapleNPC npc : map.getAllNPCs()) {
      for (QuickMove q : QuickMove.values()) {
      if (npc.getId() == q.getNpc()) {
-     mplew.writeMapleAsciiString(""); //npc name?
-     mplew.writeInt(q.getNpc());
-     mplew.writeInt(q.getType());
-     mplew.writeInt(q.getLevel());
-     mplew.writeMapleAsciiString(q.getDescription());
+     mpw.writeMapleAsciiString(""); //npc name?
+     mpw.writeInt(q.getNpc());
+     mpw.writeInt(q.getType());
+     mpw.writeInt(q.getLevel());
+     mpw.writeMapleAsciiString(q.getDescription());
      }
      }
      }
 
-     return mplew.getPacket();
+     return mpw.getPacket();
      }
      }
      public static final int[] quickMoveNpcIds = {9070004, 9010022, 9071003, 9000086, 9000087, 9000088, 9000089, 9010041};

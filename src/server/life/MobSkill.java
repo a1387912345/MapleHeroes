@@ -34,9 +34,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 
-import client.MapleCharacter;
 import client.MapleDisease;
 import client.MonsterStatus;
+import client.character.MapleCharacter;
+
 import java.util.EnumMap;
 import server.Randomizer;
 import server.maps.MapleMapObject;

@@ -20,135 +20,136 @@
  */
 package net.packet;
 
-import client.MapleCharacter;
 import net.SendPacketOpcode;
 import net.netty.MaplePacketWriter;
 
 import java.util.List;
+
+import client.character.MapleCharacter;
 import server.MapleCarnivalParty;
 
 public class MonsterCarnivalPacket {
 
     public static byte[] startMonsterCarnival(final MapleCharacter chr, final int enemyavailable, final int enemytotal) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_START);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_START);
         final MapleCarnivalParty friendly = chr.getCarnivalParty();
-        mplew.write(friendly.getTeam());
-        mplew.writeInt(chr.getAvailableCP());
-        mplew.writeInt(chr.getTotalCP());
-        mplew.writeInt(friendly.getAvailableCP()); // ??
-        mplew.writeInt(friendly.getTotalCP()); // ??
-        mplew.write(0); // ??
+        mpw.write(friendly.getTeam());
+        mpw.writeInt(chr.getAvailableCP());
+        mpw.writeInt(chr.getTotalCP());
+        mpw.writeInt(friendly.getAvailableCP()); // ??
+        mpw.writeInt(friendly.getTotalCP()); // ??
+        mpw.write(0); // ??
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] playerDiedMessage(String name, int lostCP, int team) { //CPQ
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_DIED);
-		mplew.write(team); //team
-        mplew.writeMapleAsciiString(name);
-        mplew.write(lostCP);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_DIED);
+		mpw.write(team); //team
+        mpw.writeMapleAsciiString(name);
+        mpw.write(lostCP);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] playerLeaveMessage(boolean leader, String name, int team) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE);
-		mplew.write(leader ? 7 : 0);
-        mplew.write(team); // 0: red, 1: blue
-        mplew.writeMapleAsciiString(name);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE);
+		mpw.write(leader ? 7 : 0);
+        mpw.write(team); // 0: red, 1: blue
+        mpw.writeMapleAsciiString(name);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] CPUpdate(boolean party, int curCP, int totalCP, int team) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP);
-		mplew.writeInt(curCP);
-        mplew.writeInt(totalCP);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP);
+		mpw.writeInt(curCP);
+        mpw.writeInt(totalCP);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] showMCStats(int left, int right) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_STATS);
-		mplew.writeInt(left);
-        mplew.writeInt(right);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_STATS);
+		mpw.writeInt(left);
+        mpw.writeInt(right);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] playerSummoned(String name, int tab, int number) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON);
-		mplew.write(tab);
-        mplew.write(number);
-        mplew.writeMapleAsciiString(name);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON);
+		mpw.write(tab);
+        mpw.write(number);
+        mpw.writeMapleAsciiString(name);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] showMCResult(int mode) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_RESULT);
-		mplew.write(mode);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_RESULT);
+		mpw.write(mode);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] showMCRanking(List<MapleCharacter> players) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_RANKING);
-		mplew.writeShort(players.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_RANKING);
+		mpw.writeShort(players.size());
         for (MapleCharacter i : players) {
-            mplew.writeInt(i.getId());
-            mplew.writeMapleAsciiString(i.getName());
-            mplew.writeInt(10); // points
-            mplew.write(0); // team
+            mpw.writeInt(i.getID());
+            mpw.writeMapleAsciiString(i.getName());
+            mpw.writeInt(10); // points
+            mpw.write(0); // team
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] startCPQ(byte team, int usedcp, int totalcp) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_START);
-		mplew.write(0); //team
-        mplew.writeShort(0); //Obtained CP - Used CP
-        mplew.writeShort(0); //Total Obtained CP
-        mplew.writeShort(0); //Obtained CP - Used CP of the team
-        mplew.writeShort(0); //Total Obtained CP of the team
-        mplew.writeShort(0); //Obtained CP - Used CP of the team
-        mplew.writeShort(0); //Total Obtained CP of the team
-        mplew.writeShort(0); //Probably useless nexon shit
-        mplew.writeLong(0); //Probably useless nexon shit
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_START);
+		mpw.write(0); //team
+        mpw.writeShort(0); //Obtained CP - Used CP
+        mpw.writeShort(0); //Total Obtained CP
+        mpw.writeShort(0); //Obtained CP - Used CP of the team
+        mpw.writeShort(0); //Total Obtained CP of the team
+        mpw.writeShort(0); //Obtained CP - Used CP of the team
+        mpw.writeShort(0); //Total Obtained CP of the team
+        mpw.writeShort(0); //Probably useless nexon shit
+        mpw.writeLong(0); //Probably useless nexon shit
+        return mpw.getPacket();
     }
 
     public static byte[] obtainCP() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP);
-		mplew.writeShort(0); //Obtained CP - Used CP
-        mplew.writeShort(0); //Total Obtained CP
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_OBTAINED_CP);
+		mpw.writeShort(0); //Obtained CP - Used CP
+        mpw.writeShort(0); //Total Obtained CP
+        return mpw.getPacket();
     }
 
     public static byte[] obtainPartyCP() {
-        MaplePacketWriter mplew = new MaplePacketWriter();
-        //mplew.writeShort(SendPacketOpcode.MONSTER_CARNIVAL_PARTY_CP);
-		mplew.write(0); //Team where the points are given to.
-        mplew.writeShort(0); //Obtained CP - Used CP
-        mplew.writeShort(0); //Total Obtained CP
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter();
+        //mpw.writeShort(SendPacketOpcode.MONSTER_CARNIVAL_PARTY_CP);
+		mpw.write(0); //Team where the points are given to.
+        mpw.writeShort(0); //Obtained CP - Used CP
+        mpw.writeShort(0); //Total Obtained CP
+        return mpw.getPacket();
     }
 
     public static byte[] CPQSummon() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON);
-		mplew.write(0); //Tab
-        mplew.write(0); //Number of summon inside the tab
-        mplew.writeMapleAsciiString(""); //Name of the player that summons
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON);
+		mpw.write(0); //Tab
+        mpw.write(0); //Number of summon inside the tab
+        mpw.writeMapleAsciiString(""); //Name of the player that summons
+        return mpw.getPacket();
     }
 
     public static byte[] CPQDied() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON);
-		mplew.write(0); //Team
-        mplew.writeMapleAsciiString(""); //Name of the player that died
-        mplew.write(0); //Lost CP
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_SUMMON);
+		mpw.write(0); //Team
+        mpw.writeMapleAsciiString(""); //Name of the player that died
+        mpw.write(0); //Lost CP
+        return mpw.getPacket();
     }
 
     /**
@@ -164,16 +165,16 @@ public class MonsterCarnivalPacket {
      *
      */
     public static byte[] CPQMessage(byte message) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_MESSAGE);
-		mplew.write(message); //Message
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_MESSAGE);
+		mpw.write(message); //Message
+        return mpw.getPacket();
     }
 
     public static byte[] leaveCPQ() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE);
-		mplew.write(0); //Something?
-        mplew.write(0); //Team
-        mplew.writeMapleAsciiString(""); //Player name
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MONSTER_CARNIVAL_LEAVE);
+		mpw.write(0); //Something?
+        mpw.write(0); //Team
+        mpw.writeMapleAsciiString(""); //Player name
+        return mpw.getPacket();
     }
 }

@@ -20,7 +20,7 @@
  */
 package server;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 import constants.GameConstants;
 import net.packet.CWvsContext;
 import net.world.World;

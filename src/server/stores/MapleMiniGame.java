@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
+import client.character.MapleCharacter;
 import constants.GameConstants;
 import net.packet.PlayerShopPacket;
 import server.quest.MapleQuest;

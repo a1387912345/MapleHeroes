@@ -39,18 +39,18 @@ import client.MapleDisease;
 import client.MapleExp;
 import client.MapleExpStatus;
 import client.MapleBuffStat;
-import client.MapleCharacter;
 import client.inventory.MapleInventoryType;
 import client.MapleClient;
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
 import client.SkillFactory;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import constants.EventConstants;
 import constants.ServerConstants;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.MobPacket;
+import net.server.channel.ChannelServer;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import scripting.event.EventInstanceManager;
@@ -413,7 +413,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                     em.monsterKilled(attacker, this);
                 }
             }
-            highestDamageChar = attacker.getId();
+            highestDamageChar = attacker.getID();
         }
         
         if (exp > 0) {
@@ -495,7 +495,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     	
     	for (MaplePartyCharacter partyMember : holyMage.getParty().getMembers()) {
     		int jobid = partyMember.getJobId();
-    		if ((Job.CLERIC.equals(jobid) || Job.PRIEST.equals(jobid) || Job.BISHOP.equals(jobid)) && partyMember.getId() != holyMage.getId()) {
+    		if ((Job.CLERIC.equals(jobid) || Job.PRIEST.equals(jobid) || Job.BISHOP.equals(jobid)) && partyMember.getId() != holyMage.getID()) {
     			numberOfHolyMages++;
     		}
     	}
@@ -888,7 +888,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             } else {
                 client.sendPacket(MobPacket.killMonster(getObjectId(), 0, false));
             }
-            if (getController() != null && client.getCharacter() != null && client.getCharacter().getId() == getController().getId()) {
+            if (getController() != null && client.getCharacter() != null && client.getCharacter().getID() == getController().getID()) {
                 client.getCharacter().stopControllingMonster(this);
             }
         }
@@ -1343,12 +1343,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         private long lastAttackTime;
 
         public SingleAttackerEntry(final MapleCharacter from) {
-            this.chrid = from.getId();
+            this.chrid = from.getID();
         }
 
         @Override
         public void addDamage(final MapleCharacter from, final long damage, final boolean updateAttackTime) {
-            if (chrid == from.getId()) {
+            if (chrid == from.getID()) {
                 this.damage += damage;
                 if (updateAttackTime) {
                     lastAttackTime = System.currentTimeMillis();
@@ -1368,7 +1368,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         @Override
         public boolean contains(final MapleCharacter chr) {
-            return chrid == chr.getId();
+            return chrid == chr.getID();
         }
 
         @Override
@@ -1470,7 +1470,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         @Override
         public final boolean contains(final MapleCharacter chr) {
-            return attackers.containsKey(chr.getId());
+            return attackers.containsKey(chr.getID());
         }
 
         @Override
@@ -1480,7 +1480,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
 
         @Override
         public void addDamage(final MapleCharacter from, final long damage, final boolean updateAttackTime) {
-            final OnePartyAttacker oldPartyAttacker = attackers.get(from.getId());
+            final OnePartyAttacker oldPartyAttacker = attackers.get(from.getID());
             if (oldPartyAttacker != null) {
                 oldPartyAttacker.damage += damage;
                 oldPartyAttacker.lastKnownParty = from.getParty();
@@ -1493,7 +1493,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 // constellation for every attack/everytime it changes, might be wanted/needed in the
                 // future but not now
                 final OnePartyAttacker onePartyAttacker = new OnePartyAttacker(from.getParty(), damage);
-                attackers.put(from.getId(), onePartyAttacker);
+                attackers.put(from.getID(), onePartyAttacker);
                 if (!updateAttackTime) {
                     onePartyAttacker.lastAttackTime = 0;
                 }
@@ -1546,7 +1546,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 for (final MapleCharacter expReceiver : expApplicable) {
                     iexp = expMap.get(expReceiver) == null ? 0 : expMap.get(expReceiver).exp;
                     levelMod = expReceiver.getLevel() / addedPartyLevel * (GameConstants.GMS ? 0.8 : 0.4);
-                    iexp += (int) Math.round(((attacker.getKey().getId() == expReceiver.getId() ? (GameConstants.GMS ? 0.2 : 0.6) : 0.0) + levelMod) * innerBaseExp);
+                    iexp += (int) Math.round(((attacker.getKey().getID() == expReceiver.getID() ? (GameConstants.GMS ? 0.2 : 0.6) : 0.0) + levelMod) * innerBaseExp);
                     expMap.put(expReceiver, new ExpMap(iexp, (byte) expApplicable.size(), Class_Bonus_EXP, Premium_Bonus_EXP));
                 }
             }
@@ -1815,7 +1815,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             belongsTo = -2;
             return;
         }
-        belongsTo = chr.getId();
+        belongsTo = chr.getID();
         endBelong = System.currentTimeMillis() + (stats.isBoss() ? 300000 : 30000); //30 seconds for the person to kill it.
     }
     /* Anti KS */

@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import client.character.MapleCharacter;
 import server.CharacterCardFactory;
 import tools.Pair;
 import tools.Triple;
@@ -83,7 +85,7 @@ public class MapleCharacterCards {
     public final void recalcLocalStats(final MapleCharacter chr) {
         int pos = -1;
         for (Entry<Integer, CardData> x : cards.entrySet()) {
-            if (x.getValue().cid == chr.getId()) {
+            if (x.getValue().cid == chr.getID()) {
                 pos = x.getKey();
                 break;
             }
@@ -92,7 +94,7 @@ public class MapleCharacterCards {
             if (!CharacterCardFactory.getInstance().canHaveCard(chr.getLevel(), chr.getJob())) {
                 cards.remove(pos); // we don't need to reset pos as its not needed
             } else {
-                cards.put(pos, new CardData(chr.getId(), chr.getLevel(), chr.getJob())); // override old			
+                cards.put(pos, new CardData(chr.getID(), chr.getLevel(), chr.getJob())); // override old			
             }
         }
         calculateEffects(); // recalculate, just incase 
@@ -105,9 +107,9 @@ public class MapleCharacterCards {
         }
     }
 
-    public final void connectData(final MaplePacketWriter mplew) {
+    public final void connectData(final MaplePacketWriter mpw) {
         if (cards.isEmpty()) { // we don't show for new characters 
-            mplew.writeZeroBytes(54); // 9 x 6
+            mpw.writeZeroBytes(54); // 9 x 6
             return;
         }
         int poss = 0;
@@ -116,9 +118,9 @@ public class MapleCharacterCards {
             if (poss > 6) {
                 break;
             }
-            mplew.writeInt(i.cid);
-            mplew.write(i.level);
-            mplew.writeInt(i.job);
+            mpw.writeInt(i.cid);
+            mpw.write(i.level);
+            mpw.writeInt(i.job);
         }
     }
 }

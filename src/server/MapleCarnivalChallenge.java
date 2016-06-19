@@ -4,10 +4,11 @@
  */
 package server;
 
-import client.MapleCharacter;
 import net.world.MaplePartyCharacter;
 
 import java.lang.ref.WeakReference;
+
+import client.character.MapleCharacter;
 
 /**
  * TODO : Make this a function for NPC instead.. cleaner

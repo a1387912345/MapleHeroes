@@ -6,14 +6,15 @@ package server.commands;
 
 import client.*;
 import client.anticheat.ReportType;
+import client.character.MapleCharacter;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;
 import database.DatabaseConnection;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.CWvsContext.InventoryPacket;
+import net.server.channel.ChannelServer;
 import net.world.CheaterData;
 import net.world.World;
 
@@ -1077,7 +1078,7 @@ public class GMCommand {
                 if (mch == null) {
                     return 0;
                 } else {
-                    mch.getMap().broadcastMessage(CField.getChatText(mch.getId(), StringUtil.joinStringFrom(splitted, 1), mch.isGM(), 0));
+                    mch.getMap().broadcastMessage(CField.getChatText(mch.getID(), StringUtil.joinStringFrom(splitted, 1), mch.isGM(), 0));
                 }
             }
             return 1;
@@ -1093,7 +1094,7 @@ public class GMCommand {
                 c.getCharacter().dropMessage(5, "unable to find '" + splitted[1]);
                 return 0;
             } else {
-                victim.getMap().broadcastMessage(CField.getChatText(victim.getId(), StringUtil.joinStringFrom(splitted, 2), victim.isGM(), 0));
+                victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 2), victim.isGM(), 0));
             }
             return 1;
         }

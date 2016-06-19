@@ -20,12 +20,12 @@
  */
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
 import constants.GameConstants;
-import net.channel.ChannelServer;
 import net.packet.CField;
+import net.server.channel.ChannelServer;
 import net.world.MaplePartyCharacter;
 
 import java.awt.Point;

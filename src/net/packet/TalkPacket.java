@@ -1,41 +1,41 @@
 package net.packet;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 import net.SendPacketOpcode;
 import net.netty.MaplePacketWriter;
 
 public class TalkPacket {
 
 	public static byte[] onPing() {
-		MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.PING_TALK);
+		MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.PING_TALK);
 				
-		return mplew.getPacket();
+		return mpw.getPacket();
 	}
 	
 	public static byte[] onMigrateResponse() {
-		MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.MIGRATE_RESPONSE);
-		mplew.write(0);
+		MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MIGRATE_RESPONSE);
+		mpw.write(0);
 		
-		return mplew.getPacket();
+		return mpw.getPacket();
 	}
 	
 	public static byte[] onAccountInfo(MapleCharacter chr) {
-		MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.UNK_RESPONSE);
-		mplew.write(0);
-		mplew.write(chr.getAccountID());
+		MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UNK_RESPONSE);
+		mpw.write(0);
+		mpw.write(chr.getAccountID());
 		
-		return mplew.getPacket();
+		return mpw.getPacket();
 	}
 	
 	public static byte[] onGuildChat(MapleCharacter chr, String message) {
-		MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.GUILDCHAT);
-		mplew.writeInt(0); // [26 36 F3 02] tick?
-		mplew.writeInt(chr.getGuildId());
-		mplew.writeInt(chr.getAccountID());
-		mplew.writeInt(chr.getId());
-		mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
-		mplew.writeMapleAsciiString(message);
+		MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILDCHAT);
+		mpw.writeInt(0); // [26 36 F3 02] tick?
+		mpw.writeInt(chr.getGuildId());
+		mpw.writeInt(chr.getAccountID());
+		mpw.writeInt(chr.getID());
+		mpw.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
+		mpw.writeMapleAsciiString(message);
 		
-		return mplew.getPacket();
+		return mpw.getPacket();
 	}
 }

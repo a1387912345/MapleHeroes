@@ -22,37 +22,37 @@ public class AdventurerPacket {
 	public static class AssassinPacket {
 		
 		public static byte[] giveMarkOfTheif(int cid, int oid, int skillid, List<MapleMonster> monsters, Point p1, Point p2, int starid) {
-			MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.GAIN_FORCE);
-			mplew.write(0);
-			mplew.writeInt(cid);
-			mplew.writeInt(oid);
-			mplew.writeInt(11); //type
-			mplew.write(1);
-			mplew.writeInt(monsters.size());
+			MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GAIN_FORCE);
+			mpw.write(0);
+			mpw.writeInt(cid);
+			mpw.writeInt(oid);
+			mpw.writeInt(11); //type
+			mpw.write(1);
+			mpw.writeInt(monsters.size());
 			for (MapleMonster monster : monsters) {
-			    mplew.writeInt(monster.getObjectId());
+			    mpw.writeInt(monster.getObjectId());
 			}
-			mplew.writeInt(skillid); //skillid
+			mpw.writeInt(skillid); //skillid
 			for (int i = 0; i < monsters.size(); i++) {
-			    mplew.write(1);
-			    mplew.writeInt(Randomizer.rand(0x2A, 0x2D));
-			    mplew.writeInt(2); 
-			    mplew.writeInt(Randomizer.rand(0x2A, 0x2D));
-			    mplew.writeInt(Randomizer.rand(0x03, 0x04));
-			    mplew.writeInt(Randomizer.rand(0x43, 0xF5));
-			    mplew.writeInt(200);
-			    mplew.writeInt(0);
-			    mplew.writeInt(0);
-			    mplew.writeInt(Randomizer.nextInt());
-			    mplew.writeInt(0);
+			    mpw.write(1);
+			    mpw.writeInt(Randomizer.rand(0x2A, 0x2D));
+			    mpw.writeInt(2); 
+			    mpw.writeInt(Randomizer.rand(0x2A, 0x2D));
+			    mpw.writeInt(Randomizer.rand(0x03, 0x04));
+			    mpw.writeInt(Randomizer.rand(0x43, 0xF5));
+			    mpw.writeInt(200);
+			    mpw.writeInt(0);
+			    mpw.writeInt(0);
+			    mpw.writeInt(Randomizer.nextInt());
+			    mpw.writeInt(0);
 			}
-			mplew.write(0);
-			mplew.writeInt(p1.x);
-			mplew.writeInt(p1.y);
-			mplew.writeInt(p2.x);
-			mplew.writeInt(p2.y);
-			mplew.writeInt(starid);
-			return mplew.getPacket();	
+			mpw.write(0);
+			mpw.writeInt(p1.x);
+			mpw.writeInt(p1.y);
+			mpw.writeInt(p2.x);
+			mpw.writeInt(p2.y);
+			mpw.writeInt(starid);
+			return mpw.getPacket();	
 		}
 		
 	}

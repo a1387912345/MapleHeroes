@@ -9,12 +9,13 @@ import java.io.Serializable;
 import client.inventory.Item;
 import client.SkillFactory;
 import constants.GameConstants;
-import client.MapleCharacter;
 import client.inventory.MaplePet;
 import client.inventory.MapleInventoryType;
 import client.MapleQuestStatus;
 
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import tools.Pair;

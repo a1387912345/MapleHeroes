@@ -1,8 +1,8 @@
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -15,13 +15,13 @@ import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import custom.LoadPacket;
 import database.DatabaseConnection;
-import net.cashshop.CashShopServer;
-import net.channel.ChannelServer;
-import net.login.handler.deprecated.AutoRegister;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.PetPacket;
 import net.packet.CField.NPCPacket;
+import net.server.cashshop.CashShopServer;
+import net.server.channel.ChannelServer;
+import net.server.login.handler.deprecated.AutoRegister;
 import net.world.CharacterTransfer;
 import net.world.MapleMessengerCharacter;
 import net.world.PlayerBuffStorage;
@@ -58,7 +58,7 @@ public class AdminCommand {
             if (pet == null) {
                 return 0;
             }
-            c.getCharacter().getMap().broadcastMessage(c.getCharacter(), PetPacket.petColor(c.getCharacter().getId(), (byte) 0, Color.yellow.getAlpha()), true);
+            c.getCharacter().getMap().broadcastMessage(c.getCharacter(), PetPacket.petColor(c.getCharacter().getID(), (byte) 0, Color.yellow.getAlpha()), true);
             return 1;
         }
     }
@@ -252,10 +252,10 @@ public class AdminCommand {
                 MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(chr);
                 World.Messenger.leaveMessenger(chr.getMessenger().getId(), messengerplayer);
             }
-            PlayerBuffStorage.addBuffsToStorage(chr.getId(), chr.getAllBuffs());
-            PlayerBuffStorage.addCooldownsToStorage(chr.getId(), chr.getCooldowns());
-            PlayerBuffStorage.addDiseaseToStorage(chr.getId(), chr.getAllDiseases());
-            World.ChannelChange_Data(new CharacterTransfer(chr), chr.getId(), -10);
+            PlayerBuffStorage.addBuffsToStorage(chr.getID(), chr.getAllBuffs());
+            PlayerBuffStorage.addCooldownsToStorage(chr.getID(), chr.getCooldowns());
+            PlayerBuffStorage.addDiseaseToStorage(chr.getID(), chr.getAllDiseases());
+            World.ChannelChange_Data(new CharacterTransfer(chr), chr.getID(), -10);
             ch.removePlayer(chr);
             client.updateLoginState(MapleClient.CHANGE_CHANNEL, client.getSessionIPAddress());
             chr.saveToDB(false, false);

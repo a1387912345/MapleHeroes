@@ -11,14 +11,15 @@ import constants.WorldConstants.WorldOption;
 import custom.CustomPlayerRankings;
 import database.DatabaseConnection;
 import net.PacketProcessor;
-import net.cashshop.CashShopServer;
-import net.channel.ChannelServer;
-import net.channel.MapleDojoRanking;
-import net.channel.MapleGuildRanking;
-import net.farm.FarmServer;
-import net.login.LoginInformationProvider;
-import net.login.LoginServer;
-import net.talk.TalkServer;
+import net.server.cashshop.CashShopServer;
+import net.server.channel.ChannelServer;
+import net.server.channel.MapleDojoRanking;
+import net.server.channel.MapleGuildRanking;
+import net.server.farm.FarmServer;
+import net.server.login.LoginInformationProvider;
+import net.server.login.LoginServer;
+import net.server.loginauth.LoginAuthServer;
+import net.server.talk.TalkServer;
 import net.world.World;
 import net.world.family.MapleFamily;
 import net.world.guild.MapleGuild;
@@ -47,12 +48,15 @@ import server.quest.MapleQuest;
 public class Start implements Runnable {
 
     public static long startTime = System.currentTimeMillis();
-    public static final Start instance = new Start();
+    private static final Start instance = new Start();
     public static AtomicInteger CompletedLoadingThreads = new AtomicInteger(0);
+    
+    private Start() {
+    	
+    }
 
     @Override
-    public void run()/* throws InterruptedException, IOException */ {
-        long start = System.currentTimeMillis();
+    public void run() {
 //        System.setProperty("wzpath", "wz"); // test only..?
         /*System.out.println("Pick a SQL Setting.");
          Scanner input = new Scanner(System.in);
@@ -181,10 +185,12 @@ public class Start implements Runnable {
         System.out.print(/*"\u25CF"*/".");
         MapleLifeFactory.loadQuestCounts();
         MapleQuest.initQuests();
+        
+        // Load Resources
+		MapleItemInformationProvider.getInstance().runItems();
         MapleItemInformationProvider.getInstance().runEtc();
         MapleMonsterInformationProvider.getInstance().load();
         System.out.print(/*"\u25CF"*/".");
-        MapleItemInformationProvider.getInstance().runItems();
         SkillFactory.load();
         LoginInformationProvider.getInstance();
         RandomRewards.load();
@@ -209,17 +215,21 @@ public class Start implements Runnable {
         System.out.println(" Complete!");
         CashItemFactory.getInstance().initialize();
         PacketProcessor.getInstance().initialize();
-        LoginServer.run();
+        
+        // Load Servers
+        LoginServer.getInstance().run();
+        LoginAuthServer.getInstance().run();
         ChannelServer.startChannels();
         CashShopServer.run();
         FarmServer.run();
-        TalkServer.run();
+        //TalkServer.run();
+        
         Runtime.getRuntime().addShutdownHook(new Thread(new Shutdown()));
         World.registerRespawn();
         ShutdownServer.registerMBean();
         PlayerNPC.loadAll();
         MapleMonsterInformationProvider.getInstance().addExtra();
-        LoginServer.setOn();
+        LoginServer.getInstance().setOn();
         RankingWorker.run();
         //System.out.println("Event Script List: " + ServerConfig.getEventList());
         if (ServerConfig.logPackets) {
@@ -229,10 +239,10 @@ public class Start implements Runnable {
             System.out.println("[Anti-Sniff] Server is using Fixed IVs!");
         }
         CustomPlayerRankings.getInstance().load();
-        long now = System.currentTimeMillis() - start;
-        long seconds = now / 1000;
-        long ms = now % 1000;
-        System.out.println("Total loading time: " + seconds + "s " + ms + "ms");
+        
+        double now = System.currentTimeMillis() - startTime;
+        double seconds = now / 1000;
+        System.out.println("Total loading time: " + seconds + " seconds.");
     }
 
     public static class Shutdown implements Runnable {

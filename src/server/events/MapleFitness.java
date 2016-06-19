@@ -21,11 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.events;
 
-import client.MapleCharacter;
 import net.packet.CField;
 import net.packet.CWvsContext;
 
 import java.util.concurrent.ScheduledFuture;
+
+import client.character.MapleCharacter;
 import server.Timer.EventTimer;
 
 public class MapleFitness extends MapleEvent {

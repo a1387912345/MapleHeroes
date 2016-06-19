@@ -14,9 +14,9 @@ import net.netty.MaplePacketWriter;
 public class RedirectorPacket {
 
     public static byte[] redirectorCommand(String command) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.REDIRECTOR_COMMAND);
-		mplew.writeMapleAsciiString(command);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.REDIRECTOR_COMMAND);
+		mpw.writeMapleAsciiString(command);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 }

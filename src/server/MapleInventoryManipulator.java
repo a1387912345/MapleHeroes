@@ -1,10 +1,10 @@
 package server;
 
 import client.MapleBuffStat;
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
 import client.PlayerStats;
 import client.Skill;
 import client.SkillEntry;

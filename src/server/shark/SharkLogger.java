@@ -30,57 +30,57 @@ public class SharkLogger {
      *
      * @ CWI Eclipse
      * @param value
-     * @param mplew
+     * @param mpw
      */
-    private void write7BitInt(int value, MaplePacketWriter mplew) {
+    private void write7BitInt(int value, MaplePacketWriter mpw) {
         int intValue = value;
 
         if ((intValue & 0xffffff80) == 0) {
-            mplew.write((byte) (intValue & SEVENBITS));
+            mpw.write((byte) (intValue & SEVENBITS));
             return;
         }
-        mplew.write((byte) ((intValue & SEVENBITS) | SIGNBIT));
+        mpw.write((byte) ((intValue & SEVENBITS) | SIGNBIT));
 
         if ((intValue & 0xffffc000) == 0) {
-            mplew.write((byte) ((intValue >>> 7) & SEVENBITS));
+            mpw.write((byte) ((intValue >>> 7) & SEVENBITS));
             return;
         }
-        mplew.write((byte) (((intValue >>> 7) & SEVENBITS) | SIGNBIT));
+        mpw.write((byte) (((intValue >>> 7) & SEVENBITS) | SIGNBIT));
 
         if ((intValue & 0xffe00000) == 0) {
-            mplew.write((byte) ((intValue >>> 14) & SEVENBITS));
+            mpw.write((byte) ((intValue >>> 14) & SEVENBITS));
             return;
         }
-        mplew.write((byte) (((intValue >>> 14) & SEVENBITS) | SIGNBIT));
+        mpw.write((byte) (((intValue >>> 14) & SEVENBITS) | SIGNBIT));
 
         if ((intValue & 0xf0000000) == 0) {
-            mplew.write((byte) ((intValue >>> 21) & SEVENBITS));
+            mpw.write((byte) ((intValue >>> 21) & SEVENBITS));
             return;
         }
-        mplew.write((byte) (((intValue >>> 21) & SEVENBITS) | SIGNBIT));
+        mpw.write((byte) (((intValue >>> 21) & SEVENBITS) | SIGNBIT));
 
-        mplew.write((byte) ((intValue >>> 28) & SEVENBITS));
+        mpw.write((byte) ((intValue >>> 28) & SEVENBITS));
     }
 
     public void dump() {
         if (!ServerConstants.LOG_SHARK) {
             return;
         }
-        MaplePacketWriter mplew = new MaplePacketWriter();
+        MaplePacketWriter mpw = new MaplePacketWriter();
         String localend = "127.0.0.1";
         String remoteend = "8.31.99.140";
-        mplew.writeShort(0x2015);
-        write7BitInt(localend.length(), mplew);
-        mplew.writeAsciiString(localend); // mLocalEndpoint
-        mplew.writeShort(7575); // mLocalPort
-        write7BitInt(remoteend.length(), mplew);
-        mplew.writeAsciiString(remoteend); // mRemoteEndpoint
-        mplew.writeShort(6969); // mRemotePort
-        mplew.write(8); // mLocale
-        mplew.writeShort(ServerConstants.CLIENT_VERSION); // mBuild
+        mpw.writeShort(0x2015);
+        write7BitInt(localend.length(), mpw);
+        mpw.writeAsciiString(localend); // mLocalEndpoint
+        mpw.writeShort(7575); // mLocalPort
+        write7BitInt(remoteend.length(), mpw);
+        mpw.writeAsciiString(remoteend); // mRemoteEndpoint
+        mpw.writeShort(6969); // mRemotePort
+        mpw.write(8); // mLocale
+        mpw.writeShort(ServerConstants.CLIENT_VERSION); // mBuild
         try {
 	        for (SharkPacket b : stored) {
-	            b.dump(mplew);
+	            b.dump(mpw);
 	        }
         } catch (Exception e) {
         	
@@ -90,7 +90,7 @@ public class SharkLogger {
         try {
             toWrite.createNewFile();
             try (FileOutputStream fos = new FileOutputStream(toWrite)) {
-                fos.write(mplew.getPacket());
+                fos.write(mpw.getPacket());
                 fos.flush();
             }
         } catch (IOException ex) {

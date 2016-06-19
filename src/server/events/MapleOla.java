@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.events;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 import server.Randomizer;
 
 public class MapleOla extends MapleSurvival { //survival/ola so similar.

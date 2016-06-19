@@ -23,8 +23,8 @@ package server;
 import client.MapleClient;
 import client.anticheat.CheatingOffense;
 import constants.GameConstants;
-import net.channel.ChannelServer;
 import net.packet.CWvsContext;
+import net.server.channel.ChannelServer;
 import scripting.portal.PortalScriptManager;
 
 import java.awt.Point;

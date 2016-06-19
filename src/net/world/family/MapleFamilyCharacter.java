@@ -21,9 +21,10 @@
  */
 package net.world.family;
 
-import client.MapleCharacter;
 import java.util.ArrayList;
 import java.util.List;
+
+import client.character.MapleCharacter;
 
 public class MapleFamilyCharacter implements java.io.Serializable {
 
@@ -39,7 +40,7 @@ public class MapleFamilyCharacter implements java.io.Serializable {
     public MapleFamilyCharacter(MapleCharacter c, int fid, int sid, int j1, int j2) {
         name = c.getName();
         level = c.getLevel();
-        id = c.getId();
+        id = c.getID();
         channel = c.getClient().getChannel();
         jobid = c.getJob();
         familyid = fid;

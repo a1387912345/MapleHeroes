@@ -99,40 +99,40 @@ public class CustomPlayerRankings {
     }
 
     public byte[] customRanks(int npcid) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-		mplew.write(0x50);
-        mplew.writeInt(npcid);
-        mplew.writeInt(getRank().size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
+		mpw.write(0x50);
+        mpw.writeInt(npcid);
+        mpw.writeInt(getRank().size());
         for (CustomPlayerRankings.CustomRankingInfo info : getRank()) {
-            mplew.writeShort(info.getRank());
-            mplew.writeMapleAsciiString(info.getName());
-            mplew.writeInt(info.getLevel());
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-            mplew.writeInt(0);
+            mpw.writeShort(info.getRank());
+            mpw.writeMapleAsciiString(info.getName());
+            mpw.writeInt(info.getLevel());
+            mpw.writeInt(0);
+            mpw.writeInt(0);
+            mpw.writeInt(0);
+            mpw.writeInt(0);
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     /*public static byte[] customRanks(int npcid, List<CustomPlayerRankings.CustomRankingInfo> all) {
-     MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+     MaplePacketLittleEndianWriter mpw = new MaplePacketLittleEndianWriter();
 
-     mplew.writeShort(SendPacketOpcode.GUILD_OPERATION);
-		mplew.write(80);
-     mplew.writeInt(npcid);
-     mplew.writeInt(all.size());
+     mpw.writeShort(SendPacketOpcode.GUILD_OPERATION);
+		mpw.write(80);
+     mpw.writeInt(npcid);
+     mpw.writeInt(all.size());
      for (CustomPlayerRankings.CustomRankingInfo info : all) {
-     mplew.writeShort(info.getRank());
-     mplew.writeMapleAsciiString(info.getName());
-     mplew.writeInt(info.getLevel());
-     mplew.writeInt(0);
-     mplew.writeInt(0);
-     mplew.writeInt(0);
-     mplew.writeInt(0);
+     mpw.writeShort(info.getRank());
+     mpw.writeMapleAsciiString(info.getName());
+     mpw.writeInt(info.getLevel());
+     mpw.writeInt(0);
+     mpw.writeInt(0);
+     mpw.writeInt(0);
+     mpw.writeInt(0);
      }
 
-     return mplew.getPacket();
+     return mpw.getPacket();
      }*/
 }

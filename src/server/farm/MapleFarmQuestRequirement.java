@@ -4,12 +4,13 @@
  */
 package server.farm;
 
-import client.MapleCharacter;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+
+import client.character.MapleCharacter;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 import tools.Pair;

@@ -32,12 +32,12 @@ import java.lang.ref.WeakReference;
 
 import client.inventory.Item;
 import client.inventory.ItemLoader;
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import client.inventory.MapleInventoryType;
 import database.DatabaseConnection;
-import net.channel.ChannelServer;
 import net.packet.PlayerShopPacket;
+import net.server.channel.ChannelServer;
 import net.world.World;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     public AbstractPlayerStore(MapleCharacter owner, int itemId, String desc, String pass, int slots) {
         this.setPosition(owner.getTruePosition());
         this.ownerName = owner.getName();
-        this.ownerId = owner.getId();
+        this.ownerId = owner.getID();
         this.owneraccount = owner.getAccountID();
         this.itemId = itemId;
         this.des = desc;
@@ -228,11 +228,11 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     @Override
     public byte getVisitorSlot(MapleCharacter visitor) {
         for (byte i = 0; i < chrs.length; i++) {
-            if (chrs[i] != null && chrs[i].get() != null && chrs[i].get().getId() == visitor.getId()) {
+            if (chrs[i] != null && chrs[i].get() != null && chrs[i].get().getID() == visitor.getID()) {
                 return (byte) (i + 1);
             }
         }
-        if (visitor.getId() == ownerId) { //can visit own store in merch, otherwise not.
+        if (visitor.getID() == ownerId) { //can visit own store in merch, otherwise not.
             return 0;
         }
         return -1;
@@ -326,7 +326,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
 
     @Override
     public boolean isOwner(MapleCharacter chr) {
-        return chr.getId() == ownerId && chr.getName().equals(ownerName);
+        return chr.getID() == ownerId && chr.getName().equals(ownerName);
     }
 
     @Override

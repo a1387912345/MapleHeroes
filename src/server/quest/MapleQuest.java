@@ -1,7 +1,7 @@
 package server.quest;
 
-import client.MapleCharacter;
 import client.MapleQuestStatus;
+import client.character.MapleCharacter;
 import constants.GameConstants;
 import database.DatabaseConnection;
 import net.packet.CField;
@@ -321,7 +321,7 @@ public class MapleQuest implements Serializable {
             // completion time is set by the constructor
 
             c.getClient().sendPacket(EffectPacket.showForeignEffect(14)); // Quest completion
-            c.getMap().broadcastMessage(c, EffectPacket.showForeignEffect(c.getId(), 14), false);
+            c.getMap().broadcastMessage(c, EffectPacket.showForeignEffect(c.getID(), 14), false);
         }
     }
 
@@ -358,7 +358,7 @@ public class MapleQuest implements Serializable {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, (byte) 2, npc);
         newStatus.setForfeited(chr.getQuest(this).getForfeited());
         chr.getClient().sendPacket(EffectPacket.showForeignEffect(14)); // Quest completion effect
-        chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getId(), 14), false);
+        chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getID(), 14), false);
         chr.updateQuest(newStatus);
     }
 
@@ -394,7 +394,7 @@ public class MapleQuest implements Serializable {
             a.runEnd(c, null);
         }
         c.getClient().sendPacket(CField.EffectPacket.showForeignEffect(12));
-        c.getMap().broadcastMessage(c, CField.EffectPacket.showForeignEffect(c.getId(), 12), false);
+        c.getMap().broadcastMessage(c, CField.EffectPacket.showForeignEffect(c.getID(), 12), false);
     }
 
     public static enum MedalQuest {

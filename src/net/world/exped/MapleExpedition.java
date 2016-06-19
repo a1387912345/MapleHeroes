@@ -1,7 +1,7 @@
 package net.world.exped;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.World;

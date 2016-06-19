@@ -24,11 +24,11 @@ import java.util.concurrent.ScheduledFuture;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import constants.GameConstants;
-import net.channel.ChannelServer;
 import net.packet.CWvsContext;
 import net.packet.PlayerShopPacket;
-import client.MapleCharacter;
+import net.server.channel.ChannelServer;
 import client.MapleClient;
+import client.character.MapleCharacter;
 
 import java.util.LinkedList;
 import java.util.List;

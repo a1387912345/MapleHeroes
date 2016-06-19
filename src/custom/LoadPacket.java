@@ -28,8 +28,8 @@ public class LoadPacket {
         } catch (IOException ex) {
             System.out.println("Failed to load CPacket.txt");
         }
-        MaplePacketWriter mplew = new MaplePacketWriter();
-        mplew.write(HexTool.getByteArrayFromHexString(packetProps.getProperty("packet")));
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter();
+        mpw.write(HexTool.getByteArrayFromHexString(packetProps.getProperty("packet")));
+        return mpw.getPacket();
     }
 }

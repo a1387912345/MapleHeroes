@@ -394,6 +394,7 @@ public enum RecvPacketOpcode {
 	public static boolean isSpam(RecvPacketOpcode header) {
         switch (header) {
             case AUTH_REQUEST:
+            case PONG:
             case MOVE_LIFE:
             case MOVE_PLAYER:
             //case SPECIAL_MOVE:

@@ -1,5 +1,6 @@
 package client;
 
+import client.character.MapleCharacter;
 import constants.GameConstants;
 import net.packet.CWvsContext.InfoPacket;
 

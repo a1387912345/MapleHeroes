@@ -4,8 +4,8 @@
  */
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import net.packet.CField;
 
 import java.awt.Point;
@@ -27,7 +27,7 @@ public class MapleHaku extends AnimatedMapleMapObject {
     private Point pos = new Point(0, 0);
 
     public MapleHaku(MapleCharacter owner) {
-        this.owner = owner.getId();
+        this.owner = owner.getID();
         this.jobid = owner.getJob();
         this.fh = owner.getFH();
         this.stats = false;

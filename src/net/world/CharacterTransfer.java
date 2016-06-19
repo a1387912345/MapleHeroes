@@ -3,7 +3,6 @@ package net.world;
 import client.BuddylistEntry;
 import client.CardData;
 import client.CharacterNameAndId;
-import client.MapleCharacter;
 import client.MapleMarriage;
 import client.MapleQuestStatus;
 import client.MapleTrait.MapleTraitType;
@@ -11,6 +10,7 @@ import client.MonsterFamiliar;
 import client.Skill;
 import client.SkillEntry;
 import client.anticheat.ReportType;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleImp;
 import client.inventory.MapleMount;
@@ -37,7 +37,7 @@ public class CharacterTransfer implements Externalizable {
             familyid, seniorid, junior1, junior2, currentrep, totalrep, battleshipHP, gachexp, guildContribution, individualGP, totalWins, totalLosses;
     public byte channel, gender, gmLevel, guildrank, alliancerank, clonez,
             fairyExp, cardStack, buddysize, world, initialSpawnPoint, skinColor, mount_level, mount_Fatigue, subcategory;
-    public long lastfametime, TranferTime, exp, meso;
+    public long lastfametime, transferTime, exp, meso;
     public String name, accountname, BlessOfFairy, BlessOfEmpress, chalkboard, tempIP;
     public short level, hpApUsed, job, fatigue;
     public Object inventorys, skillmacro, storage, cs, anticheat, innerSkills, azwanShopList;
@@ -77,7 +77,7 @@ public class CharacterTransfer implements Externalizable {
     }
 
     public CharacterTransfer(final MapleCharacter chr) {
-        this.characterid = chr.getId();
+        this.characterid = chr.getID();
         this.accountid = chr.getAccountID();
         this.accountname = chr.getClient().getAccountName();
         this.channel = (byte) chr.getClient().getChannel();
@@ -239,7 +239,7 @@ public class CharacterTransfer implements Externalizable {
         this.mount_Fatigue = mount.getFatigue();
         this.mount_level = mount.getLevel();
         this.mount_exp = mount.getExp();
-        TranferTime = System.currentTimeMillis();
+        transferTime = System.currentTimeMillis();
     }
 
     @Override
@@ -480,7 +480,7 @@ public class CharacterTransfer implements Externalizable {
         for (MapleTraitType value : MapleTraitType.values()) {
             this.traits.put(MapleTraitType.values()[in.readByte()], in.readInt());
         }
-        TranferTime = System.currentTimeMillis();
+        transferTime = System.currentTimeMillis();
     }
 
     @Override

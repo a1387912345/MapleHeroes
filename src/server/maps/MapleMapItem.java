@@ -23,8 +23,9 @@ package server.maps;
 import java.awt.Point;
 import client.inventory.Item;
 import net.packet.CField;
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -42,7 +43,7 @@ public class MapleMapItem extends MapleMapObject {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
-        this.character_ownerid = owner.getId();
+        this.character_ownerid = owner.getID();
         this.type = type;
         this.playerDrop = playerDrop;
     }
@@ -51,7 +52,7 @@ public class MapleMapItem extends MapleMapObject {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
-        this.character_ownerid = owner.getId();
+        this.character_ownerid = owner.getID();
         this.type = type;
         this.playerDrop = playerDrop;
         this.questid = questid;
@@ -61,7 +62,7 @@ public class MapleMapItem extends MapleMapObject {
         setPosition(position);
         this.item = null;
         this.dropper = dropper;
-        this.character_ownerid = owner.getId();
+        this.character_ownerid = owner.getID();
         this.meso = meso;
         this.type = type;
         this.playerDrop = playerDrop;

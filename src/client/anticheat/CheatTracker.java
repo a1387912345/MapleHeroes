@@ -1,7 +1,7 @@
 package client.anticheat;
 
-import client.MapleCharacter;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import constants.GameConstants;
 import java.awt.Point;
 import java.lang.ref.WeakReference;
@@ -273,7 +273,7 @@ public class CheatTracker {
             gm_message = 0;
         }
         if (entry == null) {
-            entry = new CheatingOffenseEntry(offense, chrhardref.getId());
+            entry = new CheatingOffenseEntry(offense, chrhardref.getID());
         }
         if (param != null) {
             entry.setParam(param);

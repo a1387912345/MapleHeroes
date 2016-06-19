@@ -1,11 +1,12 @@
 package net;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import net.netty.MaplePacketReader;
 
 public abstract class MaplePacketHandler {
-protected RecvPacketOpcode recv;
+	
+	protected RecvPacketOpcode recv;
 	
 	public MaplePacketHandler(RecvPacketOpcode recv) {
 		this.recv = recv;

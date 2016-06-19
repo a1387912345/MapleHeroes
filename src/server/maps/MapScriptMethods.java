@@ -20,12 +20,12 @@
  */
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import constants.GameConstants;
 import net.packet.CField;
 import net.packet.CWvsContext;

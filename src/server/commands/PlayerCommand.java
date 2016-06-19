@@ -1,22 +1,22 @@
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.MapleStat;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConfig;
 import constants.ServerConstants.PlayerGMRank;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.CField.NPCPacket;
+import net.server.channel.ChannelServer;
 
 import static java.lang.System.getProperty;
 import java.util.Arrays;

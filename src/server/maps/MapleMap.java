@@ -21,11 +21,11 @@
 package server.maps;
 
 import client.MapleBuffStat;
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MonsterFamiliar;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
+import client.character.MapleCharacter;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -36,7 +36,6 @@ import constants.QuickMove.QuickMoveNPC;
 import constants.ServerConfig;
 import custom.MoonlightRevamp;
 import database.DatabaseConnection;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.MobPacket;
@@ -47,6 +46,7 @@ import net.packet.CField.SummonPacket;
 import net.packet.CField.UIPacket;
 import net.packet.CWvsContext.PartyPacket;
 import net.packet.JobPacket.PhantomPacket;
+import net.server.channel.ChannelServer;
 import net.world.PartyOperation;
 import net.world.World;
 import net.world.exped.ExpeditionType;
@@ -710,7 +710,7 @@ public final class MapleMap {
                             case 8810122:
                             case 8820001:
                                 mc.getClient().sendPacket(EffectPacket.showOwnBuffEffect(buffid, 13, mc.getLevel(), 1)); // HT nine spirit
-                                broadcastMessage(mc, EffectPacket.showBuffEffect(mc.getId(), buffid, 13, mc.getLevel(), 1), false); // HT nine spirit
+                                broadcastMessage(mc, EffectPacket.showBuffEffect(mc.getID(), buffid, 13, mc.getLevel(), 1), false); // HT nine spirit
                                 break;
                         }
                     }
@@ -1964,7 +1964,7 @@ public final class MapleMap {
         spawnAndAddRangedMapObject(summon, new DelayedPacketCreation() {
             @Override
             public void sendPackets(MapleClient c) {
-                if (summon != null && c.getCharacter() != null && (!summon.isChangedMap() || summon.getOwnerId() == c.getCharacter().getId())) {
+                if (summon != null && c.getCharacter() != null && (!summon.isChangedMap() || summon.getOwnerId() == c.getCharacter().getID())) {
                     c.sendPacket(SummonPacket.spawnSummon(summon, true));
                 }
             }
@@ -2010,7 +2010,7 @@ public final class MapleMap {
                     @Override
                     public void run() {
                         for (final MapleMapObject mo : getMapObjectsInRect(mist.getBox(), Collections.singletonList(pvp ? MapleMapObjectType.PLAYER : MapleMapObjectType.MONSTER))) {
-                            if (pvp && mist.makeChanceResult() && !((MapleCharacter) mo).hasDOT() && ((MapleCharacter) mo).getId() != mist.getOwnerId()) {
+                            if (pvp && mist.makeChanceResult() && !((MapleCharacter) mo).hasDOT() && ((MapleCharacter) mo).getID() != mist.getOwnerId()) {
                                 ((MapleCharacter) mo).setDOT(mist.getSource().getDOT(), mist.getSourceSkill().getId(), mist.getSkillLevel());
                             } else if (!pvp && mist.makeChanceResult() && !((MapleMonster) mo).isBuffed(MonsterStatus.POISON)) {
                                 ((MapleMonster) mo).applyStatus(owner, new MonsterStatusEffect(MonsterStatus.POISON, 1, mist.getSourceSkill().getId(), null, false), true, duration, true, mist.getSource());
@@ -2267,9 +2267,9 @@ public final class MapleMap {
     public final void returnEverLastItem(final MapleCharacter chr) {
         for (final MapleMapObject o : getAllItemsThreadsafe()) {
             final MapleMapItem item = ((MapleMapItem) o);
-            if (item.getOwner() == chr.getId()) {
+            if (item.getOwner() == chr.getID()) {
                 item.setPickedUp(true);
-                broadcastMessage(CField.removeItemFromMap(item.getObjectId(), 2, chr.getId()), item.getTruePosition());
+                broadcastMessage(CField.removeItemFromMap(item.getObjectId(), 2, chr.getID()), item.getTruePosition());
                 if (item.getMeso() > 0) {
                     chr.gainMeso(item.getMeso(), false);
                 } else {
@@ -2551,9 +2551,9 @@ public final class MapleMap {
             if (chr.getHaku() != null) {
                 if (chr.getBuffSource(MapleBuffStat.HAKU_REBORN) > 0) {
                     chr.getHaku().sendStats();
-                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_change0(chr.getId()), true);
+                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_change0(chr.getID()), true);
                     chr.getMap().broadcastMessage(chr, CField.spawnHaku_change1(chr.getHaku()), true);
-                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_bianshen(chr.getId(), chr.getHaku().getObjectId(), chr.getHaku().getStats()), true);
+                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_bianshen(chr.getID(), chr.getHaku().getObjectId(), chr.getHaku().getStats()), true);
                 } else {
                     broadcastMessage(CField.spawnHaku(chr.getHaku()));
                 }
@@ -2915,7 +2915,7 @@ public final class MapleMap {
         removeMapObject(chr);
         chr.checkFollow();
         chr.removeExtractor();
-        broadcastMessage(CField.removePlayerFromMap(chr.getId()));
+        broadcastMessage(CField.removePlayerFromMap(chr.getID()));
 
         if (chr.getSummonedFamiliar() != null) {
             chr.removeVisibleFamiliar();
@@ -3280,7 +3280,7 @@ public final class MapleMap {
         charactersLock.readLock().lock();
         try {
             for (MapleCharacter mc : characters) {
-                if (mc.getId() == id) {
+                if (mc.getID() == id) {
                     return mc;
                 }
             }

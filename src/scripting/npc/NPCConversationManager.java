@@ -20,13 +20,13 @@ package scripting.npc;
 
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
-import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleStat;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
@@ -37,12 +37,6 @@ import custom.SearchGenerator;
 import custom.CustomPlayerRankings;
 import database.DatabaseConnection;
 import net.SendPacketOpcode;
-import net.channel.ChannelServer;
-import net.channel.MapleGuildRanking;
-import net.channel.handler.deprecated.HiredMerchantHandler;
-import net.channel.handler.deprecated.InventoryHandler;
-import net.channel.handler.deprecated.PlayersHandler;
-import net.login.LoginInformationProvider;
 import net.netty.MaplePacketWriter;
 import net.packet.CField;
 import net.packet.CWvsContext;
@@ -50,6 +44,12 @@ import net.packet.CField.NPCPacket;
 import net.packet.CField.UIPacket;
 import net.packet.CWvsContext.GuildPacket;
 import net.packet.CWvsContext.InfoPacket;
+import net.server.channel.ChannelServer;
+import net.server.channel.MapleGuildRanking;
+import net.server.channel.handler.deprecated.HiredMerchantHandler;
+import net.server.channel.handler.deprecated.InventoryHandler;
+import net.server.channel.handler.deprecated.PlayersHandler;
+import net.server.login.LoginInformationProvider;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.World;
@@ -1133,7 +1133,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (squad == null) {
             return -1;
         } else {
-            if (squad.getLeader() != null && squad.getLeader().getId() == c.getCharacter().getId()) {
+            if (squad.getLeader() != null && squad.getLeader().getID() == c.getCharacter().getID()) {
                 return 1;
             } else {
                 return 0;
@@ -1920,11 +1920,11 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     public boolean createAlliance(String alliancename) {
         MapleParty pt = c.getCharacter().getParty();
         MapleCharacter otherChar = c.getChannelServer().getPlayerStorage().getCharacterById(pt.getMemberByIndex(1).getId());
-        if (otherChar == null || otherChar.getId() == c.getCharacter().getId()) {
+        if (otherChar == null || otherChar.getID() == c.getCharacter().getID()) {
             return false;
         }
         try {
-            return World.Alliance.createAlliance(alliancename, c.getCharacter().getId(), otherChar.getId(), c.getCharacter().getGuildId(), otherChar.getGuildId());
+            return World.Alliance.createAlliance(alliancename, c.getCharacter().getID(), otherChar.getID(), c.getCharacter().getGuildId(), otherChar.getGuildId());
         } catch (Exception re) {
             return false;
         }
@@ -1934,7 +1934,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         try {
             final MapleGuild gs = World.Guild.getGuild(c.getCharacter().getGuildId());
             if (gs != null && c.getCharacter().getGuildRank() == 1 && c.getCharacter().getAllianceRank() == 1) {
-                if (World.Alliance.getAllianceLeader(gs.getAllianceId()) == c.getCharacter().getId() && World.Alliance.changeAllianceCapacity(gs.getAllianceId())) {
+                if (World.Alliance.getAllianceLeader(gs.getAllianceId()) == c.getCharacter().getID() && World.Alliance.changeAllianceCapacity(gs.getAllianceId())) {
                     gainMeso(-MapleGuildAlliance.CHANGE_CAPACITY_COST);
                     return true;
                 }
@@ -1948,7 +1948,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         try {
             final MapleGuild gs = World.Guild.getGuild(c.getCharacter().getGuildId());
             if (gs != null && c.getCharacter().getGuildRank() == 1 && c.getCharacter().getAllianceRank() == 1) {
-                if (World.Alliance.getAllianceLeader(gs.getAllianceId()) == c.getCharacter().getId() && World.Alliance.disbandAlliance(gs.getAllianceId())) {
+                if (World.Alliance.getAllianceLeader(gs.getAllianceId()) == c.getCharacter().getID() && World.Alliance.disbandAlliance(gs.getAllianceId())) {
                     return true;
                 }
             }
@@ -2145,13 +2145,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                         World.Guild.guildPacket(chr.getGuildId(), CWvsContext.sendMarriage(false, chr.getName()));
                     }
                     if (chr.getFamilyId() > 0) {
-                        World.Family.familyPacket(chr.getFamilyId(), CWvsContext.sendMarriage(true, chr.getName()), chr.getId());
+                        World.Family.familyPacket(chr.getFamilyId(), CWvsContext.sendMarriage(true, chr.getName()), chr.getID());
                     }
                     if (player.getGuildId() > 0) {
                         World.Guild.guildPacket(player.getGuildId(), CWvsContext.sendMarriage(false, player.getName()));
                     }
                     if (player.getFamilyId() > 0) {
-                        World.Family.familyPacket(player.getFamilyId(), CWvsContext.sendMarriage(true, chr.getName()), player.getId());
+                        World.Family.familyPacket(player.getFamilyId(), CWvsContext.sendMarriage(true, chr.getName()), player.getID());
                     }
                 }
             }
@@ -2667,17 +2667,17 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void displayRank(int npcid, List<Triple<Short, String, Integer>> list) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-		mplew.write(0x50);
-        mplew.writeInt(npcid);
-        mplew.writeInt(list.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
+		mpw.write(0x50);
+        mpw.writeInt(npcid);
+        mpw.writeInt(list.size());
         for (Triple<Short, String, Integer> info : list) {
-            mplew.writeShort(info.getLeft()); //Rank
-            mplew.writeMapleAsciiString(info.getMid()); //Name
-            mplew.writeInt(info.getRight()); //Value
-            mplew.writeZeroBytes(16);
+            mpw.writeShort(info.getLeft()); //Rank
+            mpw.writeMapleAsciiString(info.getMid()); //Name
+            mpw.writeInt(info.getRight()); //Value
+            mpw.writeZeroBytes(16);
         }
-        c.sendPacket(mplew.getPacket());
+        c.sendPacket(mpw.getPacket());
     }
 
     public void dragonShoutReward(int reward) {

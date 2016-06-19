@@ -22,9 +22,9 @@ package scripting;
 
 import client.*;
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
 import client.inventory.*;
 import constants.GameConstants;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.PetPacket;
@@ -32,6 +32,7 @@ import net.packet.CField.EffectPacket;
 import net.packet.CField.NPCPacket;
 import net.packet.CField.UIPacket;
 import net.packet.CWvsContext.InfoPacket;
+import net.server.channel.ChannelServer;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.World;
@@ -635,7 +636,7 @@ public abstract class AbstractPlayerInteraction {
         if (getPlayer().getParty() == null) {
             return false;
         }
-        return getParty().getLeader().getId() == c.getCharacter().getId();
+        return getParty().getLeader().getId() == c.getCharacter().getID();
     }
 
     public final boolean isAllPartyMembersAllowedJob(final int job) {

@@ -4,8 +4,8 @@
  */
 package net.packet;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import constants.WorldConstants;
 import constants.WorldConstants.WorldOption;
 import net.SendPacketOpcode;
@@ -23,8 +23,8 @@ import tools.Pair;
 public class FarmPacket {
 
     public static byte[] enterFarm(MapleClient c) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_OPEN);
-        PacketHelper.addCharacterInfo(mplew, c.getCharacter());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_OPEN);
+        PacketHelper.addCharacterInfo(mpw, c.getCharacter());
         MapleFarm f = c.getFarm();
         long time = System.currentTimeMillis();
         /* Farm House positions:
@@ -44,214 +44,214 @@ public class FarmPacket {
         }
         for (int i = 0; i < 25 * 25; i++) { //2D building at every position
             boolean housePosition = house.contains(i);
-            mplew.writeInt(housePosition ? houseId : 0); //building that the position contains
-            mplew.writeInt(i == houseBase ? houseId : 0); //building that the position bases
-            mplew.writeZeroBytes(5);
-            mplew.writeLong(PacketHelper.getTime(time));
+            mpw.writeInt(housePosition ? houseId : 0); //building that the position contains
+            mpw.writeInt(i == houseBase ? houseId : 0); //building that the position bases
+            mpw.writeZeroBytes(5);
+            mpw.writeLong(PacketHelper.getTime(time));
         }
-        mplew.writeInt(14);
-        mplew.writeInt(14);
-        mplew.writeInt(0);
-        mplew.writeLong(PacketHelper.getTime(time + 180000));
+        mpw.writeInt(14);
+        mpw.writeInt(14);
+        mpw.writeInt(0);
+        mpw.writeLong(PacketHelper.getTime(time + 180000));
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] farmQuestData(List<Pair<Integer, String>> canStart, List<Pair<Integer, String>> completed) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_QUEST_DATA);
-		mplew.writeInt(canStart.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_QUEST_DATA);
+		mpw.writeInt(canStart.size());
         for (Pair<Integer, String> i : canStart) {
-            mplew.writeInt(i.getLeft());
-            mplew.writeMapleAsciiString(i.getRight());
+            mpw.writeInt(i.getLeft());
+            mpw.writeMapleAsciiString(i.getRight());
         }
-        mplew.writeInt(completed.size());
+        mpw.writeInt(completed.size());
         for (Pair<Integer, String> i : completed) {
-            mplew.writeInt(i.getLeft());
-            mplew.writeMapleAsciiString(i.getRight());
+            mpw.writeInt(i.getLeft());
+            mpw.writeMapleAsciiString(i.getRight());
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] alertQuest(int questId, int status) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.QUEST_ALERT);
-		mplew.writeInt(questId);
-        mplew.write((byte) status);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.QUEST_ALERT);
+		mpw.writeInt(questId);
+        mpw.write((byte) status);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateMonsterInfo(List<Pair<Integer, Integer>> monsters) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_MONSTER_INFO);
-		mplew.writeInt(monsters.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_MONSTER_INFO);
+		mpw.writeInt(monsters.size());
         for (Pair<Integer, Integer> i : monsters) {
-            mplew.writeInt(i.getLeft());
-            mplew.writeInt(i.getRight());
+            mpw.writeInt(i.getLeft());
+            mpw.writeInt(i.getRight());
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateAesthetic(int quantity) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.AESTHETIC_POINT);
-		mplew.writeInt(quantity);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.AESTHETIC_POINT);
+		mpw.writeInt(quantity);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] spawnFarmMonster1() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.SPAWN_FARM_MONSTER1);
-		mplew.writeInt(0);
-        mplew.write(1);
-        mplew.writeInt(0); //if 1 then same as spawnmonster2 but last byte is 1
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SPAWN_FARM_MONSTER1);
+		mpw.writeInt(0);
+        mpw.write(1);
+        mpw.writeInt(0); //if 1 then same as spawnmonster2 but last byte is 1
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] farmPacket1() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_PACKET1);
-		mplew.writeZeroBytes(4);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_PACKET1);
+		mpw.writeZeroBytes(4);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] farmPacket4() {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_PACKET4);
-		mplew.writeZeroBytes(4);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_PACKET4);
+		mpw.writeZeroBytes(4);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateQuestInfo(int id, int mode, String data) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_QUEST_INFO);
-		mplew.writeInt(id);
-        mplew.write((byte) mode);
-        mplew.writeMapleAsciiString(data);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_QUEST_INFO);
+		mpw.writeInt(id);
+        mpw.write((byte) mode);
+        mpw.writeMapleAsciiString(data);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] farmMessage(String msg) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_MESSAGE);
-		mplew.writeMapleAsciiString(msg);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_MESSAGE);
+		mpw.writeMapleAsciiString(msg);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateItemQuantity(int id, int quantity) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_ITEM_GAIN);
-		mplew.writeInt(id);
-        mplew.writeInt(quantity);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_ITEM_GAIN);
+		mpw.writeInt(id);
+        mpw.writeInt(quantity);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] itemPurchased(int id) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_ITEM_PURCHASED);
-		mplew.writeInt(id);
-        mplew.write(1);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_ITEM_PURCHASED);
+		mpw.writeInt(id);
+        mpw.write(1);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] showExpGain(int quantity, int mode) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_EXP);
-		mplew.writeInt(quantity);
-        mplew.writeInt(mode);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_EXP);
+		mpw.writeInt(quantity);
+        mpw.writeInt(mode);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateWaru(int quantity) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.UPDATE_WARU);
-		mplew.writeInt(quantity);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UPDATE_WARU);
+		mpw.writeInt(quantity);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] showWaruHarvest(int slot, int quantity) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.HARVEST_WARU);
-		mplew.write(0);
-        mplew.writeInt(slot);
-        mplew.writeInt(quantity);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.HARVEST_WARU);
+		mpw.write(0);
+        mpw.writeInt(slot);
+        mpw.writeInt(quantity);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] spawnFarmMonster(MapleClient c, int id) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.SPAWN_FARM_MONSTER2);
-		mplew.writeInt(0);
-        mplew.write(1);
-        mplew.writeInt(1);
-        mplew.writeInt(1);
-        mplew.writeInt(c.getFarm().getId());
-        mplew.writeInt(1);
-        mplew.writeInt(id);
-        mplew.writeMapleAsciiString(""); //monster.getName()
-        mplew.writeInt(1); //level?
-        mplew.writeInt(0);
-        mplew.writeInt(15);
-        mplew.writeInt(3); //monster.getNurturesLeft()
-        mplew.writeInt(20); //monster.getPlaysLeft()
-        mplew.writeInt(0);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SPAWN_FARM_MONSTER2);
+		mpw.writeInt(0);
+        mpw.write(1);
+        mpw.writeInt(1);
+        mpw.writeInt(1);
+        mpw.writeInt(c.getFarm().getId());
+        mpw.writeInt(1);
+        mpw.writeInt(id);
+        mpw.writeMapleAsciiString(""); //monster.getName()
+        mpw.writeInt(1); //level?
+        mpw.writeInt(0);
+        mpw.writeInt(15);
+        mpw.writeInt(3); //monster.getNurturesLeft()
+        mpw.writeInt(20); //monster.getPlaysLeft()
+        mpw.writeInt(0);
         long time = System.currentTimeMillis(); //should be server time
-        mplew.writeLong(PacketHelper.getTime(time));
-        mplew.writeLong(PacketHelper.getTime(time + 25920000000000L));
-        mplew.writeLong(PacketHelper.getTime(time + 25920000000000L));
+        mpw.writeLong(PacketHelper.getTime(time));
+        mpw.writeLong(PacketHelper.getTime(time + 25920000000000L));
+        mpw.writeLong(PacketHelper.getTime(time + 25920000000000L));
         for (int i = 0; i < 4; i++) {
-            mplew.writeLong(PacketHelper.getTime(time));
+            mpw.writeLong(PacketHelper.getTime(time));
         }
-        mplew.writeInt(-1);
-        mplew.writeInt(-1);
-        mplew.writeZeroBytes(12);
-        mplew.write(0);
+        mpw.writeInt(-1);
+        mpw.writeInt(-1);
+        mpw.writeZeroBytes(12);
+        mpw.write(0);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateMonster(List<Pair<Integer, Long>> monsters) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.UPDATE_MONSTER);
-		mplew.write(monsters.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UPDATE_MONSTER);
+		mpw.write(monsters.size());
         for (Pair<Integer, Long> monster : monsters) {
-            mplew.writeInt(monster.getLeft()); //mob id as regular monster
-            mplew.writeLong(PacketHelper.getTime(monster.getRight())); //expire
+            mpw.writeInt(monster.getLeft()); //mob id as regular monster
+            mpw.writeLong(PacketHelper.getTime(monster.getRight())); //expire
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateMonsterQuantity(int itemId, int monsterId) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_MONSTER_GAIN);
-		mplew.write(0);
-        mplew.writeInt(itemId);
-        mplew.write(1);
-        mplew.writeInt(monsterId);
-        mplew.writeInt(1); //quantity?
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_MONSTER_GAIN);
+		mpw.write(0);
+        mpw.writeInt(itemId);
+        mpw.write(1);
+        mpw.writeInt(monsterId);
+        mpw.writeInt(1); //quantity?
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] renameMonster(int index, String name) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.RENAME_MONSTER);
-		mplew.writeInt(0);
-        mplew.writeInt(index);
-        mplew.writeMapleAsciiString(name);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.RENAME_MONSTER);
+		mpw.writeInt(0);
+        mpw.writeInt(index);
+        mpw.writeMapleAsciiString(name);
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateFarmFriends(List<MapleFarm> friends) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_FRIENDS);
-		mplew.writeInt(friends.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_FRIENDS);
+		mpw.writeInt(friends.size());
         for (MapleFarm f : friends) {
-            mplew.writeInt(f.getId());
-            mplew.writeMapleAsciiString(f.getName());
-            mplew.writeZeroBytes(5);
+            mpw.writeInt(f.getId());
+            mpw.writeMapleAsciiString(f.getName());
+            mpw.writeZeroBytes(5);
         }
-        mplew.writeInt(0); //blocked?
-        mplew.writeInt(0); //follower
+        mpw.writeInt(0); //blocked?
+        mpw.writeInt(0); //follower
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateFarmInfo(MapleClient c) {
@@ -259,89 +259,89 @@ public class FarmPacket {
     }
 
     public static byte[] updateFarmInfo(MapleClient c, boolean newname) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_INFO);
-		mplew.writeInt(c.getFarm().getId()); //Farm ID
-        mplew.writeInt(0);
-        mplew.writeLong(0); //decodeMoney ._.
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_INFO);
+		mpw.writeInt(c.getFarm().getId()); //Farm ID
+        mpw.writeInt(0);
+        mpw.writeLong(0); //decodeMoney ._.
 
         //first real farm info
-        PacketHelper.addFarmInfo(mplew, c, 2);
-        mplew.write(0);
+        PacketHelper.addFarmInfo(mpw, c, 2);
+        mpw.write(0);
 
         //then fake farm info
         if (newname) {
-            mplew.writeMapleAsciiString("Creating...");
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-            mplew.writeInt(0);
+            mpw.writeMapleAsciiString("Creating...");
+            mpw.writeInt(0);
+            mpw.writeInt(0);
+            mpw.writeInt(0);
+            mpw.writeInt(0);
+            mpw.writeInt(0);
 
-            mplew.write(2);
-            mplew.writeInt(0);
-            mplew.writeInt(0);
-            mplew.writeInt(1);
+            mpw.write(2);
+            mpw.writeInt(0);
+            mpw.writeInt(0);
+            mpw.writeInt(1);
         } else { //or real info again incase name wasn't chosen this time
-            PacketHelper.addFarmInfo(mplew, c, 2);
+            PacketHelper.addFarmInfo(mpw, c, 2);
         }
-        mplew.write(0);
+        mpw.write(0);
 
-        mplew.writeInt(0);
-        mplew.writeInt(-1);
-        mplew.write(0);
+        mpw.writeInt(0);
+        mpw.writeInt(-1);
+        mpw.write(0);
 
-        System.out.println(mplew.toString());
-        return mplew.getPacket();
+        System.out.println(mpw.toString());
+        return mpw.getPacket();
     }
 
     public static byte[] updateUserFarmInfo(MapleCharacter chr, boolean update) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_USER_INFO);
-		mplew.write(update);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_USER_INFO);
+		mpw.write(update);
         if (update) {
-            mplew.writeInt(chr.getWorld());
-            mplew.writeMapleAsciiString(WorldConstants.getNameById(chr.getWorld()));
-            mplew.writeInt(chr.getId()); //Not sure if character id or farm id
-            mplew.writeMapleAsciiString(chr.getName());
+            mpw.writeInt(chr.getWorld());
+            mpw.writeMapleAsciiString(WorldConstants.getNameById(chr.getWorld()));
+            mpw.writeInt(chr.getID()); //Not sure if character id or farm id
+            mpw.writeMapleAsciiString(chr.getName());
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] sendFarmRanking(MapleCharacter chr, List<Pair<MapleFarm, Integer>> rankings) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_RANKING);
-		mplew.writeInt(0); //Visitors
-        mplew.writeInt(0); //Playtime
-        mplew.writeInt(0); //Combinations
-        mplew.writeInt(rankings.size());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_RANKING);
+		mpw.writeInt(0); //Visitors
+        mpw.writeInt(0); //Playtime
+        mpw.writeInt(0); //Combinations
+        mpw.writeInt(rankings.size());
         int i = 0;
         for (Pair<MapleFarm, Integer> best : rankings) {
-            mplew.writeInt(i); //Type; 0 = visitors 1 = playtime 2 = combinations
-            mplew.writeInt(best.getLeft().getId());
-            mplew.writeMapleAsciiString(best.getLeft().getName());
-            mplew.writeInt(best.getRight()); //Value of type
+            mpw.writeInt(i); //Type; 0 = visitors 1 = playtime 2 = combinations
+            mpw.writeInt(best.getLeft().getId());
+            mpw.writeMapleAsciiString(best.getLeft().getName());
+            mpw.writeInt(best.getRight()); //Value of type
             if (i < 2) {
                 i++;
             }
         }
-        mplew.write(0); //Boolean; enable or disable entry reward button
+        mpw.write(0); //Boolean; enable or disable entry reward button
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 
     public static byte[] updateAvatar(Pair<WorldOption, MapleCharacter> from, Pair<WorldOption, MapleCharacter> to, boolean change) {
-        MaplePacketWriter mplew = new MaplePacketWriter(SendPacketOpcode.FARM_AVATAR);
-		mplew.write(change);
-        mplew.writeInt(from.getLeft().getWorld());
-        mplew.writeMapleAsciiString(WorldConstants.getNameById(from.getLeft().getWorld()));
-        mplew.writeInt(from.getRight().getId());
-        mplew.writeMapleAsciiString(from.getRight().getName());
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FARM_AVATAR);
+		mpw.write(change);
+        mpw.writeInt(from.getLeft().getWorld());
+        mpw.writeMapleAsciiString(WorldConstants.getNameById(from.getLeft().getWorld()));
+        mpw.writeInt(from.getRight().getID());
+        mpw.writeMapleAsciiString(from.getRight().getName());
         if (change) {
-            mplew.writeInt(to.getLeft().getWorld());
-            mplew.writeMapleAsciiString(WorldConstants.getNameById(to.getLeft().getWorld()));
-            mplew.writeInt(to.getRight().getId());
-            mplew.writeMapleAsciiString(to.getRight().getName());
+            mpw.writeInt(to.getLeft().getWorld());
+            mpw.writeMapleAsciiString(WorldConstants.getNameById(to.getLeft().getWorld()));
+            mpw.writeInt(to.getRight().getID());
+            mpw.writeMapleAsciiString(to.getRight().getName());
         }
 
-        return mplew.getPacket();
+        return mpw.getPacket();
     }
 }

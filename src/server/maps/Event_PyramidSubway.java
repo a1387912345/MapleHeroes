@@ -20,12 +20,12 @@
  */
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleQuestStatus;
 import client.MapleTrait.MapleTraitType;
-import net.channel.ChannelServer;
+import client.character.MapleCharacter;
 import net.packet.CField;
 import net.packet.CWvsContext;
+import net.server.channel.ChannelServer;
 import net.world.MaplePartyCharacter;
 import net.world.World;
 import net.world.exped.PartySearch;
@@ -50,8 +50,8 @@ public class Event_PyramidSubway {
         } else {
             type = mapid % 10000 / 1000;
         }
-        if (c.getParty() == null || c.getParty().getLeader().getId() == c.getId()) {
-            if (c.getParty() != null && c.getParty().getLeader().getId() == c.getId()) {
+        if (c.getParty() == null || c.getParty().getLeader().getId() == c.getID()) {
+            if (c.getParty() != null && c.getParty().getLeader().getId() == c.getID()) {
                 PartySearch ps = World.Party.getSearch(c.getParty());
                 if (ps != null) {
                     World.Party.removeSearch(ps, "The Party Listing has been removed because the Party Quest started.");
@@ -191,7 +191,7 @@ public class Event_PyramidSubway {
                 dispose(c);
             } else if (type != -1 && (newmapid < 926010100 || newmapid > 926013504)) {
                 dispose(c);
-            } else if (c.getParty() == null || c.getParty().getLeader().getId() == c.getId()) {
+            } else if (c.getParty() == null || c.getParty().getLeader().getId() == c.getID()) {
                 energybar = 100;
                 commenceTimerNextMap(c, newmapid % 1000 / 100);
             }
@@ -494,7 +494,7 @@ public class Event_PyramidSubway {
         if (c.getParty() != null && c.getParty().getMembers().size() > 1) {
             for (MaplePartyCharacter mpc : c.getParty().getMembers()) {
                 final MapleCharacter chr = oldMap.getCharacterById(mpc.getId());
-                if (chr != null && chr.getId() != c.getId() && chr.getLevel() >= minLevel && chr.getLevel() <= maxLevel) {
+                if (chr != null && chr.getID() != c.getID() && chr.getLevel() >= minLevel && chr.getLevel() <= maxLevel) {
                     if (clear == 1) {
                         chr.getClient().sendPacket(CField.showEffect("killing/clear"));
                     } else if (clear == 2) {

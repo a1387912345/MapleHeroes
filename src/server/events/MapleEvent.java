@@ -21,11 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.events;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 import constants.GameConstants;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
+import net.server.channel.ChannelServer;
 import net.world.World;
 import server.MapleInventoryManipulator;
 import server.RandomRewards;

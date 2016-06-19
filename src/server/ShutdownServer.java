@@ -1,9 +1,9 @@
 package server;
 
 import database.DatabaseConnection;
-import net.cashshop.CashShopServer;
-import net.channel.ChannelServer;
 import net.packet.CWvsContext;
+import net.server.cashshop.CashShopServer;
+import net.server.channel.ChannelServer;
 import net.world.World;
 
 import java.lang.management.ManagementFactory;

@@ -1,6 +1,5 @@
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleDisease;
@@ -9,16 +8,17 @@ import client.MapleStat;
 import client.Skill;
 import client.SkillFactory;
 import client.anticheat.ReportType;
+import client.character.MapleCharacter;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;
 import net.RecvPacketOpcode;
 import net.SendPacketOpcode;
-import net.channel.ChannelServer;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.CField.NPCPacket;
+import net.server.channel.ChannelServer;
 import net.world.CheaterData;
 import net.world.World;
 
@@ -745,7 +745,7 @@ public class InternCommand {
                     continue;
                 }
                 mapitem.setPickedUp(true);
-                c.getCharacter().getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 2, c.getCharacter().getId()), mapitem.getPosition());
+                c.getCharacter().getMap().broadcastMessage(CField.removeItemFromMap(mapitem.getObjectId(), 2, c.getCharacter().getID()), mapitem.getPosition());
                 c.getCharacter().getMap().removeMapObject(item);
 
             }

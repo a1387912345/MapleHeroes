@@ -4,7 +4,7 @@
  */
 package custom;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 
 /**
  *

@@ -1,9 +1,9 @@
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import net.packet.CField;
 
 import java.awt.Point;
@@ -45,7 +45,7 @@ public class MapleMist extends MapleMapObject {
 
     public MapleMist(Rectangle mistPosition, MapleCharacter owner, MapleStatEffect source) {
         this.mistPosition = mistPosition;
-        this.ownerId = owner.getId();
+        this.ownerId = owner.getID();
         this.source = source;
         this.skillDelay = 8;
         this.isMobMist = false;
@@ -99,7 +99,7 @@ public class MapleMist extends MapleMapObject {
     //fake
     public MapleMist(Rectangle mistPosition, MapleCharacter owner) {
         this.mistPosition = mistPosition;
-        this.ownerId = owner.getId();
+        this.ownerId = owner.getID();
         this.source = new MapleStatEffect();
         this.source.setSourceId(2111003);
         this.source.setSourceId(12111005);
