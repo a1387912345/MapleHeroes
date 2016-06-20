@@ -13,16 +13,16 @@ public class MigrateInHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int sessionId = lea.readInt();
-		lea.readInt(); // 1
-		lea.readLong(); // ??
-		lea.readByte(); // 0, could be a boolean
-		final int charId = lea.readInt();
-		final String charName = lea.readMapleAsciiString();
-		lea.readInt(); // 1
-		lea.readInt(); // Char Level
-		lea.readInt(); // Job ID
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int sessionId = mpr.readInt();
+		mpr.readInt(); // 1
+		mpr.readLong(); // ??
+		mpr.readByte(); // 0, could be a boolean
+		final int charId = mpr.readInt();
+		final String charName = mpr.readMapleAsciiString();
+		mpr.readInt(); // 1
+		mpr.readInt(); // Char Level
+		mpr.readInt(); // Job ID
 		
 		
 		

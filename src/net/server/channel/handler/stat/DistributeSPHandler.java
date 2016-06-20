@@ -19,10 +19,10 @@ public class DistributeSPHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
-        final int skillid = lea.readInt();
-        final byte amount = lea.readByte();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
+        final int skillid = mpr.readInt();
+        final byte amount = mpr.readByte();
         boolean isBeginnerSkill = false;
         final int remainingSp;
         if (GameConstants.isBeginnerJob(skillid / 10000) && (skillid % 10000 == 1000 || skillid % 10000 == 1001 || skillid % 10000 == 1002 || skillid % 10000 == 2)) {

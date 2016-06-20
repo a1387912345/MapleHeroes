@@ -17,10 +17,10 @@ public class ItemSortHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
-        final MapleInventoryType pInvType = MapleInventoryType.getByType(lea.readByte());
+        final MapleInventoryType pInvType = MapleInventoryType.getByType(mpr.readByte());
         if (pInvType == MapleInventoryType.UNDEFINED || c.getCharacter().hasBlockedInventory()) {
             c.sendPacket(CWvsContext.enableActions());
             return;

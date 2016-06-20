@@ -16,9 +16,9 @@ public class MobNodeHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		MapleMonster mob_from = chr.getMap().getMonsterByOid(lea.readInt());
-        int newNode = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		MapleMonster mob_from = chr.getMap().getMonsterByOid(mpr.readInt());
+        int newNode = mpr.readInt();
         int nodeSize = chr.getMap().getNodes().size();
         if ((mob_from != null) && (nodeSize > 0)) {
             MapleNodes.MapleNodeInfo mni = chr.getMap().getNode(newNode);

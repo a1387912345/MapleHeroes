@@ -20,13 +20,13 @@ package scripting.npc;
 
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleStat;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.ItemFlag;

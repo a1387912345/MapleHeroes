@@ -13,9 +13,9 @@ public class SpawnPetHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		chr.updateTick(lea.readInt());
-        chr.spawnPet(lea.readByte(), lea.readByte() > 0);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		chr.updateTick(mpr.readInt());
+        chr.spawnPet(mpr.readByte(), mpr.readByte() > 0);
 	}
 
 }

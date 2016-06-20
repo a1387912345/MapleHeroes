@@ -17,10 +17,10 @@ public class ReissueMedalHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		MapleQuest q = MapleQuest.getInstance(lea.readShort());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		MapleQuest q = MapleQuest.getInstance(mpr.readShort());
         int itemid = q.getMedalItem();
-        if ((itemid != lea.readInt()) || (itemid <= 0) || (q == null) || (chr.getQuestStatus(q.getId()) != 2)) {
+        if ((itemid != mpr.readInt()) || (itemid <= 0) || (q == null) || (chr.getQuestStatus(q.getId()) != 2)) {
             c.sendPacket(CField.UIPacket.reissueMedal(itemid, 4));
             return;
         }

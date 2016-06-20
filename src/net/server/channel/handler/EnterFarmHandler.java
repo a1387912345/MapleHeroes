@@ -21,7 +21,7 @@ public class EnterFarmHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr.hasBlockedInventory() || chr.getMap() == null || chr.getEventInstance() != null || c.getChannelServer() == null) {
             c.sendPacket(CField.serverBlocked(2));
             c.sendPacket(CWvsContext.enableActions());

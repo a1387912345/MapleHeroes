@@ -19,7 +19,7 @@ public class LeaveFarmHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		FarmServer.getPlayerStorage().deregisterPlayer(chr);
         c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());
         try {

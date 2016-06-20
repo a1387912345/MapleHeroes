@@ -15,7 +15,7 @@ public class LeavePVPHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null || !c.getCharacter().inPVP()) {
             c.sendPacket(CField.pvpBlocked(6));
             c.sendPacket(CWvsContext.enableActions());
@@ -32,7 +32,7 @@ public class LeavePVPHandler extends MaplePacketHandler {
         c.getCharacter().changeRemoval();
         c.getCharacter().dispelDebuffs();
         c.getCharacter().clearAllCooldowns();
-        c.getCharacter().updateTick(lea.readInt());
+        c.getCharacter().updateTick(mpr.readInt());
         c.sendPacket(CWvsContext.clearMidMsg());
         c.getCharacter().changeMap(c.getChannelServer().getMapFactory().getMap(960000000));
         c.getCharacter().getStat().recalcLocalStats(c.getCharacter());

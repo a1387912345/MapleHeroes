@@ -17,12 +17,12 @@ public class UseExpPotionHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		//inPacket: [F5 4F D6 2E] [60 00] [F4 06 22 00]
         System.err.println("eror");
-        c.getCharacter().updateTick(lea.readInt());
-        final byte slot = (byte) lea.readShort();
-        int itemid = lea.readInt();
+        c.getCharacter().updateTick(mpr.readInt());
+        final byte slot = (byte) mpr.readShort();
+        int itemid = mpr.readInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         if (toUse == null || toUse.getQuantity() < 1
                 || toUse.getItemId() != itemid || chr.getLevel() >= 250

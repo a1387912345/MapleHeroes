@@ -29,11 +29,11 @@ public class MagicDamageHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
 		if ((chr == null) || (chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        AttackInfo attack = DamageParse.parseMagicDamage(lea, chr);
+        AttackInfo attack = DamageParse.parseMagicDamage(mpr, chr);
         if (attack == null) {
             c.sendPacket(CWvsContext.enableActions());
             return;

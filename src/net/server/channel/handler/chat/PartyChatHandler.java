@@ -2,11 +2,11 @@ package net.server.channel.handler.chat;
 
 import client.MapleClient;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.netty.MaplePacketReader;
 import net.packet.CWvsContext;
-import client.MapleCharacterUtil;
 import constants.ServerConstants.CommandType;
 import net.world.World;
 import server.commands.CommandProcessor;

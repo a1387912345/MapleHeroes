@@ -70,7 +70,7 @@ public class LoginPacket {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.LOGIN_STATUS);
 		mpw.writeZeroBytes(6);
         mpw.writeMapleAsciiString(client.getAccountName());
-        mpw.writeInt(client.getAccID());
+        mpw.writeInt(client.getAccountID());
         //mpw.writeShort(2);
         mpw.write(0);
         mpw.writeInt(0);
@@ -148,7 +148,7 @@ public class LoginPacket {
     public static final byte[] getSecondAuthSuccess(MapleClient client) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.LOGIN_SECOND);
 		mpw.write(0);
-        mpw.writeInt(client.getAccID());
+        mpw.writeInt(client.getAccountID());
         mpw.writeZeroBytes(5);
         mpw.writeMapleAsciiString(client.getAccountName());
         mpw.writeLong(2L);

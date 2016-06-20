@@ -20,8 +20,8 @@ public class PartyRequestHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		int action = lea.readByte();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		int action = mpr.readByte();
         /*
         if ((action == 50)) {
         	System.out.println("Debug 0");
@@ -35,7 +35,7 @@ public class PartyRequestHandler extends MaplePacketHandler {
             return;
         }
         */
-        int charid = lea.readInt();
+        int charid = mpr.readInt();
         if ((c.getCharacter().getParty() == null) && (c.getCharacter().getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
         	int ch = Find.findChannel(charid);
         	MapleCharacter partyRequester = World.getStorage(ch).getCharacterById(charid);

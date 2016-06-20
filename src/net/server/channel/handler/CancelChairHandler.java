@@ -14,8 +14,8 @@ public class CancelChairHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		final short id = lea.readShort();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		final short id = mpr.readShort();
 		
 		/*
 		if (id == -1) {

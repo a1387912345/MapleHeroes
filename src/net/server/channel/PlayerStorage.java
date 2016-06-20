@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
-import client.MapleCharacterUtil;
+
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import net.world.CharacterTransfer;
 import net.world.CheaterData;
 import net.world.World;

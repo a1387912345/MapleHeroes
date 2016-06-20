@@ -1,4 +1,4 @@
-package client;
+package client.character;
 
 import constants.GameConstants;
 import net.netty.MaplePacketWriter;
@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.character.MapleCharacter;
+import client.CardData;
+import client.MapleClient;
 import server.CharacterCardFactory;
 import tools.Pair;
 import tools.Triple;
@@ -101,7 +102,7 @@ public class MapleCharacterCards {
     }
 
     public final void loadCards(final MapleClient c, final boolean channelserver) throws SQLException {
-        cards = CharacterCardFactory.getInstance().loadCharacterCards(c.getAccID(), c.getWorld());
+        cards = CharacterCardFactory.getInstance().loadCharacterCards(c.getAccountID(), c.getWorld());
         if (channelserver) {
             calculateEffects();
         }

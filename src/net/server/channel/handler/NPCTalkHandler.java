@@ -15,12 +15,12 @@ public class NPCTalkHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
 		
 		if (chr == null || chr.getMap() == null) {
             return;
         }
-        final MapleNPC npc = chr.getMap().getNPCByOid(lea.readInt());
+        final MapleNPC npc = chr.getMap().getNPCByOid(mpr.readInt());
         if (npc == null) {
             return;
         }

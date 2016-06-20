@@ -39,13 +39,13 @@ public class SpecialMoveHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		if ((chr == null) || (chr.hasBlockedInventory()) || (chr.getMap() == null) || (lea.available() < 9L)) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		if ((chr == null) || (chr.hasBlockedInventory()) || (chr.getMap() == null) || (mpr.available() < 9L)) {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        lea.skip(4);
-        int skillid = lea.readInt();
+        mpr.skip(4);
+        int skillid = mpr.readInt();
         System.out.println("skill id: " + skillid);
         if (skillid >= 91000000 && skillid < 100000000) {
             c.sendPacket(CWvsContext.enableActions());
@@ -57,16 +57,16 @@ public class SpecialMoveHandler extends MaplePacketHandler {
         int xy1 = 0;
         int xy2 = 0;
         if (skillid == 65111100) {
-            xy1 = lea.readShort();
-            xy2 = lea.readShort();
-            int soulnum = lea.readByte();
+            xy1 = mpr.readShort();
+            xy2 = mpr.readShort();
+            int soulnum = mpr.readByte();
             int scheck = 0;
             int scheck2 = 0;
             if (soulnum == 1) {
-                scheck = lea.readInt();
+                scheck = mpr.readInt();
             } else if (soulnum == 2) {
-                scheck = lea.readInt();
-                scheck2 = lea.readInt();
+                scheck = mpr.readInt();
+                scheck2 = mpr.readInt();
             }
             c.sendPacket(JobPacket.AngelicPacket.SoulSeeker(chr, skillid, soulnum, scheck, scheck2));
             c.sendPacket(JobPacket.AngelicPacket.unlockSkill());
@@ -77,9 +77,9 @@ public class SpecialMoveHandler extends MaplePacketHandler {
         //if (skillid == 13107200) { // Devine Force
         //}
         if (skillid >= 100000000) {
-            lea.readByte(); //zero
+            mpr.readByte(); //zero
         }
-        int skillLevel = lea.readByte();
+        int skillLevel = mpr.readByte();
 //        System.err.println(skillLevel);
         Skill skill = SkillFactory.getSkill(skillid);
         if ((skill == null) || ((GameConstants.isAngel(skillid)) && (chr.getStat().equippedSummon % 10000 != skillid % 10000)) || ((chr.inPVP()) && (skill.isPVPDisabled()))) {
@@ -156,10 +156,10 @@ public class SpecialMoveHandler extends MaplePacketHandler {
             case 9001020:
             case 9101020:
             case 31111003:
-                byte number_of_mobs = lea.readByte();
-                lea.skip(3);
+                byte number_of_mobs = mpr.readByte();
+                mpr.skip(3);
                 for (int i = 0; i < number_of_mobs; i++) {
-                    int mobId = lea.readInt();
+                    int mobId = mpr.readInt();
 
                     mob = chr.getMap().getMonsterByOid(mobId);
                     if (mob == null) {
@@ -169,11 +169,11 @@ public class SpecialMoveHandler extends MaplePacketHandler {
                     mob.applyStatus(chr, new MonsterStatusEffect(MonsterStatus.STUN, Integer.valueOf(1), skillid, null, false), false, effect.getDuration(), true, effect);
                 }
 
-                chr.getMap().broadcastMessage(chr, CField.EffectPacket.showBuffEffect(chr.getID(), skillid, 1, chr.getLevel(), skillLevel, lea.readByte()), chr.getTruePosition());
+                chr.getMap().broadcastMessage(chr, CField.EffectPacket.showBuffEffect(chr.getID(), skillid, 1, chr.getLevel(), skillLevel, mpr.readByte()), chr.getTruePosition());
                 c.sendPacket(CWvsContext.enableActions());
                 break;
            case 5201008: { //infinite blast Handler
-                int itemid = lea.readInt();
+                int itemid = mpr.readInt();
                 MapleStatEffect effectp = SkillFactory.getSkill(skillid).getEffect(chr.getSkillLevel(skillid));
                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemid), itemid, effectp.getBulletConsume(), true, false);
                 
@@ -181,7 +181,7 @@ public class SpecialMoveHandler extends MaplePacketHandler {
             }
 
             case 30001061:
-                mobID = lea.readInt();
+                mobID = mpr.readInt();
                 mob = chr.getMap().getMonsterByOid(mobID);
                 if (mob != null) {
                     boolean success = (mob.getHp() <= mob.getMobMaxHp() / 2L) && (mob.getId() >= 9304000) && (mob.getId() < 9305000);
@@ -208,9 +208,9 @@ public class SpecialMoveHandler extends MaplePacketHandler {
             case 36001005:
             case 2121052: {
                 List<Integer> moblist = new ArrayList<Integer>();
-                byte count = lea.readByte();
+                byte count = mpr.readByte();
                 for (byte i = 1; i <= count; i++) {
-                    moblist.add(lea.readInt());
+                    moblist.add(mpr.readInt());
                 }
                 if (skillid == 31221001) {
                     c.sendPacket(JobPacket.XenonPacket.ShieldChacing(chr.getID(), moblist, 31221014));
@@ -266,25 +266,25 @@ public class SpecialMoveHandler extends MaplePacketHandler {
                 System.out.println(skillid + " ModeCancel has been started from PlayerHandler");
                 break;
             case 110001501:
-                lea.skip(3);
+                mpr.skip(3);
                 c.sendPacket(JobPacket.BeastTamerPacket.BearMode());
                 c.sendPacket(CWvsContext.enableActions());
                 System.out.println(skillid + " BearMode has been started from PlayerHandler");
                 break;
             case 110001502:
-                lea.skip(3);
+                mpr.skip(3);
                 c.sendPacket(JobPacket.BeastTamerPacket.LeopardMode());
                 c.sendPacket(CWvsContext.enableActions());
                 System.out.println(skillid + " LeopardMode has been started from PlayerHandler");
                 break;
             case 110001503:
-                lea.skip(3);
+                mpr.skip(3);
                 c.sendPacket(JobPacket.BeastTamerPacket.HawkMode());
                 c.sendPacket(CWvsContext.enableActions());
                 System.out.println(skillid + " HawkMode has been started from PlayerHandler");
                 break;
             case 110001504:
-                lea.skip(3);
+                mpr.skip(3);
                 c.sendPacket(JobPacket.BeastTamerPacket.CatMode());
                 c.sendPacket(CWvsContext.enableActions());
                 System.out.println(skillid + " CatMode has been started from PlayerHandler");
@@ -295,8 +295,8 @@ public class SpecialMoveHandler extends MaplePacketHandler {
             default:
                 
                 Point pos = null;
-                if ((lea.available() == 5L) || (lea.available() == 7L)) {
-                    pos = lea.readPos();
+                if ((mpr.available() == 5L) || (mpr.available() == 7L)) {
+                    pos = mpr.readPos();
                 }
                
                 if (effect.isMagicDoor()) {

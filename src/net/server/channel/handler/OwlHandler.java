@@ -14,7 +14,7 @@ public class OwlHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter().haveItem(5230000, 1, true, false) || c.getCharacter().haveItem(2310000, 1, true, false)) {
             if (c.getCharacter().getMapId() >= 910000000 && c.getCharacter().getMapId() <= 910000022) {
                 c.sendPacket(CWvsContext.getOwlOpen());

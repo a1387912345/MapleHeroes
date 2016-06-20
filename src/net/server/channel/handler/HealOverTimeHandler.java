@@ -1,8 +1,8 @@
 package net.server.channel.handler;
 
 import client.MapleClient;
-import client.PlayerStats;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import constants.GameConstants;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -15,16 +15,16 @@ public class HealOverTimeHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if (chr == null) {
             return;
         }
-        chr.updateTick(lea.readInt());
-        if (lea.available() >= 8L) {
-            lea.skip(lea.available() >= 12L ? 8 : 4);
+        chr.updateTick(mpr.readInt());
+        if (mpr.available() >= 8L) {
+            mpr.skip(mpr.available() >= 12L ? 8 : 4);
         }
-        int healHP = lea.readShort();
-        int healMP = lea.readShort();
+        int healHP = mpr.readShort();
+        int healMP = mpr.readShort();
 
         PlayerStats stats = chr.getStat();
 

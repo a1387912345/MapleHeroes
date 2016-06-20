@@ -18,12 +18,12 @@ public class CancelBuffHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
 		
-		final int sourceid = lea.readInt();
+		final int sourceid = mpr.readInt();
 		
         Skill skill = SkillFactory.getSkill(sourceid);
             switch (sourceid) {

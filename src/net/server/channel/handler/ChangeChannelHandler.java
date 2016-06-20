@@ -18,7 +18,7 @@ public class ChangeChannelHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
 		final boolean room = getRecvOpcode() == RecvPacketOpcode.CHANGE_ROOM_CHANNEL;
 		
 		if (chr == null || chr.hasBlockedInventory() || chr.getEventInstance() != null || chr.getMap() == null || chr.isInBlockedMap() || FieldLimitType.ChannelSwitch.check(chr.getMap().getFieldLimit())) {
@@ -30,12 +30,12 @@ public class ChangeChannelHandler extends MaplePacketHandler {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        final int chc = lea.readByte() + 1;
+        final int chc = mpr.readByte() + 1;
         int mapid = 0;
         if (room) {
-            mapid = lea.readInt();
+            mapid = mpr.readInt();
         }
-        chr.updateTick(lea.readInt());
+        chr.updateTick(mpr.readInt());
         if (!World.isChannelAvailable(chc, chr.getWorld())) {
             chr.dropMessage(1, "Request denied due to an unknown error.");
             c.sendPacket(CWvsContext.enableActions());

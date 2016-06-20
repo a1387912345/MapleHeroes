@@ -22,8 +22,8 @@ public class StorageHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		byte mode = lea.readByte();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		byte mode = mpr.readByte();
 		
         if (chr == null) {
             return;
@@ -32,8 +32,8 @@ public class StorageHandler extends MaplePacketHandler {
 
         switch (mode) {
             case 4: {
-                byte type = lea.readByte();
-                byte slot = storage.getSlot(MapleInventoryType.getByType(type), lea.readByte());
+                byte type = mpr.readByte();
+                byte slot = storage.getSlot(MapleInventoryType.getByType(type), mpr.readByte());
                 Item item = storage.takeOut(slot);
 
                 if (item != null) {
@@ -50,10 +50,10 @@ public class StorageHandler extends MaplePacketHandler {
                 break;
             }
             case 5: {
-                byte slot = (byte) lea.readShort();
-                int itemId = lea.readInt();
+                byte slot = (byte) mpr.readShort();
+                int itemId = mpr.readInt();
                 MapleInventoryType type = GameConstants.getInventoryType(itemId);
-                short quantity = lea.readShort();
+                short quantity = mpr.readShort();
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 if (quantity < 1) {
                     return;
@@ -115,7 +115,7 @@ public class StorageHandler extends MaplePacketHandler {
                 storage.update(c);
                 break;
             case 7: {
-                long meso = lea.readInt();
+                long meso = mpr.readInt();
                 long storageMesos = storage.getMeso();
                 long playerMesos = chr.getMeso();
 

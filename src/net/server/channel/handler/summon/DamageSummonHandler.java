@@ -18,11 +18,11 @@ public class DamageSummonHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		lea.readInt();
-		final int unkByte = lea.readByte();
-        final int damage = lea.readInt();
-        final int monsterIdFrom = lea.readInt();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		mpr.readInt();
+		final int unkByte = mpr.readByte();
+        final int damage = mpr.readInt();
+        final int monsterIdFrom = mpr.readInt();
         //       inPacket.readByte(); // stance
 
         final Iterator<MapleSummon> iter = chr.getSummonsReadLock().iterator();

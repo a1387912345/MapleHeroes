@@ -14,7 +14,7 @@ public class FarmFirstEntryHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		//give random waru consume item
         c.sendPacket(FarmPacket.farmMessage("Find your reward for logging in today \r\nin your inventory."));
 	}

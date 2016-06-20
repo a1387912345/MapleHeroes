@@ -29,13 +29,13 @@ public class MagnifyGlassHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
-        final byte src = (byte) lea.readShort();
+        final byte src = (byte) mpr.readShort();
         final boolean insight = src == 127 && c.getCharacter().getTrait(MapleTraitType.sense).getLevel() >= 30;
         final Item magnify = c.getCharacter().getInventory(MapleInventoryType.USE).getItem(src);
-        byte eqSlot = (byte) lea.readShort();
+        byte eqSlot = (byte) mpr.readShort();
         boolean equipped = eqSlot < 0;
         final Item toReveal = c.getCharacter().getInventory(equipped ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP).getItem(eqSlot);
         if (toReveal == null || c.getCharacter().hasBlockedInventory()) {

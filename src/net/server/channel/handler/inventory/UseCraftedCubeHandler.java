@@ -22,11 +22,11 @@ public class UseCraftedCubeHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		//[47 80 12 04] [0B 00] [03 00]
-        c.getCharacter().updateTick(lea.readInt());
-        final Item item = c.getCharacter().getInventory(MapleInventoryType.EQUIP).getItem(lea.readShort());
-        final Item toUse = c.getCharacter().getInventory(MapleInventoryType.USE).getItem(lea.readShort());
+        c.getCharacter().updateTick(mpr.readInt());
+        final Item item = c.getCharacter().getInventory(MapleInventoryType.EQUIP).getItem(mpr.readShort());
+        final Item toUse = c.getCharacter().getInventory(MapleInventoryType.USE).getItem(mpr.readShort());
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (toUse.getItemId() / 10000 != 271 || item == null || toUse == null
                 || c.getCharacter().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1

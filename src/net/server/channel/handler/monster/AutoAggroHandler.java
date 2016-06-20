@@ -14,8 +14,8 @@ public class AutoAggroHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int monsteroid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int monsteroid = mpr.readInt();
 		if ((chr == null) || (chr.getMap() == null) || (chr.isHidden())) {
             return;
         }

@@ -19,9 +19,9 @@ public class ResetHyperHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		chr.updateTick(lea.readInt());
-        short times = lea.readShort();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		chr.updateTick(mpr.readInt());
+        short times = mpr.readShort();
         if (times < 1 || times > 3) {
             times = 3;
         }

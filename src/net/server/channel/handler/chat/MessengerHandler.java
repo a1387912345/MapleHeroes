@@ -1,8 +1,8 @@
 package net.server.channel.handler.chat;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.netty.MaplePacketReader;

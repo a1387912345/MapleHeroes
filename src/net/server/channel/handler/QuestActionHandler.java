@@ -18,12 +18,12 @@ public class QuestActionHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if (chr == null) {
             return;
         }
-		final byte action = lea.readByte();
-        int quest = lea.readInt();
+		final byte action = mpr.readByte();
+        int quest = mpr.readInt();
         if (quest == 20734) {
             c.sendPacket(CWvsContext.ultimateExplorer());
             return;
@@ -33,13 +33,13 @@ public class QuestActionHandler extends MaplePacketHandler {
         switch (action) {
             case 0: { // Restore lost item
                 //chr.updateTick(inPacket.readInt());
-                lea.readInt();
-                final int itemid = lea.readInt();
+                mpr.readInt();
+                final int itemid = mpr.readInt();
                 q.RestoreLostItem(chr, itemid);
                 break;
             }
             case 1: { // Start Quest
-                final int npc = lea.readInt();
+                final int npc = mpr.readInt();
                 if (npc == 0 && quest > 0) {
                     q.forceStart(chr, npc, null);
                 } else if (!q.hasStartScript()) {
@@ -48,14 +48,14 @@ public class QuestActionHandler extends MaplePacketHandler {
                 break;
             }
             case 2: { // Complete Quest
-                final int npc = lea.readInt();
+                final int npc = mpr.readInt();
                 //chr.updateTick(inPacket.readInt());
-                lea.readInt();
+                mpr.readInt();
                 if (q.hasEndScript()) {
                     return;
                 }
-                if (lea.available() >= 4) {
-                    q.complete(chr, npc, lea.readInt());
+                if (mpr.available() >= 4) {
+                    q.complete(chr, npc, mpr.readInt());
                 } else {
                     q.complete(chr, npc);
                 }
@@ -78,7 +78,7 @@ public class QuestActionHandler extends MaplePacketHandler {
                 break;
             }
             case 4: { // Scripted Start Quest
-                final int npc = lea.readInt();
+                final int npc = mpr.readInt();
                 if (chr.hasBlockedInventory()) {
                     return;
                 }
@@ -87,7 +87,7 @@ public class QuestActionHandler extends MaplePacketHandler {
                 break;
             }
             case 5: { // Scripted End Quest
-                final int npc = lea.readInt();
+                final int npc = mpr.readInt();
                 if (chr.hasBlockedInventory()) {
                     return;
                 }

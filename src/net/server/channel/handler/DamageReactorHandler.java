@@ -14,10 +14,10 @@ public class DamageReactorHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int oid = lea.readInt();
-        final int charPos = lea.readInt();
-        final short stance = lea.readShort();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int oid = mpr.readInt();
+        final int charPos = mpr.readInt();
+        final short stance = mpr.readShort();
         final MapleReactor reactor = c.getCharacter().getMap().getReactorByOid(oid);
         System.out.println("Hit Reactor:  " + reactor);
 

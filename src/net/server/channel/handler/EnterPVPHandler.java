@@ -21,7 +21,7 @@ public class EnterPVPHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null || c.getCharacter().getMapId() != 960000000) {
             c.sendPacket(CField.pvpBlocked(1));
             c.sendPacket(CWvsContext.enableActions());
@@ -32,9 +32,9 @@ public class EnterPVPHandler extends MaplePacketHandler {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getCharacter().updateTick(lea.readInt());
-        lea.skip(1);
-        int type = lea.readByte(), lvl = lea.readByte(), playerCount = 0;
+        c.getCharacter().updateTick(mpr.readInt());
+        mpr.skip(1);
+        int type = mpr.readByte(), lvl = mpr.readByte(), playerCount = 0;
         boolean passed = false;
         switch (lvl) {
             case 0:

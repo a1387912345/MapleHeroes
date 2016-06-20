@@ -22,14 +22,14 @@ public class UseFamiliarHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if ((chr == null) || (!chr.isAlive()) || (chr.getMap() == null) || (chr.hasBlockedInventory())) {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getCharacter().updateTick(lea.readInt());
-        short slot = lea.readShort();
-        int itemId = lea.readInt();
+        c.getCharacter().updateTick(mpr.readInt());
+        short slot = mpr.readShort();
+        int itemId = mpr.readInt();
         Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         c.sendPacket(CWvsContext.enableActions());

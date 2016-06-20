@@ -17,14 +17,14 @@ public class InnerPortalHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		lea.skip(1);
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		mpr.skip(1);
 		if ((chr == null) || (chr.getMap() == null)) {
             return;
         }
-        MaplePortal portal = chr.getMap().getPortal(lea.readMapleAsciiString());
-        int toX = lea.readShort();
-        int toY = lea.readShort();
+        MaplePortal portal = chr.getMap().getPortal(mpr.readMapleAsciiString());
+        int toX = mpr.readShort();
+        int toY = mpr.readShort();
 
         if (portal == null) {
             return;

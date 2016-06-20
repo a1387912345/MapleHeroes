@@ -18,16 +18,16 @@ public class DeleteCharHandler extends MaplePacketHandler {
         return c.loginAttempt > 3;
     }
 	
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-        String secondPassword = lea.readMapleAsciiString();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+        String secondPassword = mpr.readMapleAsciiString();
         if (secondPassword == null) {
-            if (lea.readByte() > 0) { // Specific if user have second password or not
-                secondPassword = lea.readMapleAsciiString();
+            if (mpr.readByte() > 0) { // Specific if user have second password or not
+                secondPassword = mpr.readMapleAsciiString();
             }
-            lea.readMapleAsciiString();
+            mpr.readMapleAsciiString();
         }
 
-        final int charid = lea.readInt();
+        final int charid = mpr.readInt();
 
         if (!c.loginAuth(charid) || !c.isLoggedIn() || loginFailCount(c)) {
             c.close();

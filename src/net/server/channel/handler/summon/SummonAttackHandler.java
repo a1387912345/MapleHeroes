@@ -34,12 +34,12 @@ public class SummonAttackHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if (chr == null || !chr.isAlive() || chr.getMap() == null) {
             return;
         }
         final MapleMap map = chr.getMap();
-        final MapleMapObject obj = map.getMapObject(lea.readInt(), MapleMapObjectType.SUMMON);
+        final MapleMapObject obj = map.getMapObject(mpr.readInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof MapleSummon)) {
             chr.dropMessage(5, "The summon has disappeared.");
             return;
@@ -50,8 +50,8 @@ public class SummonAttackHandler extends MaplePacketHandler {
             return;
         }
         
-        int tick = lea.readInt();
-        final int skillid = lea.readInt();
+        int tick = mpr.readInt();
+        final int skillid = mpr.readInt();
         final SummonSkillEntry sse = SkillFactory.getSummonData(skillid);
         if (skillid / 1000000 != 35 && skillid != 33101008 && sse == null) {
             chr.dropMessage(5, "Error in processing attack.");
@@ -62,9 +62,9 @@ public class SummonAttackHandler extends MaplePacketHandler {
             //summon.CheckSummonAttackFrequency(chr, tick);
             //chr.getCheatTracker().checkSummonAttack();
         }
-        lea.skip(4);
-        final byte animation = lea.readByte();
-        byte tbyte = (byte) (lea.readByte());
+        mpr.skip(4);
+        final byte animation = mpr.readByte();
+        byte tbyte = (byte) (mpr.readByte());
         byte numAttacked = (byte) ((tbyte >>> 4) & 0xF);
         if (sse != null && numAttacked > sse.mobCount) {
             chr.dropMessage(5, "Warning: Attacking more monster than summon can do");
@@ -72,22 +72,22 @@ public class SummonAttackHandler extends MaplePacketHandler {
             //AutobanManager.getInstance().autoban(c, "Attacking more monster that summon can do (Skillid : "+summon.getSkill()+" Count : " + numAttacked + ", allowed : " + sse.mobCount + ")");
             return;
         }
-        lea.skip(summon.getSkill() == 35111002 ? 24 : 12); //some pos stuff
-        lea.skip(10);
+        mpr.skip(summon.getSkill() == 35111002 ? 24 : 12); //some pos stuff
+        mpr.skip(10);
         final List<Pair<Integer, Integer>> allDamage = new ArrayList<>();
         for (int i = 0; i < numAttacked; i++) {
-            int oid = lea.readInt();
+            int oid = mpr.readInt();
             MapleMonster mob = map.getMonsterByOid(oid);
 
             if (mob == null) {
                 continue;
             }
-            lea.skip(24); // who knows
-            final int damage = lea.readInt();
+            mpr.skip(24); // who knows
+            final int damage = mpr.readInt();
             allDamage.add(new Pair<>(mob.getObjectId(), damage));
-            lea.skip(4);
+            mpr.skip(4);
         }
-        lea.skip(4);
+        mpr.skip(4);
         //if (!summon.isChangedMap()) {
         map.broadcastMessage(chr, SummonPacket.summonAttack(summon.getOwnerId(), summon.getObjectId(), animation, allDamage, chr.getLevel(), false), summon.getTruePosition());
         //}

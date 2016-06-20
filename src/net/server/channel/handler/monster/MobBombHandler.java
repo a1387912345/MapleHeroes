@@ -17,14 +17,14 @@ public class MobBombHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		MapleMap map = chr.getMap();
         if (map == null) {
             return;
         }
-        MapleMonster mobfrom = map.getMonsterByOid(lea.readInt());
-        lea.skip(4);
-        lea.readInt();
+        MapleMonster mobfrom = map.getMonsterByOid(mpr.readInt());
+        mpr.skip(4);
+        mpr.readInt();
 
         if ((mobfrom != null) && (mobfrom.getBuff(MonsterStatus.MONSTER_BOMB) != null));
 	}

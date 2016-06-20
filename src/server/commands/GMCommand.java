@@ -7,6 +7,7 @@ package server.commands;
 import client.*;
 import client.anticheat.ReportType;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;

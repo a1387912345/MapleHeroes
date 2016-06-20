@@ -9,9 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.ItemLoader;
@@ -36,12 +36,12 @@ public class PackageOperationHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final byte operation = lea.readByte();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final byte operation = mpr.readByte();
 
         switch (operation) {
             case 1: { // Start Donald, 13 digit AS
-                final String AS13Digit = lea.readMapleAsciiString();
+                final String AS13Digit = mpr.readMapleAsciiString();
                 //int unk = inPacket.readInt(); // Theres an int here, value = 1
                 //9 = error
                 final int conv = c.getCharacter().getConversation();
@@ -54,19 +54,19 @@ public class PackageOperationHandler extends MaplePacketHandler {
                 if (c.getCharacter().getConversation() != 2) {
                     return;
                 }
-                final byte inventId = lea.readByte();
-                final short itemPos = lea.readShort();
-                final short amount = lea.readShort();
-                final int mesos = lea.readInt();
-                final String recipient = lea.readMapleAsciiString();
-                boolean quickdelivery = lea.readByte() > 0;
+                final byte inventId = mpr.readByte();
+                final short itemPos = mpr.readShort();
+                final short amount = mpr.readShort();
+                final int mesos = mpr.readInt();
+                final String recipient = mpr.readMapleAsciiString();
+                boolean quickdelivery = mpr.readByte() > 0;
 
                 final int finalcost = mesos + GameConstants.getTaxAmount(mesos) + (quickdelivery ? 0 : 5000);
 
                 if (mesos >= 0 && mesos <= 100000000 && c.getCharacter().getMeso() >= finalcost) {
                     final int accid = MapleCharacterUtil.getIdByName(recipient);
                     if (accid != -1) {
-                        if (accid != c.getAccID()) {
+                        if (accid != c.getAccountID()) {
                             boolean recipientOn = false;
                             MapleClient rClient = null;
                             try {
@@ -140,7 +140,7 @@ public class PackageOperationHandler extends MaplePacketHandler {
                 if (c.getCharacter().getConversation() != 2) {
                     return;
                 }
-                final int packageid = lea.readInt();
+                final int packageid = mpr.readInt();
                 //System.out.println("Item attempted : " + packageid);
                 final MaplePackageActions dp = loadSingleItem(packageid, c.getCharacter().getID());
                 if (dp == null) {
@@ -168,7 +168,7 @@ public class PackageOperationHandler extends MaplePacketHandler {
                 if (c.getCharacter().getConversation() != 2) {
                     return;
                 }
-                final int packageid = lea.readInt();
+                final int packageid = mpr.readInt();
                 removeItemFromDB(packageid, c.getCharacter().getID());
                 c.sendPacket(CField.removeFromPackageList(true, packageid));
                 break;
@@ -178,7 +178,7 @@ public class PackageOperationHandler extends MaplePacketHandler {
                 break;
             }
             default: {
-                System.out.println("Unhandled Package operation : " + lea.toString());
+                System.out.println("Unhandled Package operation : " + mpr.toString());
                 break;
             }
         }

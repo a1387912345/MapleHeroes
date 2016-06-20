@@ -5,7 +5,7 @@ import client.MapleClient;
 import client.MapleQuestStatus;
 import client.MapleTrait.MapleTraitType;
 import client.character.MapleCharacter;
-import client.PlayerStats;
+import client.character.PlayerStats;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
@@ -45,7 +45,7 @@ public class MapleInventoryManipulator {
             return;
         }
         chr.getCashInventory().addToInventory(ring);
-        chr.getClient().sendPacket(CSPacket.sendBoughtRings(GameConstants.isCrushRing(itemId), ring, sn, chr.getClient().getAccID(), partner));
+        chr.getClient().sendPacket(CSPacket.sendBoughtRings(GameConstants.isCrushRing(itemId), ring, sn, chr.getClient().getAccountID(), partner));
     }
 
     public static boolean addbyItem(final MapleClient c, final Item item) {

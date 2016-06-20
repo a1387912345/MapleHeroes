@@ -183,8 +183,8 @@ public class MovementParse {
                    // if (chr.isGM()) {
                         //chr.showInfo("Movement", false, "Failed to read movement type " + command);
                     //}
-//                    System.out.println("Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + lea.toString(true));
-                    //FileoutputUtil.log(FileoutputUtil.Movement_Log, "Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + lea.toString(true) + "\r\n");
+//                    System.out.println("Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + mpr.toString(true));
+                    //FileoutputUtil.log(FileoutputUtil.Movement_Log, "Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + mpr.toString(true) + "\r\n");
                     //return null;
             }
             
@@ -212,12 +212,12 @@ public class MovementParse {
         return res;
     }
 
-    /*public static List<LifeMovementFragment> parseMovement2(final LittleEndianAccessor lea, final int kind, MapleCharacter chr) {
+    /*public static List<LifeMovementFragment> parseMovement2(final LittleEndianAccessor mpr, final int kind, MapleCharacter chr) {
         final List<LifeMovementFragment> res = new ArrayList<>();
-        final byte numCommands = lea.readByte();
+        final byte numCommands = mpr.readByte();
 
         for (byte i = 0; i < numCommands; i++) {
-            final byte command = lea.readByte();
+            final byte command = mpr.readByte();
             switch (command) {
                 case -1:
                 case 12:
@@ -233,7 +233,7 @@ public class MovementParse {
                         read = MovementTypes.Move_Map_Pos[command];
                     }
 
-                    final UnknownMovement mm = new UnknownMovement(command, lea.read(read));
+                    final UnknownMovement mm = new UnknownMovement(command, mpr.read(read));
                     res.add(mm);
                     break;
                 }
@@ -243,19 +243,19 @@ public class MovementParse {
                 case 44:
                 case 45:
                 case 46: {
-                    final short xpos = (short) lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short xwobble = lea.readShort();
-                    final short ywobble = lea.readShort();
-                    final short unk = lea.readShort();
+                    final short xpos = (short) mpr.readShort();
+                    final short ypos = mpr.readShort();
+                    final short xwobble = mpr.readShort();
+                    final short ywobble = mpr.readShort();
+                    final short unk = mpr.readShort();
                     short fh = 0, xoffset = 0, yoffset = 0;
 
                     if (command != 44) {
-                        xoffset = lea.readShort();
-                        yoffset = lea.readShort();
+                        xoffset = mpr.readShort();
+                        yoffset = mpr.readShort();
                     }
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
+                    final byte newstate = mpr.readByte();
+                    final short duration = mpr.readShort();
 
                     final AbsoluteLifeMovement alm = new AbsoluteLifeMovement(command, new Point(xpos, ypos), duration, newstate);
                     alm.setUnk(unk);
@@ -275,14 +275,14 @@ public class MovementParse {
                 case 41:
                 case 42:
                 case 43: {
-                    final short xmod = (short) lea.readShort();
-                    final short ymod = lea.readShort();
+                    final short xmod = (short) mpr.readShort();
+                    final short ymod = mpr.readShort();
                     short unk = 0;
                     if (command == 18 || command == 19) {
-                        unk = lea.readShort();
+                        unk = mpr.readShort();
                     }
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
+                    final byte newstate = mpr.readByte();
+                    final short duration = mpr.readShort();
 
                     final RelativeLifeMovement rlm = new RelativeLifeMovement(command, new Point(xmod, ymod), duration, newstate);
                     rlm.setUnk(unk);
@@ -309,8 +309,8 @@ public class MovementParse {
                 case 38:
                 case 39:
                 case -106: {
-                    final byte newstate = lea.readByte();
-                    final short unk = lea.readShort();
+                    final byte newstate = mpr.readByte();
+                    final short unk = mpr.readShort();
 
                     final GroundMovement am = new GroundMovement(command, new Point(0, 0), unk, newstate);
 
@@ -325,11 +325,11 @@ public class MovementParse {
                 case 9:
                 case 10:
                 case 13: {
-                    final short xpos = (short) lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short fh = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
+                    final short xpos = (short) mpr.readShort();
+                    final short ypos = mpr.readShort();
+                    final short fh = mpr.readShort();
+                    final byte newstate = mpr.readByte();
+                    final short duration = mpr.readShort();
 
                     final TeleportMovement tm = new TeleportMovement(command, new Point(xpos, ypos), duration, newstate);
                     tm.setFh(fh);
@@ -338,12 +338,12 @@ public class MovementParse {
                     break;
                 }
                 case 20: {
-                    final short xpos = lea.readShort();
-                    final short ypos = lea.readShort();
-                    final short xoffset = lea.readShort();
-                    final short yoffset = lea.readShort();
-                    final byte newstate = lea.readByte();
-                    final short duration = lea.readShort();
+                    final short xpos = mpr.readShort();
+                    final short ypos = mpr.readShort();
+                    final short xoffset = mpr.readShort();
+                    final short yoffset = mpr.readShort();
+                    final byte newstate = mpr.readByte();
+                    final short duration = mpr.readShort();
 
                     final BounceMovement bm = new BounceMovement(command, new Point(xpos, ypos), duration, newstate);
                     bm.setOffset(new Point(xoffset, yoffset));
@@ -352,12 +352,12 @@ public class MovementParse {
                     break;
                 }
                 case 11: { // Update Equip or Dash
-                    res.add(new ChangeEquipSpecialAwesome(command, lea.readByte()));
+                    res.add(new ChangeEquipSpecialAwesome(command, mpr.readByte()));
                     break;
                 }
                 default:
-//                    System.out.println("Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + lea.toString(true));
-                    FileoutputUtil.log(FileoutputUtil.Movement_Log, "Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + lea.toString(true));
+//                    System.out.println("Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + mpr.toString(true));
+                    FileoutputUtil.log(FileoutputUtil.Movement_Log, "Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + mpr.toString(true));
                     return null;
             }
         }

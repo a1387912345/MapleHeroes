@@ -14,8 +14,8 @@ public class ChangeHakuHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int oid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int oid = mpr.readInt();
         if (chr.getHaku() != null) {
             chr.getHaku().sendStats();
             chr.getMap().broadcastMessage(chr, CField.spawnHaku_change0(chr.getID()), true);

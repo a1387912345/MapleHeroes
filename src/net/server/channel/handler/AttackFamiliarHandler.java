@@ -26,28 +26,28 @@ public class AttackFamiliarHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr.getSummonedFamiliar() == null) {
             return;
         }
-        lea.skip(6);
-        int skillid = lea.readInt();
+        mpr.skip(6);
+        int skillid = mpr.readInt();
 
         SkillFactory.FamiliarEntry f = SkillFactory.getFamiliar(skillid);
         if (f == null) {
             return;
         }
-        byte unk = lea.readByte();
-        byte size = lea.readByte();
+        byte unk = mpr.readByte();
+        byte size = mpr.readByte();
         List<Triple<Integer, Integer, List<Integer>>> attackPair = new ArrayList(size);
         for (int i = 0; i < size; i++) {
-            int oid = lea.readInt();
-            int type = lea.readInt();
-            lea.skip(10);
-            byte si = lea.readByte();
+            int oid = mpr.readInt();
+            int type = mpr.readInt();
+            mpr.skip(10);
+            byte si = mpr.readByte();
             List attack = new ArrayList(si);
             for (int x = 0; x < si; x++) {
-                attack.add(Integer.valueOf(lea.readInt()));
+                attack.add(Integer.valueOf(mpr.readInt()));
             }
             attackPair.add(new Triple(Integer.valueOf(oid), Integer.valueOf(type), attack));
         }

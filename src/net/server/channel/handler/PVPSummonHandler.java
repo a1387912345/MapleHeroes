@@ -10,11 +10,11 @@ import client.MapleBuffStat;
 import client.MapleClient;
 import client.MapleDisease;
 import client.MonsterStatus;
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.SummonSkillEntry;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.netty.MaplePacketReader;
@@ -37,20 +37,20 @@ public class PVPSummonHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1")) {
             return;
         }
         final MapleMap map = chr.getMap();
-        final MapleMapObject obj = map.getMapObject(lea.readInt(), MapleMapObjectType.SUMMON);
+        final MapleMapObject obj = map.getMapObject(mpr.readInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof MapleSummon)) {
             chr.dropMessage(5, "The summon has disappeared.");
             return;
         }
         int tick = -1;
-        if (lea.available() == 27) {
-            lea.skip(23);
-            tick = lea.readInt();
+        if (mpr.available() == 27) {
+            mpr.skip(23);
+            tick = mpr.readInt();
         }
         final MapleSummon summon = (MapleSummon) obj;
         if (summon.getOwnerId() != chr.getID() || summon.getSkillLevel() <= 0) {

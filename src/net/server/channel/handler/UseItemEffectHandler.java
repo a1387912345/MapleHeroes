@@ -17,8 +17,8 @@ public class UseItemEffectHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int itemId = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int itemId = mpr.readInt();
 		
 		Item toUse = chr.getInventory((itemId == 4290001) || (itemId == 4290000) ? MapleInventoryType.ETC : MapleInventoryType.CASH).findById(itemId);
         if ((toUse == null) || (toUse.getItemId() != itemId) || (toUse.getQuantity() < 1)) {

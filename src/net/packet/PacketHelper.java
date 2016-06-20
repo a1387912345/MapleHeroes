@@ -1170,7 +1170,7 @@ public class PacketHelper {
         }
         */
         
-        mpw.writeInt(chr.getClient().getAccID());
+        mpw.writeInt(chr.getClient().getAccountID());
         mpw.writeInt(chr.getID());
         mpw.writeInt(4);
         mpw.writeInt(0);

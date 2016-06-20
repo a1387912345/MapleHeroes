@@ -19,8 +19,8 @@ public class UseChairHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		final int itemId = lea.readInt();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		final int itemId = mpr.readInt();
 		
 		if (chr == null || chr.getMap() == null) {
             return;

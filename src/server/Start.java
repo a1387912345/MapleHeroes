@@ -106,35 +106,6 @@ public class Start implements Runnable {
         ServerConstants.SQL_PASSWORD = p.getProperty("sql_password");
         ServerConstants.SQL_DATABASE = p.getProperty("sql_db");
         System.setProperty("wzpath", p.getProperty("wzpath"));
-        
-        /*for (Object property : System.getProperties().keySet()) {
-         if (property instanceof String) {
-         String arg = (String) property;
-         switch (arg.toLowerCase()) {
-         case "ip":
-         ServerConfig.interface_ = System.getProperty(arg);
-         break;
-         case "log":
-         ServerConfig.logPackets = Boolean.parseBoolean(System.getProperty(arg));
-         break;
-         case "admin":
-         ServerConfig.adminOnly = Boolean.parseBoolean(System.getProperty(arg));
-         break;
-         case "port":
-         ServerConstants.SQL_PORT = System.getProperty(arg);
-         break;
-         case "user":
-         ServerConstants.SQL_USER = System.getProperty(arg);
-         break;
-         case "password":
-         ServerConstants.SQL_PASSWORD = System.getProperty(arg);
-         break;
-         case "database":
-         ServerConstants.SQL_DATABASE = System.getProperty(arg);
-         break;
-         }
-         }
-         }*/
 
         if (ServerConfig.adminOnly || ServerConstants.Use_Localhost) {
             System.out.println("Admin Only mode is active.");
@@ -167,43 +138,44 @@ public class Start implements Runnable {
             }
         }
         System.out.println("Worlds: Total: " + (ServerConstants.TESPIA ? TespiaWorldOption.values().length : WorldOption.values().length) + " Visible: " + servers + (WorldConstants.gmserver > -1 ? " GM Server: " + WorldConstants.getNameById(WorldConstants.gmserver) : ""));
-        System.out.print("Running Threads");
+        System.out.println("Running Threads");
         WorldTimer.getInstance().start();
         EtcTimer.getInstance().start();
         MapTimer.getInstance().start();
         CloneTimer.getInstance().start();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         EventTimer.getInstance().start();
         BuffTimer.getInstance().start();
         PingTimer.getInstance().start();
         GameConstants.LoadEXP();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         MapleDojoRanking.getInstance().load();
         MapleGuildRanking.getInstance().load();
         MapleGuild.loadAll();
         MapleFamily.loadAll();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         MapleLifeFactory.loadQuestCounts();
         MapleQuest.initQuests();
         
         // Load Resources
+        System.out.println("Loading resources...");
 		MapleItemInformationProvider.getInstance().runItems();
         MapleItemInformationProvider.getInstance().runEtc();
         MapleMonsterInformationProvider.getInstance().load();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         SkillFactory.load();
         LoginInformationProvider.getInstance();
         RandomRewards.load();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         MapleOxQuizFactory.getInstance();
         MapleCarnivalFactory.getInstance();
         CharacterCardFactory.getInstance().initialize();
   //      MobSkillFactory.getInstance();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         SpeedRunner.loadSpeedRuns();
         MapleInventoryIdentifier.getInstance();
         MapleMapFactory.loadCustomLife();
-        System.out.print(/*"\u25CF"*/".");
+        //System.out.print(/*"\u25CF"*/".");
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps;
         try {
@@ -212,7 +184,7 @@ public class Start implements Runnable {
             ps.close();
         } catch (SQLException ex) {
         }
-        System.out.println(" Complete!");
+        //System.out.println(" Complete!");
         CashItemFactory.getInstance().initialize();
         PacketProcessor.getInstance().initialize();
         

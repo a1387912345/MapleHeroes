@@ -18,12 +18,12 @@ public class ReportHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		//0 = success 1 = unable to locate 2 = once a day 3 = you've been reported 4+ = unknown reason
         MapleCharacter other;
         ReportType type;
-        type = ReportType.getById(lea.readByte());
-        other = c.getCharacter().getMap().getCharacterByName(lea.readMapleAsciiString());
+        type = ReportType.getById(mpr.readByte());
+        other = c.getCharacter().getMap().getCharacterByName(mpr.readMapleAsciiString());
         //then,byte(?) and string(reason)
         if (other == null || type == null || other.isIntern()) {
             c.sendPacket(CWvsContext.report(4));

@@ -9,10 +9,10 @@ import client.MapleBuffStat;
 import client.MapleClient;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -47,7 +47,7 @@ public class RangedAttackHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
 		
 		if (chr == null) {
             return;
@@ -55,7 +55,7 @@ public class RangedAttackHandler extends MaplePacketHandler {
         if ((chr.hasBlockedInventory()) || (chr.getMap() == null)) {
             return;
         }
-        AttackInfo attack = DamageParse.parseRangeDamage(lea, chr);
+        AttackInfo attack = DamageParse.parseRangeDamage(mpr, chr);
         if (attack == null) {
             c.sendPacket(CWvsContext.enableActions());
             return;

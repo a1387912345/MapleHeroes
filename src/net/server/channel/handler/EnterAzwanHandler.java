@@ -16,7 +16,7 @@ public class EnterAzwanHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null || c.getCharacter().getMapId() != 262000300) {
             c.sendPacket(CField.pvpBlocked(1));
             c.sendPacket(CWvsContext.enableActions());
@@ -27,9 +27,9 @@ public class EnterAzwanHandler extends MaplePacketHandler {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        byte mode = lea.readByte();
-        byte difficult = lea.readByte();
-        byte party = lea.readByte();
+        byte mode = mpr.readByte();
+        byte difficult = mpr.readByte();
+        byte party = mpr.readByte();
         int mapid = 262020000 + (mode * 1000) + difficult; //Supply doesn't have difficult but it's always 0 so idc
         if (party == 1 && c.getCharacter().getParty() == null) {
             c.sendPacket(CField.pvpBlocked(9));

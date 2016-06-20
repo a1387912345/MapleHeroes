@@ -31,18 +31,18 @@ public class PetLootHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr == null) {
             return;
         }
         //System.out.println("PETS: " + inPacket.toString());
         c.getCharacter().setScrolledPosition((short) 0);
-        final byte petz = (byte) c.getCharacter().getPetIndex((int) lea.readLong());
+        final byte petz = (byte) c.getCharacter().getPetIndex((int) mpr.readLong());
         final MaplePet pet = chr.getPet(petz);
-        lea.skip(1); // [4] Zero, [4] Seems to be tickcount, [1] Always zero
-        chr.updateTick(lea.readInt());
-        final Point Client_Reportedpos = lea.readPos();
-        final MapleMapObject ob = chr.getMap().getMapObject(lea.readInt(), MapleMapObjectType.ITEM);
+        mpr.skip(1); // [4] Zero, [4] Seems to be tickcount, [1] Always zero
+        chr.updateTick(mpr.readInt());
+        final Point Client_Reportedpos = mpr.readPos();
+        final MapleMapObject ob = chr.getMap().getMapObject(mpr.readInt(), MapleMapObjectType.ITEM);
 
         if (ob == null || pet == null) {
             //System.out.println("Ob or pet is null");

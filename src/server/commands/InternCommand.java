@@ -1,6 +1,5 @@
 package server.commands;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleDisease;
 import client.MapleJob;
@@ -9,6 +8,7 @@ import client.Skill;
 import client.SkillFactory;
 import client.anticheat.ReportType;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;

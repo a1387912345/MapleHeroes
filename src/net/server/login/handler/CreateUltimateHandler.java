@@ -3,12 +3,12 @@ package net.server.login.handler;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -28,25 +28,25 @@ public class CreateUltimateHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (!c.getCharacter().isGM() && (!c.isLoggedIn() || c.getCharacter() == null || c.getCharacter().getLevel() < 120 || c.getCharacter().getMapId() != 130000000 || c.getCharacter().getQuestStatus(20734) != 0 || c.getCharacter().getQuestStatus(20616) != 2 || !GameConstants.isKOC(c.getCharacter().getJob()) || !c.canMakeCharacter(c.getCharacter().getWorld()))) {
             c.sendPacket(CField.createUltimate(2));
             //Character slots are full. Please purchase another slot from the Cash Shop.
             return;
         }
         //System.out.println(inPacket.toString());
-        final String name = lea.readMapleAsciiString();
-        final int job = lea.readInt(); //job ID
+        final String name = mpr.readMapleAsciiString();
+        final int job = mpr.readInt(); //job ID
 
-        final int face = lea.readInt();
-        final int hair = lea.readInt();
+        final int face = mpr.readInt();
+        final int hair = mpr.readInt();
 
         //No idea what are these used for:
-        final int hat = lea.readInt();
-        final int top = lea.readInt();
-        final int glove = lea.readInt();
-        final int shoes = lea.readInt();
-        final int weapon = lea.readInt();
+        final int hat = mpr.readInt();
+        final int top = mpr.readInt();
+        final int glove = mpr.readInt();
+        final int shoes = mpr.readInt();
+        final int weapon = mpr.readInt();
 
         final byte gender = c.getCharacter().getGender();
 

@@ -17,9 +17,9 @@ public class DistributeHyperHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		chr.updateTick(lea.readInt());
-        int skillid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		chr.updateTick(mpr.readInt());
+        int skillid = mpr.readInt();
         final Skill skill = SkillFactory.getSkill(skillid);
         final int remainingSp = chr.getRemainingHSp(skill.getHyper() - 1);
 

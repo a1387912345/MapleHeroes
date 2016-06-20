@@ -14,9 +14,9 @@ public class GuildInvitationHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int response = lea.readByte();
-		final String from = lea.readMapleAsciiString();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int response = mpr.readByte();
+		final String from = mpr.readMapleAsciiString();
 		final MapleCharacter cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(from);
 		
 		

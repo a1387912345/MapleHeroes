@@ -25,7 +25,7 @@ public class ChangeMapHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
 		if(c.getCharacter().getMap() == null) {
 			CashShopServer.getPlayerStorage().deregisterPlayer(chr);
 	        c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION, c.getSessionIPAddress());
@@ -46,16 +46,16 @@ public class ChangeMapHandler extends MaplePacketHandler {
 			if ((chr == null) || (chr.getMap() == null)) {
 	            return;
 	        }
-	        if (lea.available() != 0L) {
-	            lea.readByte();
-	            int targetid = lea.readInt();
-	            lea.readInt();
-	            MaplePortal portal = chr.getMap().getPortal(lea.readMapleAsciiString());
-	            if (lea.available() >= 7L) {
-	                chr.updateTick(lea.readInt());
+	        if (mpr.available() != 0L) {
+	            mpr.readByte();
+	            int targetid = mpr.readInt();
+	            mpr.readInt();
+	            MaplePortal portal = chr.getMap().getPortal(mpr.readMapleAsciiString());
+	            if (mpr.available() >= 7L) {
+	                chr.updateTick(mpr.readInt());
 	            }
-	            lea.skip(1);
-	            boolean wheel = (lea.readShort() > 0) && (!GameConstants.isEventMap(chr.getMapId())) && (chr.haveItem(5510000, 1, false, true)) && (chr.getMapId() / 1000000 != 925);
+	            mpr.skip(1);
+	            boolean wheel = (mpr.readShort() > 0) && (!GameConstants.isEventMap(chr.getMapId())) && (chr.haveItem(5510000, 1, false, true)) && (chr.getMapId() / 1000000 != 925);
 	
 	            if ((targetid != -1) && (!chr.isAlive())) {
 	                chr.setStance(0);

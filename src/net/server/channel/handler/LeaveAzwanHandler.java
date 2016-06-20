@@ -15,7 +15,7 @@ public class LeaveAzwanHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null || !c.getCharacter().inAzwan()) {
             c.sendPacket(CField.pvpBlocked(6));
             c.sendPacket(CWvsContext.enableActions());

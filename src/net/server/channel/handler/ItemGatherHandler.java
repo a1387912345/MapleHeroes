@@ -23,17 +23,17 @@ public class ItemGatherHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		// [41 00] [E5 1D 55 00] [01]
         // [32 00] [01] [01] // Sent after
 
-        c.getCharacter().updateTick(lea.readInt());
+        c.getCharacter().updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
         if (c.getCharacter().hasBlockedInventory()) {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        final byte mode = lea.readByte();
+        final byte mode = mpr.readByte();
         final MapleInventoryType invType = MapleInventoryType.getByType(mode);
         MapleInventory Inv = c.getCharacter().getInventory(invType);
 

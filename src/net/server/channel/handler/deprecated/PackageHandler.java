@@ -20,9 +20,9 @@
  */
 package net.server.channel.handler.deprecated;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.ItemLoader;
@@ -86,7 +86,7 @@ public class PackageHandler {
                 if (mesos >= 0 && mesos <= 100000000 && c.getCharacter().getMeso() >= finalcost) {
                     final int accid = MapleCharacterUtil.getIdByName(recipient);
                     if (accid != -1) {
-                        if (accid != c.getAccID()) {
+                        if (accid != c.getAccountID()) {
                             boolean recipientOn = false;
                             MapleClient rClient = null;
                             try {

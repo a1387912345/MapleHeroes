@@ -19,11 +19,11 @@ public class LinkSkillHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		int skillTo = 0, skillRank = 0, accid = 0;
 		final short level = chr.getLevel();
-		final int skillFrom = lea.readInt();
-		final int charID = lea.readInt();
+		final int skillFrom = mpr.readInt();
+		final int charID = mpr.readInt();
 	
 		switch(skillFrom) {
 			case 110:

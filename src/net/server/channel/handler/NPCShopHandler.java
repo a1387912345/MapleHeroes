@@ -15,8 +15,8 @@ public class NPCShopHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		byte bmode = lea.readByte();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		byte bmode = mpr.readByte();
 		
         if (chr == null) {
             return;
@@ -28,10 +28,10 @@ public class NPCShopHandler extends MaplePacketHandler {
                 if (shop == null) {
                     return;
                 }
-                short slot = lea.readShort();
+                short slot = mpr.readShort();
                 slot++;
-                int itemId = lea.readInt();
-                short quantity = lea.readShort();
+                int itemId = mpr.readInt();
+                short quantity = mpr.readShort();
                 // int unitprice = inPacket.readInt();
                 shop.buy(c, slot, itemId, quantity);
                 break;
@@ -41,9 +41,9 @@ public class NPCShopHandler extends MaplePacketHandler {
                 if (shop == null) {
                     return;
                 }
-                byte slot = (byte) lea.readShort();
-                int itemId = lea.readInt();
-                short quantity = lea.readShort();
+                byte slot = (byte) mpr.readShort();
+                int itemId = mpr.readInt();
+                short quantity = mpr.readShort();
                 shop.sell(c, GameConstants.getInventoryType(itemId), slot, quantity);
                 break;
             }
@@ -52,7 +52,7 @@ public class NPCShopHandler extends MaplePacketHandler {
                 if (shop == null) {
                     return;
                 }
-                byte slot = (byte) lea.readShort();
+                byte slot = (byte) mpr.readShort();
                 shop.recharge(c, slot);
                 break;
             }

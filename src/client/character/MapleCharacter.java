@@ -7,8 +7,6 @@ import client.InnerAbillity;
 import client.InnerSkillValueHolder;
 import client.MapleBuffStat;
 import client.MapleBuffStatValueHolder;
-import client.MapleCharacterCards;
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleCoolDownValueHolder;
 import client.MapleCoreAura;
@@ -28,7 +26,6 @@ import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.PartTimeJob;
 import client.PlayerRandomStream;
-import client.PlayerStats;
 import client.RockPaperScissors;
 import client.Skill;
 import client.SkillEntry;
@@ -365,7 +362,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         ret.level = 1;
         ret.remainingAp = 0;
         ret.fame = 0;
-        ret.accountid = client.getAccID();
+        ret.accountid = client.getAccountID();
         ret.buddylist = new BuddyList((byte) 20);
 
         ret.stats.str = 12;
@@ -454,7 +451,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
         ret.accountid = ct.accountid;
         ret.totalWins = ct.totalWins;
         ret.totalLosses = ct.totalLosses;
-        client.setAccID(ct.accountid);
+        client.setAccountID(ct.accountid);
         ret.mapid = ct.mapid;
         ret.initialSpawnPoint = ct.initialSpawnPoint;
         ret.world = ct.world;
@@ -653,7 +650,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             ret.tail = rs.getInt("tail");
             ret.elf = rs.getInt("elf");
             ret.accountid = rs.getInt("accountid");
-            client.setAccID(ret.accountid);
+            client.setAccountID(ret.accountid);
             ret.mapid = rs.getInt("map");
             ret.initialSpawnPoint = rs.getByte("spawnpoint");
             ret.world = rs.getByte("world");
@@ -1226,9 +1223,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             }
         } catch (NullPointerException ex) {
         	System.out.println("Nullpointer...");
-        }
-        
-        catch (SQLException ess) {
+        } catch (SQLException ess) {
             ess.printStackTrace();
             System.out.println("Failed to load character..");
             FileoutputUtil.outputFileError(FileoutputUtil.PacketEx_Log, ess);
@@ -1837,7 +1832,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             ps.setInt(5, vpoints);
             ps.setInt(6, dpoints);
             ps.setInt(7, epoints);
-            ps.setInt(8, client.getAccID());
+            ps.setInt(8, client.getAccountID());
             ps.executeUpdate();
             ps.close();
 

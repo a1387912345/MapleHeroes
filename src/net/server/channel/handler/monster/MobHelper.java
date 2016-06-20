@@ -1,6 +1,5 @@
 package net.server.channel.handler.monster;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MonsterFamiliar;
 import client.MonsterStatus;
@@ -8,6 +7,7 @@ import client.MonsterStatusEffect;
 import client.SkillFactory;
 import client.anticheat.CheatingOffense;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;

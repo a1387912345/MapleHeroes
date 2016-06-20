@@ -21,15 +21,15 @@ public class PetCommandHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final MaplePet pet = chr.getPet(chr.getPetIndex((int) lea.readLong()));
-		lea.readByte(); // Always 0?
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final MaplePet pet = chr.getPet(chr.getPetIndex((int) mpr.readLong()));
+		mpr.readByte(); // Always 0?
 		
 		if(pet == null) {
 			return;
 		}
 		
-		final PetCommand petCommand = PetDataFactory.getPetCommand(pet.getPetItemId(), lea.readByte());
+		final PetCommand petCommand = PetDataFactory.getPetCommand(pet.getPetItemId(), mpr.readByte());
 		
 		if(petCommand == null) {
             return;

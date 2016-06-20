@@ -1,4 +1,4 @@
-package client;
+package client.character;
 
 import constants.GameConstants;
 import database.DatabaseConnection;
@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
+
+import client.LoginCrypto;
+import client.LoginCryptoLegacy;
 import tools.Triple;
 
 public class MapleCharacterUtil {

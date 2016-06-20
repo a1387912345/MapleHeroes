@@ -14,12 +14,12 @@ public class HypnotizeDamageHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		MapleMonster mob_from = chr.getMap().getMonsterByOid(lea.readInt());
-        lea.skip(4);
-        int to = lea.readInt();
-        lea.skip(1);
-        int damage = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		MapleMonster mob_from = chr.getMap().getMonsterByOid(mpr.readInt());
+        mpr.skip(4);
+        int to = mpr.readInt();
+        mpr.skip(1);
+        int damage = mpr.readInt();
 
         MapleMonster mob_to = chr.getMap().getMonsterByOid(to);
 

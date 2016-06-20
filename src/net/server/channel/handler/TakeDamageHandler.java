@@ -6,10 +6,10 @@ import client.MapleBuffStat;
 import client.MapleClient;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -37,13 +37,13 @@ public class TakeDamageHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		lea.skip(4);
-        chr.updateTick(lea.readInt());
-        byte type = lea.readByte();
-        lea.skip(1);
-        int damage = lea.readInt();
-        lea.skip(2);
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		mpr.skip(4);
+        chr.updateTick(mpr.readInt());
+        byte type = mpr.readByte();
+        mpr.skip(1);
+        int damage = mpr.readInt();
+        mpr.skip(2);
         boolean isDeadlyAttack = false;
         boolean pPhysical = false;
         int oid = 0;
@@ -74,10 +74,10 @@ public class TakeDamageHandler extends MaplePacketHandler {
         }
         PlayerStats stats = chr.getStat();
         if ((type != -2) && (type != -3) && (type != -4)) {
-            monsteridfrom = lea.readInt();
-            oid = lea.readInt();
+            monsteridfrom = mpr.readInt();
+            oid = mpr.readInt();
             attacker = chr.getMap().getMonsterByOid(oid);
-            direction = lea.readByte();
+            direction = mpr.readByte();
             if ((attacker == null) || (attacker.getId() != monsteridfrom) || (attacker.getLinkCID() > 0) || (attacker.isFake()) || (attacker.getStats().isFriendly())) {
                 return;
             }
@@ -121,10 +121,10 @@ public class TakeDamageHandler extends MaplePacketHandler {
                     attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
                 }
             }
-            skillid = lea.readInt();
-            pDMG = lea.readInt();
-            byte defType = lea.readByte();
-            lea.skip(1);
+            skillid = mpr.readInt();
+            pDMG = mpr.readInt();
+            byte defType = mpr.readByte();
+            mpr.skip(1);
             if (defType == 1) {
                 Skill bx = SkillFactory.getSkill(31110008);
                 int bof = chr.getTotalSkillLevel(bx);
@@ -136,11 +136,11 @@ public class TakeDamageHandler extends MaplePacketHandler {
                 }
             }
             if (skillid != 0) {
-                pPhysical = lea.readByte() > 0;
-                pID = lea.readInt();
-                pType = lea.readByte();
-                lea.skip(4);
-                pPos = lea.readPos();
+                pPhysical = mpr.readByte() > 0;
+                pID = mpr.readInt();
+                pType = mpr.readByte();
+                mpr.skip(4);
+                pPos = mpr.readPos();
             }
         }
         if (damage == -1) {
@@ -267,10 +267,10 @@ public class TakeDamageHandler extends MaplePacketHandler {
         }
         byte offset = 0;
         int offset_d = 0;
-        if (lea.available() == 1L) {
-            offset = lea.readByte();
-            if ((offset == 1) && (lea.available() >= 4L)) {
-                offset_d = lea.readInt();
+        if (mpr.available() == 1L) {
+            offset = mpr.readByte();
+            if ((offset == 1) && (mpr.available() >= 4L)) {
+                offset_d = mpr.readInt();
             }
             if ((offset < 0) || (offset > 2)) {
                 offset = 0;

@@ -15,9 +15,9 @@ public class MysticDoorHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int oid = lea.readInt();
-        final boolean mode = lea.readByte() == 0; // specifies if backwarp or not, 1 town to target, 0 target to town
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int oid = mpr.readInt();
+        final boolean mode = mpr.readByte() == 0; // specifies if backwarp or not, 1 town to target, 0 target to town
 
         for (MapleMapObject obj : chr.getMap().getAllDoorsThreadsafe()) {
             final MapleDoor door = (MapleDoor) obj;

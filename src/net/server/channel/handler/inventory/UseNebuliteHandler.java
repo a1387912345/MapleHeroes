@@ -23,12 +23,12 @@ public class UseNebuliteHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
-        final Item nebulite = c.getCharacter().getInventory(MapleInventoryType.SETUP).getItem((byte) lea.readShort());
-        final int nebuliteId = lea.readInt();
-        final Item toMount = c.getCharacter().getInventory(MapleInventoryType.EQUIP).getItem((byte) lea.readShort());
+        final Item nebulite = c.getCharacter().getInventory(MapleInventoryType.SETUP).getItem((byte) mpr.readShort());
+        final int nebuliteId = mpr.readInt();
+        final Item toMount = c.getCharacter().getInventory(MapleInventoryType.EQUIP).getItem((byte) mpr.readShort());
         if (nebulite == null || nebuliteId != nebulite.getItemId() || toMount == null || c.getCharacter().hasBlockedInventory()) {
             c.sendPacket(InventoryPacket.getInventoryFull());
             return;

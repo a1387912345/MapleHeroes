@@ -20,8 +20,8 @@ public class FaceExpressionHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		final int emote = lea.readInt();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		final int emote = mpr.readInt();
 		
 		if (emote > 7) {
             final int emoteid = 5159992 + emote;

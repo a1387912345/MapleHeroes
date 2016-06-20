@@ -17,9 +17,9 @@ public class TouchReactorHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int oid = lea.readInt();
-        final boolean touched = lea.available() == 0 || lea.readByte() > 0; //the byte is probably the state to set it to
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int oid = mpr.readInt();
+        final boolean touched = mpr.available() == 0 || mpr.readByte() > 0; //the byte is probably the state to set it to
         final MapleReactor reactor = c.getCharacter().getMap().getReactorByOid(oid);
         System.out.println("Touch Reactor:  " + reactor);
         if (!touched || reactor == null || !reactor.isAlive() || reactor.getTouch() == 0) {

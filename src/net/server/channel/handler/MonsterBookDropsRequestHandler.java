@@ -21,12 +21,12 @@ public class MonsterBookDropsRequestHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null) {
             return;
         }
-        chr.updateTick(lea.readInt()); // tick
-        final int cardid = lea.readInt();
+        chr.updateTick(mpr.readInt()); // tick
+        final int cardid = mpr.readInt();
         final int mobid = MapleItemInformationProvider.getInstance().getCardMobId(cardid);
         if (mobid <= 0 || !chr.getMonsterBook().hasCard(cardid)) {
             c.sendPacket(CWvsContext.getCardDrops(cardid, null));

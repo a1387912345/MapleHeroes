@@ -33,11 +33,11 @@ public class MerchItemStoreHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null) {
             return;
         }
-        final byte operation = lea.readByte();
+        final byte operation = mpr.readByte();
         if (operation == 27 || operation == 28) { // Request, Take out
             requestItems(c, operation == 27);
         } else if (operation == 30) { // Exit

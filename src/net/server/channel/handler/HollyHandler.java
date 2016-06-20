@@ -20,9 +20,9 @@ public class HollyHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final MapleMapObject obj = c.getCharacter().getMap().getMapObject(lea.readInt(), MapleMapObjectType.SUMMON);
-        int skillid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final MapleMapObject obj = c.getCharacter().getMap().getMapObject(mpr.readInt(), MapleMapObjectType.SUMMON);
+        int skillid = mpr.readInt();
         if (skillid == 3121013) {
             final MapleSummon sum = (MapleSummon) obj;
             Point poss = c.getCharacter().getPosition();

@@ -15,10 +15,10 @@ public class PetBuffHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.readInt(); //0
-        int skill = lea.readInt();
-        lea.readByte(); //0
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.readInt(); //0
+        int skill = mpr.readInt();
+        mpr.readByte(); //0
         if (skill <= 0) {
             chr.getQuestRemove(MapleQuest.getInstance(GameConstants.BUFF_ITEM));
         } else {

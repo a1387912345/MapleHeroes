@@ -45,13 +45,13 @@ public class BuddylistModifyHandler extends MaplePacketHandler {
     }
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		final int mode = lea.readByte();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		final int mode = mpr.readByte();
         final BuddyList buddylist = c.getCharacter().getBuddylist();
 
         if (mode == 1) { // add
-            final String addName = lea.readMapleAsciiString();
-            final String groupName = lea.readMapleAsciiString();
+            final String addName = mpr.readMapleAsciiString();
+            final String groupName = mpr.readMapleAsciiString();
             final BuddylistEntry ble = buddylist.get(addName);
 
             if (addName.length() > 13 || groupName.length() > 16) {
@@ -141,7 +141,7 @@ public class BuddylistModifyHandler extends MaplePacketHandler {
                 }
             }
         } else if (mode == 2) { // accept buddy
-            int otherCid = lea.readInt();
+            int otherCid = mpr.readInt();
             final BuddylistEntry ble = buddylist.get(otherCid);
             if (!buddylist.isFull() && ble != null && !ble.isVisible()) {
                 final int channel = World.Find.findChannel(otherCid);
@@ -152,7 +152,7 @@ public class BuddylistModifyHandler extends MaplePacketHandler {
                 c.sendPacket(BuddylistPacket.buddylistMessage((byte) 24));//11
             }
         } else if (mode == 3) { // delete
-            final int otherCid = lea.readInt();
+            final int otherCid = mpr.readInt();
             final BuddylistEntry blz = buddylist.get(otherCid);
             if (blz != null && blz.isVisible()) {
                 notifyRemoteChannel(c, World.Find.findChannel(otherCid), otherCid, blz.getGroup(), DELETED);

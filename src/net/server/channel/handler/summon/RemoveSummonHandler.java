@@ -18,8 +18,8 @@ public class RemoveSummonHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final MapleMapObject obj = c.getCharacter().getMap().getMapObject(lea.readInt(), MapleMapObjectType.SUMMON);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final MapleMapObject obj = c.getCharacter().getMap().getMapObject(mpr.readInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof MapleSummon)) {
             return;
         }

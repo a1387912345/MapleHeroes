@@ -26,15 +26,15 @@ public class UseNebuliteFusionHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
-        final int nebuliteId1 = lea.readInt();
-        final Item nebulite1 = c.getCharacter().getInventory(MapleInventoryType.SETUP).getItem((byte) lea.readShort());
-        final int nebuliteId2 = lea.readInt();
-        final Item nebulite2 = c.getCharacter().getInventory(MapleInventoryType.SETUP).getItem((byte) lea.readShort());
-        final long mesos = lea.readInt();
-        final int premiumQuantity = lea.readInt();
+        final int nebuliteId1 = mpr.readInt();
+        final Item nebulite1 = c.getCharacter().getInventory(MapleInventoryType.SETUP).getItem((byte) mpr.readShort());
+        final int nebuliteId2 = mpr.readInt();
+        final Item nebulite2 = c.getCharacter().getInventory(MapleInventoryType.SETUP).getItem((byte) mpr.readShort());
+        final long mesos = mpr.readInt();
+        final int premiumQuantity = mpr.readInt();
         if (nebulite1 == null || nebulite2 == null || nebuliteId1 != nebulite1.getItemId() || nebuliteId2 != nebulite2.getItemId() || (mesos == 0 && premiumQuantity == 0) || (mesos != 0 && premiumQuantity != 0) || mesos < 0 || premiumQuantity < 0 || c.getCharacter().hasBlockedInventory()) {
             c.getCharacter().dropMessage(1, "Failed to fuse Nebulite.");
             c.sendPacket(InventoryPacket.getInventoryFull());

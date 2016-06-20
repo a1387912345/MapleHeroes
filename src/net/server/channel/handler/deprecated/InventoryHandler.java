@@ -23,11 +23,10 @@ package net.server.channel.handler.deprecated;
 import client.InnerAbillity;
 import client.InnerSkillValueHolder;
 import client.MapleClient;
-
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import client.inventory.Equip;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.Item;

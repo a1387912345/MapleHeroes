@@ -14,9 +14,9 @@ public class MesoDropHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		chr.updateTick(lea.readInt());
-		final int meso = lea.readInt();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		chr.updateTick(mpr.readInt());
+		final int meso = mpr.readInt();
 		
 		if ((!chr.isAlive()) || (meso < 10) || (meso > 50000) || (meso > chr.getMeso())) {
             chr.getClient().sendPacket(CWvsContext.enableActions());

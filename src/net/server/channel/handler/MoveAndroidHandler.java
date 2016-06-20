@@ -19,9 +19,9 @@ public class MoveAndroidHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.skip(12);
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(lea, 3, null, null);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.skip(12);
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(mpr, 3, null, null);
        
 
         if ((res != null) && (chr != null) && (!res.isEmpty()) && (chr.getMap() != null) && (chr.getAndroid() != null)) {

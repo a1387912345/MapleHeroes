@@ -6,10 +6,10 @@ import java.util.List;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.MapleStat;
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryIdentifier;
@@ -37,10 +37,10 @@ public class UseScriptedNPCItemHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
-        final byte slot = (byte) lea.readShort();
-        final int itemId = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
+        final byte slot = (byte) mpr.readShort();
+        final int itemId = mpr.readInt();
         final Item toUse = chr.getInventory(GameConstants.getInventoryType(itemId)).getItem(slot);
         long expiration_days = 0;
         int mountid = 0;

@@ -14,15 +14,15 @@ public class SkillMacroHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int num = lea.readByte();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int num = mpr.readByte();
 
         for (int i = 0; i < num; i++) {
-            String name = lea.readMapleAsciiString();
-            int shout = lea.readByte();
-            int skill1 = lea.readInt();
-            int skill2 = lea.readInt();
-            int skill3 = lea.readInt();
+            String name = mpr.readMapleAsciiString();
+            int shout = mpr.readByte();
+            int skill1 = mpr.readInt();
+            int skill2 = mpr.readInt();
+            int skill3 = mpr.readInt();
 
             SkillMacro macro = new SkillMacro(skill1, skill2, skill3, name, shout, i);
             chr.updateMacros(i, macro);

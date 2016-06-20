@@ -18,8 +18,8 @@ public class FarmCompleteQuestHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int questId = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int questId = mpr.readInt();
         if (questId == 1111) {
             c.sendPacket(FarmPacket.updateQuestInfo(1111, 1, ""));
             SimpleDateFormat sdfGMT = new SimpleDateFormat("yyyy-MM-dd-HH-mm");

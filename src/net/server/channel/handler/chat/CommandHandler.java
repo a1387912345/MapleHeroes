@@ -16,14 +16,14 @@ public class CommandHandler extends MaplePacketHandler
 		super(recv);
 	}
 
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		final byte mode = lea.readByte();
-        lea.readInt(); //ticks
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		final byte mode = mpr.readByte();
+        mpr.readInt(); //ticks
         switch (mode) {
             case 68: //buddy
             case 5: { // Find
 
-                final String recipient = lea.readMapleAsciiString();
+                final String recipient = mpr.readMapleAsciiString();
                 MapleCharacter player = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient);
                 if (player != null) {
                     if (!player.isIntern() || c.getCharacter().isIntern() && player.isIntern()) {
@@ -65,8 +65,8 @@ public class CommandHandler extends MaplePacketHandler
                     return;
                 }
                 c.getCharacter().getCheatTracker().checkMsg();
-                final String recipient = lea.readMapleAsciiString();
-                final String text = lea.readMapleAsciiString();
+                final String recipient = mpr.readMapleAsciiString();
+                final String text = mpr.readMapleAsciiString();
                 final int ch = World.Find.findChannel(recipient);
                 if (!c.getCharacter().isIntern() && text.length() >= 80) {
                     return;

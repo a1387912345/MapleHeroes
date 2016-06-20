@@ -24,14 +24,14 @@ public class UseSummonBagHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (!chr.isAlive() || chr.hasBlockedInventory() || chr.inPVP()) {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getCharacter().updateTick(lea.readInt());
-        final byte slot = (byte) lea.readShort();
-        final int itemId = lea.readInt();
+        c.getCharacter().updateTick(mpr.readInt());
+        final byte slot = (byte) mpr.readShort();
+        final int itemId = mpr.readInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse != null && toUse.getQuantity() >= 1 && toUse.getItemId() == itemId && (c.getCharacter().getMapId() < 910000000 || c.getCharacter().getMapId() > 910000022)) {

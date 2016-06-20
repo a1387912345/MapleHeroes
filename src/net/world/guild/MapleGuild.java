@@ -1,9 +1,9 @@
 package net.world.guild;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import constants.GameConstants;
 import database.DatabaseConnection;
 import net.netty.MaplePacketWriter;

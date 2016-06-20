@@ -14,9 +14,9 @@ public class CharInfoRequestHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-        chr.updateTick(lea.readInt());
-        final int objectid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+        chr.updateTick(mpr.readInt());
+        final int objectid = mpr.readInt();
         
         if (c.getCharacter() == null || c.getCharacter().getMap() == null) {
             return;

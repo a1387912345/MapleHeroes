@@ -20,16 +20,16 @@ public class PetAutoPotHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.skip(9);
-        chr.updateTick(lea.readInt());
-        final short slot = lea.readShort();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.skip(9);
+        chr.updateTick(mpr.readInt());
+        final short slot = mpr.readShort();
         if (chr == null || !chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(MapleDisease.POTION)) {
             return;
         }
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
-        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != lea.readInt()) {
+        if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != mpr.readInt()) {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }

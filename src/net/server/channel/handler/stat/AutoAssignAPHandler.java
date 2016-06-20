@@ -5,8 +5,8 @@ import java.util.Map;
 
 import client.MapleClient;
 import client.MapleStat;
-import client.PlayerStats;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import constants.GameConstants;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -20,17 +20,17 @@ public class AutoAssignAPHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		chr.updateTick(lea.readInt());
-        lea.skip(4);
-        if (lea.available() < 16L) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		chr.updateTick(mpr.readInt());
+        mpr.skip(4);
+        if (mpr.available() < 16L) {
             return;
         }
        // final int count = inPacket.readInt();
-        int PrimaryStat = GameConstants.GMS ? (int) lea.readLong() : lea.readInt();
-        int amount = lea.readInt();
-        int SecondaryStat = GameConstants.GMS ? (int) lea.readLong() : lea.readInt();
-        int amount2 = lea.readInt();
+        int PrimaryStat = GameConstants.GMS ? (int) mpr.readLong() : mpr.readInt();
+        int amount = mpr.readInt();
+        int SecondaryStat = GameConstants.GMS ? (int) mpr.readLong() : mpr.readInt();
+        int amount2 = mpr.readInt();
         if ((amount < 0) || (amount2 < 0)) {
             return;
         }

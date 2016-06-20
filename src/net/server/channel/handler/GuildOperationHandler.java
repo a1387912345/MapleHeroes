@@ -30,7 +30,7 @@ public class GuildOperationHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		final long currentTime = System.currentTimeMillis();
 		int guildId, charid;
 		String charName;
@@ -46,13 +46,13 @@ public class GuildOperationHandler extends MaplePacketHandler {
             nextPruneTime += 5 * 60 * 1000;
         }
 
-        switch (lea.readByte()) {
+        switch (mpr.readByte()) {
         	case 1: // Accept Guild Invitation
 	            if (c.getCharacter().getGuildId() > 0) {
 	            	c.getCharacter().dropMessage(1, "You have already joined a guild.");
 	                return;
 	            }
-	            guildId = lea.readInt(); // guild leader id or inviter id?
+	            guildId = mpr.readInt(); // guild leader id or inviter id?
 
 	            charName = c.getCharacter().getName().toLowerCase();
 	            Pair<Integer, Long> gid = getInvited().remove(charName);
@@ -84,7 +84,7 @@ public class GuildOperationHandler extends MaplePacketHandler {
                     c.getCharacter().dropMessage(1, "You do not have enough mesos to create a guild.");
                     return;
                 }
-                final String guildName = lea.readMapleAsciiString();
+                final String guildName = mpr.readMapleAsciiString();
 
                 if (!isGuildNameAcceptable(guildName)) {
                     c.getCharacter().dropMessage(1, "The guild name you have chosen is not acceptable.");
@@ -111,7 +111,7 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 if (c.getCharacter().getGuildId() <= 0 || c.getCharacter().getGuildRank() > 2) { // 1 == guild master, 2 == jr
                     return;
                 }
-                charName = lea.readMapleAsciiString().toLowerCase();
+                charName = mpr.readMapleAsciiString().toLowerCase();
                 if (getInvited().containsKey(charName)) {
                     c.getCharacter().dropMessage(5, "The player is currently handling an invitation.");
                     //return;
@@ -126,8 +126,8 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 break;
             
             case 11: // Leave Guild
-                charid = lea.readInt();
-                charName = lea.readMapleAsciiString();
+                charid = mpr.readInt();
+                charName = mpr.readMapleAsciiString();
 
                 if (charid != c.getCharacter().getID() || !charName.equals(c.getCharacter().getName()) || c.getCharacter().getGuildId() <= 0) {
                     return;
@@ -137,8 +137,8 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 //c.sendPacket(GuildPacket.showGuildInfo(null));
                 break;
             case 12: // Expel Member from Guild
-                charid = lea.readInt();
-                charName = lea.readMapleAsciiString();
+                charid = mpr.readInt();
+                charName = mpr.readMapleAsciiString();
 
                 if (c.getCharacter().getGuildRank() > 2 || c.getCharacter().getGuildId() <= 0) {
                     return;
@@ -151,14 +151,14 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 }
                 String ranks[] = new String[5];
                 for (int i = 0; i < 5; i++) {
-                    ranks[i] = lea.readMapleAsciiString();
+                    ranks[i] = mpr.readMapleAsciiString();
                 }
 
                 World.Guild.changeRankTitle(c.getCharacter().getGuildId(), ranks);
                 break;
             case 19: // Change Guild Member's Rank
-                charid = lea.readInt();
-                byte newRank = lea.readByte();
+                charid = mpr.readInt();
+                byte newRank = mpr.readByte();
 
                 if ((newRank <= 1 || newRank > 5) || c.getCharacter().getGuildRank() > 2 || (newRank <= 2 && c.getCharacter().getGuildRank() != 1) || c.getCharacter().getGuildId() <= 0) {
                     return;
@@ -175,10 +175,10 @@ public class GuildOperationHandler extends MaplePacketHandler {
                     c.getCharacter().dropMessage(1, "You do not have enough mesos to create an emblem.");
                     return;
                 }
-                final short bg = lea.readShort();
-                final byte bgcolor = lea.readByte();
-                final short logo = lea.readShort();
-                final byte logocolor = lea.readByte();
+                final short bg = mpr.readShort();
+                final byte bgcolor = mpr.readByte();
+                final short logo = mpr.readShort();
+                final byte logocolor = mpr.readByte();
 
                 World.Guild.setGuildEmblem(c.getCharacter().getGuildId(), bg, bgcolor, logo, logocolor);
 
@@ -186,14 +186,14 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 respawnPlayer(c.getCharacter());
                 break;
             case 0x11: // guild notice change
-                final String notice = lea.readMapleAsciiString();
+                final String notice = mpr.readMapleAsciiString();
                 if (notice.length() > 100 || c.getCharacter().getGuildId() <= 0 || c.getCharacter().getGuildRank() > 2) {
                     return;
                 }
                 World.Guild.setGuildNotice(c.getCharacter().getGuildId(), notice);
                 break;
             case 0x1d: //guild skill purchase
-                Skill skilli = SkillFactory.getSkill(lea.readInt());
+                Skill skilli = SkillFactory.getSkill(mpr.readInt());
                 if (c.getCharacter().getGuildId() <= 0 || skilli == null || skilli.getId() < 91000000) {
                     return;
                 }
@@ -210,7 +210,7 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 }
                 break;
             case 0x1e: //guild skill activation
-                skilli = SkillFactory.getSkill(lea.readInt());
+                skilli = SkillFactory.getSkill(mpr.readInt());
                 if (c.getCharacter().getGuildId() <= 0 || skilli == null) {
                     return;
                 }
@@ -227,7 +227,7 @@ public class GuildOperationHandler extends MaplePacketHandler {
                 }
                 break;
             case 0x1f: //guild leader change
-                charid = lea.readInt();
+                charid = mpr.readInt();
                 if (c.getCharacter().getGuildId() <= 0 || c.getCharacter().getGuildRank() > 1) {
                     return;
                 }

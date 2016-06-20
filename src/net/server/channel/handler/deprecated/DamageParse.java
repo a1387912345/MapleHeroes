@@ -4,12 +4,12 @@ import client.MapleBuffStat;
 import client.MapleQuestStatus;
 import client.MonsterStatus;
 import client.MonsterStatusEffect;
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -1197,7 +1197,7 @@ public class DamageParse {
         inPacket.readInt();
         inPacket.readByte();
         
-        //if (isEvanForceSkill(ret.skillid)) lea.readByte();
+        //if (isEvanForceSkill(ret.skillid)) mpr.readByte();
         
         ret.speed = inPacket.readByte();
         ret.lastAttackTickCount = inPacket.readInt();
@@ -1235,7 +1235,7 @@ public class DamageParse {
             inPacket.skip(1);
         }
    //     if (ret.skill == 2321054){//Asura - Mixtamal6
-   //     lea.skip(3); //new
+   //     mpr.skip(3); //new
  //   } 
         return ret;
     }
@@ -1306,7 +1306,7 @@ public class DamageParse {
         }
         /*
         if (isUserCloneSummonedAbleSkill(ret.skill)) {
-        	lea.readInt(); // nBySummonedID
+        	mpr.readInt(); // nBySummonedID
         }
         */
         
@@ -1365,23 +1365,23 @@ public class DamageParse {
 
     /**
      * 
-     * @param lea
+     * @param mpr
      * @param chr
      * @return
      * @see <code> CUserLocal::TryDoingShootAttack </code>
      */
-    public static AttackInfo parseRangeDamage(MaplePacketReader lea, MapleCharacter chr) {
+    public static AttackInfo parseRangeDamage(MaplePacketReader mpr, MapleCharacter chr) {
         AttackInfo ret = new AttackInfo();
         
-        lea.readByte(); // Default value of 0
-        lea.readByte(); // g_pStage.baseclass_0.vfptr
-        ret.tbyte = lea.readByte();
+        mpr.readByte(); // Default value of 0
+        mpr.readByte(); // g_pStage.baseclass_0.vfptr
+        ret.tbyte = mpr.readByte();
         ret.targets = ((byte) (ret.tbyte >>> 4 & 0xF));
         ret.hits = ((byte) (ret.tbyte & 0xF));
-        ret.skillid = lea.readInt();
-        ret.skillLevel = lea.readByte();
-        lea.readByte(); // bAddAttackProc
-        lea.readInt(); // SkillLevelData::GetCrc
+        ret.skillid = mpr.readInt();
+        ret.skillLevel = mpr.readByte();
+        mpr.readByte(); // bAddAttackProc
+        mpr.readInt(); // SkillLevelData::GetCrc
 
         switch (ret.skillid) { // If the skill is a hold down/charge skill
             case 3121004:
@@ -1405,120 +1405,120 @@ public class DamageParse {
             case 3121013:// Arrow Blaster
             case 3120019:
             case 5221022:
-                lea.readInt(); // tKeyDown
+                mpr.readInt(); // tKeyDown
                 break;
         }
         
         if (GameConstants.isZero(chr.getJob())) { // If the skill is a Zero skill
-            lea.readByte(); // Default value of 0
+            mpr.readByte(); // Default value of 0
         }
         
         /*
         if (isUserCloneSummonedAbleSkill(ret.skill)) {
-        	lea.readInt(); // nBySummonedID
+        	mpr.readInt(); // nBySummonedID
         }
         */
         
         ret.charge = -1;
-        ret.flag = lea.readByte(); // Shadow Star
-        ret.unk = lea.readByte();  // 2 * ((value.y > 1) | (4 * ptStartByDir) | 2*(nBySummonedID != 0))
-        lea.readByte(); // Expert Handling Boolean (CUserLocal::CheckApplyExJablin)
-        ret.display = lea.readUShort();
-        lea.readInt(); // pExcept
-        lea.readByte(); // nAttackActionType
+        ret.flag = mpr.readByte(); // Shadow Star
+        ret.unk = mpr.readByte();  // 2 * ((value.y > 1) | (4 * ptStartByDir) | 2*(nBySummonedID != 0))
+        mpr.readByte(); // Expert Handling Boolean (CUserLocal::CheckApplyExJablin)
+        ret.display = mpr.readUShort();
+        mpr.readInt(); // pExcept
+        mpr.readByte(); // nAttackActionType
         
         if (ret.skillid == 23111001 || ret.skillid == 36111010) {
-            lea.skip(12);
+            mpr.skip(12);
         } else if (ret.skillid == 3121013) {// Arrow Blaster
-            lea.skip(8);
+            mpr.skip(8);
         }
         if ((ret.skillid == 5221022) || (ret.skillid == 5220023) || (ret.skillid == 95001000)) {//Corsair BoarSide IDSkills
-            lea.readInt();//newv144
-            lea.readInt();//newv144
+            mpr.readInt();//newv144
+            mpr.readInt();//newv144
         }  
-        ret.speed = lea.readByte();
-        ret.lastAttackTickCount = lea.readInt(); // nTotalBulletCount
-        lea.readInt();
-        lea.readInt();
-        ret.slot = ((byte) lea.readShort());
-        ret.csstar = ((byte) lea.readShort());
-        ret.AOE = lea.readByte(); // nShootRange
+        ret.speed = mpr.readByte();
+        ret.lastAttackTickCount = mpr.readInt(); // nTotalBulletCount
+        mpr.readInt();
+        mpr.readInt();
+        ret.slot = ((byte) mpr.readShort());
+        ret.csstar = ((byte) mpr.readShort());
+        ret.AOE = mpr.readByte(); // nShootRange
         
         if ((ret.flag & 0x40) != 0) { // if Shadow Star is active
-        	lea.readInt(); // Star Item ID
+        	mpr.readInt(); // Star Item ID
         }
         
         ret.allDamage = new ArrayList<AttackPair>();
 
         for (int i = 0; i < ret.targets; i++) {
-            int oid = lea.readInt();
-            byte unkByte = lea.readByte();
-            byte unkBool1 = lea.readByte();
-            byte unkBool2 = lea.readByte();
-            lea.readByte();
-            lea.readByte();
-            lea.readInt();
-            lea.readByte();
-            lea.readShort();
-            lea.readShort();
-            lea.readShort();
-            lea.readShort();
-            short unkShort = lea.readShort();
+            int oid = mpr.readInt();
+            byte unkByte = mpr.readByte();
+            byte unkBool1 = mpr.readByte();
+            byte unkBool2 = mpr.readByte();
+            mpr.readByte();
+            mpr.readByte();
+            mpr.readInt();
+            mpr.readByte();
+            mpr.readShort();
+            mpr.readShort();
+            mpr.readShort();
+            mpr.readShort();
+            short unkShort = mpr.readShort();
             
             List<Pair<Integer, Boolean>> allDamageNumbers = new ArrayList<Pair<Integer, Boolean>>();
             for (int j = 0; j < ret.hits; j++) {
-                int damage = lea.readInt();
+                int damage = mpr.readInt();
                 allDamageNumbers.add(new Pair<Integer, Boolean>(Integer.valueOf(damage), Boolean.valueOf(false)));
             }
-            lea.readInt(); // Monster CRC
-            lea.readInt(); // GetMobUpDownYRange
+            mpr.readInt(); // Monster CRC
+            mpr.readInt(); // GetMobUpDownYRange
             ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers)); // It's technically no longer an AttackPair. We should refactor the class name into another name :]
         }
         
         /*
         if (isScreenCenterAttackSkill(ret.skill)) {
-        	lea.readShort();
+        	mpr.readShort();
     	}
     	*/
-        ret.position = lea.readPos();
+        ret.position = mpr.readPos();
         
-        if (lea.available() > 4) {
-            lea.skip(4);
+        if (mpr.available() > 4) {
+            mpr.skip(4);
         }
         
         return ret;
     }
 
-    public static AttackInfo parseExplosionAttack(MaplePacketReader lea, AttackInfo ret, MapleCharacter chr) {
+    public static AttackInfo parseExplosionAttack(MaplePacketReader mpr, AttackInfo ret, MapleCharacter chr) {
         if (ret.hits == 0) {
-            lea.skip(4);
-            byte bullets = lea.readByte();
+            mpr.skip(4);
+            byte bullets = mpr.readByte();
             for (int j = 0; j < bullets; j++) {
-                ret.allDamage.add(new AttackPair(Integer.valueOf(lea.readInt()).intValue(), null));
-                lea.skip(1);
+                ret.allDamage.add(new AttackPair(Integer.valueOf(mpr.readInt()).intValue(), null));
+                mpr.skip(1);
             }
-            lea.skip(2);
+            mpr.skip(2);
             return ret;
         }
 
         for (int i = 0; i < ret.targets; i++) {
-            int oid = lea.readInt();
+            int oid = mpr.readInt();
 
-            lea.skip(12);
-            byte bullets = lea.readByte();
+            mpr.skip(12);
+            byte bullets = mpr.readByte();
             List allDamageNumbers = new ArrayList();
             for (int j = 0; j < bullets; j++) {
-                allDamageNumbers.add(new Pair(Integer.valueOf(lea.readInt()), Boolean.valueOf(false)));
+                allDamageNumbers.add(new Pair(Integer.valueOf(mpr.readInt()), Boolean.valueOf(false)));
             }
             ret.allDamage.add(new AttackPair(Integer.valueOf(oid).intValue(), allDamageNumbers));
-            lea.skip(4);
+            mpr.skip(4);
         }
-        lea.skip(4);
-        byte bullets = lea.readByte();
+        mpr.skip(4);
+        byte bullets = mpr.readByte();
 
         for (int j = 0; j < bullets; j++) {
-            ret.allDamage.add(new AttackPair(Integer.valueOf(lea.readInt()).intValue(), null));
-            lea.skip(2);
+            ret.allDamage.add(new AttackPair(Integer.valueOf(mpr.readInt()).intValue(), null));
+            mpr.skip(2);
         }
 
         return ret;

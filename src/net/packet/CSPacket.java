@@ -393,7 +393,7 @@ public class CSPacket {
         if (mci.getItemsSize() > 0) {
             int size = 0;
             for (Item itemz : mci.getInventory()) {
-                addCashItemInfo(mpw, itemz, c.getAccID(), 0);
+                addCashItemInfo(mpw, itemz, c.getAccountID(), 0);
                 if (GameConstants.isPet(itemz.getItemId()) || GameConstants.getInventoryType(itemz.getItemId()) == MapleInventoryType.EQUIP) {
                     size++;
                 }
@@ -530,7 +530,7 @@ public class CSPacket {
 		mpw.write(Operation_Code + 19);
         mpw.write(items.size());
         for (Entry<Integer, Item> item : items.entrySet()) {
-            addCashItemInfo(mpw, item.getValue(), c.getAccID(), item.getKey().intValue());
+            addCashItemInfo(mpw, item.getValue(), c.getAccountID(), item.getKey().intValue());
         }
         mpw.writeInt(maplePoints);
         mpw.writeInt(0); // Normal items size
@@ -549,7 +549,7 @@ public class CSPacket {
         mpw.writeMapleAsciiString(receiver); // Split by ;
         mpw.write(items.size());
         for (Entry<Integer, Item> item : items.entrySet()) {
-            addCashItemInfo(mpw, item.getValue(), c.getAccID(), item.getKey().intValue());
+            addCashItemInfo(mpw, item.getValue(), c.getAccountID(), item.getKey().intValue());
         }
         mpw.writeInt(0); // (amount of receiver - 1)
 

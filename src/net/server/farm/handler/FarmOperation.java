@@ -39,7 +39,7 @@ public class FarmOperation {
         MapleCharacter chr = MapleCharacter.ReconstructChr(transfer, c, false);
 
         c.setCharacter(chr);
-        c.setAccID(chr.getAccountID());
+        c.setAccountID(chr.getAccountID());
 
         if (!c.checkIPAddress()) { // Remote hack
             c.close();

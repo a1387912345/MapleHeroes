@@ -5,8 +5,8 @@ import java.util.Map;
 
 import client.MapleClient;
 import client.MapleStat;
-import client.PlayerStats;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import constants.GameConstants;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
@@ -23,11 +23,11 @@ public class DistributeAPHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		Map<MapleStat, Long> statupdate = new EnumMap<>(MapleStat.class);
         c.sendPacket(CWvsContext.updatePlayerStats(statupdate, true, chr));
-        chr.updateTick(lea.readInt());
-        final int statmask = lea.readInt();
+        chr.updateTick(mpr.readInt());
+        final int statmask = mpr.readInt();
         final PlayerStats stat = chr.getStat();
         final int job = chr.getJob();
         if (chr.getRemainingAp() > 0) {

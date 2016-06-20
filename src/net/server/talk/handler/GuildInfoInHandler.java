@@ -13,9 +13,9 @@ public class GuildInfoInHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int guildid = lea.readInt();
-		final int charid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int guildid = mpr.readInt();
+		final int charid = mpr.readInt();
 	}
 
 }

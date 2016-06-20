@@ -3462,7 +3462,7 @@ public class CWvsContext {
             	mpw.write(0);
             }
             
-            mpw.writeInt(0);
+            mpw.writeLong(0);
             
             for (Map.Entry<MapleBuffStat, Integer> stat : statups.entrySet()) {
                 if (stat.getKey().canStack()) {
@@ -3474,8 +3474,6 @@ public class CWvsContext {
                     mpw.writeInt(bufflength);
                 }
             }
-            
-            mpw.writeInt(0);
             
             if (statups.containsKey(MapleBuffStat.MAPLE_WARRIOR) || statups.containsKey(MapleBuffStat.SPEED)) {
             	mpw.write(0);

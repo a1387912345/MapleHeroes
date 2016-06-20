@@ -12,12 +12,12 @@ import client.MapleBuffStat;
 import client.MapleClient;
 import client.MapleDisease;
 import client.MonsterStatus;
-import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.anticheat.CheatTracker;
 import client.anticheat.CheatingOffense;
 import client.character.MapleCharacter;
+import client.character.PlayerStats;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -42,9 +42,9 @@ public class PVPAttackHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient client, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient client, MapleCharacter chr) {
 		final Lock ThreadLock = new ReentrantLock();
-        final int trueSkill = lea.readInt();
+        final int trueSkill = mpr.readInt();
         int skillid = trueSkill;
         if (chr == null || chr.isHidden() || !chr.isAlive() || chr.hasBlockedInventory() || chr.getMap() == null || !chr.inPVP() || !chr.getEventInstance().getProperty("started").equals("1") || skillid >= 90000000) {
             client.sendPacket(CWvsContext.enableActions());
@@ -66,14 +66,14 @@ public class PVPAttackHandler extends MaplePacketHandler {
         final Item shield = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -10);
         final boolean katara = shield != null && shield.getItemId() / 10000 == 134;
         final boolean aran = weapon != null && weapon.getItemId() / 10000 == 144 && GameConstants.isAran(chr.getJob());
-        lea.skip(1); //skill level
+        mpr.skip(1); //skill level
         int chargeTime = 0;
         if (GameConstants.isMagicChargeSkill(skillid)) {
-            chargeTime = lea.readInt();
+            chargeTime = mpr.readInt();
         } else {
-            lea.skip(4);
+            mpr.skip(4);
         }
-        boolean facingLeft = lea.readByte() > 0;
+        boolean facingLeft = mpr.readByte() > 0;
         if (skillid > 0) {
             if (skillid == 3211006 && chr.getTotalSkillLevel(3220010) > 0) { //hack
                 skillid = 3220010;
@@ -194,10 +194,10 @@ public class PVPAttackHandler extends MaplePacketHandler {
         final int originalAttackCount = attackCount;
         attackCount *= (shad != null ? 2 : 1);
 
-        lea.skip(4); //?idk
-        final int speed = lea.readByte();
-        final int slot = lea.readShort();
-        final int csstar = lea.readShort();
+        mpr.skip(4); //?idk
+        final int speed = mpr.readByte();
+        final int slot = mpr.readShort();
+        final int csstar = mpr.readShort();
         int visProjectile = 0;
         if ((chr.getJob() >= 3500 && chr.getJob() <= 3512) || GameConstants.isJett(chr.getJob())) {
             visProjectile = 2333000;

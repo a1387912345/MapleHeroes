@@ -22,7 +22,7 @@ public class PetFoodHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		int previousFullness = 100;
         MaplePet pet = null;
         if (chr == null) {
@@ -41,9 +41,9 @@ public class PetFoodHandler extends MaplePacketHandler {
             return;
         }
 
-        c.getCharacter().updateTick(lea.readInt());
-        short slot = lea.readShort();
-        final int itemId = lea.readInt();
+        c.getCharacter().updateTick(mpr.readInt());
+        short slot = mpr.readShort();
+        final int itemId = mpr.readInt();
         Item petFood = c.getCharacter().getInventory(MapleInventoryType.USE).getItem(slot);
         if (petFood == null || petFood.getItemId() != itemId || petFood.getQuantity() <= 0 || itemId / 10000 != 212) {
             c.sendPacket(CWvsContext.enableActions());

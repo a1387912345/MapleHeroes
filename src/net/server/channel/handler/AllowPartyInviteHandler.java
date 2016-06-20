@@ -14,8 +14,8 @@ public class AllowPartyInviteHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		if (lea.readByte() > 0) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		if (mpr.readByte() > 0) {
             c.getCharacter().getQuestRemove(MapleQuest.getInstance(122901));
         } else {
             c.getCharacter().getQuestNAdd(MapleQuest.getInstance(122901));

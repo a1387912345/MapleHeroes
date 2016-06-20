@@ -1,13 +1,13 @@
 package net.server.login.handler.deprecated;
 
 import client.LoginCrypto;
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.PartTimeJob;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;

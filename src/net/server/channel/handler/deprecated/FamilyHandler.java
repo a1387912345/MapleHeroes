@@ -20,9 +20,9 @@
  */
 package net.server.channel.handler.deprecated;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import net.netty.MaplePacketReader;
 import net.packet.CWvsContext;
 import net.packet.CWvsContext.FamilyPacket;

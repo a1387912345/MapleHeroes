@@ -14,14 +14,14 @@ public class PetChatHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		if (lea.available() < 12) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		if (mpr.available() < 12) {
             return;
         }
-        final int petid = c.getCharacter().getPetIndex((int) lea.readLong());
-        c.getCharacter().updateTick(lea.readInt());
-        final short command = lea.readShort();
-        final String text = lea.readMapleAsciiString();
+        final int petid = c.getCharacter().getPetIndex((int) mpr.readLong());
+        c.getCharacter().updateTick(mpr.readInt());
+        final short command = mpr.readShort();
+        final String text = mpr.readMapleAsciiString();
         
         if (chr == null || chr.getMap() == null || chr.getPet(petid) == null) {
             return;

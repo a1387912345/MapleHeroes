@@ -18,10 +18,10 @@ public class MechDoorHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int oid = lea.readInt();
-        final Point pos = lea.readPos();
-        final int mode = lea.readByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int oid = mpr.readInt();
+        final Point pos = mpr.readPos();
+        final int mode = mpr.readByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
         chr.getClient().sendPacket(CWvsContext.enableActions());
         for (MapleMapObject obj : chr.getMap().getAllMechDoorsThreadsafe()) {
             final MechDoor door = (MechDoor) obj;

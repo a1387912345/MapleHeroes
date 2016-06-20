@@ -1,7 +1,12 @@
-package client;
+package client.character;
 
+import client.MapleBuffStat;
+import client.MapleStat;
+import client.MapleTrait;
+import client.Skill;
+import client.SkillEntry;
+import client.SkillFactory;
 import client.MapleTrait.MapleTraitType;
-import client.character.MapleCharacter;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;

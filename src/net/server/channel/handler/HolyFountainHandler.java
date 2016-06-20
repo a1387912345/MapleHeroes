@@ -19,7 +19,7 @@ public class HolyFountainHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if (chr == null || !chr.isAlive()) {
 			return;
 		}
@@ -37,10 +37,10 @@ public class HolyFountainHandler extends MaplePacketHandler {
 			return;
 		}
 		
-		lea.readByte();
-		final int timesUsed = lea.readInt();
-		final int skillId = lea.readInt();
-		final Point pos = lea.readPos();
+		mpr.readByte();
+		final int timesUsed = mpr.readInt();
+		final int skillId = mpr.readInt();
+		final Point pos = mpr.readPos();
 		
 		System.out.println("Holy Fountain Used " + timesUsed);
 		if (!holyFountain.getBox().contains(pos)) { // If the player is using Holy Fountain from a far distance.

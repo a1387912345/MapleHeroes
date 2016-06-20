@@ -13,8 +13,8 @@ public class FarmHarvestHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.readInt(); //position
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.readInt(); //position
         //c.getFarm().getFarmInventory().updateItemQuantity(oid, -1);
         //c.getFarm().gainAestheticPoints(aesthetic); //rewarded from building
 	}

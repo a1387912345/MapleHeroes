@@ -14,12 +14,12 @@ public class MonsterBookInfoHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null) {
             return;
         }
-        lea.readInt(); // tick
-        final MapleCharacter player = c.getCharacter().getMap().getCharacterById(lea.readInt());
+        mpr.readInt(); // tick
+        final MapleCharacter player = c.getCharacter().getMap().getCharacterById(mpr.readInt());
         c.sendPacket(CWvsContext.enableActions());
         if (player != null && !player.isClone()) {
             if (!player.isGM() || c.getCharacter().isGM()) {

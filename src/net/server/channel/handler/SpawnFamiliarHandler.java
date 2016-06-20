@@ -15,12 +15,12 @@ public class SpawnFamiliarHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
-        int mId = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
+        int mId = mpr.readInt();
         c.sendPacket(CWvsContext.enableActions());
         c.getCharacter().removeFamiliar();
-        if ((c.getCharacter().getFamiliars().containsKey(Integer.valueOf(mId))) && (lea.readByte() > 0)) {
+        if ((c.getCharacter().getFamiliars().containsKey(Integer.valueOf(mId))) && (mpr.readByte() > 0)) {
             MonsterFamiliar mf = (MonsterFamiliar) c.getCharacter().getFamiliars().get(Integer.valueOf(mId));
             if (mf.getFatigue() > 0) {
                 c.getCharacter().dropMessage(1, "Please wait " + mf.getFatigue() + " seconds to summon it.");

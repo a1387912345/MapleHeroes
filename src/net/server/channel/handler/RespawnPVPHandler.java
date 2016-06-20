@@ -21,7 +21,7 @@ public class RespawnPVPHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		final Lock ThreadLock = new ReentrantLock();
 	    /*if (c.getPlayer() == null || c.getPlayer().getMap() == null || !c.getPlayer().inPVP() || c.getPlayer().isAlive()) {
 	     c.sendPacket(CWvsContext.enableActions());

@@ -15,12 +15,12 @@ public class SpecialPortalHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if ((c.getCharacter() == null) || (c.getCharacter().getMap() == null)) {
             return;
         }
-		lea.readByte();
-		final String portalName = lea.readMapleAsciiString();
+		mpr.readByte();
+		final String portalName = mpr.readMapleAsciiString();
         final MaplePortal portal = c.getCharacter().getMap().getPortal(portalName);
 
         // if (chr.getGMLevel() > ServerConstants.PlayerGMRank.GM.getLevel()) {

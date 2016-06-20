@@ -21,15 +21,15 @@ public class PartyOperationHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
-		int operation = lea.readByte();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
+		int operation = mpr.readByte();
         MapleParty party = c.getCharacter().getParty();
         MaplePartyCharacter player = new MaplePartyCharacter(c.getCharacter());
 
         switch (operation) {
             case 1: // Create party
-            	lea.skip(1);
-            	String partyName = lea.readMapleAsciiString();
+            	mpr.skip(1);
+            	String partyName = mpr.readMapleAsciiString();
                 if (party == null) {
                     party = World.Party.createParty(player, partyName);
                     c.getCharacter().setParty(party);
@@ -95,7 +95,7 @@ public class PartyOperationHandler extends MaplePacketHandler {
                 c.getCharacter().setParty(null);
                 break;
             case 3:
-                int partyid = lea.readInt();
+                int partyid = mpr.readInt();
                 if (party == null) {
                     party = World.Party.getParty(partyid);
                     if (party != null) {
@@ -125,7 +125,7 @@ public class PartyOperationHandler extends MaplePacketHandler {
                     c.sendPacket(CWvsContext.PartyPacket.partyCreated(party.getId(), party.getName()));
                 }
 
-                String inviteName = lea.readMapleAsciiString();
+                String inviteName = mpr.readMapleAsciiString();
                 MapleCharacter partyInvitee = World.getCharacterFromPlayerStorage(inviteName);
                 if (partyInvitee != null) {
                 	if ((partyInvitee.getParty() == null) && (partyInvitee.getQuestNoAdd(MapleQuest.getInstance(122901)) == null)) {
@@ -156,7 +156,7 @@ public class PartyOperationHandler extends MaplePacketHandler {
                     c.getCharacter().dropMessage(5, "You may not do party operations while in a raid.");
                     return;
                 }
-                MaplePartyCharacter expelled = party.getMemberById(lea.readInt());
+                MaplePartyCharacter expelled = party.getMemberById(mpr.readInt());
                 if (expelled != null) {
                     if ((GameConstants.isDojo(c.getCharacter().getMapId())) && (expelled.isOnline())) {
                         Event_DojoAgent.failed(c.getCharacter());
@@ -180,7 +180,7 @@ public class PartyOperationHandler extends MaplePacketHandler {
                     c.getCharacter().dropMessage(5, "You may not do party operations while in a raid.");
                     return;
                 }
-                MaplePartyCharacter newLeader = party.getMemberById(lea.readInt());
+                MaplePartyCharacter newLeader = party.getMemberById(mpr.readInt());
                 if ((newLeader != null) && (player.equals(party.getLeader()))) {
                     World.Party.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeader);
                 }
@@ -198,7 +198,7 @@ public class PartyOperationHandler extends MaplePacketHandler {
                     }
                     c.getCharacter().setParty(null);
                 }
-                int partyid_ = lea.readInt();
+                int partyid_ = mpr.readInt();
                 party = World.Party.getParty(partyid_);
                 if ((party == null) || (party.getMembers().size() >= 8)) {
                     break;
@@ -216,7 +216,7 @@ public class PartyOperationHandler extends MaplePacketHandler {
                 }
                 break;
             case 8:
-                if (lea.readByte() > 0) {
+                if (mpr.readByte() > 0) {
                     c.getCharacter().getQuestRemove(MapleQuest.getInstance(122900));
                 } else {
                     c.getCharacter().getQuestNAdd(MapleQuest.getInstance(122900));

@@ -15,16 +15,16 @@ public class PartTimeJobHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() != null || !c.isLoggedIn()) {
             c.close();
             return;
         }
-        final byte mode = lea.readByte();
-        final int cid = lea.readInt();
+        final byte mode = mpr.readByte();
+        final int cid = mpr.readInt();
         if (mode == 1) {
             final PartTimeJob partTime = MapleCharacter.getPartTime(cid);
-            final byte job = lea.readByte();
+            final byte job = mpr.readByte();
             if (/*chr.getLevel() < 30 || */job < 0 || job > 5 || partTime.getReward() > 0
                     || (partTime.getJob() > 0 && partTime.getJob() <= 5)) {
                 c.close();

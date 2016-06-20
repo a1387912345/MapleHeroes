@@ -15,13 +15,13 @@ public class EnterAzwanEventHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (c.getCharacter() == null || c.getCharacter().getMap() == null) {
         c.sendPacket(CField.pvpBlocked(1));
         c.sendPacket(CWvsContext.enableActions());
         return;
     }
-    int mapid = lea.readInt();
+    int mapid = mpr.readInt();
     c.getCharacter().changeMap(c.getChannelServer().getMapFactory().getMap(mapid));
 
 	}

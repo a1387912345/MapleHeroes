@@ -31,13 +31,13 @@ public class MovePetHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr == null) {
             return;
         }
-        final int petId = (int) lea.readLong();
-        lea.skip(13); // byte(index?), int(pos), int
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(lea, 3, null, null);
+        final int petId = (int) mpr.readLong();
+        mpr.skip(13); // byte(index?), int(pos), int
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(mpr, 3, null, null);
         if (res != null && chr != null && !res.isEmpty() && chr.getMap() != null) { // map crash hack
             final MaplePet pet = chr.getPet(chr.getPetIndex(petId));
             if (pet == null) {

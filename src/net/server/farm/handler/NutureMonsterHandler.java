@@ -13,8 +13,8 @@ public class NutureMonsterHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int monsterIndex = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int monsterIndex = mpr.readInt();
 	}
 
 }

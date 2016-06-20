@@ -15,20 +15,20 @@ public class TouchFamiliarHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr.getSummonedFamiliar() == null) {
             return;
         }
-        lea.skip(6);
-        byte unk = lea.readByte();
+        mpr.skip(6);
+        byte unk = mpr.readByte();
 
-        MapleMonster target = chr.getMap().getMonsterByOid(lea.readInt());
+        MapleMonster target = chr.getMap().getMonsterByOid(mpr.readInt());
         if (target == null) {
             return;
         }
-        int type = lea.readInt();
-        lea.skip(4);
-        int damage = lea.readInt();
+        int type = mpr.readInt();
+        mpr.skip(4);
+        int damage = mpr.readInt();
         int maxDamage = chr.getSummonedFamiliar().getOriginalStats().getPhysicalAttack() * 5;
         if (damage < maxDamage) {
             damage = maxDamage;

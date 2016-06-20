@@ -24,9 +24,9 @@ public class UseSkillBookHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-        chr.updateTick(lea.readInt());
-        InventoryHandler.UseSkillBook((byte) lea.readShort(), lea.readInt(), c, c.getCharacter());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+        chr.updateTick(mpr.readInt());
+        InventoryHandler.UseSkillBook((byte) mpr.readShort(), mpr.readInt(), c, c.getCharacter());
 
 	}
 

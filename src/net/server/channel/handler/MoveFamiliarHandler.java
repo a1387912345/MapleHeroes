@@ -18,9 +18,9 @@ public class MoveFamiliarHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.skip(17);
-        List res = MovementParse.parseMovement(lea, 6, null, null);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.skip(17);
+        List res = MovementParse.parseMovement(mpr, 6, null, null);
         if ((chr != null) && (chr.getSummonedFamiliar() != null) && (res.size() > 0)) {
             Point pos = chr.getSummonedFamiliar().getPosition();
             MovementParse.updatePosition(res, chr.getSummonedFamiliar(), 0);

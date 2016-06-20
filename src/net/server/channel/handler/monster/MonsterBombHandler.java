@@ -14,8 +14,8 @@ public class MonsterBombHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int oid = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int oid = mpr.readInt();
 		
 		MapleMonster monster = chr.getMap().getMonsterByOid(oid);
 

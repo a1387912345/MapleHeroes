@@ -14,10 +14,10 @@ public class SpecialStatHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		String stat = lea.readMapleAsciiString();
-        int array = lea.readInt();
-        int mode = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		String stat = mpr.readMapleAsciiString();
+        int array = mpr.readInt();
+        int mode = mpr.readInt();
         switch (stat) {
             case "honorLeveling":
                 c.sendPacket(CWvsContext.updateSpecialStat(stat, array, mode, c.getCharacter().getHonourNextExp()));

@@ -15,9 +15,9 @@ public class GiveFameHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final int who = lea.readInt();
-        final int mode = lea.readByte();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final int who = mpr.readInt();
+        final int mode = mpr.readByte();
 
         final int famechange = mode == 0 ? -1 : 1;
         final MapleCharacter target = chr.getMap().getCharacterById(who);

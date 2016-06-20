@@ -24,7 +24,7 @@ public class OwlWarpHandler extends MaplePacketHandler {
 	public static final int OWL_ID = 2; //don't change. 0 = owner ID, 1 = store ID, 2 = object ID
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (!c.getCharacter().isAlive()) {
             c.sendPacket(CWvsContext.getOwlMessage(4));
             return;
@@ -33,8 +33,8 @@ public class OwlWarpHandler extends MaplePacketHandler {
             return;
         }
         if (c.getCharacter().getMapId() >= 910000000 && c.getCharacter().getMapId() <= 910000022 && !c.getCharacter().hasBlockedInventory()) {
-            final int id = lea.readInt();
-            final int map = lea.readInt();
+            final int id = mpr.readInt();
+            final int map = mpr.readInt();
             if (map >= 910000001 && map <= 910000022) {
                 c.sendPacket(CWvsContext.getOwlMessage(0));
                 final MapleMap mapp = c.getChannelServer().getMapFactory().getMap(map);

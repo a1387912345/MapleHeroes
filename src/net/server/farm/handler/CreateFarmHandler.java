@@ -1,8 +1,8 @@
 package net.server.farm.handler;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import net.MaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.netty.MaplePacketReader;
@@ -16,8 +16,8 @@ public class CreateFarmHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final String name = lea.readMapleAsciiString();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final String name = mpr.readMapleAsciiString();
 		
         if (!MapleCharacterUtil.canCreateChar(name, false)) {
             return;

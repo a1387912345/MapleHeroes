@@ -27,8 +27,8 @@ public class SubSummonHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		final MapleMapObject obj = chr.getMap().getMapObject(lea.readInt(), MapleMapObjectType.SUMMON);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		final MapleMapObject obj = chr.getMap().getMapObject(mpr.readInt(), MapleMapObjectType.SUMMON);
         if (obj == null || !(obj instanceof MapleSummon)) {
             return;
         }
@@ -41,12 +41,12 @@ public class SubSummonHandler extends MaplePacketHandler {
                 if (!chr.canSummon(2000)) {
                     return;
                 }
-                final int skillId = lea.readInt(); // 35121009?
+                final int skillId = mpr.readInt(); // 35121009?
                 if (sum.getSkill() != skillId) {
                     return;
                 }
-                lea.skip(1); // 0E?
-                chr.updateTick(lea.readInt());
+                mpr.skip(1); // 0E?
+                chr.updateTick(mpr.readInt());
                 for (int i = 0; i < 3; i++) {
                     final MapleSummon tosummon = new MapleSummon(chr, SkillFactory.getSkill(35121011).getEffect(sum.getSkillLevel()), new Point(sum.getTruePosition().x, sum.getTruePosition().y - 5), SummonMovementType.WALK_STATIONARY);
                     chr.getMap().spawnSummon(tosummon);
@@ -64,7 +64,7 @@ public class SubSummonHandler extends MaplePacketHandler {
             case 1321007: //beholder
             case 1301013: // Evil Eye
             case 1311013: // Evil Eye of Domination
-                Skill bHealing = SkillFactory.getSkill(lea.readInt());
+                Skill bHealing = SkillFactory.getSkill(mpr.readInt());
                 final int bHealingLvl = chr.getTotalSkillLevel(bHealing);
                 if (bHealingLvl <= 0 || bHealing == null) {
                     return;

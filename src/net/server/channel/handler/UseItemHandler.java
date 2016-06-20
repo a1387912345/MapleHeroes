@@ -20,7 +20,7 @@ public class UseItemHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		
 		if (chr == null || !chr.isAlive() || chr.getMapId() == 749040100 || chr.getMap() == null || chr.hasDisease(MapleDisease.POTION) || chr.hasBlockedInventory() || chr.inPVP()) {
             c.sendPacket(CWvsContext.enableActions());
@@ -32,9 +32,9 @@ public class UseItemHandler extends MaplePacketHandler {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        c.getCharacter().updateTick(lea.readInt());
-        final byte slot = (byte) lea.readShort();
-        final int itemId = lea.readInt();
+        c.getCharacter().updateTick(mpr.readInt());
+        final byte slot = (byte) mpr.readShort();
+        final int itemId = mpr.readInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId) {

@@ -22,9 +22,9 @@ public class MoveDragonHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.skip(12);//New in v14X+
-        final List<LifeMovementFragment> res = MovementParse.parseMovement(lea, 5, null, null);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.skip(12);//New in v14X+
+        final List<LifeMovementFragment> res = MovementParse.parseMovement(mpr, 5, null, null);
         if (chr != null && chr.getDragon() != null && res.size() > 0) {
             final Point pos = chr.getDragon().getPosition();
             MovementParse.updatePosition(res, chr.getDragon(), 0);

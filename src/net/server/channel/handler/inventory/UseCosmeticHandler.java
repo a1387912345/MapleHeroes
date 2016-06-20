@@ -18,13 +18,13 @@ public class UseCosmeticHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr == null || !chr.isAlive() || chr.getMap() == null || chr.hasBlockedInventory() || chr.inPVP()) {
             c.sendPacket(CWvsContext.enableActions());
             return;
         }
-        final byte slot = (byte) lea.readShort();
-        final int itemId = lea.readInt();
+        final byte slot = (byte) mpr.readShort();
+        final int itemId = mpr.readInt();
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
 
         if (toUse == null || toUse.getQuantity() < 1 || toUse.getItemId() != itemId || itemId / 10000 != 254 || (itemId / 1000) % 10 != chr.getGender()) {

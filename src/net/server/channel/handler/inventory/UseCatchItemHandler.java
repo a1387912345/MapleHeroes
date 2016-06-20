@@ -22,12 +22,12 @@ public class UseCatchItemHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
-        final byte slot = (byte) lea.readShort();
-        final int itemid = lea.readInt();
-        final MapleMonster mob = chr.getMap().getMonsterByOid(lea.readInt());
+        final byte slot = (byte) mpr.readShort();
+        final int itemid = mpr.readInt();
+        final MapleMonster mob = chr.getMap().getMonsterByOid(mpr.readInt());
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         final MapleMap map = chr.getMap();
 

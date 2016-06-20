@@ -35,18 +35,18 @@ public class ItemPickupHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if (c.getCharacter().hasBlockedInventory()) { //hack
             return;
         }
-        chr.updateTick(lea.readInt());
+        chr.updateTick(mpr.readInt());
         c.getCharacter().setScrolledPosition((short) 0);
-        lea.skip(1); // or is this before tick?
-        final Point Client_Reportedpos = lea.readPos();
+        mpr.skip(1); // or is this before tick?
+        final Point Client_Reportedpos = mpr.readPos();
         if (chr == null || chr.getMap() == null) {
             return;
         }
-        final MapleMapObject ob = chr.getMap().getMapObject(lea.readInt(), MapleMapObjectType.ITEM);
+        final MapleMapObject ob = chr.getMap().getMapObject(mpr.readInt(), MapleMapObjectType.ITEM);
 
         if (ob == null) {
             c.sendPacket(CWvsContext.enableActions());

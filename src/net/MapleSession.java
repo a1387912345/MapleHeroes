@@ -12,6 +12,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 import net.netty.MaplePacketReader;
 import net.packet.LoginPacket;
+import net.server.login.LoginServer;
 import server.shark.SharkPacket;
 import tools.HexTool;
 
@@ -24,6 +25,10 @@ public class MapleSession extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(final ChannelHandlerContext context) throws Exception {
+    	if (LoginServer.getInstance().isShutdown()) {
+    		context.close();
+    		return;
+    	}
     	final Channel socket = context.channel();
     	final MapleClient client = new MapleClient(socket);
     	
@@ -88,7 +93,15 @@ public class MapleSession extends ChannelInboundHandlerAdapter {
 	@Override
     public void channelInactive(ChannelHandlerContext context) throws Exception {
 		final MapleClient client = context.channel().attr(MapleClient.CLIENT_KEY).get();
-        client.disconnect(false, false);
+		
+		if (client != null) {
+			try {
+				client.disconnect(true, true);
+			} finally {
+				context.close();
+				context.channel().attr(MapleClient.CLIENT_KEY).remove();
+			}
+		}
 		System.out.println("Session Disconnected");
     }
 

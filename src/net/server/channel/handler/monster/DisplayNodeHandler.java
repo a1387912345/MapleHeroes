@@ -15,8 +15,8 @@ public class DisplayNodeHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		MapleMonster mob_from = chr.getMap().getMonsterByOid(lea.readInt());
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		MapleMonster mob_from = chr.getMap().getMonsterByOid(mpr.readInt());
         if (mob_from != null) {
             chr.getClient().sendPacket(MobPacket.getNodeProperties(mob_from, chr.getMap()));
         }

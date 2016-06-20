@@ -17,13 +17,13 @@ public class NPCTalkMoreHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		final byte lastMsg = lea.readByte(); // 00 (last msg type I think)
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, MapleCharacter chr) {
+		final byte lastMsg = mpr.readByte(); // 00 (last msg type I think)
 		
-        if (lastMsg == 9 && lea.available() >= 4) {
-            lea.readShort();
+        if (lastMsg == 9 && mpr.available() >= 4) {
+            mpr.readShort();
         }
-        final byte action = lea.readByte(); // 00 = end chat, 01 == follow
+        final byte action = mpr.readByte(); // 00 = end chat, 01 == follow
         byte disposeByte;
         switch(lastMsg) {
 	        case 3: 
@@ -38,7 +38,7 @@ public class NPCTalkMoreHandler extends MaplePacketHandler {
         }
 
         if (((lastMsg == 0x12 && c.getCharacter().getDirection() >= 0) || (lastMsg == 0x12 && c.getCharacter().getDirection() == -1)) && action == 1) {
-            byte lastbyte = lea.readByte(); // 00 = end chat, 01 == follow
+            byte lastbyte = mpr.readByte(); // 00 = end chat, 01 == follow
             if (lastbyte == 0) {
                 c.sendPacket(CWvsContext.enableActions());
             } else {
@@ -65,7 +65,7 @@ public class NPCTalkMoreHandler extends MaplePacketHandler {
             NPCScriptManager.getInstance().action(c, action, lastMsg, -1);
         } else if (lastMsg == 3) {
             if (action != 0) {
-                cm.setGetText(lea.readMapleAsciiString());
+                cm.setGetText(mpr.readMapleAsciiString());
                 if (cm.getType() == 0) {
                     NPCScriptManager.getInstance().startQuest(c, action, lastMsg, -1);
                 } else if (cm.getType() == 1) {
@@ -82,10 +82,10 @@ public class NPCTalkMoreHandler extends MaplePacketHandler {
             NPCScriptManager.getInstance().action(c, (byte) 1, lastMsg, action);
         } else {
             int selection = -1;
-            if (lea.available() >= 4) {
-                selection = lea.readInt();
-            } else if (lea.available() > 0) {
-                selection = lea.readByte();
+            if (mpr.available() >= 4) {
+                selection = mpr.readInt();
+            } else if (mpr.available() > 0) {
+                selection = mpr.readByte();
             }
             if (lastMsg == 4 && selection == -1) {
                 cm.dispose();

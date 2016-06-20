@@ -13,10 +13,10 @@ public class FarmPlaceObjectHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int position = lea.readInt();
-        int itemId = lea.readInt();
-        lea.readByte(); //idk
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int position = mpr.readInt();
+        int itemId = mpr.readInt();
+        mpr.readByte(); //idk
         if (itemId / 10000 < 112 || itemId / 10000 > 114) {
             return;
         }

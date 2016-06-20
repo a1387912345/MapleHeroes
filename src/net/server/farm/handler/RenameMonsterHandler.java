@@ -14,9 +14,9 @@ public class RenameMonsterHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int monsterIndex = lea.readInt();
-        String name = lea.readMapleAsciiString();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int monsterIndex = mpr.readInt();
+        String name = mpr.readMapleAsciiString();
         //c.getFarm().getMonster(monsterIndex).setName(name);
         c.sendPacket(FarmPacket.renameMonster(monsterIndex, name));
 	}

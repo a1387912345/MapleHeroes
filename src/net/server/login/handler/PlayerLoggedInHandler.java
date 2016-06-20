@@ -63,9 +63,9 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
 	}
 	
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, MapleCharacter chr) {
-		lea.readInt();
-        final int charid = lea.readInt();
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient client, MapleCharacter chr) {
+		mpr.readInt();
+        final int charid = mpr.readInt();
         
         final Map<Skill, SkillEntry> list = new HashMap<>();
         try {
@@ -73,18 +73,18 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
         CharacterTransfer transfer = CashShopServer.getPlayerStorage().getPendingCharacter(charid);
         if (transfer != null) {
 //            c.sendPacket(CWvsContext.BuffPacket.cancelBuff());
-            CashShopOperation.EnterCS(transfer, c);
+            CashShopOperation.EnterCS(transfer, client);
             return;
         }
         CharacterTransfer farmtransfer = FarmServer.getPlayerStorage().getPendingCharacter(charid);
         if (farmtransfer != null) {
-            FarmOperation.EnterFarm(farmtransfer, c);
+            FarmOperation.EnterFarm(farmtransfer, client);
             return;
         }
         for (ChannelServer cserv : ChannelServer.getAllInstances()) {
             transfer = cserv.getPlayerStorage().getPendingCharacter(charid);
             if (transfer != null) {
-                c.setChannel(cserv.getChannel());
+                client.setChannel(cserv.getChannel());
                 break;
             }
         }
@@ -92,42 +92,42 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
         if (transfer == null) { // Player isn't in storage, probably isn't CC
         	System.out.println("Debug 1");
             Triple<String, String, Integer> ip = LoginServer.getInstance().getLoginAuth(charid);
-            String s = c.getSessionIPAddress();
+            String s = client.getSessionIPAddress();
             if (ip == null || !s.substring(s.indexOf('/') + 1, s.length()).equals(ip.left)) {
                 if (ip != null) {
                     LoginServer.getInstance().putLoginAuth(charid, ip.left, ip.mid, ip.right);
                 }
-                c.close();
+                client.close();
                 return;
             }
-            c.setTempIP(ip.mid);
-            c.setChannel(ip.right);
+            client.setTempIP(ip.mid);
+            client.setChannel(ip.right);
             System.out.println("Debug 1.1");
-            player = MapleCharacter.loadCharFromDB(charid, c, true);
+            player = MapleCharacter.loadCharFromDB(charid, client, true);
             System.out.println("Debug 2");
         } else {
         	System.out.println("Debug 3");
-            player = MapleCharacter.ReconstructChr(transfer, c, true);
+            player = MapleCharacter.ReconstructChr(transfer, client, true);
         }
-        final ChannelServer channelServer = c.getChannelServer();
-        c.setCharacter(player);
-        c.setAccID(player.getAccountID());
+        final ChannelServer channelServer = client.getChannelServer();
+        client.setCharacter(player);
+        client.setAccountID(player.getAccountID());
 
-        if (!c.checkIPAddress()) { // Remote hack
-            c.close();
+        if (!client.checkIPAddress()) { // Remote hack
+            client.close();
             return;
         }
-        final int state = c.getLoginState();
+        final int state = client.getLoginState();
         boolean allowLogin = false;
         if (state == MapleClient.LOGIN_SERVER_TRANSITION || state == MapleClient.CHANGE_CHANNEL || state == MapleClient.LOGIN_NOTLOGGEDIN) {
-            allowLogin = !World.isCharacterListConnected(c.loadCharacterNames(c.getWorld()));
+            allowLogin = !World.isCharacterListConnected(client.loadCharacterNames(client.getWorld()));
         }
         if (!allowLogin) {
-            c.setCharacter(null);
-            c.close();
+            client.setCharacter(null);
+            client.close();
             return;
         }
-        c.updateLoginState(MapleClient.LOGIN_LOGGEDIN, c.getSessionIPAddress());
+        client.updateLoginState(MapleClient.LOGIN_LOGGEDIN, client.getSessionIPAddress());
         channelServer.addPlayer(player);
 
         player.giveCoolDowns(PlayerBuffStorage.getCooldownsFromStorage(player.getID()));
@@ -137,11 +137,11 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
             String info = "bTail=1;bEar=1;TailID=" + player.getTail() + ";EarID=" + player.getEars();
             player.updateInfoQuest(GameConstants.BEAST_TEAMER_INFO, info, false);
         }
-        c.sendPacket(CWvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
-        c.sendPacket(CField.getCharInfo(player));
-        PlayersHandler.calcHyperSkillPointCount(c);
-        c.sendPacket(CSPacket.enableCSUse());
-        c.sendPacket(CWvsContext.updateSkills(c.getCharacter().getSkills(), false));//skill to 0 "fix"
+        client.sendPacket(CWvsContext.updateCrowns(new int[]{-1, -1, -1, -1, -1}));
+        client.sendPacket(CField.getCharInfo(player));
+        PlayersHandler.calcHyperSkillPointCount(client);
+        client.sendPacket(CSPacket.enableCSUse());
+        client.sendPacket(CWvsContext.updateSkills(client.getCharacter().getSkills(), false));//skill to 0 "fix"
         player.getStolenSkills();
   //      c.sendPacket(JobPacket.addStolenSkill());
 
@@ -149,7 +149,7 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
         try {
             // Start of buddylist
             final int buddyIds[] = player.getBuddylist().getBuddyIds();
-            World.Buddy.loggedOn(player.getName(), player.getID(), c.getChannel(), buddyIds);
+            World.Buddy.loggedOn(player.getName(), player.getID(), client.getChannel(), buddyIds);
             if (player.getParty() != null) {
                 final MapleParty party = player.getParty();
                 World.Party.updateParty(party.getId(), PartyOperation.LOG_ONOFF, new MaplePartyCharacter(player));
@@ -157,7 +157,7 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
                 if (party != null && party.getExpeditionId() > 0) {
                     final MapleExpedition me = World.Party.getExped(party.getExpeditionId());
                     if (me != null) {
-                        c.sendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
+                        client.sendPacket(CWvsContext.ExpeditionPacket.expeditionStatus(me, false, true));
                     }
                 }
             }
@@ -165,26 +165,26 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
             for (CharacterIdChannelPair onlineBuddy : onlineBuddies) {
                 player.getBuddylist().get(onlineBuddy.getCharacterId()).setChannel(onlineBuddy.getChannel());
             }
-            c.sendPacket(BuddylistPacket.updateBuddylist(player.getBuddylist().getBuddies()));
+            client.sendPacket(BuddylistPacket.updateBuddylist(player.getBuddylist().getBuddies()));
 
             // Start of Messenger
             final MapleMessenger messenger = player.getMessenger();
             if (messenger != null) {
-                World.Messenger.silentJoinMessenger(messenger.getId(), new MapleMessengerCharacter(c.getCharacter()));
-                World.Messenger.updateMessenger(messenger.getId(), c.getCharacter().getName(), c.getChannel());
+                World.Messenger.silentJoinMessenger(messenger.getId(), new MapleMessengerCharacter(client.getCharacter()));
+                World.Messenger.updateMessenger(messenger.getId(), client.getCharacter().getName(), client.getChannel());
             }
 
             // Start of Guild and alliance
             if (player.getGuildId() > 0) {
-                World.Guild.setGuildMemberOnline(player.getMGC(), true, c.getChannel());
-                c.sendPacket(GuildPacket.showGuildInfo(player));
+                World.Guild.setGuildMemberOnline(player.getMGC(), true, client.getChannel());
+                client.sendPacket(GuildPacket.showGuildInfo(player));
                 final MapleGuild gs = World.Guild.getGuild(player.getGuildId());
                 if (gs != null) {
                     final List<byte[]> packetList = World.Alliance.getAllianceInfo(gs.getAllianceId(), true);
                     if (packetList != null) {
                         for (byte[] pack : packetList) {
                             if (pack != null) {
-                                c.sendPacket(pack);
+                                client.sendPacket(pack);
                             }
                         }
                     }
@@ -196,7 +196,7 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
                 }
             }
             if (player.getFamilyId() > 0) {
-                World.Family.setFamilyMemberOnline(player.getMFC(), true, c.getChannel());
+                World.Family.setFamilyMemberOnline(player.getMFC(), true, client.getChannel());
             }
             //c.sendPacket(FamilyPacket.getFamilyData());
             //c.sendPacket(FamilyPacket.getFamilyInfo(player));
@@ -211,16 +211,16 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
         player.startFairySchedule(false);
         player.baseSkills(); //fix people who've lost skills.
         if (GameConstants.isZero(player.getJob())) {
-            c.sendPacket(CWvsContext.updateSkills(player.getSkills(), false));
+            client.sendPacket(CWvsContext.updateSkills(player.getSkills(), false));
         }
-        c.sendPacket(CField.getKeymap(player.getKeyLayout()));
+        client.sendPacket(CField.getKeymap(player.getKeyLayout()));
         player.updatePetAuto();
         player.expirationTask(true, transfer == null);
-        c.sendPacket(CWvsContext.updateMaplePoint(player.getCSPoints(2)));
+        client.sendPacket(CWvsContext.updateMaplePoint(player.getCSPoints(2)));
         
          int[] warriorz = {25121131, 20050012, 20050073, 80001155, 80000000, 80000001, 80000002, 80000005, 80000006, 80001140, 80000050, 80000047, 80001040, 20051284, 20050285, 20051287, 25100010, 20050286, 20051251, 25120113, 25121116, 25001000, 25111111, 25120214, 25111206, 25120133, 25121030, 25121131, 71000251, 25110107, 25120112, 25110108, 25121108, 25120115, 25121211, 25120110, 25121209, 25100106, 25110210, 25111209, 25100009, 25100108, 25101111, 25100107, 25001204, 25000105, 25101205, 25101000};
             for (int i = 0; i < warriorz.length; i++) {
-                c.sendPacket(CWvsContext.updateSkill(list, warriorz[i], c.getCharacter().getOriginSkillLevel(warriorz[i]), c.getCharacter().getMasterLevel(warriorz[i]), -1L));
+                client.sendPacket(CWvsContext.updateSkill(list, warriorz[i], client.getCharacter().getOriginSkillLevel(warriorz[i]), client.getCharacter().getMasterLevel(warriorz[i]), -1L));
             }
 
         
@@ -231,7 +231,7 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
             player.startXenonSupply();
         }
         if (GameConstants.isDemonAvenger(player.getJob())) {
-            c.sendPacket(AvengerPacket.giveAvengerHpBuff(player.getStat().getHp()));
+            client.sendPacket(AvengerPacket.giveAvengerHpBuff(player.getStat().getHp()));
         }
         player.spawnClones();
         player.spawnSavedPets();
@@ -239,9 +239,9 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
             SkillFactory.getSkill(player.getStat().equippedSummon + (GameConstants.getBeginnerJob(player.getJob()) * 1000)).getEffect(1).applyTo(player);
         }
         MapleQuestStatus stat = player.getQuestNoAdd(MapleQuest.getInstance(GameConstants.PENDANT_SLOT));
-        c.sendPacket(CWvsContext.pendantSlot(stat != null && stat.getCustomData() != null && Long.parseLong(stat.getCustomData()) > System.currentTimeMillis()));
+        client.sendPacket(CWvsContext.pendantSlot(stat != null && stat.getCustomData() != null && Long.parseLong(stat.getCustomData()) > System.currentTimeMillis()));
         stat = player.getQuestNoAdd(MapleQuest.getInstance(GameConstants.QUICK_SLOT));
-        c.sendPacket(CField.quickSlot(stat != null && stat.getCustomData() != null ? stat.getCustomData() : null));
+        client.sendPacket(CField.quickSlot(stat != null && stat.getCustomData() != null ? stat.getCustomData() : null));
         // c.sendPacket(CWvsContext.getFamiliarInfo(player));
         MapleInventory equipped = player.getInventory(MapleInventoryType.EQUIPPED);
         MapleInventory equip = player.getInventory(MapleInventoryType.EQUIP);
@@ -265,10 +265,10 @@ public class PlayerLoggedInHandler extends MaplePacketHandler {
         //        c.sendPacket(CField.EffectPacket.updateDeathCount(99)); //for fun
         player.getClient().sendPacket(CWvsContext.broadcastMsg(channelServer.getServerMessage()));
         Thread.sleep(3100);
-                if (c.getCharacter().getLevel() < 11 && ServerConfig.RED_EVENT_10) { 
-        NPCScriptManager.getInstance().start(c, 9000108, "LoginTot");
-        } else if (c.getCharacter().getLevel() > 10 && ServerConfig.RED_EVENT) { 
-        NPCScriptManager.getInstance().start(c, 9000108, "LoginRed");
+                if (client.getCharacter().getLevel() < 11 && ServerConfig.RED_EVENT_10) { 
+        NPCScriptManager.getInstance().start(client, 9000108, "LoginTot");
+        } else if (client.getCharacter().getLevel() > 10 && ServerConfig.RED_EVENT) { 
+        NPCScriptManager.getInstance().start(client, 9000108, "LoginRed");
         }
   
         if (!GameConstants.isZero(player.getJob())) { //tell all players 2 login so u can remove this from ther

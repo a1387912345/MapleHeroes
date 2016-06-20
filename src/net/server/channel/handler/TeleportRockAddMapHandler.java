@@ -15,13 +15,13 @@ public class TeleportRockAddMapHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		byte addrem = lea.readByte();
-        byte vip = lea.readByte();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		byte addrem = mpr.readByte();
+        byte vip = mpr.readByte();
 
         if (vip == 1) {
             if (addrem == 0) {
-                chr.deleteFromRegRocks(lea.readInt());
+                chr.deleteFromRegRocks(mpr.readInt());
             } else if (addrem == 1) {
                 if (!FieldLimitType.VipRock.check(chr.getMap().getFieldLimit())) {
                     chr.addRegRockMap();
@@ -31,7 +31,7 @@ public class TeleportRockAddMapHandler extends MaplePacketHandler {
             }
         } else if (vip == 2) {
             if (addrem == 0) {
-                chr.deleteFromRocks(lea.readInt());
+                chr.deleteFromRocks(mpr.readInt());
             } else if (addrem == 1) {
                 if (!FieldLimitType.VipRock.check(chr.getMap().getFieldLimit())) {
                     chr.addRockMap();
@@ -41,7 +41,7 @@ public class TeleportRockAddMapHandler extends MaplePacketHandler {
             }
         } else if (vip == 3 || vip == 5) {
             if (addrem == 0) {
-                chr.deleteFromHyperRocks(lea.readInt());
+                chr.deleteFromHyperRocks(mpr.readInt());
             } else if (addrem == 1) {
                 if (!FieldLimitType.VipRock.check(chr.getMap().getFieldLimit())) {
                     chr.addHyperRockMap();

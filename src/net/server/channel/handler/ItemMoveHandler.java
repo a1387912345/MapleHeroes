@@ -15,16 +15,16 @@ public class ItemMoveHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(final MaplePacketReader lea, final MapleClient c, final MapleCharacter chr) {
+	public void handlePacket(final MaplePacketReader mpr, final MapleClient c, final MapleCharacter chr) {
 		if (c.getCharacter().hasBlockedInventory()) { //hack
             return;
         }
         c.getCharacter().setScrolledPosition((short) 0);
-        c.getCharacter().updateTick(lea.readInt());
-        final MapleInventoryType type = MapleInventoryType.getByType(lea.readByte());
-        final short src = lea.readShort();
-        final short dst = lea.readShort();
-        final short quantity = lea.readShort();
+        c.getCharacter().updateTick(mpr.readInt());
+        final MapleInventoryType type = MapleInventoryType.getByType(mpr.readByte());
+        final short src = mpr.readShort();
+        final short dst = mpr.readShort();
+        final short quantity = mpr.readShort();
         System.out.println("item move " + type.name() + " " + src + " " + dst + " " + quantity);
 
         if (src < 0 && dst > 0) {

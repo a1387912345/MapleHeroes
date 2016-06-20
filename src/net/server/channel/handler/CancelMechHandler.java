@@ -16,11 +16,11 @@ public class CancelMechHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
 		if (chr == null) {
             return;
         }
-        int sourceid = lea.readInt();
+        int sourceid = mpr.readInt();
         if ((sourceid % 10000 < 1000) && (SkillFactory.getSkill(sourceid) == null)) {
             sourceid += 1000;
         }
@@ -33,7 +33,7 @@ public class CancelMechHandler extends MaplePacketHandler {
             chr.getMap().broadcastMessage(chr, CField.skillCancel(chr, sourceid), false);
         } else {
            
-            chr.cancelEffect(skill.getEffect(lea.readByte()), false, -1L);
+            chr.cancelEffect(skill.getEffect(mpr.readByte()), false, -1L);
         }
 	}
 

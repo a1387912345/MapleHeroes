@@ -14,9 +14,9 @@ public class UsePotentialScrollHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
-        InventoryHandler.UseUpgradeScroll(lea.readShort(), lea.readShort(), lea.readShort(), c, c.getCharacter(), lea.readByte() > 0);
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
+        InventoryHandler.UseUpgradeScroll(mpr.readShort(), mpr.readShort(), mpr.readShort(), c, c.getCharacter(), mpr.readByte() > 0);
 	}
 
 }

@@ -13,8 +13,8 @@ public class FarmShopBuyHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		int itemId = lea.readInt();
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		int itemId = mpr.readInt();
         //c.getFarm().getFarmInventory().gainWaru(-price);
         //c.getFarm().getFarmInventory().updateItemQuantity(itemId, 1);
         //c.getFarm().gainAestheticPoints(aesthetic); //rewarded from building

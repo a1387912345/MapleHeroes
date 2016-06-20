@@ -19,10 +19,10 @@ public class UseMountFoodHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		c.getCharacter().updateTick(lea.readInt());
-        final byte slot = (byte) lea.readShort();
-        final int itemid = lea.readInt(); //2260000 usually
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		c.getCharacter().updateTick(mpr.readInt());
+        final byte slot = (byte) mpr.readShort();
+        final int itemid = mpr.readInt(); //2260000 usually
         final Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
         final MapleMount mount = chr.getMount();
 

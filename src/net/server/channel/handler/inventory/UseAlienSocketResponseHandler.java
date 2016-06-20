@@ -14,8 +14,8 @@ public class UseAlienSocketResponseHandler extends MaplePacketHandler {
 	}
 
 	@Override
-	public void handlePacket(MaplePacketReader lea, MapleClient c, MapleCharacter chr) {
-		lea.skip(4); // all 0
+	public void handlePacket(MaplePacketReader mpr, MapleClient c, MapleCharacter chr) {
+		mpr.skip(4); // all 0
         c.sendPacket(CSPacket.useAlienSocket(false));
 	}
 	

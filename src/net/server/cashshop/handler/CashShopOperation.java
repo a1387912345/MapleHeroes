@@ -1,9 +1,9 @@
 package net.server.cashshop.handler;
 
-import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import client.inventory.Item;
 import client.inventory.MapleInventoryIdentifier;
 import client.inventory.MapleInventoryType;
@@ -63,7 +63,7 @@ public class CashShopOperation {
         MapleCharacter chr = MapleCharacter.ReconstructChr(transfer, c, false);
 
         c.setCharacter(chr);
-        c.setAccID(chr.getAccountID());
+        c.setAccountID(chr.getAccountID());
 
         if (!c.checkIPAddress()) { // Remote hack
             c.close();
@@ -193,7 +193,7 @@ public class CashShopOperation {
             Item itemz = chr.getCashInventory().toItem(item);
             if (itemz != null) {
                 chr.getCashInventory().addToInventory(itemz);
-                c.sendPacket(CSPacket.showBoughtCSItem(itemz, item.getSN(), c.getAccID()));
+                c.sendPacket(CSPacket.showBoughtCSItem(itemz, item.getSN(), c.getAccountID()));
             } else {
                 c.sendPacket(CSPacket.sendCSFail(0));
             }
@@ -210,7 +210,7 @@ public class CashShopOperation {
             Item itemz = chr.getCashInventory().toItem(item);
             if (itemz != null) {
                 chr.getCashInventory().addToInventory(itemz);
-                c.sendPacket(CSPacket.showBoughtCSItem(itemz, item.getSN(), c.getAccID()));
+                c.sendPacket(CSPacket.showBoughtCSItem(itemz, item.getSN(), c.getAccountID()));
             } else {
                 c.sendPacket(CSPacket.sendCSFail(0));
             }
@@ -247,7 +247,7 @@ public class CashShopOperation {
                 if (itemz != null && itemz.getUniqueId() > 0 && itemz.getItemId() == item.getId() && itemz.getQuantity() == item.getCount()) {
                     chr.getCashInventory().addToInventory(itemz);
                     //c.sendPacket(CSPacket.confirmToCSInventory(itemz, c.getAccID(), item.getSN()));
-                    c.sendPacket(CSPacket.showBoughtCSItem(itemz, item.getSN(), c.getAccID()));
+                    c.sendPacket(CSPacket.showBoughtCSItem(itemz, item.getSN(), c.getAccountID()));
 
                 } else {
                     c.sendPacket(CSPacket.sendCSFail(0));
@@ -269,7 +269,7 @@ public class CashShopOperation {
                 return;
             }
             Triple<Integer, Integer, Integer> info = MapleCharacterUtil.getInfoByName(partnerName, c.getCharacter().getWorld());
-            if (info == null || info.getLeft().intValue() <= 0 || info.getLeft().intValue() == c.getCharacter().getID() || info.getMid().intValue() == c.getAccID()) {
+            if (info == null || info.getLeft().intValue() <= 0 || info.getLeft().intValue() == c.getCharacter().getID() || info.getMid().intValue() == c.getAccountID()) {
                 c.sendPacket(CSPacket.sendCSFail(0xA2)); //9E v75
                 doCSPackets(c);
                 return;
@@ -428,7 +428,7 @@ public class CashShopOperation {
                 }
                 item_.setPosition((byte) 0);
                 c.getCharacter().getCashInventory().addToInventory(item_);
-                c.sendPacket(CSPacket.showBoughtCSItem(item, item.getUniqueId(), c.getAccID()));
+                c.sendPacket(CSPacket.showBoughtCSItem(item, item.getUniqueId(), c.getAccountID()));
                 //warning: this d/cs
 //                c.sendPacket(CSPacket.confirmToCSInventory(item, c.getAccID(), itemz.getSN()));
             } else {
@@ -460,7 +460,7 @@ public class CashShopOperation {
                 c.sendPacket(CSPacket.sendCSFail(0xB4)); //9E v75
                 doCSPackets(c);
                 return;
-            } else if (info.getMid().intValue() == c.getAccID()) {
+            } else if (info.getMid().intValue() == c.getAccountID()) {
                 c.sendPacket(CSPacket.sendCSFail(0xA3)); //9D v75
                 doCSPackets(c);
                 return;
@@ -521,7 +521,7 @@ public class CashShopOperation {
                 c.getCharacter().getCashInventory().addToInventory(itemz);
             }
             chr.modifyCSPoints(toCharge, -item.getPrice(), false);
-            c.sendPacket(CSPacket.showBoughtCSPackage(ccz, c.getAccID()));
+            c.sendPacket(CSPacket.showBoughtCSPackage(ccz, c.getAccountID()));
 
         } else if (action == 35 || action == 99) { //99 buy with mesos
             final CashItemInfo item = CashItemFactory.getInstance().getItem(inPacket.readInt());
