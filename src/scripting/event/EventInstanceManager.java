@@ -30,13 +30,15 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import javax.script.ScriptException;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.MapleTrait.MapleTraitType;
+import client.character.MapleCharacter;
 import client.SkillFactory;
 import constants.GameConstants;
-import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.CWvsContext.InfoPacket;
+import net.server.channel.ChannelServer;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.World;
@@ -55,9 +57,7 @@ import server.life.MapleMonster;
 import server.maps.MapleMap;
 import server.maps.MapleMapFactory;
 import tools.FileoutputUtil;
-import tools.packet.CField;
 import tools.Pair;
-import tools.packet.CWvsContext.InfoPacket;
 
 public class EventInstanceManager {
 
@@ -161,9 +161,9 @@ public class EventInstanceManager {
 
             for (MapleCharacter chr : getPlayers()) {
                 if (name.startsWith("PVP")) {
-                    chr.getClient().getSession().write(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
+                    chr.getClient().sendPacket(CField.getPVPClock(Integer.parseInt(getProperty("type")), timesend));
                 } else {
-                    chr.getClient().getSession().write(CField.getClock(timesend));
+                    chr.getClient().sendPacket(CField.getClock(timesend));
                 }
             }
             timeOut(time, this);
@@ -433,7 +433,7 @@ public class EventInstanceManager {
             } else if ((ret > 0 && getPlayerCount() < ret) || (ret < 0 && (isLeader(chr) || getPlayerCount() < (ret * -1)))) {
                 final List<MapleCharacter> chrs = new LinkedList<>(chars);
                 for (MapleCharacter player : chrs) {
-                    if (player.getId() != idz) {
+                    if (player.getID() != idz) {
                         removePlayer(player);
                     }
                 }
@@ -461,13 +461,13 @@ public class EventInstanceManager {
             if (disposed || chr == null) {
                 return;
             }
-            Integer kc = killCount.get(chr.getId());
+            Integer kc = killCount.get(chr.getID());
             if (kc == null) {
                 kc = inc;
             } else {
                 kc += inc;
             }
-            killCount.put(chr.getId(), kc);
+            killCount.put(chr.getID(), kc);
             if (chr.getCarnivalParty() != null && (mob.getStats().getPoint() > 0 || mob.getStats().getCP() > 0)) {
                 em.getIv().invokeFunction("monsterKilled", this, chr, mob.getStats().getCP() > 0 ? mob.getStats().getCP() : mob.getStats().getPoint());
             }
@@ -514,7 +514,7 @@ public class EventInstanceManager {
         if (disposed) {
             return 0;
         }
-        Integer kc = killCount.get(chr.getId());
+        Integer kc = killCount.get(chr.getID());
         if (kc == null) {
             return 0;
         } else {
@@ -626,7 +626,7 @@ public class EventInstanceManager {
             return;
         }
         for (MapleCharacter chr : getPlayers()) {
-            chr.getClient().getSession().write(p);
+            chr.getClient().sendPacket(p);
         }
     }
 
@@ -636,7 +636,7 @@ public class EventInstanceManager {
         }
         for (MapleCharacter chr : getPlayers()) {
             if (chr.getTeam() == team) {
-                chr.getClient().getSession().write(p);
+                chr.getClient().sendPacket(p);
             }
         }
     }
@@ -867,7 +867,7 @@ public class EventInstanceManager {
     }
 
     public boolean isLeader(final MapleCharacter chr) {
-        return (chr != null && chr.getParty() != null && chr.getParty().getLeader().getId() == chr.getId());
+        return (chr != null && chr.getParty() != null && chr.getParty().getLeader().getId() == chr.getID());
     }
 
     public void registerSquad(MapleSquad squad, MapleMap map, int questID) {
@@ -899,7 +899,7 @@ public class EventInstanceManager {
         if (disposed) {
             return false;
         }
-        return (dced.contains(chr.getId()));
+        return (dced.contains(chr.getID()));
     }
 
     public void removeDisconnected(final int id) {
@@ -915,7 +915,7 @@ public class EventInstanceManager {
 
     public void applyBuff(final MapleCharacter chr, final int id) {
         MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(chr);
-        chr.getClient().getSession().write(InfoPacket.getStatusMsg(id));
+        chr.getClient().sendPacket(InfoPacket.getStatusMsg(id));
     }
 
     public void applySkill(final MapleCharacter chr, final int id) {

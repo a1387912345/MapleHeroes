@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
-import client.MapleCharacter;
+import net.packet.PlayerShopPacket;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import server.MapleInventoryManipulator;
-import tools.packet.PlayerShopPacket;
 
 public class MaplePlayerShop extends AbstractPlayerStore {
 
@@ -52,11 +52,11 @@ public class MaplePlayerShop extends AbstractPlayerStore {
                 newItem.setFlag((short) (flag - ItemFlag.KARMA_USE.getValue()));
             }
             final int gainmeso = pItem.price * quantity;
-            if (c.getPlayer().getMeso() >= gainmeso) {
+            if (c.getCharacter().getMeso() >= gainmeso) {
                 if (getMCOwner().getMeso() + gainmeso > 0 && MapleInventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && MapleInventoryManipulator.addFromDrop(c, newItem, false)) {
                     pItem.bundles -= quantity;
-                    bought.add(new BoughtItem(newItem.getItemId(), quantity, gainmeso, c.getPlayer().getName()));
-                    c.getPlayer().gainMeso(-gainmeso, false);
+                    bought.add(new BoughtItem(newItem.getItemId(), quantity, gainmeso, c.getCharacter().getName()));
+                    c.getCharacter().gainMeso(-gainmeso, false);
                     getMCOwner().gainMeso(gainmeso, false);
                     if (pItem.bundles <= 0) {
                         boughtnumber++;
@@ -66,13 +66,13 @@ public class MaplePlayerShop extends AbstractPlayerStore {
                         }
                     }
                 } else {
-                    c.getPlayer().dropMessage(1, "Your inventory is full.");
+                    c.getCharacter().dropMessage(1, "Your inventory is full.");
                 }
             } else {
-                c.getPlayer().dropMessage(1, "You do not have enough mesos.");
+                c.getCharacter().dropMessage(1, "You do not have enough mesos.");
                 //}
             }
-            getMCOwner().getClient().getSession().write(PlayerShopPacket.shopItemUpdate(this));
+            getMCOwner().getClient().sendPacket(PlayerShopPacket.shopItemUpdate(this));
         }
     }
 
@@ -101,7 +101,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         }
         owner.setPlayerShop(null);
         update();
-        getMCOwner().getClient().getSession().write(PlayerShopPacket.shopErrorMessage(10, 1));
+        getMCOwner().getClient().sendPacket(PlayerShopPacket.shopErrorMessage(10, 1));
     }
 
     public void banPlayer(String name) {
@@ -111,7 +111,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         for (int i = 0; i < 3; i++) {
             MapleCharacter chr = getVisitor(i);
             if (chr.getName().equals(name)) {
-                chr.getClient().getSession().write(PlayerShopPacket.shopErrorMessage(5, 1));
+                chr.getClient().sendPacket(PlayerShopPacket.shopErrorMessage(5, 1));
                 chr.setPlayerShop(null);
                 removeVisitor(chr);
             }

@@ -1,22 +1,22 @@
 package scripting.map;
 
 import client.MapleClient;
+import net.packet.CField.UIPacket;
 import scripting.AbstractPlayerInteraction;
-import tools.packet.CField.UIPacket;
 
 public class MapEventManager extends AbstractPlayerInteraction {
 
 	
 	public MapEventManager(MapleClient c) {
-		super(c, c.getPlayer().getMapId(), 0, null);
+		super(c, c.getCharacter().getMapId(), 0, null);
 	}
 	
 	public void enableDirectionStatus() {
-		c.getSession().write(UIPacket.getDirectionStatus(true));
+		c.sendPacket(UIPacket.getDirectionStatus(true));
 	}
 	
 	public void introEnableUI(boolean enable) {
-		c.getSession().write(UIPacket.IntroEnableUI(enable ? 1 : 0));
+		c.sendPacket(UIPacket.IntroEnableUI(enable ? 1 : 0));
 	}
 	
 	public void sleep(int delay) {
@@ -32,7 +32,7 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	 * @param delay the delay in milliseconds to pause threads
 	 */
 	public void delayEvent(int delay) {
-		c.getSession().write(UIPacket.delayDirectionInfo(delay));
+		c.sendPacket(UIPacket.delayDirectionInfo(delay));
 		try {
 			Thread.sleep(delay);
 		} catch (InterruptedException e) {
@@ -46,7 +46,7 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	 * @param offset the additional delay in milliseconds
 	 */
 	public void delayEvent(int delay, int offset) {
-		c.getSession().write(UIPacket.delayDirectionInfo(delay));
+		c.sendPacket(UIPacket.delayDirectionInfo(delay));
 		try {
 			Thread.sleep(delay + offset);
 		} catch (InterruptedException e) {
@@ -59,16 +59,16 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	 * @param input
 	 */
 	public void forceMoveCharacter(int input) {
-		c.getSession().write(UIPacket.forceMoveCharacter(input));
+		c.sendPacket(UIPacket.forceMoveCharacter(input));
 	}
 	
 	
 	public void showDirectionEffect(String data, int value, int x, int y) {
-		c.getSession().write(UIPacket.getDirectionInfo(data, value, x, y, 0, 0));
+		c.sendPacket(UIPacket.getDirectionInfo(data, value, x, y, 0, 0));
 	}
 	
 	public void showDirectionEffect(String data, int value, int x, int y, int a, int b) {
-		c.getSession().write(UIPacket.getDirectionInfo(data, value, x, y, a, b));
+		c.sendPacket(UIPacket.getDirectionInfo(data, value, x, y, a, b));
 	}
 	
 	

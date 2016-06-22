@@ -4,14 +4,15 @@
  */
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
+import net.packet.CField;
+
 import java.awt.Point;
 import java.util.List;
 import server.movement.LifeMovement;
 import server.movement.LifeMovementFragment;
 import server.movement.StaticLifeMovement;
-import tools.packet.CField;
 
 /**
  *
@@ -26,7 +27,7 @@ public class MapleHaku extends AnimatedMapleMapObject {
     private Point pos = new Point(0, 0);
 
     public MapleHaku(MapleCharacter owner) {
-        this.owner = owner.getId();
+        this.owner = owner.getID();
         this.jobid = owner.getJob();
         this.fh = owner.getFH();
         this.stats = false;
@@ -40,12 +41,12 @@ public class MapleHaku extends AnimatedMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(CField.spawnHaku(this));
+        client.sendPacket(CField.spawnHaku(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.removeDragon(this.owner));
+        client.sendPacket(CField.removeDragon(this.owner));
     }
 
     public int getOwner() {

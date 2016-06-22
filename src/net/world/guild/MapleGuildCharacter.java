@@ -20,7 +20,7 @@
  */
 package net.world.guild;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 
 public class MapleGuildCharacter implements java.io.Serializable { // alias for a character
 
@@ -36,7 +36,7 @@ public class MapleGuildCharacter implements java.io.Serializable { // alias for 
     public MapleGuildCharacter(final MapleCharacter chr) {
         name = chr.getName();
         level = (short) chr.getLevel();
-        id = chr.getId();
+        id = chr.getID();
         channel = (byte) chr.getClient().getChannel();
         jobid = chr.getJob();
         guildrank = chr.getGuildRank();

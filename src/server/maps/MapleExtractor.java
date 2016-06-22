@@ -1,8 +1,8 @@
 package server.maps;
 
-import client.MapleCharacter;
 import client.MapleClient;
-import tools.packet.CField;
+import client.character.MapleCharacter;
+import net.packet.CField;
 
 public class MapleExtractor extends MapleMapObject {
 
@@ -12,7 +12,7 @@ public class MapleExtractor extends MapleMapObject {
 
     public MapleExtractor(MapleCharacter owner, int itemId, int fee, int timeLeft) {
         super();
-        this.owner = owner.getId();
+        this.owner = owner.getID();
         this.itemId = itemId;
         this.fee = fee;
         this.ownerName = owner.getName();
@@ -27,12 +27,12 @@ public class MapleExtractor extends MapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(CField.makeExtractor(owner, ownerName, getTruePosition(), getTimeLeft(), itemId, fee));
+        client.sendPacket(CField.makeExtractor(owner, ownerName, getTruePosition(), getTimeLeft(), itemId, fee));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.removeExtractor(this.owner));
+        client.sendPacket(CField.removeExtractor(this.owner));
     }
 
     @Override

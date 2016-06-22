@@ -1,7 +1,8 @@
 package client;
 
+import client.character.MapleCharacter;
 import constants.GameConstants;
-import tools.packet.CWvsContext.InfoPacket;
+import net.packet.CWvsContext.InfoPacket;
 
 public class MapleTrait {
 
@@ -71,7 +72,7 @@ public class MapleTrait {
             this.totalExp += e;
             this.localTotalExp += e;
             c.updateSingleStat(type.stat, totalExp);
-            c.getClient().getSession().write(InfoPacket.showTraitGain(type, e));
+            c.getClient().sendPacket(InfoPacket.showTraitGain(type, e));
             recalcLevel();
         }
     }

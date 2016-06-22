@@ -3,6 +3,11 @@ package client;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.List;
+
+import client.character.MapleCharacter;
+import net.netty.MaplePacketWriter;
+import net.packet.CField;
+import net.packet.PacketHelper;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.life.MapleLifeFactory;
@@ -12,9 +17,6 @@ import server.maps.MapleMapObjectType;
 import server.movement.LifeMovement;
 import server.movement.LifeMovementFragment;
 import server.movement.StaticLifeMovement;
-import tools.data.MaplePacketLittleEndianWriter;
-import tools.packet.CField;
-import tools.packet.PacketHelper;
 
 public final class MonsterFamiliar extends AnimatedMapleMapObject
         implements Serializable {
@@ -65,7 +67,7 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject
 
     public void addFatigue(MapleCharacter owner, int f) {
         fatigue = Math.min(vitality * 300, Math.max(0, fatigue + f));
-        owner.getClient().getSession().write(CField.updateFamiliar(this));
+        owner.getClient().sendPacket(CField.updateFamiliar(this));
         if (fatigue >= vitality * 300) {
             owner.removeFamiliar();
         }
@@ -125,12 +127,12 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.getSession().write(CField.spawnFamiliar(this, true, false));
+        client.sendPacket(CField.spawnFamiliar(this, true, false));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.spawnFamiliar(this, false, false));
+        client.sendPacket(CField.spawnFamiliar(this, false, false));
     }
 
     @Override
@@ -147,16 +149,16 @@ public final class MonsterFamiliar extends AnimatedMapleMapObject
         }
     }
 
-    public void writeRegisterPacket(MaplePacketLittleEndianWriter mplew, boolean chr) {
-        mplew.writeInt(getCharacterId());
-        mplew.writeInt(getFamiliar());
-        mplew.writeZeroBytes(13);
-        mplew.write(chr ? 1 : 0);
-        mplew.writeShort(getVitality());
-        mplew.writeInt(getFatigue());
-        mplew.writeLong(PacketHelper.getTime(getVitality() >= 3 ? System.currentTimeMillis() : -2L));
-        mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
-        mplew.writeLong(PacketHelper.getTime(getExpiry()));
-        mplew.writeShort(getVitality());
+    public void writeRegisterPacket(MaplePacketWriter mpw, boolean chr) {
+        mpw.writeInt(getCharacterId());
+        mpw.writeInt(getFamiliar());
+        mpw.writeZeroBytes(13);
+        mpw.write(chr ? 1 : 0);
+        mpw.writeShort(getVitality());
+        mpw.writeInt(getFatigue());
+        mpw.writeLong(PacketHelper.getTime(getVitality() >= 3 ? System.currentTimeMillis() : -2L));
+        mpw.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
+        mpw.writeLong(PacketHelper.getTime(getExpiry()));
+        mpw.writeShort(getVitality());
     }
 }

@@ -10,6 +10,9 @@ import constants.GameConstants;
 import custom.MoonlightRevamp;
 import custom.MoonlightRevamp.MoonlightShop;
 import database.DatabaseConnection;
+import net.packet.CField;
+import net.packet.CWvsContext;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,8 +26,6 @@ import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import tools.FileoutputUtil;
 import tools.Pair;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class MapleShop {
 
@@ -74,25 +75,25 @@ public class MapleShop {
     }
 
     public void sendShop(MapleClient c) {
-        c.getPlayer().setShop(this);
-        c.getSession().write(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
+        c.getCharacter().setShop(this);
+        c.sendPacket(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
     }
 
     public void sendShop(MapleClient c, int customNpc) {
-        c.getPlayer().setShop(this);
-        c.getSession().write(CField.NPCPacket.getNPCShop(customNpc, this, c));
+        c.getCharacter().setShop(this);
+        c.sendPacket(CField.NPCPacket.getNPCShop(customNpc, this, c));
     }
 
     public void buy(MapleClient c, short slot, int itemId, short quantity) {
-        if ((itemId / 10000 == 190) && (!GameConstants.isMountItemAvailable(itemId, c.getPlayer().getJob()))) {
-            c.getPlayer().dropMessage(1, "You may not buy this item.");
-            c.getSession().write(CWvsContext.enableActions());
+        if ((itemId / 10000 == 190) && (!GameConstants.isMountItemAvailable(itemId, c.getCharacter().getJob()))) {
+            c.getCharacter().dropMessage(1, "You may not buy this item.");
+            c.sendPacket(CWvsContext.enableActions());
             return;
         }
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         int x = 0;
         int index = -1;
-        for (Item i : c.getPlayer().getRebuy()) {
+        for (Item i : c.getCharacter().getRebuy()) {
             if (i.getItemId() == itemId) {
                 index = x;
                 break;
@@ -100,20 +101,20 @@ public class MapleShop {
             x++;
         }
         if (index >= 0) {
-            Item i = (Item) c.getPlayer().getRebuy().get(index);
+            Item i = (Item) c.getCharacter().getRebuy().get(index);
             int price = (int) Math.max(Math.ceil(ii.getPrice(itemId) * (GameConstants.isRechargable(itemId) ? 1 : i.getQuantity())), 0.0D);
-            if ((price >= 0) && (c.getPlayer().getMeso() >= price)) {
+            if ((price >= 0) && (c.getCharacter().getMeso() >= price)) {
                 if (MapleInventoryManipulator.checkSpace(c, itemId, i.getQuantity(), i.getOwner())) {
-                    c.getPlayer().gainMeso(-price, false);
+                    c.getCharacter().gainMeso(-price, false);
                     MapleInventoryManipulator.addbyItem(c, i);
-                    c.getPlayer().getRebuy().remove(index);
-                    c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, x));
+                    c.getCharacter().getRebuy().remove(index);
+                    c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, x));
                 } else {
-                    c.getPlayer().dropMessage(1, "Your inventory is full.");
-                    c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                    c.getCharacter().dropMessage(1, "Your inventory is full.");
+                    c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
                 }
             } else {
-                c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
             }
 
             return;
@@ -129,22 +130,22 @@ public class MapleShop {
                 boolean passed = true;
                 int y = 0;
                 for (Pair i : getRanks()) {
-                    if ((c.getPlayer().haveItem(((Integer) i.left).intValue(), 1, true, true)) && (item.getRank() >= y)) {
+                    if ((c.getCharacter().haveItem(((Integer) i.left).intValue(), 1, true, true)) && (item.getRank() >= y)) {
                         passed = true;
                         break;
                     }
                     y++;
                 }
                 if (!passed) {
-                    c.getPlayer().dropMessage(1, "You need a higher rank.");
-                    c.getSession().write(CWvsContext.enableActions());
+                    c.getCharacter().dropMessage(1, "You need a higher rank.");
+                    c.sendPacket(CWvsContext.enableActions());
                     return;
                 }
             }
             int price = GameConstants.isRechargable(itemId) ? item.getPrice() : item.getPrice() * quantity;
-            if ((price >= 0) && (c.getPlayer().getMeso() >= price)) {
+            if ((price >= 0) && (c.getCharacter().getMeso() >= price)) {
                 if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                    c.getPlayer().gainMeso(-price, false);
+                    c.getCharacter().gainMeso(-price, false);
                     if (GameConstants.isPet(itemId)) {
                         MapleInventoryManipulator.addById(c, itemId, (short) (quantity * item.getQuantity()), "", MaplePet.createPet(itemId, MapleInventoryIdentifier.getInstance()), -1, false, "Bought from shop " + id + ", " + npcId + " on " + FileoutputUtil.CurrentReadable_Date());
                     } else {
@@ -155,11 +156,11 @@ public class MapleShop {
                         MapleInventoryManipulator.addById(c, itemId, quantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + FileoutputUtil.CurrentReadable_Date());
                     }
                 } else {
-                    c.getPlayer().dropMessage(1, "Your Inventory is full");
+                    c.getCharacter().dropMessage(1, "Your Inventory is full");
                 }
-                c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
             }
-        } else if ((item != null) && (item.getReqItem() > 0) && (quantity == 1) && (c.getPlayer().haveItem(item.getReqItem(), item.getReqItemQ(), false, true))) {
+        } else if ((item != null) && (item.getReqItem() > 0) && (quantity == 1) && (c.getCharacter().haveItem(item.getReqItem(), item.getReqItemQ(), false, true))) {
             if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(item.getReqItem()), item.getReqItem(), item.getReqItemQ(), false, false);
                 if (GameConstants.isPet(itemId)) {
@@ -171,9 +172,9 @@ public class MapleShop {
                     MapleInventoryManipulator.addById(c, itemId, quantity, "Bought from shop " + this.id + ", " + this.npcId + " on " + FileoutputUtil.CurrentReadable_Date());
                 }
             } else {
-                c.getPlayer().dropMessage(1, "Your Inventory is full");
+                c.getCharacter().dropMessage(1, "Your Inventory is full");
             }
-            c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+            c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
         }
     }
 
@@ -181,7 +182,7 @@ public class MapleShop {
         if ((quantity == 65535) || (quantity == 0)) {
             quantity = 1;
         }
-        Item item = c.getPlayer().getInventory(type).getItem((short) slot);
+        Item item = c.getCharacter().getInventory(type).getItem((short) slot);
         if (item == null) {
             return;
         }
@@ -203,23 +204,23 @@ public class MapleShop {
         if ((quantity <= iQuant) && (iQuant > 0)) {
             if (GameConstants.GMS) {
                 if (item.getQuantity() == quantity) {
-                    if (c.getPlayer().getRebuy().size() < 10) {
-                        c.getPlayer().getRebuy().add(item.copy());
-                    } else if (c.getPlayer().getRebuy().size() == 10) {
+                    if (c.getCharacter().getRebuy().size() < 10) {
+                        c.getCharacter().getRebuy().add(item.copy());
+                    } else if (c.getCharacter().getRebuy().size() == 10) {
                         for (int i = 1; i < 10; i++) {
-                            listRebuy.add(c.getPlayer().getRebuy().get(i));
+                            listRebuy.add(c.getCharacter().getRebuy().get(i));
                         }
                         listRebuy.add(item.copy());
-                        c.getPlayer().setRebuy(listRebuy);
+                        c.getCharacter().setRebuy(listRebuy);
                     } else {
-                        int x = c.getPlayer().getRebuy().size();
+                        int x = c.getCharacter().getRebuy().size();
                         for (int i = x - 10; i < x; i++) {
-                            listRebuy.add(c.getPlayer().getRebuy().get(i));
+                            listRebuy.add(c.getCharacter().getRebuy().get(i));
                         }
-                        c.getPlayer().setRebuy(listRebuy);
+                        c.getCharacter().setRebuy(listRebuy);
                     }
                 } else {
-                    c.getPlayer().getRebuy().add(item.copyWithQuantity(quantity));
+                    c.getCharacter().getRebuy().add(item.copyWithQuantity(quantity));
                 }
             }
             MapleInventoryManipulator.removeFromSlot(c, type, (short) slot, quantity, false);
@@ -244,32 +245,32 @@ public class MapleShop {
 
             int recvMesos = (int) Math.max(Math.ceil(price * quantity), 0.0D);
             if ((price != -1.0D) && (recvMesos > 0)) {
-                c.getPlayer().gainMeso(recvMesos, false);
+                c.getCharacter().gainMeso(recvMesos, false);
             }
-            c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 5, this, c, -1));
+            c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 5, this, c, -1));
         }
     }
 
     public void recharge(MapleClient c, byte slot) {
-        Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((short) slot);
+        Item item = c.getCharacter().getInventory(MapleInventoryType.USE).getItem((short) slot);
 
         if ((item == null) || ((!GameConstants.isThrowingStar(item.getItemId())) && (!GameConstants.isBullet(item.getItemId())))) {
             return;
         }
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         short slotMax = ii.getSlotMax(item.getItemId());
-        int skill = GameConstants.getMasterySkill(c.getPlayer().getJob());
+        int skill = GameConstants.getMasterySkill(c.getCharacter().getJob());
 
         if (skill != 0) {
-            slotMax = (short) (slotMax + c.getPlayer().getTotalSkillLevel(SkillFactory.getSkill(skill)) * 10);
+            slotMax = (short) (slotMax + c.getCharacter().getTotalSkillLevel(SkillFactory.getSkill(skill)) * 10);
         }
         if (item.getQuantity() < slotMax) {
             int price = (int) Math.round(ii.getPrice(item.getItemId()) * (slotMax - item.getQuantity()));
-            if (c.getPlayer().getMeso() >= price) {
+            if (c.getCharacter().getMeso() >= price) {
                 item.setQuantity(slotMax);
-                c.getSession().write(CWvsContext.InventoryPacket.updateInventorySlot(MapleInventoryType.USE, item, false));
-                c.getPlayer().gainMeso(-price, false, false);
-                c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                c.sendPacket(CWvsContext.InventoryPacket.updateInventorySlot(MapleInventoryType.USE, item, false));
+                c.getCharacter().gainMeso(-price, false, false);
+                c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
             }
         }
     }

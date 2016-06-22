@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
+import client.character.MapleCharacter;
 import constants.GameConstants;
+import net.packet.PlayerShopPacket;
 import server.quest.MapleQuest;
-import tools.packet.PlayerShopPacket;
 
 public final class MapleMiniGame extends AbstractPlayerStore {
 
@@ -158,7 +158,7 @@ public final class MapleMiniGame extends AbstractPlayerStore {
             closeShop(false, false);
             return;
         }
-        c.getSession().write(PlayerShopPacket.getMiniGame(c, this));
+        c.sendPacket(PlayerShopPacket.getMiniGame(c, this));
     }
 
     public void setReady(int slot) {

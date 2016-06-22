@@ -20,9 +20,11 @@
  */
 package scripting.event;
 
-import client.MapleCharacter;
 import client.MapleClient;
-import net.channel.ChannelServer;
+import client.character.MapleCharacter;
+import net.packet.CField;
+import net.packet.CWvsContext;
+import net.server.channel.ChannelServer;
 import net.world.MapleParty;
 import net.world.MaplePartyCharacter;
 import net.world.exped.MapleExpedition;
@@ -51,8 +53,6 @@ import server.maps.MapleMapObject;
 import server.maps.MapleReactor;
 import server.maps.MapleReactorFactory;
 import tools.FileoutputUtil;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class EventManager {
 
@@ -232,7 +232,7 @@ public class EventManager {
 
     public void startInstance_CharID(MapleCharacter character) {
         try {
-            EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getId()));
+            EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getID()));
             eim.registerPlayer(character);
         } catch (NoSuchMethodException | ScriptException ex) {
             System.out.println("Event name : " + name + ", method Name : setup-CharID:\n" + ex);
@@ -242,7 +242,7 @@ public class EventManager {
 
     public void startInstance_CharMapID(MapleCharacter character) {
         try {
-            EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getId(), character.getMapId()));
+            EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", character.getID(), character.getMapId()));
             eim.registerPlayer(character);
         } catch (NoSuchMethodException | ScriptException ex) {
             System.out.println("Event name : " + name + ", method Name : setup-CharID:\n" + ex);

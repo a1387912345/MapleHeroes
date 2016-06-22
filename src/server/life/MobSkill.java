@@ -22,6 +22,10 @@ package server.life;
 
 import client.MapleBuffStat;
 import constants.GameConstants;
+import net.packet.CField;
+import net.packet.MobPacket;
+import net.packet.CField.UIPacket;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Map;
@@ -30,17 +34,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.LinkedList;
 
-import client.MapleCharacter;
 import client.MapleDisease;
 import client.MonsterStatus;
+import client.character.MapleCharacter;
+
 import java.util.EnumMap;
 import server.Randomizer;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleMist;
-import tools.packet.CField;
-import tools.packet.CField.UIPacket;
-import tools.packet.MobPacket;
 
 public class MobSkill {
 

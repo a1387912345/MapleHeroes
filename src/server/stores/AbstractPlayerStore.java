@@ -32,11 +32,12 @@ import java.lang.ref.WeakReference;
 
 import client.inventory.Item;
 import client.inventory.ItemLoader;
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import client.inventory.MapleInventoryType;
 import database.DatabaseConnection;
-import net.channel.ChannelServer;
+import net.packet.PlayerShopPacket;
+import net.server.channel.ChannelServer;
 import net.world.World;
 
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ import server.maps.MapleMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
 import tools.Pair;
-import tools.packet.PlayerShopPacket;
 
 public abstract class AbstractPlayerStore extends MapleMapObject implements IMaplePlayerShop {
 
@@ -60,7 +60,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     public AbstractPlayerStore(MapleCharacter owner, int itemId, String desc, String pass, int slots) {
         this.setPosition(owner.getTruePosition());
         this.ownerName = owner.getName();
-        this.ownerId = owner.getId();
+        this.ownerId = owner.getID();
         this.owneraccount = owner.getAccountID();
         this.itemId = itemId;
         this.des = desc;
@@ -91,22 +91,22 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     public void broadcastToVisitors(byte[] packet, boolean owner) {
         for (WeakReference<MapleCharacter> chr : chrs) {
             if (chr != null && chr.get() != null) {
-                chr.get().getClient().getSession().write(packet);
+                chr.get().getClient().sendPacket(packet);
             }
         }
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT && owner && getMCOwner() != null) {
-            getMCOwner().getClient().getSession().write(packet);
+            getMCOwner().getClient().sendPacket(packet);
         }
     }
 
     public void broadcastToVisitors(byte[] packet, int exception) {
         for (WeakReference<MapleCharacter> chr : chrs) {
             if (chr != null && chr.get() != null && getVisitorSlot(chr.get()) != exception) {
-                chr.get().getClient().getSession().write(packet);
+                chr.get().getClient().sendPacket(packet);
             }
         }
         if (getShopType() != IMaplePlayerShop.HIRED_MERCHANT && getMCOwner() != null && exception != ownerId) {
-            getMCOwner().getClient().getSession().write(packet);
+            getMCOwner().getClient().sendPacket(packet);
         }
     }
 
@@ -228,11 +228,11 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
     @Override
     public byte getVisitorSlot(MapleCharacter visitor) {
         for (byte i = 0; i < chrs.length; i++) {
-            if (chrs[i] != null && chrs[i].get() != null && chrs[i].get().getId() == visitor.getId()) {
+            if (chrs[i] != null && chrs[i].get() != null && chrs[i].get().getID() == visitor.getID()) {
                 return (byte) (i + 1);
             }
         }
-        if (visitor.getId() == ownerId) { //can visit own store in merch, otherwise not.
+        if (visitor.getID() == ownerId) { //can visit own store in merch, otherwise not.
             return 0;
         }
         return -1;
@@ -244,7 +244,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
             MapleCharacter visitor = getVisitor(i);
             if (visitor != null) {
                 if (type != -1) {
-                    visitor.getClient().getSession().write(PlayerShopPacket.shopErrorMessage(error, type));
+                    visitor.getClient().sendPacket(PlayerShopPacket.shopErrorMessage(error, type));
                 }
                 broadcastToVisitors(PlayerShopPacket.shopVisitorLeave(getVisitorSlot(visitor)), getVisitorSlot(visitor));
                 visitor.setPlayerShop(null);
@@ -326,7 +326,7 @@ public abstract class AbstractPlayerStore extends MapleMapObject implements IMap
 
     @Override
     public boolean isOwner(MapleCharacter chr) {
-        return chr.getId() == ownerId && chr.getName().equals(ownerName);
+        return chr.getID() == ownerId && chr.getName().equals(ownerName);
     }
 
     @Override

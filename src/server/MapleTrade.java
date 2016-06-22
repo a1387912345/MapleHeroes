@@ -1,21 +1,21 @@
 package server;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.ItemFlag;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
+import net.packet.CField;
+import net.packet.CWvsContext;
+import net.packet.PlayerShopPacket;
 import net.world.World;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 import server.commands.CommandProcessor;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.PlayerShopPacket;
 
 public class MapleTrade {
 
@@ -54,7 +54,7 @@ public class MapleTrade {
         }
         this.exchangeMeso = 0;
 
-        ((MapleCharacter) this.chr.get()).getClient().getSession().write(CField.InteractionPacket.TradeMessage(this.tradingslot, (byte) 7));
+        ((MapleCharacter) this.chr.get()).getClient().sendPacket(CField.InteractionPacket.TradeMessage(this.tradingslot, (byte) 7));
     }
 
     public final void cancel(MapleClient c, MapleCharacter chr) {
@@ -74,7 +74,7 @@ public class MapleTrade {
         }
         this.meso = 0;
 
-        c.getSession().write(CField.InteractionPacket.getTradeCancel(this.tradingslot, unsuccessful));
+        c.sendPacket(CField.InteractionPacket.getTradeCancel(this.tradingslot, unsuccessful));
     }
 
     public final boolean isLocked() {
@@ -88,9 +88,9 @@ public class MapleTrade {
         if (((MapleCharacter) this.chr.get()).getMeso() >= meso) {
             ((MapleCharacter) this.chr.get()).gainMeso(-meso, false, false);
             this.meso += meso;
-            ((MapleCharacter) this.chr.get()).getClient().getSession().write(CField.InteractionPacket.getTradeMesoSet((byte) 0, this.meso));
+            ((MapleCharacter) this.chr.get()).getClient().sendPacket(CField.InteractionPacket.getTradeMesoSet((byte) 0, this.meso));
             if (this.partner != null) {
-                this.partner.getChr().getClient().getSession().write(CField.InteractionPacket.getTradeMesoSet((byte) 1, this.meso));
+                this.partner.getChr().getClient().sendPacket(CField.InteractionPacket.getTradeMesoSet((byte) 1, this.meso));
             }
         }
     }
@@ -100,9 +100,9 @@ public class MapleTrade {
             return;
         }
         this.items.add(item);
-        ((MapleCharacter) this.chr.get()).getClient().getSession().write(CField.InteractionPacket.getTradeItemAdd((byte) 0, item));
+        ((MapleCharacter) this.chr.get()).getClient().sendPacket(CField.InteractionPacket.getTradeItemAdd((byte) 0, item));
         if (this.partner != null) {
-            this.partner.getChr().getClient().getSession().write(CField.InteractionPacket.getTradeItemAdd((byte) 1, item));
+            this.partner.getChr().getClient().sendPacket(CField.InteractionPacket.getTradeItemAdd((byte) 1, item));
         }
     }
 
@@ -110,7 +110,7 @@ public class MapleTrade {
         if (!CommandProcessor.processCommand(chr.get().getClient(), message, ServerConstants.CommandType.TRADE)) {
             ((MapleCharacter) this.chr.get()).dropMessage(-2, ((MapleCharacter) this.chr.get()).getName() + " : " + message);
             if (this.partner != null) {
-                this.partner.getChr().getClient().getSession().write(PlayerShopPacket.shopChat(((MapleCharacter) this.chr.get()).getName() + " : " + message, 1));
+                this.partner.getChr().getClient().sendPacket(PlayerShopPacket.shopChat(((MapleCharacter) this.chr.get()).getName() + " : " + message, 1));
             }
         }
         if (((MapleCharacter) this.chr.get()).getClient().isMonitored()) {
@@ -123,7 +123,7 @@ public class MapleTrade {
     public final void chatAuto(String message) {
         ((MapleCharacter) this.chr.get()).dropMessage(-2, message);
         if (this.partner != null) {
-            this.partner.getChr().getClient().getSession().write(PlayerShopPacket.shopChat(message, 1));
+            this.partner.getChr().getClient().sendPacket(PlayerShopPacket.shopChat(message, 1));
         }
         if (((MapleCharacter) this.chr.get()).getClient().isMonitored()) {
             World.Broadcast.broadcastGMMessage(CWvsContext.broadcastMsg(6, ((MapleCharacter) this.chr.get()).getName() + " said in trade [Automated] with " + this.partner.getChr().getName() + ": " + message));
@@ -172,12 +172,12 @@ public class MapleTrade {
         }
         short flag = item.getFlag();
         if ((ItemFlag.UNTRADABLE.check(flag)) || (ItemFlag.LOCK.check(flag))) {
-            c.getSession().write(CWvsContext.enableActions());
+            c.sendPacket(CWvsContext.enableActions());
             return false;
         }
         if (((ii.isDropRestricted(item.getItemId())) || (ii.isAccountShared(item.getItemId())))
                 && (!ItemFlag.KARMA_EQ.check(flag)) && (!ItemFlag.KARMA_USE.check(flag))) {
-            c.getSession().write(CWvsContext.enableActions());
+            c.sendPacket(CWvsContext.enableActions());
             return false;
         }
 
@@ -254,7 +254,7 @@ public class MapleTrade {
             return;
         }
         local.locked = true;
-        partner.getChr().getClient().getSession().write(CField.InteractionPacket.getTradeConfirmation());
+        partner.getChr().getClient().sendPacket(CField.InteractionPacket.getTradeConfirmation());
 
         partner.exchangeItems = new LinkedList(local.items);
         partner.exchangeMeso = local.meso;
@@ -288,9 +288,9 @@ public class MapleTrade {
     public static final void startTrade(MapleCharacter c) {
         if (c.getTrade() == null) {
             c.setTrade(new MapleTrade((byte) 0, c));
-            c.getClient().getSession().write(CField.InteractionPacket.getTradeStart(c.getClient(), c.getTrade(), (byte) 0));
+            c.getClient().sendPacket(CField.InteractionPacket.getTradeStart(c.getClient(), c.getTrade(), (byte) 0));
         } else {
-            c.getClient().getSession().write(CWvsContext.broadcastMsg(5, "You are already in a trade"));
+            c.getClient().sendPacket(CWvsContext.broadcastMsg(5, "You are already in a trade"));
         }
     }
 
@@ -302,9 +302,9 @@ public class MapleTrade {
             c2.setTrade(new MapleTrade((byte) 1, c2));
             c2.getTrade().setPartner(c1.getTrade());
             c1.getTrade().setPartner(c2.getTrade());
-            c2.getClient().getSession().write(CField.InteractionPacket.getTradeInvite(c1));
+            c2.getClient().sendPacket(CField.InteractionPacket.getTradeInvite(c1));
         } else {
-            c1.getClient().getSession().write(CWvsContext.broadcastMsg(5, "The other player is already trading with someone else."));
+            c1.getClient().sendPacket(CWvsContext.broadcastMsg(5, "The other player is already trading with someone else."));
             cancelTrade(c1.getTrade(), c1.getClient(), c1);
         }
     }
@@ -312,12 +312,12 @@ public class MapleTrade {
     public static final void visitTrade(MapleCharacter c1, MapleCharacter c2) {
         if ((c2 != null) && (c1.getTrade() != null) && (c1.getTrade().getPartner() == c2.getTrade()) && (c2.getTrade() != null) && (c2.getTrade().getPartner() == c1.getTrade())) {
             c1.getTrade().inTrade = true;
-            c2.getClient().getSession().write(PlayerShopPacket.shopVisitorAdd(c1, 1));
-            c1.getClient().getSession().write(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
+            c2.getClient().sendPacket(PlayerShopPacket.shopVisitorAdd(c1, 1));
+            c1.getClient().sendPacket(CField.InteractionPacket.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
             c1.dropMessage(-2, "System : Use @tradehelp to see the list of trading commands");
             c2.dropMessage(-2, "System : Use @tradehelp to see the list of trading commands");
         } else {
-            c1.getClient().getSession().write(CWvsContext.broadcastMsg(5, "The other player has already closed the trade"));
+            c1.getClient().sendPacket(CWvsContext.broadcastMsg(5, "The other player has already closed the trade"));
         }
     }
 

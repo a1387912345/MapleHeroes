@@ -22,7 +22,7 @@ package net.world;
 
 import java.io.Serializable;
 
-import client.MapleCharacter;
+import client.character.MapleCharacter;
 
 public class MapleMessengerCharacter implements Serializable {
 
@@ -35,7 +35,7 @@ public class MapleMessengerCharacter implements Serializable {
     public MapleMessengerCharacter(MapleCharacter maplechar) {
         this.name = maplechar.getName();
         this.channel = maplechar.getClient().getChannel();
-        this.id = maplechar.getId();
+        this.id = maplechar.getID();
         this.online = true;
     }
 

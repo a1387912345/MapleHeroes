@@ -1,11 +1,16 @@
 package client;
 
 import constants.GameConstants;
+import constants.ServerConfig;
 import constants.ServerConstants;
 import database.DatabaseConnection;
 import database.DatabaseException;
-import net.cashshop.CashShopServer;
-import net.channel.ChannelServer;
+import io.netty.channel.Channel;
+import io.netty.util.*;
+import net.MapleCrypto;
+import net.packet.LoginPacket;
+import net.server.cashshop.CashShopServer;
+import net.server.channel.ChannelServer;
 import net.server.login.LoginServer;
 import net.world.MapleMessengerCharacter;
 import net.world.MapleParty;
@@ -37,20 +42,18 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.script.ScriptEngine;
-import org.apache.mina.common.IoSession;
+
+import client.character.MapleCharacter;
+import client.character.MapleCharacterUtil;
 import server.CharacterCardFactory;
-import server.Timer.PingTimer;
+import server.Randomizer;
 import server.farm.MapleFarm;
 import server.maps.MapleMap;
 import server.quest.MapleQuest;
 import server.shark.SharkLogger;
 import server.stores.IMaplePlayerShop;
 import tools.FileoutputUtil;
-import tools.MapleAESOFB;
 import tools.Pair;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
-import tools.packet.LoginPacket;
 
 public class MapleClient implements Serializable {
 
@@ -59,13 +62,13 @@ public class MapleClient implements Serializable {
             LOGIN_SERVER_TRANSITION = 1,
             LOGIN_LOGGEDIN = 2,
             CHANGE_CHANNEL = 3;
-    public static final int DEFAULT_CHARSLOT = 8;
-    public static final String CLIENT_KEY = "CLIENT";
-    private final transient MapleAESOFB send, receive;
-    private final transient IoSession session;
-    private MapleCharacter player;
-    private int channel = 1, accId = -1, world, birthday;
-    private int charslots = DEFAULT_CHARSLOT;
+    
+    public static final AttributeKey<MapleClient> CLIENT_KEY = AttributeKey.valueOf("C");
+    private final transient MapleCrypto send, receive;
+    private final transient Channel socketChannel;
+    private MapleCharacter character;
+    private int channel = 1, accountID = -1, world, birthday;
+    private int charslots = ServerConfig.DEFAULT_CHARSLOT;
     private boolean loggedIn = false, serverTransition = false;
     private transient Calendar tempban = null;
     private String accountName;
@@ -79,7 +82,7 @@ public class MapleClient implements Serializable {
     private final transient Set<String> macs = new HashSet<>();
     private final transient Map<String, ScriptEngine> engines = new HashMap<>();
     private transient ScheduledFuture<?> idleTask = null;
-    private transient String secondPassword, salt2, tempIP = ""; // To be used only on login
+    private transient String pic, picSalt, tempIP = ""; // To be used only on login
     private final transient Lock mutex = new ReentrantLock(true);
     private final transient Lock npc_mutex = new ReentrantLock();
     private long lastNpcClick = 0;
@@ -89,24 +92,32 @@ public class MapleClient implements Serializable {
     private MapleFarm farm;
     private String redirectorUsername;
     public SharkLogger sl = new SharkLogger(); // no boilerplate because i'm lazy
-
-    public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
-        this.send = send;
-        this.receive = receive;
-        this.session = session;
+    
+    public MapleClient(Channel socketChannel) {
+        this.send = new MapleCrypto(Randomizer.nextBytes(4), (short) (0xFFFF - ServerConstants.CLIENT_VERSION));
+        this.receive = new MapleCrypto(Randomizer.nextBytes(4), ServerConstants.CLIENT_VERSION);
+        this.socketChannel = socketChannel;
     }
 
-    public final MapleAESOFB getReceiveCrypto() {
+    public final MapleCrypto getReceiveCrypto() {
         return receive;
     }
 
-    public final MapleAESOFB getSendCrypto() {
+    public final MapleCrypto getSendCrypto() {
         return send;
     }
 
-    public final IoSession getSession() {
-        return session;
+    public final Channel getSocketChannel() {
+        return socketChannel;
     }
+    
+    public void close() {
+		socketChannel.close();
+	}
+    
+    public void sendPacket(byte[] message) {
+		socketChannel.writeAndFlush(message);
+	}
 
     public final Lock getLock() {
         return mutex;
@@ -116,32 +127,32 @@ public class MapleClient implements Serializable {
         return npc_mutex;
     }
 
-    public MapleCharacter getPlayer() {
-        return player;
+    public MapleCharacter getCharacter() {
+        return character;
     }
 
-    public void setPlayer(MapleCharacter player) {
-        this.player = player;
+    public void setCharacter(MapleCharacter character) {
+        this.character = character;
     }
 
     public void createdChar(final int id) {
         allowedChar.add(id);
     }
 
-    public final boolean login_Auth(final int id) {
+    public final boolean loginAuth(final int id) {
         return allowedChar.contains(id);
     }
 
-    public final List<MapleCharacter> loadCharacters(final int serverId) { // TODO make this less costly zZz
+    public final List<MapleCharacter> loadCharacters(final int serverId) { // TODO make this less costly
         final List<MapleCharacter> chars = new LinkedList<>();
 
-        final Map<Integer, CardData> cardss = CharacterCardFactory.getInstance().loadCharacterCards(accId, serverId);
-        for (final CharNameAndId cni : loadCharactersInternal(serverId)) {
-            final MapleCharacter chr = MapleCharacter.loadCharFromDB(cni.id, this, false, cardss);
+        final Map<Integer, CardData> cardss = CharacterCardFactory.getInstance().loadCharacterCards(accountID, serverId);
+        for (final Pair<String, Integer> cni : loadCharactersInternal(serverId)) {
+            final MapleCharacter chr = MapleCharacter.loadCharFromDB(cni.getRight(), this, false, cardss);
             chars.add(chr);
-            charInfo.put(chr.getId(), new Pair<>(chr.getLevel(), chr.getJob())); // to be used to update charCards
-            if (!login_Auth(chr.getId())) {
-                allowedChar.add(chr.getId());
+            charInfo.put(chr.getID(), new Pair<>(chr.getLevel(), chr.getJob())); // to be used to update charCards
+            if (!loginAuth(chr.getID())) {
+                allowedChar.add(chr.getID());
             }
         }
         return chars;
@@ -155,7 +166,7 @@ public class MapleClient implements Serializable {
         try {
             Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM `character_cards` WHERE `accid` = ?")) {
-                ps.setInt(1, accId);
+                ps.setInt(1, accountID);
                 ps.executeUpdate();
             }
             try (PreparedStatement psu = con.prepareStatement("INSERT INTO `character_cards` (accid, worldid, characterid, position) VALUES (?, ?, ?, ?)")) {
@@ -165,7 +176,7 @@ public class MapleClient implements Serializable {
                         System.out.println("continue");
                         continue;
                     }
-                    psu.setInt(1, accId);
+                    psu.setInt(1, accountID);
                     psu.setInt(2, world);
                     psu.setInt(3, ii.getValue());
                     psu.setInt(4, ii.getKey()); // position shouldn't matter much, will reset upon login
@@ -184,53 +195,51 @@ public class MapleClient implements Serializable {
 
     public List<String> loadCharacterNames(int serverId) {
         List<String> chars = new LinkedList<>();
-        for (CharNameAndId cni : loadCharactersInternal(serverId)) {
-            chars.add(cni.name);
+        for (Pair<String, Integer> cni : loadCharactersInternal(serverId)) {
+            chars.add(cni.getLeft());
         }
         return chars;
     }
 
-    private List<CharNameAndId> loadCharactersInternal(int serverId) {
-        List<CharNameAndId> chars = new LinkedList<>();
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT id, name, gm FROM characters WHERE accountid = ? AND world = ?")) {
-                ps.setInt(1, accId);
-                ps.setInt(2, serverId);
+    private List<Pair<String, Integer>> loadCharactersInternal(int worldID) {
+        List<Pair<String, Integer>> chars = new LinkedList<>();
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT id, name FROM characters WHERE accountid = ? AND world = ?")) {
+                ps.setInt(1, accountID);
+                ps.setInt(2, worldID);
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        chars.add(new CharNameAndId(rs.getString("name"), rs.getInt("id")));
-                        LoginServer.getLoginAuth(rs.getInt("id"));
+                        chars.add(new Pair<String, Integer>(rs.getString("name"), rs.getInt("id")));
+                        LoginServer.getInstance().getLoginAuth(rs.getInt("id"));
                     }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("error loading characters internal");
+            System.err.println("[Error] An error occured when attempting to load characters internal.");
+            e.printStackTrace();
         }
         return chars;
     }
 
-    private int loadCharactersSize(int serverId) {
+    private int loadCharactersSize(int worldID) {
         int chars = 0;
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT count(*) FROM characters WHERE accountid = ? AND world = ?")) {
-                ps.setInt(1, accId);
-                ps.setInt(2, serverId);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        chars = rs.getInt(1);
-                    }
+        try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT count(*) FROM characters WHERE accountid = ? AND world = ?")) {
+        	ps.setInt(1, accountID);
+        	ps.setInt(2, worldID);
+        	try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    chars = rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("error loading characters internal");
+            System.err.println("[Error] Error loading the number of characters from the database.");
+            e.printStackTrace();
         }
         return chars;
     }
 
     public boolean isLoggedIn() {
-        return loggedIn && accId >= 0;
+        return loggedIn && accountID >= 0;
     }
 
     private Calendar getTempBanCalendar(ResultSet rs) throws SQLException {
@@ -410,7 +419,7 @@ public class MapleClient implements Serializable {
         if (macs.isEmpty()) {
             Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("SELECT macs FROM accounts WHERE id = ?")) {
-                ps.setInt(1, accId);
+                ps.setInt(1, accountID);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         if (rs.getString("macs") != null) {
@@ -504,12 +513,17 @@ public class MapleClient implements Serializable {
         }
         return 0;
     }
+    
+    public boolean loginFailCount() {
+        loginAttempt++;
+        return loginAttempt > 3;
+    }
 
     public void clearInformation() {
         accountName = null;
-        accId = -1;
-        secondPassword = null;
-        salt2 = null;
+        accountID = -1;
+        pic = null;
+        picSalt = null;
         gm = false;
         loggedIn = false;
         greason = (byte) 1;
@@ -534,17 +548,17 @@ public class MapleClient implements Serializable {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         accountName = login;
-                        accId = rs.getInt("id");
-                        secondPassword = rs.getString("2ndpassword");
-                        salt2 = rs.getString("salt2");
+                        accountID = rs.getInt("id");
+                        pic = rs.getString("2ndpassword");
+                        picSalt = rs.getString("salt2");
                         gm = rs.getInt("gm") > 0;
                         greason = rs.getByte("greason");
                         tempban = getTempBanCalendar(rs);
                         gender = rs.getByte("gender");
                     }
 
-                    if (secondPassword != null && salt2 != null) {
-                        secondPassword = LoginCrypto.rand_r(secondPassword);
+                    if (pic != null && picSalt != null) {
+                        pic = LoginCrypto.rand_r(pic);
                     }
                 }
             }
@@ -554,123 +568,113 @@ public class MapleClient implements Serializable {
         }
     }
 
-    public int login(String login, String pwd, boolean ipMacBanned) {
+    public int login(String username, String password, boolean ipMacBanned) {
         int loginok = 5;
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM accounts WHERE name = ?");
-            ps.setString(1, login);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                final int banned = rs.getInt("banned");
-                final String passhash = rs.getString("password");
-                final String salt = rs.getString("salt");
-                final String oldSession = rs.getString("SessionIP");
-
-                accountName = login;
-                accId = rs.getInt("id");
-                secondPassword = rs.getString("2ndpassword");
-                salt2 = rs.getString("salt2");
-                gm = rs.getInt("gm") > 0;
-                greason = rs.getByte("greason");
-                tempban = getTempBanCalendar(rs);
-                gender = rs.getByte("gender");
-
-                final boolean admin = rs.getInt("gm") > 1;
-
-                if (secondPassword != null && salt2 != null) {
-                    secondPassword = LoginCrypto.rand_r(secondPassword);
+        
+        try (Connection con = DatabaseConnection.getConnection()) {
+    		int banned = 0;
+            String passhash = null, salt = null, oldSession = null;
+            
+	        try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM accounts WHERE name = ?")) {
+	        	ps.setString(1, username);
+	        	try (ResultSet rs = ps.executeQuery()) {
+	        		if (rs.next()) {
+	                    banned = rs.getInt("banned");
+	                    passhash = rs.getString("password");
+	                    salt = rs.getString("salt");
+	                    oldSession = rs.getString("SessionIP");
+	
+	                    accountName = username;
+	                    accountID = rs.getInt("id");
+	                    pic = rs.getString("2ndpassword");
+	                    picSalt = rs.getString("salt2");
+	                    gm = rs.getInt("gm") > 0;
+	                    greason = rs.getByte("greason");
+	                    tempban = getTempBanCalendar(rs);
+	                    gender = rs.getByte("gender");
+	        		}
+	        	}
+	        }
+	        
+	        if (pic != null && picSalt != null) {
+                pic = LoginCrypto.rand_r(pic);
+            }
+	        
+	        if (banned > 0 && gm) {
+                loginok = 3;
+            } else {
+                if (banned == -1) {
+                    unban();
                 }
-                ps.close();
-
-                if (banned > 0 && gm) {
-                    loginok = 3;
+                byte loginstate = getLoginState();
+                if (loginstate > MapleClient.LOGIN_NOTLOGGEDIN) { // already loggedin
+                    loggedIn = false;
+                    loginok = 7;
                 } else {
-                    if (banned == -1) {
-                        unban();
-                    }
-                    byte loginstate = getLoginState();
-                    if (loginstate > MapleClient.LOGIN_NOTLOGGEDIN) { // already loggedin
-                        loggedIn = false;
-                        loginok = 7;
-                        if (pwd.equalsIgnoreCase("fixme") || pwd.equalsIgnoreCase("unstuckme")) {
-                            try {
-                                ps = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE name = ?");
-                                ps.setString(1, login);
-                                ps.executeUpdate();
-                                ps.close();
-                                disconnect(true, false);//test disconnect.
-                                getSession().write(CWvsContext.broadcastMsg(1, "Account has been successfully unstuck!"));
-                            } catch (SQLException se) {
-                            }
-                        }
-                    } else {
-                        boolean updatePasswordHash = false;
-                        // Check if the passwords are correct here. :B
-                        if (passhash == null || passhash.isEmpty()) {
-                            //match by sessionIP
-                            if (oldSession != null && !oldSession.isEmpty()) {
-                                loggedIn = getSessionIPAddress().equals(oldSession);
-                                loginok = loggedIn ? 0 : 4;
-                                updatePasswordHash = loggedIn;
-                            } else {
-                                loginok = 4;
-                                loggedIn = false;
-                            }
-                        } else if (LoginCryptoLegacy.isLegacyPassword(passhash) && LoginCryptoLegacy.checkPassword(pwd, passhash)) {
-                            // Check if a password upgrade is needed.
-                            loginok = 0;
-                            updatePasswordHash = true;
-                        } else if (salt == null && LoginCrypto.checkSha1Hash(passhash, pwd)) {
-                            loginok = 0;
-                            updatePasswordHash = true;
-                        } else if (salt != null && LoginCrypto.checkSaltedSha1Hash(passhash, pwd, salt)) {
-                            loginok = 0; //new standard
-                        } else if (salt != null && LoginCrypto.checkSaltedSha512Hash(passhash, pwd, salt)) {
-                            updatePasswordHash = true; //migrates away from Sha512, higher bit count but incompatible
-                            loginok = 0;
-                    /*    Take out to reflect salted SHA1 Redirector
-                        Java's SHA512 implementation is incompatible
-                        Enable only if you know what you're doing
-                    */        
+                    boolean updatePasswordHash = false;
+                    // Check if the passwords are correct here. :B
+                    if (passhash == null || passhash.isEmpty()) {
+                        //match by sessionIP
+                        if (oldSession != null && !oldSession.isEmpty()) {
+                            loggedIn = getSessionIPAddress().equals(oldSession);
+                            loginok = loggedIn ? 0 : 4;
+                            updatePasswordHash = loggedIn;
                         } else {
-                            loggedIn = false;
                             loginok = 4;
+                            loggedIn = false;
                         }
-                        if (updatePasswordHash) {
-                            try (PreparedStatement pss = con.prepareStatement("UPDATE `accounts` SET `password` = ?, `salt` = ? WHERE id = ?")) {
-                                final String newSalt = LoginCrypto.makeSalt();
-                                pss.setString(1, LoginCrypto.makeSaltedSha1Hash(pwd, newSalt));
-                                pss.setString(2, newSalt);
-                                pss.setInt(3, accId);
-                                pss.executeUpdate();
-                            }
+                    } else if (LoginCryptoLegacy.isLegacyPassword(passhash) && LoginCryptoLegacy.checkPassword(password, passhash)) {
+                        // Check if a password upgrade is needed.
+                        loginok = 0;
+                        updatePasswordHash = true;
+                    } else if (salt == null && LoginCrypto.checkSha1Hash(passhash, password)) {
+                        loginok = 0;
+                        updatePasswordHash = true;
+                    } else if (salt != null && LoginCrypto.checkSaltedSha1Hash(passhash, password, salt)) {
+                        loginok = 0; //new standard
+                    } else if (salt != null && LoginCrypto.checkSaltedSha512Hash(passhash, password, salt)) {
+                        updatePasswordHash = true; //migrates away from Sha512, higher bit count but incompatible
+                        loginok = 0;
+                /*    Take out to reflect salted SHA1 Redirector
+                    Java's SHA512 implementation is incompatible
+                    Enable only if you know what you're doing
+                */        
+                    } else {
+                        loggedIn = false;
+                        loginok = 4;
+                    }
+                    if (updatePasswordHash) {
+                        try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `password` = ?, `salt` = ? WHERE id = ?")) {
+                            final String newSalt = LoginCrypto.makeSalt();
+                            ps.setString(1, LoginCrypto.makeSaltedSha1Hash(password, newSalt));
+                            ps.setString(2, newSalt);
+                            ps.setInt(3, accountID);
+                            ps.executeUpdate();
                         }
                     }
                 }
             }
-            rs.close();
-            ps.close();
-        } catch (SQLException e) {
-            System.err.println("ERROR" + e);
+        } catch (SQLException ex) {
+        	System.err.println("[Error] Failed to login.");
+        	ex.printStackTrace();
         }
+        
         return loginok;
     }
 
-    public boolean CheckSecondPassword(String in) {
+    public boolean checkPIC(String in) {
         boolean allow = false;
         boolean updatePasswordHash = false;
 
         // Check if the passwords are correct here. :B
-        if (LoginCryptoLegacy.isLegacyPassword(secondPassword) && LoginCryptoLegacy.checkPassword(in, secondPassword)) {
+        if (LoginCryptoLegacy.isLegacyPassword(pic) && LoginCryptoLegacy.checkPassword(in, pic)) {
             // Check if a password upgrade is needed.
             allow = true;
             updatePasswordHash = true;
-        } else if (salt2 == null && LoginCrypto.checkSha1Hash(secondPassword, in)) {
+        } else if (picSalt == null && LoginCrypto.checkSha1Hash(pic, in)) {
             allow = true;
             updatePasswordHash = true;
-        } else if (LoginCrypto.checkSaltedSha512Hash(secondPassword, in, salt2)) {
+        } else if (LoginCrypto.checkSaltedSha512Hash(pic, in, picSalt)) {
             allow = true;
         }
         if (updatePasswordHash) {
@@ -680,7 +684,7 @@ public class MapleClient implements Serializable {
                     final String newSalt = LoginCrypto.makeSalt();
                     ps.setString(1, LoginCrypto.rand_s(LoginCrypto.makeSaltedSha512Hash(in, newSalt)));
                     ps.setString(2, newSalt);
-                    ps.setInt(3, accId);
+                    ps.setInt(3, accountID);
                     ps.executeUpdate();
                 }
             } catch (SQLException e) {
@@ -694,7 +698,7 @@ public class MapleClient implements Serializable {
         try {
             Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banned = 0, banreason = '' WHERE id = ?")) {
-                ps.setInt(1, accId);
+                ps.setInt(1, accountID);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -743,57 +747,54 @@ public class MapleClient implements Serializable {
             Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET macs = ? WHERE id = ?")) {
                 ps.setString(1, newMacData.toString());
-                ps.setInt(2, accId);
+                ps.setInt(2, accountID);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
             System.err.println("Error saving MACs" + e);
         }
     }
-
-    public void setAccID(int id) {
-        this.accId = id;
+    
+    public int getAccountID() {
+        return accountID;
     }
 
-    public int getAccID() {
-        return this.accId;
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
     }
 
-    public final void updateLoginState(final int newstate, final String SessionID) { // TODO hide?
-        try {
-            final Connection con = DatabaseConnection.getConnection();
+    public final void updateLoginState(final int newState, final String SessionID) { // TODO hide?
+    	try (final Connection con = DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = ?, SessionIP = ?, lastlogin = CURRENT_TIMESTAMP() WHERE id = ?")) {
-                ps.setInt(1, newstate);
+                ps.setInt(1, newState);
                 ps.setString(2, SessionID);
-                ps.setInt(3, getAccID());
+                ps.setInt(3, getAccountID());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            System.err.println("[Error] Updating login state " + e);
+            System.err.println("[Error] An error occured while trying to update the login state.");
+            e.printStackTrace();
         }
-        if (newstate == MapleClient.LOGIN_NOTLOGGEDIN) {
+        if (newState == MapleClient.LOGIN_NOTLOGGEDIN) {
             loggedIn = false;
             serverTransition = false;
         } else {
-            serverTransition = (newstate == MapleClient.LOGIN_SERVER_TRANSITION || newstate == MapleClient.CHANGE_CHANNEL);
+            serverTransition = (newState == MapleClient.LOGIN_SERVER_TRANSITION || newState == MapleClient.CHANGE_CHANNEL);
             loggedIn = !serverTransition;
         }
     }
 
-    public final void updateSecondPassword() {
-        try {
-            final Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `2ndpassword` = ?, `salt2` = ? WHERE id = ?")) {
-                final String newSalt = LoginCrypto.makeSalt();
-                ps.setString(1, LoginCrypto.rand_s(LoginCrypto.makeSaltedSha512Hash(secondPassword, newSalt)));
-                ps.setString(2, newSalt);
-                ps.setInt(3, accId);
-                ps.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            System.err.println("error updating login state " + e);
-        }
+    public final void updatePIC() {
+    	try (final PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE `accounts` SET `2ndpassword` = ?, `salt2` = ? WHERE id = ?")) {
+			final String newSalt = LoginCrypto.makeSalt();
+            ps.setString(1, LoginCrypto.rand_s(LoginCrypto.makeSaltedSha512Hash(pic, newSalt)));
+            ps.setString(2, newSalt);
+            ps.setInt(3, accountID);
+            ps.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("[Error] Error updating personal identification code.");
+            e.printStackTrace();
+		}
     }
 
     public final byte getLoginState() { // TODO hide?
@@ -801,13 +802,13 @@ public class MapleClient implements Serializable {
         try {
             PreparedStatement ps;
             ps = con.prepareStatement("SELECT loggedin, lastlogin, banned, `birthday` + 0 AS `bday` FROM accounts WHERE id = ?");
-            ps.setInt(1, getAccID());
+            ps.setInt(1, getAccountID());
             byte state;
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next() || rs.getInt("banned") > 0) {
                     ps.close();
                     rs.close();
-                    session.close();
+                    socketChannel.close();
                     throw new DatabaseException("Account doesn't exist or is banned");
                 }
                 birthday = rs.getInt("bday");
@@ -834,12 +835,12 @@ public class MapleClient implements Serializable {
 
     public final void removalTask(boolean shutdown) {
         try {
-            player.cancelAllBuffs_();
-            player.cancelAllDebuffs();
-            player.cancelBlessedEnsemble();
-            if (player.getMarriageId() > 0) {
-                final MapleQuestStatus stat1 = player.getQuestNoAdd(MapleQuest.getInstance(160001));
-                final MapleQuestStatus stat2 = player.getQuestNoAdd(MapleQuest.getInstance(160002));
+            character.cancelAllBuffs_();
+            character.cancelAllDebuffs();
+            character.cancelBlessedEnsemble();
+            if (character.getMarriageId() > 0) {
+                final MapleQuestStatus stat1 = character.getQuestNoAdd(MapleQuest.getInstance(160001));
+                final MapleQuestStatus stat2 = character.getQuestNoAdd(MapleQuest.getInstance(160002));
                 if (stat1 != null && stat1.getCustomData() != null && (stat1.getCustomData().equals("2_") || stat1.getCustomData().equals("2"))) {
                     //dc in process of marriage
                     if (stat2 != null && stat2.getCustomData() != null) {
@@ -848,9 +849,9 @@ public class MapleClient implements Serializable {
                     stat1.setCustomData("3");
                 }
             }
-            if (player.getMapId() == GameConstants.JAIL) {
-                final MapleQuestStatus stat1 = player.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME));
-                final MapleQuestStatus stat2 = player.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST));
+            if (character.getMapId() == GameConstants.JAIL) {
+                final MapleQuestStatus stat1 = character.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_TIME));
+                final MapleQuestStatus stat2 = character.getQuestNAdd(MapleQuest.getInstance(GameConstants.JAIL_QUEST));
                 if (stat1.getCustomData() == null) {
                     stat1.setCustomData(String.valueOf(System.currentTimeMillis()));
                 } else if (stat2.getCustomData() == null) {
@@ -863,29 +864,29 @@ public class MapleClient implements Serializable {
                     stat2.setCustomData(String.valueOf(seconds));
                 }
             }
-            player.changeRemoval(true);
-            if (player.getEventInstance() != null) {
-                player.getEventInstance().playerDisconnected(player, player.getId());
+            character.changeRemoval(true);
+            if (character.getEventInstance() != null) {
+                character.getEventInstance().playerDisconnected(character, character.getID());
             }
             synchronized (this) {
-            final IMaplePlayerShop shop = player.getPlayerShop();
+            final IMaplePlayerShop shop = character.getPlayerShop();
                   if (shop != null) {
-                    shop.removeVisitor(player);
-                    if (shop.isOwner(player)) {
+                    shop.removeVisitor(character);
+                    if (shop.isOwner(character)) {
                       if (shop.getShopType() == 1 && shop.isAvailable() && !shutdown) {
                         shop.setOpen(true);
                       } else {
                         shop.closeShop(true, !shutdown);
-                        player.setPlayerShop(null);
+                        character.setPlayerShop(null);
                       }
                     }
                   }
             }
-            player.setMessenger(null);
-            if (player.getMap() != null) {
+            character.setMessenger(null);
+            if (character.getMap() != null) {
                 if (shutdown || (getChannelServer() != null && getChannelServer().isShutdown())) {
                     int questID = -1;
-                    switch (player.getMapId()) {
+                    switch (character.getMapId()) {
                         case 240060200: //HT
                             questID = 160100;
                             break;
@@ -926,18 +927,18 @@ public class MapleClient implements Serializable {
                             break;
                     }
                     if (questID > 0) {
-                        player.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData("0"); //reset the time.
+                        character.getQuestNAdd(MapleQuest.getInstance(questID)).setCustomData("0"); //reset the time.
                     }
-                } else if (player.isAlive()) {
-                    switch (player.getMapId()) {
+                } else if (character.isAlive()) {
+                    switch (character.getMapId()) {
                         case 541010100: //latanica
                         case 541020800: //krexel
                         case 220080001: //pap
-                            player.getMap().addDisconnected(player.getId());
+                            character.getMap().addDisconnected(character.getID());
                             break;
                     }
                 }
-                player.getMap().removePlayer(player);
+                character.getMap().removePlayer(character);
             }
         } catch (final NumberFormatException e) {
             FileoutputUtil.outputFileError(FileoutputUtil.Acc_Stuck, e);
@@ -950,23 +951,23 @@ public class MapleClient implements Serializable {
 
     public final void disconnect(final boolean RemoveInChannelServer, final boolean fromCS, final boolean shutdown) {
         this.sl.dump();
-        if (player != null) {
-            MapleMap map = player.getMap();
-            final MapleParty party = player.getParty();
-            final boolean clone = player.isClone();
-            final String namez = player.getName();
-            final int idz = player.getId(), messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId(), gid = player.getGuildId(), fid = player.getFamilyId();
-            final BuddyList bl = player.getBuddylist();
-            final MaplePartyCharacter chrp = new MaplePartyCharacter(player);
-            final MapleMessengerCharacter chrm = new MapleMessengerCharacter(player);
-            final MapleGuildCharacter chrg = player.getMGC();
-            final MapleFamilyCharacter chrf = player.getMFC();
+        if (character != null) {
+            MapleMap map = character.getMap();
+            final MapleParty party = character.getParty();
+            final boolean clone = character.isClone();
+            final String namez = character.getName();
+            final int idz = character.getID(), messengerid = character.getMessenger() == null ? 0 : character.getMessenger().getId(), gid = character.getGuildId(), fid = character.getFamilyId();
+            final BuddyList bl = character.getBuddylist();
+            final MaplePartyCharacter chrp = new MaplePartyCharacter(character);
+            final MapleMessengerCharacter chrm = new MapleMessengerCharacter(character);
+            final MapleGuildCharacter chrg = character.getMGC();
+            final MapleFamilyCharacter chrf = character.getMFC();
 
             removalTask(shutdown);
-            LoginServer.getLoginAuth(player.getId());
-            player.saveToDB(true, fromCS);
+            LoginServer.getInstance().getLoginAuth(character.getID());
+            character.saveToDB(true, fromCS);
             if (shutdown) {
-                player = null;
+                character = null;
                 receiving = false;
                 return;
             }
@@ -980,7 +981,7 @@ public class MapleClient implements Serializable {
                 }
                 try {
                     if (chz == -1 || ch == null || clone || ch.isShutdown()) {
-                        player = null;
+                        character = null;
                         return;//no idea
                     }
                     if (messengerid > 0) {
@@ -1022,7 +1023,7 @@ public class MapleClient implements Serializable {
                     if (RemoveInChannelServer && ch != null) {
                         ch.removePlayer(idz, namez);
                     }
-                    player = null;
+                    character = null;
                 }
             } else {
                 final int ch = World.Find.findChannel(idz);
@@ -1046,8 +1047,8 @@ public class MapleClient implements Serializable {
                     if (fid > 0 && chrf != null) {
                         World.Family.setFamilyMemberOnline(chrf, false, -1);
                     }
-                    if (player != null) {
-                        player.setMessenger(null);
+                    if (character != null) {
+                        character.setMessenger(null);
                     }
                 } catch (final Exception e) {
                     FileoutputUtil.outputFileError(FileoutputUtil.Acc_Stuck, e);
@@ -1056,7 +1057,7 @@ public class MapleClient implements Serializable {
                     if (RemoveInChannelServer && ch > 0) {
                         CashShopServer.getPlayerStorage().deregisterPlayer(idz, namez);
                     }
-                    player = null;
+                    character = null;
                 }
             }
         }
@@ -1067,17 +1068,17 @@ public class MapleClient implements Serializable {
     }
 
     public final String getSessionIPAddress() {
-        return session.getRemoteAddress().toString().split(":")[0];
+    	return socketChannel.remoteAddress().toString().split(":")[0].substring(1);
     }
 
-    public final boolean CheckIPAddress() {
-        if (this.accId < 0) {
+    public final boolean checkIPAddress() {
+        if (this.accountID < 0) {
             return false;
         }
         try {
             boolean canlogin = false;
             try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT SessionIP, banned FROM accounts WHERE id = ?");) {
-                ps.setInt(1, this.accId);
+                ps.setInt(1, this.accountID);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         final String sessionIP = rs.getString("SessionIP");
@@ -1098,17 +1099,17 @@ public class MapleClient implements Serializable {
     }
 
     public final void DebugMessage(final StringBuilder sb) {
-        sb.append(getSession().getRemoteAddress());
+        sb.append(getSocketChannel().remoteAddress());
         sb.append("Connected: ");
-        sb.append(getSession().isConnected());
+        sb.append(getSocketChannel().isActive());
         sb.append(" Closing: ");
-        sb.append(getSession().isClosing());
+        sb.append(!getSocketChannel().isActive());
         sb.append(" ClientKeySet: ");
-        sb.append(getSession().getAttribute(MapleClient.CLIENT_KEY) != null);
+        sb.append(getSocketChannel().attr(MapleClient.CLIENT_KEY).get() != null);
         sb.append(" loggedin: ");
         sb.append(isLoggedIn());
         sb.append(" has char: ");
-        sb.append(getPlayer() != null);
+        sb.append(getCharacter() != null);
     }
 
     public final int getChannel() {
@@ -1124,7 +1125,7 @@ public class MapleClient implements Serializable {
             final Connection con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement("SELECT guildid, guildrank, familyid, name FROM characters WHERE id = ? AND accountid = ?")) {
                 ps.setInt(1, cid);
-                ps.setInt(2, accId);
+                ps.setInt(2, accountID);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
                         rs.close();
@@ -1184,12 +1185,12 @@ public class MapleClient implements Serializable {
         this.gender = gender;
     }
 
-    public final String getSecondPassword() {
-        return secondPassword;
+    public final String getPIC() {
+        return pic;
     }
 
-    public final void setSecondPassword(final String secondPassword) {
-        this.secondPassword = secondPassword;
+    public final void setPIC(final String pic) {
+        this.pic = pic;
     }
 
     public final String getAccountName() {
@@ -1230,23 +1231,23 @@ public class MapleClient implements Serializable {
 
     public final void sendPing() {
         lastPing = System.currentTimeMillis();
-        session.write(LoginPacket.getPing());
+        sendPacket(LoginPacket.getPing());
 
-        PingTimer.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (getLatency() < 0) {
-                        disconnect(true, false);
-                        if (getSession().isConnected()) {
-                            getSession().close();
-                        }
-                    }
-                } catch (final NullPointerException e) {
-                    System.out.println(e.toString()); // client already gone
-                }
-            }
-        }, 60000); // note: idletime gets added to this too
+//        PingTimer.getInstance().schedule(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    if (getLatency() < 0) {
+//                        disconnect(true, false);
+//                        if (getSocketChannel().isActive()) {
+//                            getSocketChannel().close();
+//                        }
+//                    }
+//                } catch (final NullPointerException e) {
+//                    System.out.println(e.toString()); // client already gone
+//                }
+//            }
+//        }, 60000); // note: idletime gets added to this too
     }
 
     public static String getLogMessage(final MapleClient cfor, final String message) {
@@ -1264,11 +1265,11 @@ public class MapleClient implements Serializable {
     public static String getLogMessage(final MapleClient cfor, final String message, final Object... parms) {
         final StringBuilder builder = new StringBuilder();
         if (cfor != null) {
-            if (cfor.getPlayer() != null) {
+            if (cfor.getCharacter() != null) {
                 builder.append("<");
-                builder.append(MapleCharacterUtil.makeMapleReadable(cfor.getPlayer().getName()));
+                builder.append(MapleCharacterUtil.makeMapleReadable(cfor.getCharacter().getName()));
                 builder.append(" (cid: ");
-                builder.append(cfor.getPlayer().getId());
+                builder.append(cfor.getCharacter().getID());
                 builder.append(")> ");
             }
             if (cfor.getAccountName() != null) {
@@ -1334,44 +1335,33 @@ public class MapleClient implements Serializable {
         this.idleTask = idleTask;
     }
 
-    protected static final class CharNameAndId {
-
-        public final String name;
-        public final int id;
-
-        public CharNameAndId(final String name, final int id) {
-            super();
-            this.name = name;
-            this.id = id;
-        }
-    }
-
     public int getCharacterSlots() {
    //     if (isGm()) {
   //          return 24;
    //     }
-        if (charslots != DEFAULT_CHARSLOT) {
+        if (charslots != ServerConfig.DEFAULT_CHARSLOT) {
             return charslots; //save a sql
         }
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM character_slots WHERE accid = ? AND worldid = ?")) {
-                ps.setInt(1, accId);
-                ps.setInt(2, world);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        charslots = rs.getInt("charslots");
-                    } else {
-                        try (PreparedStatement psu = con.prepareStatement("INSERT INTO character_slots (accid, worldid, charslots) VALUES (?, ?, ?)")) {
-                            psu.setInt(1, accId);
-                            psu.setInt(2, world);
-                            psu.setInt(3, charslots);
-                            psu.executeUpdate();
-                        }
-                    }
-                }
-            }
-        } catch (SQLException sqlE) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+	    	try (PreparedStatement ps = con.prepareStatement("SELECT * FROM character_slots WHERE accid = ? AND worldid = ?")) {
+	            ps.setInt(1, accountID);
+	            ps.setInt(2, world);
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    charslots = rs.getInt("charslots");
+	                } else {
+	                    try (PreparedStatement psu = con.prepareStatement("INSERT INTO character_slots (accid, worldid, charslots) VALUES (?, ?, ?)")) {
+	                        psu.setInt(1, accountID);
+	                        psu.setInt(2, world);
+	                        psu.setInt(3, charslots);
+	                        psu.executeUpdate();
+	                    }
+	                }
+	            }
+	    	}
+        } catch (SQLException e) {
+        	System.err.println("[Error] An error occured when trying to get the number of character slots.");
+        	e.printStackTrace();
         }
 
         return charslots;
@@ -1387,7 +1377,7 @@ public class MapleClient implements Serializable {
             try (PreparedStatement ps = con.prepareStatement("UPDATE character_slots SET charslots = ? WHERE worldid = ? AND accid = ?")) {
                 ps.setInt(1, charslots);
                 ps.setInt(2, world);
-                ps.setInt(3, accId);
+                ps.setInt(3, accountID);
                 ps.executeUpdate();
                 ps.close();
             }
@@ -1528,7 +1518,7 @@ public class MapleClient implements Serializable {
         try {
             PreparedStatement ps;
             ps = con.prepareStatement("SELECT createdat FROM accounts WHERE id = ?");
-            ps.setInt(1, getAccID());
+            ps.setInt(1, getAccountID());
             Timestamp ret;
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {

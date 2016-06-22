@@ -22,11 +22,12 @@ package server.maps;
 
 import java.awt.Point;
 import client.inventory.Item;
-import client.MapleCharacter;
+import net.packet.CField;
 import client.MapleClient;
+import client.character.MapleCharacter;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import tools.packet.CField;
 
 public class MapleMapItem extends MapleMapObject {
 
@@ -42,7 +43,7 @@ public class MapleMapItem extends MapleMapObject {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
-        this.character_ownerid = owner.getId();
+        this.character_ownerid = owner.getID();
         this.type = type;
         this.playerDrop = playerDrop;
     }
@@ -51,7 +52,7 @@ public class MapleMapItem extends MapleMapObject {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
-        this.character_ownerid = owner.getId();
+        this.character_ownerid = owner.getID();
         this.type = type;
         this.playerDrop = playerDrop;
         this.questid = questid;
@@ -61,7 +62,7 @@ public class MapleMapItem extends MapleMapObject {
         setPosition(position);
         this.item = null;
         this.dropper = dropper;
-        this.character_ownerid = owner.getId();
+        this.character_ownerid = owner.getID();
         this.meso = meso;
         this.type = type;
         this.playerDrop = playerDrop;
@@ -138,14 +139,14 @@ public class MapleMapItem extends MapleMapObject {
 
     @Override
     public void sendSpawnData(final MapleClient client) {
-        if (questid <= 0 || client.getPlayer().getQuestStatus(questid) == 1) {
-            client.getSession().write(CField.dropItemFromMapObject(this, null, getTruePosition(), (byte) 2));
+        if (questid <= 0 || client.getCharacter().getQuestStatus(questid) == 1) {
+            client.sendPacket(CField.dropItemFromMapObject(this, null, getTruePosition(), (byte) 2));
         }
     }
 
     @Override
     public void sendDestroyData(final MapleClient client) {
-        client.getSession().write(CField.removeItemFromMap(getObjectId(), 1, 0));
+        client.sendPacket(CField.removeItemFromMap(getObjectId(), 1, 0));
     }
 
     public Lock getLock() {

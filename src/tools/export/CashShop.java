@@ -10,9 +10,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
+
+import net.netty.MaplePacketReader;
 import tools.HexTool;
 import tools.data.ByteArrayByteStream;
-import tools.data.LittleEndianAccessor;
 
 /**
  *
@@ -38,17 +39,17 @@ public class CashShop {
 
     public static void dumpPackages(Properties data) {
         byte[] hexdata = HexTool.getByteArrayFromHexString(data.getProperty("packages"));
-        final LittleEndianAccessor slea = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) hexdata));
+        final MaplePacketReader inPacket = new MaplePacketReader(new ByteArrayByteStream((byte[]) hexdata));
         StringBuilder sb = new StringBuilder();
         sb.append("int[][][] packages = {\r\n");
-        int length = slea.readInt();
+        int length = inPacket.readInt();
         for (int i = 0; i < length; i++) {
             sb.append("{{");
-            sb.append(slea.readInt());
+            sb.append(inPacket.readInt());
             sb.append("}, {");
-            int snlength = slea.readInt();
+            int snlength = inPacket.readInt();
             for (int l = 0; l < snlength; l++) {
-                sb.append(slea.readInt());
+                sb.append(inPacket.readInt());
                 if (snlength - l != 1) {
                     sb.append(", ");
                 }
@@ -73,20 +74,20 @@ public class CashShop {
 
     public static void dumpCategories(Properties data) {
         byte[] hexdata = HexTool.getByteArrayFromHexString(data.getProperty("categories"));
-        final LittleEndianAccessor slea = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) hexdata));
+        final MaplePacketReader inPacket = new MaplePacketReader(new ByteArrayByteStream((byte[]) hexdata));
         StringBuilder sb = new StringBuilder();
         sb.append("/* Dumping data for table `cashshop_categories` */");
         int category, parent, flag, sold;
         String name;
         try {
-            slea.skip(slea.readByte() == 3 ? 1 : 3);
-            int length = slea.readByte();
+            inPacket.skip(inPacket.readByte() == 3 ? 1 : 3);
+            int length = inPacket.readByte();
             for (int i = 0; i < length; i++) {
-                category = slea.readInt();
-                name = slea.readMapleAsciiString();
-                parent = slea.readInt();
-                flag = slea.readInt();
-                sold = slea.readInt();
+                category = inPacket.readInt();
+                name = inPacket.readMapleAsciiString();
+                parent = inPacket.readInt();
+                flag = inPacket.readInt();
+                sold = inPacket.readInt();
                 sb.append("\r\nINSERT INTO cashshop_categories (`categoryid`, `name`, `parent`, `flag`, `sold`) ");
                 sb.append("VALUES (").append(category).append(", '").append(name).append("', ").append(parent);
                 sb.append(", ").append(flag).append(", ").append(sold).append(");");
@@ -107,7 +108,7 @@ public class CashShop {
 
     public static void dumpMenuItems(Properties data) {
         byte[] hexdata;
-        LittleEndianAccessor slea;
+        MaplePacketReader inPacket;
         StringBuilder sb = new StringBuilder();
         sb.append("/* Dumping data for table `cashshop_menuitems` */");
         int category, subcategory, parent, sn, itemid, flag = 0, price, discountPrice, quantity, expire, gender, likes;
@@ -116,30 +117,30 @@ public class CashShop {
             for (int menu = 1; menu <= 4; menu++) {
                 String menuStr = "menuitems" + menu;
                 hexdata = HexTool.getByteArrayFromHexString(data.getProperty(menuStr));
-                slea = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) hexdata));
-                byte a = slea.readByte();
-                slea.skip(a == 4 || a == 5 || a == 6 || a == 8 ? 1 : 3);
-                int length = slea.readByte();
+                inPacket = new MaplePacketReader(new ByteArrayByteStream((byte[]) hexdata));
+                byte a = inPacket.readByte();
+                inPacket.skip(a == 4 || a == 5 || a == 6 || a == 8 ? 1 : 3);
+                int length = inPacket.readByte();
                 for (int i = 0; i < length; i++) {
-                    category = slea.readInt();
-                    subcategory = slea.readInt();
-                    parent = slea.readInt();
-                    image = slea.readMapleAsciiString();
-                    sn = slea.readInt();
-                    itemid = slea.readInt();
-                    slea.skip(4 * 4);
-                    price = slea.readInt();
-                    slea.skip(8 * 4);
-                    discountPrice = slea.readInt();
-                    slea.skip(4);
-                    quantity = slea.readInt();
-                    expire = slea.readInt();
-                    slea.skip(1 * 5);
-                    gender = slea.readInt();
-                    likes = slea.readInt();
-                    slea.skip(4 * 4);
-                    for (int p = 0; p < slea.readInt(); p++) {
-                        slea.skip(4 * 9);
+                    category = inPacket.readInt();
+                    subcategory = inPacket.readInt();
+                    parent = inPacket.readInt();
+                    image = inPacket.readMapleAsciiString();
+                    sn = inPacket.readInt();
+                    itemid = inPacket.readInt();
+                    inPacket.skip(4 * 4);
+                    price = inPacket.readInt();
+                    inPacket.skip(8 * 4);
+                    discountPrice = inPacket.readInt();
+                    inPacket.skip(4);
+                    quantity = inPacket.readInt();
+                    expire = inPacket.readInt();
+                    inPacket.skip(1 * 5);
+                    gender = inPacket.readInt();
+                    likes = inPacket.readInt();
+                    inPacket.skip(4 * 4);
+                    for (int p = 0; p < inPacket.readInt(); p++) {
+                        inPacket.skip(4 * 9);
                     }
                     sb.append("INSERT INTO cashshop_menuitems (`category`, `subcategory`, `parent`, `image`, ");
                     sb.append("`sn`, `itemid`, `flag`, `price`, `discountPrice`, `quantity`, `expire`, `gender`, `likes`) ");

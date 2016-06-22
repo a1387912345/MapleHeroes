@@ -1,7 +1,8 @@
 package client.inventory;
 
-import client.MapleCharacter;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
+import client.character.MapleCharacter;
 import database.DatabaseConnection;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -60,7 +61,7 @@ public class MapleRing
         PreparedStatement ps = con.prepareStatement("INSERT INTO rings (ringId, itemid, partnerChrId, partnerName, partnerRingId) VALUES (?, ?, ?, ?, ?)");
         ps.setInt(1, ringId[0]);
         ps.setInt(2, itemid);
-        ps.setInt(3, chr.getId());
+        ps.setInt(3, chr.getID());
         ps.setString(4, chr.getName());
         ps.setInt(5, ringId[1]);
         ps.executeUpdate();
@@ -93,7 +94,7 @@ public class MapleRing
     public static int[] makeRing(int itemid, MapleCharacter partner1, MapleCharacter partner2) throws Exception {
         int[] ringID = {MapleInventoryIdentifier.getInstance(), MapleInventoryIdentifier.getInstance()};
         try {
-            addToDB(itemid, partner1, partner2.getName(), partner2.getId(), ringID);
+            addToDB(itemid, partner1, partner2.getName(), partner2.getID(), ringID);
         } catch (MySQLIntegrityConstraintViolationException mslcve) {
             return ringID;
         }
@@ -163,7 +164,7 @@ public class MapleRing
         try {
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE partnerChrId = ?");
-            ps.setInt(1, player.getId());
+            ps.setInt(1, player.getID());
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
                 ps.close();

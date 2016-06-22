@@ -4,10 +4,11 @@
  */
 package server;
 
-import client.MapleCharacter;
 import constants.ServerConstants;
 import java.util.LinkedList;
 import java.util.List;
+
+import client.character.MapleCharacter;
 
 /**
  *
@@ -17,7 +18,7 @@ public class MapleSlideMenu {
 
     public static class SlideMenu0 {
 
-        public static final int version = ServerConstants.MAPLE_VERSION; //Change as you wish
+        public static final int version = ServerConstants.CLIENT_VERSION; //Change as you wish
         public static final int above = 0xFF;
 
         public static enum DimensionalMirror { //Updated to V120 without quests

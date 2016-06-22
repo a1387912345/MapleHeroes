@@ -1,8 +1,8 @@
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -15,9 +15,13 @@ import constants.ServerConstants;
 import constants.ServerConstants.PlayerGMRank;
 import custom.LoadPacket;
 import database.DatabaseConnection;
-import net.cashshop.CashShopServer;
-import net.channel.ChannelServer;
-import net.login.handler.AutoRegister;
+import net.packet.CField;
+import net.packet.CWvsContext;
+import net.packet.PetPacket;
+import net.packet.CField.NPCPacket;
+import net.server.cashshop.CashShopServer;
+import net.server.channel.ChannelServer;
+import net.server.login.handler.deprecated.AutoRegister;
 import net.world.CharacterTransfer;
 import net.world.MapleMessengerCharacter;
 import net.world.PlayerBuffStorage;
@@ -39,10 +43,6 @@ import server.Timer.EventTimer;
 import server.Timer.WorldTimer;
 import tools.HexTool;
 import tools.StringUtil;
-import tools.packet.CField;
-import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
-import tools.packet.PetPacket;
 
 public class AdminCommand {
 
@@ -54,11 +54,11 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MaplePet pet = c.getPlayer().getPet(0);
+            MaplePet pet = c.getCharacter().getPet(0);
             if (pet == null) {
                 return 0;
             }
-            c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PetPacket.petColor(c.getPlayer().getId(), (byte) 0, Color.yellow.getAlpha()), true);
+            c.getCharacter().getMap().broadcastMessage(c.getCharacter(), PetPacket.petColor(c.getCharacter().getID(), (byte) 0, Color.yellow.getAlpha()), true);
             return 1;
         }
     }
@@ -67,7 +67,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            SkillFactory.getSkill(9101003).getEffect(1).applyTo(c.getPlayer());
+            SkillFactory.getSkill(9101003).getEffect(1).applyTo(c.getCharacter());
             return 1;
         }
     }
@@ -86,8 +86,8 @@ public class AdminCommand {
             }
             int end = Randomizer.nextInt(10);
             String data = "Magic Wheel";
-            c.getPlayer().setWheelItem(items.get(end));
-            c.getSession().write(CWvsContext.magicWheel((byte) 3, items, data, end));
+            c.getCharacter().setWheelItem(items.get(end));
+            c.sendPacket(CWvsContext.magicWheel((byte) 3, items, data, end));
             return 1;
         }
     }
@@ -97,7 +97,7 @@ public class AdminCommand {
         @Override
         public int execute(final MapleClient c, String[] splitted) {
             short slot = Short.parseShort(splitted[1]);
-            Item item = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+            Item item = c.getCharacter().getInventory(MapleInventoryType.USE).getItem(slot);
             if (item == null) {
                 return 0;
             }
@@ -106,7 +106,7 @@ public class AdminCommand {
                 1302002, 1302003, 1302004, 1302005, 1302006,
                 1302007};
             final List<Integer> items = Arrays.asList(itemArray);
-            c.getSession().write(CField.sendSealedBox(slot, 2028162, items)); //sealed box
+            c.sendPacket(CField.sendSealedBox(slot, 2028162, items)); //sealed box
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             WorldTimer.getInstance().schedule(new Runnable() {
                 @Override
@@ -114,8 +114,8 @@ public class AdminCommand {
                     MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemId), itemId, 1, false, false);
                     Item item = ii.getEquipById(items.get(Randomizer.nextInt(items.size())));
                     MapleInventoryManipulator.addbyItem(c, item);
-                    c.getSession().write(CField.unsealBox(item.getItemId()));
-                    c.getSession().write(CField.EffectPacket.showRewardItemAnimation(2028162, "")); //sealed box
+                    c.sendPacket(CField.unsealBox(item.getItemId()));
+                    c.sendPacket(CField.EffectPacket.showRewardItemAnimation(2028162, "")); //sealed box
                 }
             }, 10000);
             return 1;
@@ -126,7 +126,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(NPCPacket.getCutSceneSkip());
+            c.sendPacket(NPCPacket.getCutSceneSkip());
             return 1;
         }
     }
@@ -135,7 +135,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(NPCPacket.getDemonSelection());
+            c.sendPacket(NPCPacket.getDemonSelection());
             return 1;
         }
     }
@@ -144,7 +144,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(LoadPacket.getPacket());
+            c.sendPacket(LoadPacket.getPacket());
             return 1;
         }
     }
@@ -153,8 +153,8 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            MaplePortal portal = c.getPlayer().getMap().findClosestPortal(c.getPlayer().getTruePosition());
-            c.getPlayer().dropMessage(6, portal.getName() + " id: " + portal.getId() + " script: " + portal.getScriptName());
+            MaplePortal portal = c.getCharacter().getMap().findClosestPortal(c.getCharacter().getTruePosition());
+            c.getCharacter().dropMessage(6, portal.getName() + " id: " + portal.getId() + " script: " + portal.getScriptName());
 
             return 1;
         }
@@ -164,7 +164,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().dropMessage(6, "Server has been up for " + StringUtil.getReadableMillis(ChannelServer.serverStartTime, System.currentTimeMillis()));
+            c.getCharacter().dropMessage(6, "Server has been up for " + StringUtil.getReadableMillis(ChannelServer.serverStartTime, System.currentTimeMillis()));
             return 1;
         }
     }
@@ -252,16 +252,16 @@ public class AdminCommand {
                 MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(chr);
                 World.Messenger.leaveMessenger(chr.getMessenger().getId(), messengerplayer);
             }
-            PlayerBuffStorage.addBuffsToStorage(chr.getId(), chr.getAllBuffs());
-            PlayerBuffStorage.addCooldownsToStorage(chr.getId(), chr.getCooldowns());
-            PlayerBuffStorage.addDiseaseToStorage(chr.getId(), chr.getAllDiseases());
-            World.ChannelChange_Data(new CharacterTransfer(chr), chr.getId(), -10);
+            PlayerBuffStorage.addBuffsToStorage(chr.getID(), chr.getAllBuffs());
+            PlayerBuffStorage.addCooldownsToStorage(chr.getID(), chr.getCooldowns());
+            PlayerBuffStorage.addDiseaseToStorage(chr.getID(), chr.getAllDiseases());
+            World.ChannelChange_Data(new CharacterTransfer(chr), chr.getID(), -10);
             ch.removePlayer(chr);
             client.updateLoginState(MapleClient.CHANGE_CHANNEL, client.getSessionIPAddress());
             chr.saveToDB(false, false);
             chr.getMap().removePlayer(chr);
-            client.getSession().write(CField.getChannelChange(client, Integer.parseInt(CashShopServer.getIP().split(":")[1])));
-            client.setPlayer(null);
+            client.sendPacket(CField.getChannelChange(client, Integer.parseInt(CashShopServer.getIP().split(":")[1])));
+            client.setCharacter(null);
             client.setReceiving(false);
             return 1;
         }
@@ -271,7 +271,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(CField.UIPacket.getDirectionInfo(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
+            c.sendPacket(CField.UIPacket.getDirectionInfo(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
             return 1;
         }
     }
@@ -281,7 +281,7 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             AutoRegister.autoRegister = !AutoRegister.autoRegister;
-            c.getPlayer().dropMessage(0, "Auto Register has been " + (AutoRegister.autoRegister ? "enabled" : "disabled") + ".");
+            c.getCharacter().dropMessage(0, "Auto Register has been " + (AutoRegister.autoRegister ? "enabled" : "disabled") + ".");
             System.out.println("Auto Register has been " + (AutoRegister.autoRegister ? "enabled" : "disabled") + ".");
             return 1;
         }
@@ -291,7 +291,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(HexTool.getByteArrayFromHexString(StringUtil.joinStringFrom(splitted, 1)));
+            c.sendPacket(HexTool.getByteArrayFromHexString(StringUtil.joinStringFrom(splitted, 1)));
             return 1;
         }
     }
@@ -302,7 +302,7 @@ public class AdminCommand {
         public int execute(MapleClient c, String[] splitted) {
             ChannelServer cs = c.getChannelServer();
             for (MapleCharacter mchr : cs.getPlayerStorage().getAllCharacters()) {
-                if (c.getPlayer().isGM()) {
+                if (c.getCharacter().isGM()) {
                     continue;
                 }
                 MapleInventory equipped = mchr.getInventory(MapleInventoryType.EQUIPPED);
@@ -338,7 +338,7 @@ public class AdminCommand {
                 notice = true;
             }
             if (notice) {
-                World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, victim.getName() + " has been stripped by " + c.getPlayer().getName()));
+                World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(0, victim.getName() + " has been stripped by " + c.getCharacter().getName()));
             }
             return 1;
         }
@@ -362,18 +362,18 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             if (splitted.length < 1) {
-                c.getPlayer().dropMessage(0, "!ScheduleHotTime <Item Id>");
+                c.getCharacter().dropMessage(0, "!ScheduleHotTime <Item Id>");
                 return 0;
             }
             if (!MapleItemInformationProvider.getInstance().itemExists(Integer.parseInt(splitted[1]))) {
-                c.getPlayer().dropMessage(0, "Item does not exists.");
+                c.getCharacter().dropMessage(0, "Item does not exists.");
                 return 0;
             }
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (MapleCharacter mch : cserv.getPlayerStorage().getAllCharacters()) {
                     if (c.canClickNPC()) {
                         mch.gainItem(Integer.parseInt(splitted[1]), 1);
-                        mch.getClient().getSession().write(CField.NPCPacket.getNPCTalk(9010010, (byte) 0, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", "00 00", (byte) 1, 9010010));
+                        mch.getClient().sendPacket(CField.NPCPacket.getNPCTalk(9010010, (byte) 0, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", "00 00", (byte) 1, 9010010));
                     }
                 }
             }
@@ -387,8 +387,8 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (MapleCharacter mch : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                if (mch.getMapId() != c.getPlayer().getMapId()) {
-                    mch.changeMap(c.getPlayer().getMap(), c.getPlayer().getPosition());
+                if (mch.getMapId() != c.getCharacter().getMapId()) {
+                    mch.changeMap(c.getCharacter().getMap(), c.getCharacter().getPosition());
                 }
             }
             return 1;
@@ -415,7 +415,7 @@ public class AdminCommand {
                 range = 1;
             }
             if (range == 0) {
-                c.getPlayer().getMap().disconnectAll();
+                c.getCharacter().getMap().disconnectAll();
             } else if (range == 1) {
                 c.getChannelServer().getPlayerStorage().disconnectAll(true);
             } else if (range == 2) {
@@ -433,13 +433,13 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().dropMessage(6, "Shutting down...");
+            c.getCharacter().dropMessage(6, "Shutting down...");
             if (t == null || !t.isAlive()) {
                 t = new Thread(ShutdownServer.getInstance());
                 ShutdownServer.getInstance().shutdown();
                 t.start();
             } else {
-                c.getPlayer().dropMessage(6, "A shutdown thread is already in progress or shutdown has not been done. Please wait.");
+                c.getCharacter().dropMessage(6, "A shutdown thread is already in progress or shutdown has not been done. Please wait.");
             }
             return 1;
         }
@@ -453,7 +453,7 @@ public class AdminCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             minutesLeft = Integer.parseInt(splitted[1]);
-            c.getPlayer().dropMessage(6, "Shutting down... in " + minutesLeft + " minutes");
+            c.getCharacter().dropMessage(6, "Shutting down... in " + minutesLeft + " minutes");
             if (ts == null && (t == null || !t.isAlive())) {
                 t = new Thread(ShutdownServer.getInstance());
                 ts = EventTimer.getInstance().register(new Runnable() {
@@ -470,7 +470,7 @@ public class AdminCommand {
                     }
                 }, 60000);
             } else {
-                c.getPlayer().dropMessage(6, "A shutdown thread is already in progress or shutdown has not been done. Please wait.");
+                c.getCharacter().dropMessage(6, "A shutdown thread is already in progress or shutdown has not been done. Please wait.");
             }
             return 1;
         }
@@ -485,7 +485,7 @@ public class AdminCommand {
                 PreparedStatement ps = (PreparedStatement) con.prepareStatement(StringUtil.joinStringFrom(splitted, 1));
                 ps.executeUpdate();
             } catch (SQLException e) {
-                c.getPlayer().dropMessage(0, "Failed to execute SQL command.");
+                c.getCharacter().dropMessage(0, "Failed to execute SQL command.");
                 return 0;
             }
             return 1;

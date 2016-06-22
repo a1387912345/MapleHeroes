@@ -70,7 +70,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 cms.put(c, cm);
                 scriptengine.put("cm", cm);
 
-                c.getPlayer().setConversation(1);
+                c.getCharacter().setConversation(1);
                 c.setClickedNPC();
                 try {
                     iv.invokeFunction("start"); // Temporary until I've removed all of start
@@ -116,7 +116,7 @@ public class NPCScriptManager extends AbstractScriptManager {
     }
 
     public final void startQuest(final MapleClient c, final int npc, final int quest) {
-        if (!MapleQuest.getInstance(quest).canStart(c.getPlayer(), null)) {
+        if (!MapleQuest.getInstance(quest).canStart(c.getCharacter(), null)) {
             return;
         }
         final Lock lock = c.getNPCLock();
@@ -133,7 +133,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 cms.put(c, cm);
                 scriptengine.put("qm", cm);
 
-                c.getPlayer().setConversation(1);
+                c.getCharacter().setConversation(1);
                 c.setClickedNPC();
                 iv.invokeFunction("start", (byte) 1, (byte) 0, 0); // start it off as something
             }
@@ -170,7 +170,7 @@ public class NPCScriptManager extends AbstractScriptManager {
     }
 
     public final void endQuest(final MapleClient c, final int npc, final int quest, final boolean customEnd) {
-        if (!customEnd && !MapleQuest.getInstance(quest).canComplete(c.getPlayer(), null)) {
+        if (!customEnd && !MapleQuest.getInstance(quest).canComplete(c.getCharacter(), null)) {
             return;
         }
         final Lock lock = c.getNPCLock();
@@ -187,7 +187,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 cms.put(c, cm);
                 scriptengine.put("qm", cm);
 
-                c.getPlayer().setConversation(1);
+                c.getCharacter().setConversation(1);
                 c.setClickedNPC();
                 iv.invokeFunction("end", (byte) 1, (byte) 0, 0); // start it off as something
             }
@@ -238,7 +238,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 final NPCConversationManager cm = new NPCConversationManager(c, npc, -1, script, (byte) -1, iv);
                 cms.put(c, cm);
                 scriptengine.put("im", cm);
-                c.getPlayer().setConversation(1);
+                c.getCharacter().setConversation(1);
                 c.setClickedNPC();
                 iv.invokeFunction("use");
             }
@@ -263,8 +263,8 @@ public class NPCScriptManager extends AbstractScriptManager {
                 c.removeScriptEngine("scripts/quest/" + npccm.getQuest() + ".js");
             }
         }
-        if (c.getPlayer() != null && c.getPlayer().getConversation() == 1) {
-            c.getPlayer().setConversation(0);
+        if (c.getCharacter() != null && c.getCharacter().getConversation() == 1) {
+            c.getCharacter().setConversation(0);
         }
     }
 

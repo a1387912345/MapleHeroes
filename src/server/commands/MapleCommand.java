@@ -1,7 +1,7 @@
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleClient;
+import client.character.MapleCharacter;
 import constants.ServerConstants.CommandType;
 
 /**

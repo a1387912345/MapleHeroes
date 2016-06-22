@@ -5,7 +5,8 @@
 package server.movement;
 
 import java.awt.Point;
-import tools.data.MaplePacketLittleEndianWriter;
+
+import net.netty.MaplePacketWriter;
 
 /**
  *
@@ -61,7 +62,7 @@ public class StaticLifeMovement extends AbstractLifeMovement {
     }
 
     @Override
-    public void serialize(MaplePacketLittleEndianWriter mlew) {
+    public void serialize(MaplePacketWriter mlew) {
         mlew.write(getType());
         switch (getType()) {
             case 0:

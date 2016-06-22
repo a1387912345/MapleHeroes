@@ -21,16 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.events;
 
-import client.MapleCharacter;
 import client.MapleStat;
+import client.character.MapleCharacter;
+import net.packet.CField;
+import net.packet.CWvsContext;
+
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 import server.Timer.EventTimer;
 import server.events.MapleOxQuizFactory.MapleOxQuizEntry;
 import server.maps.MapleMap;
 import tools.Pair;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class MapleOxQuiz extends MapleEvent {
 

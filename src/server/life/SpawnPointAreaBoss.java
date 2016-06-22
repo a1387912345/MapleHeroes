@@ -23,9 +23,9 @@ package server.life;
 import java.awt.Point;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import net.packet.CWvsContext;
 import server.Randomizer;
 import server.maps.MapleMap;
-import tools.packet.CWvsContext;
 
 public class SpawnPointAreaBoss extends Spawns {
 

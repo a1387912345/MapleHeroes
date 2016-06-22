@@ -1,9 +1,9 @@
 package server.stores;
 
 import java.util.List;
-import client.MapleCharacter;
-import client.MapleClient;
 
+import client.MapleClient;
+import client.character.MapleCharacter;
 import server.stores.AbstractPlayerStore.BoughtItem;
 import tools.Pair;
 

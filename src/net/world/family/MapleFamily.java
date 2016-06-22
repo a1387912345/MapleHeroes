@@ -28,8 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
 
-import client.MapleCharacter;
 import database.DatabaseConnection;
+import net.packet.CWvsContext;
+import net.packet.CWvsContext.FamilyPacket;
 import net.world.World;
 
 import java.sql.Statement;
@@ -37,8 +38,8 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.FamilyPacket;
+
+import client.character.MapleCharacter;
 
 public final class MapleFamily implements java.io.Serializable {
 
@@ -345,7 +346,7 @@ public final class MapleFamily implements java.io.Serializable {
 
     public final MapleFamilyCharacter addFamilyMemberInfo(final MapleCharacter mc, final int seniorid, final int junior1, final int junior2) {
         final MapleFamilyCharacter ret = new MapleFamilyCharacter(mc, id, seniorid, junior1, junior2);
-        members.put(mc.getId(), ret);
+        members.put(mc.getID(), ret);
         ret.resetPedigree(this);
         bDirty = true;
         List<Integer> toRemove = new ArrayList<>();
@@ -429,17 +430,17 @@ public final class MapleFamily implements java.io.Serializable {
     }
 
     public final void memberLevelJobUpdate(final MapleCharacter mgc) {
-        final MapleFamilyCharacter member = getMFC(mgc.getId());
+        final MapleFamilyCharacter member = getMFC(mgc.getID());
         if (member != null) {
             int old_level = member.getLevel();
             int old_job = member.getJobId();
             member.setJobId(mgc.getJob());
             member.setLevel((short) mgc.getLevel());
             if (old_level != mgc.getLevel()) {
-                this.broadcast(CWvsContext.sendLevelup(true, mgc.getLevel(), mgc.getName()), mgc.getId(), mgc.getId() == leaderid ? null : member.getPedigree());
+                this.broadcast(CWvsContext.sendLevelup(true, mgc.getLevel(), mgc.getName()), mgc.getID(), mgc.getID() == leaderid ? null : member.getPedigree());
             }
             if (old_job != mgc.getJob()) {
-                this.broadcast(CWvsContext.sendJobup(true, mgc.getJob(), mgc.getName()), mgc.getId(), mgc.getId() == leaderid ? null : member.getPedigree());
+                this.broadcast(CWvsContext.sendJobup(true, mgc.getJob(), mgc.getName()), mgc.getID(), mgc.getID() == leaderid ? null : member.getPedigree());
             }
         }
     }

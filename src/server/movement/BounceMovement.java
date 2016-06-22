@@ -18,7 +18,8 @@
 package server.movement;
 
 import java.awt.Point;
-import tools.data.MaplePacketLittleEndianWriter;
+
+import net.netty.MaplePacketWriter;
 
 public class BounceMovement extends AbstractLifeMovement {
 
@@ -33,7 +34,7 @@ public class BounceMovement extends AbstractLifeMovement {
     }
 
     @Override
-    public void serialize(MaplePacketLittleEndianWriter lew) {
+    public void serialize(MaplePacketWriter lew) {
         lew.write(getType());
         lew.writePos(getPosition());
         lew.writePos(offset);

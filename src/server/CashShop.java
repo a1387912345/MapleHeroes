@@ -10,6 +10,8 @@ import client.inventory.MaplePet;
 import client.inventory.MapleRing;
 import constants.GameConstants;
 import database.DatabaseConnection;
+import net.packet.CSPacket;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import tools.FileoutputUtil;
 import tools.Pair;
-import tools.packet.CSPacket;
 
 public class CashShop implements Serializable {
 
@@ -65,7 +66,7 @@ public class CashShop implements Serializable {
         if (toberemove.size() > 0) {
             for (Item item : toberemove) {
                 removeFromInventory(item);
-                c.getSession().write(CSPacket.cashItemExpired(item.getUniqueId()));
+                c.sendPacket(CSPacket.cashItemExpired(item.getUniqueId()));
             }
             toberemove.clear();
         }

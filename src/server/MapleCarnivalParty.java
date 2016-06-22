@@ -1,13 +1,15 @@
 package server;
 
-import client.MapleCharacter;
-import net.channel.ChannelServer;
+import net.packet.CField;
+import net.server.channel.ChannelServer;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import client.character.MapleCharacter;
+
 import java.lang.ref.WeakReference;
 import server.maps.MapleMap;
-import tools.packet.CField;
 
 public class MapleCarnivalParty {
 
@@ -21,7 +23,7 @@ public class MapleCarnivalParty {
     public MapleCarnivalParty(final MapleCharacter owner, final List<MapleCharacter> members1, final byte team1) {
         leader = new WeakReference<>(owner);
         for (MapleCharacter mem : members1) {
-            members.add(mem.getId());
+            members.add(mem.getID());
             mem.setCarnivalParty(this);
         }
         team = team1;
@@ -88,7 +90,7 @@ public class MapleCarnivalParty {
 
     public void removeMember(MapleCharacter chr) {
         for (int i = 0; i < members.size(); i++) {
-            if (members.get(i) == chr.getId()) {
+            if (members.get(i) == chr.getID()) {
                 members.remove(i);
                 chr.setCarnivalParty(null);
             }
@@ -111,8 +113,8 @@ public class MapleCarnivalParty {
         for (int chr : members) {
             final MapleCharacter c = ChannelServer.getInstance(channel).getPlayerStorage().getCharacterById(chr);
             if (c != null) {
-                c.getClient().getSession().write(CField.showEffect(effect));
-                c.getClient().getSession().write(CField.playSound(sound));
+                c.getClient().sendPacket(CField.showEffect(effect));
+                c.getClient().sendPacket(CField.playSound(sound));
                 if (!done) {
                     done = true;
                     c.getMap().killAllMonsters(true);

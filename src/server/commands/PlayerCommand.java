@@ -1,19 +1,22 @@
 package server.commands;
 
-import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.MapleStat;
 import client.Skill;
 import client.SkillEntry;
 import client.SkillFactory;
+import client.character.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import constants.ServerConstants;
 import constants.ServerConfig;
 import constants.ServerConstants.PlayerGMRank;
-import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.CWvsContext;
+import net.packet.CField.NPCPacket;
+import net.server.channel.ChannelServer;
 
 import static java.lang.System.getProperty;
 import java.util.Arrays;
@@ -34,9 +37,6 @@ import server.maps.SavedLocationType;
 import server.quest.MapleQuest;
 import tools.FileoutputUtil;
 import tools.StringUtil;
-import tools.packet.CField;
-import tools.packet.CField.NPCPacket;
-import tools.packet.CWvsContext;
 
 /**
  *
@@ -144,11 +144,11 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             HashMap<Skill, SkillEntry> sa = new HashMap<>();
             for (Skill skil : SkillFactory.getAllSkills()) {
-                if (GameConstants.isApplicableSkill(skil.getId()) && skil.canBeLearnedBy(c.getPlayer().getJob()) && !skil.isInvisible()) { //no db/additionals/resistance skills
+                if (GameConstants.isApplicableSkill(skil.getId()) && skil.canBeLearnedBy(c.getCharacter().getJob()) && !skil.isInvisible()) { //no db/additionals/resistance skills
                     sa.put(skil, new SkillEntry((byte) skil.getMaxLevel(), (byte) skil.getMaxLevel(), SkillFactory.getDefaultSExpiry(skil)));
                 }
             }
-            c.getPlayer().changeSkillsLevel(sa);
+            c.getCharacter().changeSkillsLevel(sa);
             return 1;
         }
     }
@@ -159,7 +159,7 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.getSession().write(CWvsContext.enableActions());
+            c.sendPacket(CWvsContext.enableActions());
             return 1;
         }
     }
@@ -174,7 +174,7 @@ public class PlayerCommand {
                 NPCScriptManager.getInstance().start(c, 9201160, null);
             }
             if (eem.getProperty("entryPossible").equals("false")) {
-                c.getPlayer().dropMessage(5, "Entry to the [Pink Zakum] Event is currently closed please wait patiently for the next entrance!");
+                c.getCharacter().dropMessage(5, "Entry to the [Pink Zakum] Event is currently closed please wait patiently for the next entrance!");
             }
             return 1;
         }
@@ -184,7 +184,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().setExp(c.getPlayer().getExp() - GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) : 0);
+            c.getCharacter().setExp(c.getCharacter().getExp() - GameConstants.getExpNeededForLevel(c.getCharacter().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getCharacter().getLevel()) : 0);
             return 1;
         }
     }
@@ -193,7 +193,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().setExp(0);
+            c.getCharacter().setExp(0);
             return 1;
         }
     }
@@ -312,14 +312,14 @@ public class PlayerCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             if (splitted.length < 2) {
-                c.getPlayer().dropMessage(5, "Invalid number entered.");
+                c.getCharacter().dropMessage(5, "Invalid number entered.");
                 return 0;
             }
             int change;
             try {
                 change = Integer.parseInt(splitted[1]);
             } catch (NumberFormatException nfe) {
-                c.getPlayer().dropMessage(5, "Invalid number entered.");
+                c.getCharacter().dropMessage(5, "Invalid number entered.");
                 return 0;
             }
             int hpUsed = 0;
@@ -331,40 +331,40 @@ public class PlayerCommand {
             //   }
             if (stat == MapleStat.MAXMP) {
                 mpUsed = change;
-                short job = c.getPlayer().getJob();
+                short job = c.getCharacter().getJob();
                 if (GameConstants.isDemonSlayer(job) || GameConstants.isAngelicBuster(job) || GameConstants.isDemonAvenger(job)) {
-                    c.getPlayer().dropMessage(5, "You cannot raise MP.");
+                    c.getCharacter().dropMessage(5, "You cannot raise MP.");
                     return 0;
                 }
                 change *= GameConstants.getMpApByJob(job);
             }
 
             if (change <= 0) {
-                c.getPlayer().dropMessage(5, "You don't have enough AP Resets that.");
+                c.getCharacter().dropMessage(5, "You don't have enough AP Resets that.");
                 return 0;
             }
-            if (c.getPlayer().getRemainingAp() < change) {
-                c.getPlayer().dropMessage(5, "You don't have enough AP for that.");
+            if (c.getCharacter().getRemainingAp() < change) {
+                c.getCharacter().dropMessage(5, "You don't have enough AP for that.");
                 return 0;
             }
-            if (getStat(c.getPlayer()) + change > statLim && stat != MapleStat.MAXHP && stat != MapleStat.MAXMP) {
-                c.getPlayer().dropMessage(5, "The stat limit is " + statLim + ".");
+            if (getStat(c.getCharacter()) + change > statLim && stat != MapleStat.MAXHP && stat != MapleStat.MAXMP) {
+                c.getCharacter().dropMessage(5, "The stat limit is " + statLim + ".");
                 return 0;
             }
-            if (getStat(c.getPlayer()) + change > hpMpLim && (stat == MapleStat.MAXHP || stat == MapleStat.MAXMP)) {
-                c.getPlayer().dropMessage(5, "The stat limit is " + hpMpLim + ".");
+            if (getStat(c.getCharacter()) + change > hpMpLim && (stat == MapleStat.MAXHP || stat == MapleStat.MAXMP)) {
+                c.getCharacter().dropMessage(5, "The stat limit is " + hpMpLim + ".");
                 return 0;
             }
-            setStat(c.getPlayer(), getStat(c.getPlayer()), change);
-            c.getPlayer().setRemainingAp((short) (c.getPlayer().getRemainingAp() - change));
-            c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + hpUsed));
-            c.getPlayer().setHpApUsed((short) (c.getPlayer().getHpApUsed() + mpUsed));
-            c.getPlayer().updateSingleStat(MapleStat.AVAILABLEAP, c.getPlayer().getRemainingAp());
+            setStat(c.getCharacter(), getStat(c.getCharacter()), change);
+            c.getCharacter().setRemainingAp((short) (c.getCharacter().getRemainingAp() - change));
+            c.getCharacter().setHpApUsed((short) (c.getCharacter().getHpApUsed() + hpUsed));
+            c.getCharacter().setHpApUsed((short) (c.getCharacter().getHpApUsed() + mpUsed));
+            c.getCharacter().updateSingleStat(MapleStat.AVAILABLEAP, c.getCharacter().getRemainingAp());
             if (stat == MapleStat.MAXHP) {
-                c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change * 30 + ".");
-                c.getPlayer().fakeRelog();
+                c.getCharacter().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change * 30 + ".");
+                c.getCharacter().fakeRelog();
             } else {
-                c.getPlayer().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change + ".");
+                c.getCharacter().dropMessage(5, StringUtil.makeEnumHumanReadable(stat.name()) + " has been raised by " + change + ".");
             }
             return 1;
         }
@@ -375,15 +375,15 @@ public class PlayerCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             MapleMonster mob = null;
-            for (final MapleMapObject monstermo : c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), 100000, Arrays.asList(MapleMapObjectType.MONSTER))) {
+            for (final MapleMapObject monstermo : c.getCharacter().getMap().getMapObjectsInRange(c.getCharacter().getPosition(), 100000, Arrays.asList(MapleMapObjectType.MONSTER))) {
                 mob = (MapleMonster) monstermo;
                 if (mob.isAlive()) {
-                    c.getPlayer().dropMessage(6, "Monster " + mob.toString());
+                    c.getCharacter().dropMessage(6, "Monster " + mob.toString());
                     break; //only one
                 }
             }
             if (mob == null) {
-                c.getPlayer().dropMessage(6, "No monster was found.");
+                c.getCharacter().dropMessage(6, "No monster was found.");
             }
             return 1;
         }
@@ -478,8 +478,8 @@ public class PlayerCommand {
         @Override
 
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().setExp(c.getPlayer().getExp() - GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getPlayer().getLevel()) : 0);
-            c.getPlayer().saveToDB(false, false);
+            c.getCharacter().setExp(c.getCharacter().getExp() - GameConstants.getExpNeededForLevel(c.getCharacter().getLevel()) >= 0 ? GameConstants.getExpNeededForLevel(c.getCharacter().getLevel()) : 0);
+            c.getCharacter().saveToDB(false, false);
             return 1;
         }
     }
@@ -496,8 +496,8 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (c.getPlayer().isInBlockedMap() || c.getPlayer().hasBlockedInventory()) {
-                c.getPlayer().dropMessage(5, "You may not use this command here.");
+            if (c.getCharacter().isInBlockedMap() || c.getCharacter().hasBlockedInventory()) {
+                c.getCharacter().dropMessage(5, "You may not use this command here.");
                 return 0;
             }
             NPCScriptManager.getInstance().start(c, 9000000, null);
@@ -509,7 +509,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(CWvsContext.gmBoard(c.getNextClientIncrenement(), "http://www.hidden-street.net/"));
+            c.sendPacket(CWvsContext.gmBoard(c.getNextClientIncrenement(), "http://www.hidden-street.net/"));
             return 1;
         }
     }
@@ -518,7 +518,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getSession().write(CWvsContext.gmBoard(c.getNextClientIncrenement(), ServerConfig.rankingURL));
+            c.sendPacket(CWvsContext.gmBoard(c.getNextClientIncrenement(), ServerConfig.rankingURL));
             return 1;
         }
     }
@@ -626,29 +626,29 @@ public class PlayerCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (int i : GameConstants.blockedMaps) {
-                if (c.getPlayer().getMapId() == i) {
-                    c.getPlayer().dropMessage(5, "You may not use this command here.");
+                if (c.getCharacter().getMapId() == i) {
+                    c.getCharacter().dropMessage(5, "You may not use this command here.");
                     return 0;
                 }
             }
-            if (c.getPlayer().getLevel() < 50 && c.getPlayer().getJob() != 200) {
-                c.getPlayer().dropMessage(5, "You must be over level 50 to use this command.");
+            if (c.getCharacter().getLevel() < 50 && c.getCharacter().getJob() != 200) {
+                c.getCharacter().dropMessage(5, "You must be over level 50 to use this command.");
                 return 0;
             }
-            if (c.getPlayer().hasBlockedInventory() || c.getPlayer().getMap().getSquadByMap() != null || c.getPlayer().getEventInstance() != null || c.getPlayer().getMap().getEMByMap() != null || c.getPlayer().getMapId() >= 990000000/* || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())*/) {
-                c.getPlayer().dropMessage(5, "You may not use this command here.");
-                return 0;
-            }
-
-            if ((c.getPlayer().getMapId() >= 680000210 && c.getPlayer().getMapId() <= 680000502) || (c.getPlayer().getMapId() / 1000 == 980000 && c.getPlayer().getMapId() != 980000000) || (c.getPlayer().getMapId() / 100 == 1030008) || (c.getPlayer().getMapId() / 100 == 922010) || (c.getPlayer().getMapId() / 10 == 13003000)) {
-                c.getPlayer().dropMessage(5, "You may not use this command here.");
+            if (c.getCharacter().hasBlockedInventory() || c.getCharacter().getMap().getSquadByMap() != null || c.getCharacter().getEventInstance() != null || c.getCharacter().getMap().getEMByMap() != null || c.getCharacter().getMapId() >= 990000000/* || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())*/) {
+                c.getCharacter().dropMessage(5, "You may not use this command here.");
                 return 0;
             }
 
-            c.getPlayer().saveLocation(SavedLocationType.FREE_MARKET, c.getPlayer().getMap().getReturnMap().getId());
+            if ((c.getCharacter().getMapId() >= 680000210 && c.getCharacter().getMapId() <= 680000502) || (c.getCharacter().getMapId() / 1000 == 980000 && c.getCharacter().getMapId() != 980000000) || (c.getCharacter().getMapId() / 100 == 1030008) || (c.getCharacter().getMapId() / 100 == 922010) || (c.getCharacter().getMapId() / 10 == 13003000)) {
+                c.getCharacter().dropMessage(5, "You may not use this command here.");
+                return 0;
+            }
+
+            c.getCharacter().saveLocation(SavedLocationType.FREE_MARKET, c.getCharacter().getMap().getReturnMap().getId());
             MapleMap map = c.getChannelServer().getMapFactory().getMap(ServerConfig.HOME_MAP_ID);
 
-            c.getPlayer()
+            c.getCharacter()
                     .changeMap(map, map.getPortal(0));
 
             return 1;
@@ -659,23 +659,23 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (GameConstants.isBeastTamer(c.getPlayer().getJob())) {
-                c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001510), (byte) 1, (byte) 1);
-                c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001501), (byte) 1, (byte) 1);
-                c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001502), (byte) 1, (byte) 1);
-                c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001503), (byte) 1, (byte) 1);
-                c.getPlayer().changeSingleSkillLevel(SkillFactory.getSkill(110001504), (byte) 1, (byte) 1);
+            if (GameConstants.isBeastTamer(c.getCharacter().getJob())) {
+                c.getCharacter().changeSingleSkillLevel(SkillFactory.getSkill(110001510), (byte) 1, (byte) 1);
+                c.getCharacter().changeSingleSkillLevel(SkillFactory.getSkill(110001501), (byte) 1, (byte) 1);
+                c.getCharacter().changeSingleSkillLevel(SkillFactory.getSkill(110001502), (byte) 1, (byte) 1);
+                c.getCharacter().changeSingleSkillLevel(SkillFactory.getSkill(110001503), (byte) 1, (byte) 1);
+                c.getCharacter().changeSingleSkillLevel(SkillFactory.getSkill(110001504), (byte) 1, (byte) 1);
                 HashMap<Skill, SkillEntry> sa = new HashMap<>();
                 for (Skill skil : SkillFactory.getAllSkills()) {
-                    if (GameConstants.isApplicableSkill(skil.getId()) && skil.canBeLearnedBy(c.getPlayer().getJob()) && !skil.isInvisible()) { //no db/additionals/resistance skills
+                    if (GameConstants.isApplicableSkill(skil.getId()) && skil.canBeLearnedBy(c.getCharacter().getJob()) && !skil.isInvisible()) { //no db/additionals/resistance skills
                         sa.put(skil, new SkillEntry((byte) skil.getMaxLevel(), (byte) skil.getMaxLevel(), SkillFactory.getDefaultSExpiry(skil)));
                     }
                 }
-                c.getPlayer().changeSkillsLevel(sa);
-                c.getPlayer().dropMessage(6, "All modes are added");
+                c.getCharacter().changeSkillsLevel(sa);
+                c.getCharacter().dropMessage(6, "All modes are added");
                 return 1;
             } else {
-                c.getPlayer().dropMessage(6, "You are not beast tamer!");
+                c.getCharacter().dropMessage(6, "You are not beast tamer!");
                 return 0;
             }
         }
@@ -686,29 +686,29 @@ public class PlayerCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (int i : GameConstants.blockedMaps) {
-                if (c.getPlayer().getMapId() == i) {
-                    c.getPlayer().dropMessage(5, "You may not use this command here.");
+                if (c.getCharacter().getMapId() == i) {
+                    c.getCharacter().dropMessage(5, "You may not use this command here.");
                     return 0;
                 }
             }
-            if (c.getPlayer().getLevel() < 10 && c.getPlayer().getJob() != 200) {
-                c.getPlayer().dropMessage(5, "You must be over level 10 to use this command.");
+            if (c.getCharacter().getLevel() < 10 && c.getCharacter().getJob() != 200) {
+                c.getCharacter().dropMessage(5, "You must be over level 10 to use this command.");
                 return 0;
             }
-            if (c.getPlayer().hasBlockedInventory() || c.getPlayer().getMap().getSquadByMap() != null || c.getPlayer().getEventInstance() != null || c.getPlayer().getMap().getEMByMap() != null || c.getPlayer().getMapId() >= 990000000/* || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())*/) {
-                c.getPlayer().dropMessage(5, "You may not use this command here.");
-                return 0;
-            }
-
-            if ((c.getPlayer().getMapId() >= 680000210 && c.getPlayer().getMapId() <= 680000502) || (c.getPlayer().getMapId() / 1000 == 980000 && c.getPlayer().getMapId() != 980000000) || (c.getPlayer().getMapId() / 100 == 1030008) || (c.getPlayer().getMapId() / 100 == 922010) || (c.getPlayer().getMapId() / 10 == 13003000)) {
-                c.getPlayer().dropMessage(5, "You may not use this command here.");
+            if (c.getCharacter().hasBlockedInventory() || c.getCharacter().getMap().getSquadByMap() != null || c.getCharacter().getEventInstance() != null || c.getCharacter().getMap().getEMByMap() != null || c.getCharacter().getMapId() >= 990000000/* || FieldLimitType.VipRock.check(c.getPlayer().getMap().getFieldLimit())*/) {
+                c.getCharacter().dropMessage(5, "You may not use this command here.");
                 return 0;
             }
 
-            c.getPlayer().saveLocation(SavedLocationType.FREE_MARKET, c.getPlayer().getMap().getReturnMap().getId());
+            if ((c.getCharacter().getMapId() >= 680000210 && c.getCharacter().getMapId() <= 680000502) || (c.getCharacter().getMapId() / 1000 == 980000 && c.getCharacter().getMapId() != 980000000) || (c.getCharacter().getMapId() / 100 == 1030008) || (c.getCharacter().getMapId() / 100 == 922010) || (c.getCharacter().getMapId() / 10 == 13003000)) {
+                c.getCharacter().dropMessage(5, "You may not use this command here.");
+                return 0;
+            }
+
+            c.getCharacter().saveLocation(SavedLocationType.FREE_MARKET, c.getCharacter().getMap().getReturnMap().getId());
             MapleMap map = c.getChannelServer().getMapFactory().getMap(910000000);
 
-            c.getPlayer().changeMap(map, map.getPortal(0));
+            c.getCharacter().changeMap(map, map.getPortal(0));
 
             return 1;
         }
@@ -719,7 +719,7 @@ public class PlayerCommand {
      public int execute(MapleClient c, String[] splitted) {
      c.removeClickedNPC();
      NPCScriptManager.getInstance().dispose(c);
-     c.getSession().write(CWvsContext.enableActions());
+     c.sendPacket(CWvsContext.enableActions());
      return 1;
      }
      }
@@ -788,12 +788,12 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getPlayer().dropMessage(6, "You currently have " + c.getPlayer().getCSPoints(1) + " Cash, " + c.getPlayer().getEPoints() + " Event Points, " + c.getPlayer().getDPoints() + " Donation Points, " + c.getPlayer().getVPoints() + " voting points and " + c.getPlayer().getIntNoRecord(GameConstants.BOSS_PQ) + " Boss Party Quest points.");
-            c.getPlayer().dropMessage(6, "The time is currently " + FileoutputUtil.CurrentReadable_TimeGMT() + " GMT. | EXP " + (Math.round(c.getPlayer().getEXPMod()) * 100) * Math.round(c.getPlayer().getStat().expBuff / 100.0) + "%, Drop " + (Math.round(c.getPlayer().getDropMod()) * 100) * Math.round(c.getPlayer().getStat().dropBuff / 100.0) + "%, Meso " + Math.round(c.getPlayer().getStat().mesoBuff / 100.0) * 100 + "%");
-            c.getPlayer().dropMessage(6, "EXP: " + c.getPlayer().getExp() + " / " + c.getPlayer().getNeededExp());
+            c.getCharacter().dropMessage(6, "You currently have " + c.getCharacter().getCSPoints(1) + " Cash, " + c.getCharacter().getEPoints() + " Event Points, " + c.getCharacter().getDPoints() + " Donation Points, " + c.getCharacter().getVPoints() + " voting points and " + c.getCharacter().getIntNoRecord(GameConstants.BOSS_PQ) + " Boss Party Quest points.");
+            c.getCharacter().dropMessage(6, "The time is currently " + FileoutputUtil.CurrentReadable_TimeGMT() + " GMT. | EXP " + (Math.round(c.getCharacter().getEXPMod()) * 100) * Math.round(c.getCharacter().getStat().expBuff / 100.0) + "%, Drop " + (Math.round(c.getCharacter().getDropMod()) * 100) * Math.round(c.getCharacter().getStat().dropBuff / 100.0) + "%, Meso " + Math.round(c.getCharacter().getStat().mesoBuff / 100.0) * 100 + "%");
+            c.getCharacter().dropMessage(6, "EXP: " + c.getCharacter().getExp() + " / " + c.getCharacter().getNeededExp());
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.getSession().write(CWvsContext.enableActions());
+            c.sendPacket(CWvsContext.enableActions());
             return 1;
         }
     }
@@ -828,7 +828,7 @@ public class PlayerCommand {
                 NPCPacket.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0);
             }
             for (String command : sb.toString().split("\r\n")) {
-                c.getPlayer().dropMessage(5, command);
+                c.getCharacter().dropMessage(5, command);
             }
             return 1;
         }
@@ -838,11 +838,11 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (c.getPlayer().isInBlockedMap() || c.getPlayer().hasBlockedInventory()) {
-                c.getPlayer().dropMessage(5, "You may not use this command here.");
+            if (c.getCharacter().isInBlockedMap() || c.getCharacter().hasBlockedInventory()) {
+                c.getCharacter().dropMessage(5, "You may not use this command here.");
                 return 0;
-            } else if (c.getPlayer().getLevel() < 30) {
-                c.getPlayer().dropMessage(5, "You need to be at least lvl 30 in order to advance.");
+            } else if (c.getCharacter().getLevel() < 30) {
+                c.getCharacter().dropMessage(5, "You need to be at least lvl 30 in order to advance.");
                 return 0;
             } else {
                 NPCScriptManager.getInstance().start(c, 2300001, null);
@@ -1010,7 +1010,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getChannelServer().warpToEvent(c.getPlayer());
+            c.getChannelServer().warpToEvent(c.getCharacter());
             return 1;
         }
     }
@@ -1019,15 +1019,15 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            if (c.getPlayer().getMapId() != 109010100) {
-                c.getPlayer().dropMessage(5, "You may only spawn bomb in the event map.");
+            if (c.getCharacter().getMapId() != 109010100) {
+                c.getCharacter().dropMessage(5, "You may only spawn bomb in the event map.");
                 return 0;
             }
             if (!c.getChannelServer().bombermanActive()) {
-                c.getPlayer().dropMessage(5, "You may not spawn bombs yet.");
+                c.getCharacter().dropMessage(5, "You may not spawn bombs yet.");
                 return 0;
             }
-            c.getPlayer().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), c.getPlayer().getPosition());
+            c.getCharacter().getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), c.getCharacter().getPosition());
             return 1;
         }
     }
@@ -1046,9 +1046,9 @@ public class PlayerCommand {
         @Override
         public int execute(MapleClient c, String[] splitted) {
             for (final ChannelServer cserv : ChannelServer.getAllInstances()) {
-                cserv.broadcastGMMessage(tools.packet.CField.multiChat("[GM Help] " + c.getPlayer().getName(), StringUtil.joinStringFrom(splitted, 1), 6));
+                cserv.broadcastGMMessage(net.packet.CField.multiChat("[GM Help] " + c.getCharacter().getName(), StringUtil.joinStringFrom(splitted, 1), 6));
             }
-            c.getPlayer().dropMessage(5, "Your message had been sent successfully.");
+            c.getCharacter().dropMessage(5, "Your message had been sent successfully.");
             return 1;
         }
     }

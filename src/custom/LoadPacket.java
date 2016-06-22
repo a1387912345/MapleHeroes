@@ -8,8 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
+
+import net.netty.MaplePacketWriter;
 import tools.HexTool;
-import tools.data.MaplePacketLittleEndianWriter;
 
 /**
  *
@@ -27,8 +28,8 @@ public class LoadPacket {
         } catch (IOException ex) {
             System.out.println("Failed to load CPacket.txt");
         }
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.write(HexTool.getByteArrayFromHexString(packetProps.getProperty("packet")));
-        return mplew.getPacket();
+        MaplePacketWriter mpw = new MaplePacketWriter();
+        mpw.write(HexTool.getByteArrayFromHexString(packetProps.getProperty("packet")));
+        return mpw.getPacket();
     }
 }

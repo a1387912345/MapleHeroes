@@ -22,6 +22,8 @@
 package net.world.guild;
 
 import database.DatabaseConnection;
+import net.packet.CWvsContext;
+import net.packet.CWvsContext.AlliancePacket;
 import net.world.World;
 
 import java.sql.Connection;
@@ -31,8 +33,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import tools.packet.CWvsContext;
-import tools.packet.CWvsContext.AlliancePacket;
 
 public class MapleGuildAlliance implements java.io.Serializable {
 

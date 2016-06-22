@@ -1,7 +1,8 @@
 package server;
 
-import client.MapleCharacter;
-import net.channel.ChannelServer;
+import net.packet.CField;
+import net.packet.CWvsContext;
+import net.server.channel.ChannelServer;
 import net.world.World;
 
 import java.lang.ref.WeakReference;
@@ -13,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
+
+import client.character.MapleCharacter;
 import server.Timer.EtcTimer;
 import server.maps.MapleMap;
 import tools.Pair;
-import tools.packet.CField;
-import tools.packet.CWvsContext;
 
 public class MapleSquad {
 

@@ -22,9 +22,11 @@ package net.world;
 
 import java.awt.Point;
 import java.util.List;
+
+import client.character.MapleCharacter;
+
 import java.io.Serializable;
 
-import client.MapleCharacter;
 import server.maps.MapleDoor;
 
 public class MaplePartyCharacter implements Serializable {
@@ -47,7 +49,7 @@ public class MaplePartyCharacter implements Serializable {
         this.name = chr.getName();
         this.level = chr.getLevel();
         this.channel = chr.getClient().getChannel();
-        this.id = chr.getId();
+        this.id = chr.getID();
         this.jobid = chr.getJob();
         this.mapid = chr.getMapId();
         this.online = true;

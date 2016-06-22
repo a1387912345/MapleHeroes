@@ -21,6 +21,8 @@
 package client;
 
 import java.lang.ref.WeakReference;
+
+import client.character.MapleCharacter;
 import server.life.MapleMonster;
 import server.life.MobSkill;
 
@@ -117,7 +119,7 @@ public class MonsterStatusEffect {
     }
 
     public final int getFromID() {
-        return weakChr == null || weakChr.get() == null ? 0 : weakChr.get().getId();
+        return weakChr == null || weakChr.get() == null ? 0 : weakChr.get().getID();
     }
 
     public final void cancelPoisonSchedule(MapleMonster mm) {

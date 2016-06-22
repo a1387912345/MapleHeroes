@@ -21,7 +21,8 @@
 package client.inventory;
 
 import client.MapleBuffStat;
-import client.MapleCharacter;
+import client.character.MapleCharacter;
+
 import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,8 +30,8 @@ import java.sql.SQLException;
 import java.io.Serializable;
 
 import database.DatabaseConnection;
+import net.packet.CWvsContext;
 import server.Randomizer;
-import tools.packet.CWvsContext;
 
 public class MapleMount implements Serializable {
 

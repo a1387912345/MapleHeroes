@@ -21,9 +21,8 @@
 package server.maps;
 
 import client.MapleClient;
-import tools.packet.CField;
-
-import tools.packet.CSPacket;
+import net.packet.CField;
+import net.packet.CSPacket;
 
 public class MapleMapEffect {
 
@@ -58,6 +57,6 @@ public class MapleMapEffect {
     }
 
     public void sendStartData(MapleClient c) {
-        c.getSession().write(makeStartData());
+        c.sendPacket(makeStartData());
     }
 }
