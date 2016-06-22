@@ -38,14 +38,14 @@ public class MapleSession extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext context, Object message) throws Exception {
-    	if (context == null || message == null) {
-    		return;
-    	}
+//    	if (context == null || message == null) {
+//    		return;
+//    	}
     	final MapleClient client = context.channel().attr(MapleClient.CLIENT_KEY).get();
     	
-    	if (client == null) {
-    		return;
-    	}
+//    	if (client == null) {
+//    		return;
+//    	}
     	if (ServerConstants.LOG_SHARK) {
             final SharkPacket sp = new SharkPacket((byte[]) message, true);
             client.sl.log(sp);
@@ -72,7 +72,8 @@ public class MapleSession extends ChannelInboundHandlerAdapter {
         		}
         	}
         	printRecvPacket(recvName, header, (byte[]) message);
-        }  
+        }
+        super.channelRead(context, message);
     }
     
     /**

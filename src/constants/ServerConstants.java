@@ -68,10 +68,10 @@ public class ServerConstants {
     
     // Login Backgrounds
     public static Triple<String, Integer, Boolean>[] backgrounds = new Triple[]{ //boolean for randomize
-		new Triple<String, Integer, Boolean>("a3", 0, false), 
-        new Triple<String, Integer, Boolean>("a2", 0, false),
-        new Triple<String, Integer, Boolean>("a1", 0, false), 
-        new Triple<String, Integer, Boolean>("a0", 1, false)
+//		new Triple<String, Integer, Boolean>("a3", 0, false), 
+//        new Triple<String, Integer, Boolean>("a2", 0, false),
+//        new Triple<String, Integer, Boolean>("a1", 0, false), 
+//        new Triple<String, Integer, Boolean>("a0", 1, false)
     };
 
     public static enum PlayerGMRank {
