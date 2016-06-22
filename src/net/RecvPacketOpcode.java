@@ -9,7 +9,7 @@ public enum RecvPacketOpcode {
     RSA_KEY(false),
     STRANGE_DATA,
     LOGIN_REDIRECTOR(false, (short) 0x01),
-    CRASH_INFO(false, (short) 0x95),    //v146 -  0x2E; v170 - 0xA0; v171 - 0x95
+    CRASH_INFO(false, (short) 0x95),    //v146 - 0x2E; v170 - 0xA0; v171 - 0x95
     PONG(false, (short) 0x93),          //v146 - 0x46; v170 - 0x9E; v171 - 0x93
     AUTH_REQUEST(false, (short) 0x86),  //v146 - 0x30; v170 - 0x90; v171 - 0x86
     CLIENT_ERROR(false, (short) 0x85),  //v146 - 0x4A; v170 - 0x8F; v171 - 0x85
@@ -28,36 +28,36 @@ public enum RecvPacketOpcode {
      * Opcode codes are ordered in the order in which they will be received by the server or sent by the client.
      * This will allow for ease in updating future opcodes.
      */
-    CLIENT_HELLO(false, (short) 0x67),  // v146 - 0x3F; v160 - 0x42; v170 - 0x67; v171 - 0x67;
-    CLIENT_REQUEST(false, (short) 0xA3), // v170 - 0xA3; v171 - 0xA3
-    CLIENT_REQUEST2(false, (short) 0xA8), 
-    CLIENT_START(false, (short) 0x66),  // v146 - 0x38; v160 - 0x3A, v170 - 0x66
-    LOGIN_PASSWORD(false, (short) 0x69), // v146 - 0x40;  v160 - 0x43; v170 - 0x69; v171 - 0x69
-    WRONG_PASSWORD(false, (short) 0xA4),//v146 - 0x49; v170 - 0xA4; v171 - 0xA4
-    ACCEPT_TOS(true, (short) 0x9A), // v146 - 0x1D; v171.3 - 0x9A
+    CLIENT_HELLO(false, (short) 0x67),    // v174.1 - 0x67;
+    CLIENT_REQUEST(false, (short) 0x98),  // v171.3 - 0xA3; v174.1 - 0x98
+    CLIENT_REQUEST2(false, (short) 0xAB), // v173.1 - 0xA8; v174.1 - 0xAB
+    CLIENT_START(false, (short) 0x66),    // v174.1 - 0x66
+    LOGIN_PASSWORD(false, (short) 0x69),  // v174.1 - 0x69
+    WRONG_PASSWORD(false, (short) 0xA7),  // v171.3 - 0xA4; v174.1 - 0xA7
+    ACCEPT_TOS(true, (short) 0x9B),       // v171.3 - 0x9A
     /*
      * World Select Opcodes
      */
-    SERVERLIST_REQUEST(false, (short) 0x9E), // v146 - 0x22  v170 - 0x82; v171 - 0x9E
-    REDISPLAY_SERVERLIST(true, (short) 0x75), // v146 - 0x23; v170 - 0x72; v171 - 0x75
-    VIEW_SERVERLIST(false, (short) 0x72),  // v146 - 0x21; v170 - 0x72; v171 - 0x72
-    SERVERSTATUS_REQUEST(false, (short) 0x99),   // v146 - 0x1D; v170 - 0x7E; v171 - 0x99
+    SERVERLIST_REQUEST(false, (short) 0xA2), // v146 - 0x22  v170 - 0x82; v171 - 0x9E; v174.1 - 0xA2
+    REDISPLAY_SERVERLIST(true, (short) 0x75), // v146 - 0x23; v170 - 0x72; v171 - 0x75; v174.1 - 0x75
+    VIEW_SERVERLIST(false, (short) 0x72),  // v146 - 0x21; v170 - 0x72; v171 - 0x72; v174.1 - 0x72
+    SERVERSTATUS_REQUEST(false, (short) 0x9D),   // v146 - 0x1D; v170 - 0x7E; v171 - 0x99; v174.1 - 0x9D
     /*
      * Character Select Opcodes
      */
-    CHARLIST_REQUEST(false, (short) 0x6A),  // v146 - 0x43; v170 - 0x6A; v171 - 0x6A
-    CHECK_CHAR_NAME(true, (short) 0x74), // v146 - 0x28; v170 - 0x74; v171 - 0x74
-    CREATE_CHAR(false, (short) 0x7D),  // v146 - 0x45; v170 - 0x87; v171 - 0x7D
-    CREATE_SPECIAL_CHAR(true, (short) 0x7D), // v146 - 0x41; v170 - 0x87
-    DELETE_CHAR(true, (short) 0x80), // v146 - 0x2C; v170 - 0x8A; v171 - 0x80
-    CHAR_SELECT_NO_PIC(false, (short) 0xA2),// v146 - 0x25; v170 - 0x91; v171 - 0xA2
-    CHAR_SELECT(true, (short) 0x6B), // v146 - 0x31; v170 - 0x6B; v171 - 0x6B
-    VIEW_SELECT_PIC(true, (short) 0x6C), // v146 - 0x35; v170 - 0x6C; v171 - 0x6C  Don't know what this is used for
-    VIEW_REGISTER_PIC(true, (short) 0x92), // v146 - 0x32; v170 - 0x91 ??  not correct
-    CHANGE_PIC_REQUEST(true, (short) 0xA7),  // v146 - 0x33; v170 - 0xA7
-    PLAYER_LOGGEDIN(false, (short) 0x6E), // v146 - 0x27; v170 - 0x6E; v171 - 0x6E
-    CHARACTER_CARD(true, (short) 0x8F), // v146 - 0x3C; v171.3 - 0x8F
-    CHAR_BURNING(true, (short) 0x20E), //v172.2 - 0x20E
+    CHARLIST_REQUEST(false, (short) 0x6A),  // v171 - 0x6A; v174.1 - 0x6A
+    CHECK_CHAR_NAME(true, (short) 0x74),    // v171 - 0x74; v174.1 - 0x74
+    CREATE_CHAR(false, (short) 0x7D),       // v171 - 0x7D; v174.1 - 0x7D
+    CREATE_SPECIAL_CHAR(true, (short) 0x7D),// v146 - 0x41; ??
+    DELETE_CHAR(true, (short) 0x80),        // v171 - 0x80; v174.1 - 0x80
+    CHAR_SELECT_NO_PIC(false, (short) 0xA3),// v171 - 0xA2
+    CHAR_SELECT(true, (short) 0x6B),        // v171 - 0x6B; v174.1 - 0x6B
+    VIEW_SELECT_PIC(true, (short) 0x6C),    // v171 - 0x6C; v174.1 - 0x6C  Don't know what this is used for
+    VIEW_REGISTER_PIC(true, (short) 0x92),  // v146 - 0x32; v170 - 0x91 ??  not correct
+    CHANGE_PIC_REQUEST(true, (short) 0xA8), // v146 - 0x33; v170 - 0xA7
+    PLAYER_LOGGEDIN(false, (short) 0x6E),   // v171 - 0x6E; v174.1 - 0x6E
+    CHARACTER_CARD(true, (short) 0x8F),     // v146 - 0x3C; v171.3 - 0x8F
+    CHAR_BURNING(true, (short) 0x219),      // v172.2 - 0x20E; v174.1 - 0x219
     
     // Char Select Opcodes - Not Updated Yet
     GUEST_LOGIN(true, (short) 0x16),
@@ -109,7 +109,7 @@ public enum RecvPacketOpcode {
     NPC_TALK_MORE(true, (short) 0xDA),  //v146 - 0x81; v171 - 0xDA
     NPC_SHOP(true, (short) 0xDB),       //v146 - 0x82; v171 - 0xDB
     STORAGE_OPERATION(true, (short) 0xDC),//v171 - 0xDC
-    USE_HIRED_MERCHANT(true, (short) 0x85),//84
+    USE_HIRED_MERCHANT(true, (short) 0x86),//was 84 and 85
     MERCH_ITEM_STORE(true, (short) 0x87),//85
     PACKAGE_OPERATION(true, (short) 0x7F),//87
     CANCEL_MECH(true, (short) 0x89),//87
@@ -189,7 +189,7 @@ public enum RecvPacketOpcode {
     REISSUE_MEDAL(true, (short) 0x140),         // v146 - 0xEE; v171.3 - 0x140
     BUFF_RESPONSE(true, (short) 0x141),         // v146 - 0xEF; v171.3 - 0x141
     SKILL_MACRO(true, (short) 0x147),           // v146 - 0xF5; v171.3 - 0x147
-    SPECIAL_STAT(false, (short) 0x157),         // v146 - 0x10C; v171 - 0x157; v172.1 - 0x157
+    SPECIAL_STAT(false, (short) 0x15C),         // v146 - 0x10C; v171 - 0x157; v172.1 - 0x157; v174.1 - 0x15C
     REWARD_ITEM(true, (short) 0xF7),//F2
     ITEM_MAKER(true, (short) 0x999),
     REPAIR_ALL(true, (short) 0xFE),//C7
@@ -303,7 +303,7 @@ public enum RecvPacketOpcode {
     REVEAL_FAMILIAR(true, (short) 0x308),//v146 - 0x1DF; v171.3 - 0x30A
     QUICK_SLOT(true, (short) 0x1D7),
     PAM_SONG(true, (short) 0x1D8),
-    MOVE_LIFE(true, (short) 0x314),//1EC v146 - 0x20B; v171 - 0x310; v172.1 - 0x314
+    MOVE_LIFE(true, (short) 0x331),//1EC v146 - 0x20B; v171 - 0x310; v172.1 - 0x314; v174.1 - 0x331
     AUTO_AGGRO(true, (short) 0x315), // v172.1 - 0x315
     FRIENDLY_DAMAGE(true, (short) 0x999),//1ef
     MONSTER_BOMB(true, (short) 0x1F0),
@@ -361,7 +361,7 @@ public enum RecvPacketOpcode {
     RESET_HYPER(true, (short) 0x172),//
     DRESSUP_TIME(true, (short) 0x17F),
     DF_COMBO(true, (short) 0x10F),
-    BUTTON_PRESSED(true, (short) 0x23B),//1D3 v146 - 0x1E3; v171 - 0x22F; v172.1 - 0x23B (Useless..)
+    BUTTON_PRESSED(true, (short) 0x24B),//1D3 v146 - 0x1E3; v171 - 0x22F; v172.1 - 0x23B; v174.1 - 0x24B
     OS_INFORMATION(true, (short) 0x1E6),//1D6
     LUCKY_LOGOUT(true, (short) 0x2B6),
     MESSENGER_RANKING(true, (short) 0x1DD);
