@@ -52,7 +52,7 @@ public class ServerConstants {
         return time >= 19 && time <= 24;
     }
     public static final String ACCMASTER = "admin";
-    public static final short CLIENT_VERSION = (short) 173;
+    public static final short CLIENT_VERSION = (short) 174;
     public static final String CLIENT_SUBVERSION = "1";
     public static final String SOURCE_REVISION = "5";
     public static final boolean BLOCK_CS = false;  //true = cash shop disabled

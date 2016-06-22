@@ -14,7 +14,7 @@ import tools.HexTool;
 
 public class MapleCrypto {
 	
-	private volatile byte iv[];
+	private volatile byte[] iv;
 	private final short mapleVersion;
 	
 	private static final byte[] bShuffle = new byte[]{(byte) 0xEC, (byte) 0x3F, (byte) 0x77, (byte) 0xA4, (byte) 0x45, (byte) 0xD0, (byte) 0x71, (byte) 0xBF, (byte) 0xB7, (byte) 0x98, (byte) 0x20, (byte) 0xFC,
@@ -70,7 +70,7 @@ public class MapleCrypto {
      * @param iv The 4-byte IV to use.
      * @param mapleVersion
      */
-    public MapleCrypto(byte iv[], short mapleVersion) {
+    public MapleCrypto(byte[] iv, short mapleVersion) {
         this.iv = iv;
         this.mapleVersion = (short) (((mapleVersion >> 8) & 0xFF) | ((mapleVersion << 8) & 0xFF00));
     }

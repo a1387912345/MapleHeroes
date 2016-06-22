@@ -461,10 +461,8 @@ public class PacketHelper {
                     mpw.writeInt(chr.getRemainingSp(i));
                 }
             }
-            System.out.println("Byte");
         } else {
             mpw.writeShort(chr.getRemainingSp());
-            System.out.println("Short");
         }
         mpw.writeLong(chr.getExp());
         mpw.writeInt(chr.getFame());
