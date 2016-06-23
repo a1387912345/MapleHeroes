@@ -35,10 +35,10 @@ public class CrashHandler extends MaplePacketHandler {
 		super(recv);
 	}
 	
-    public void handlePacket(final MaplePacketReader inPacket, final MapleClient client, MapleCharacter chr) {
-    	inPacket.skip(12);
-    	short opcode = inPacket.readShort();
-    	System.out.println("[Crash]\t" + SendPacketOpcode.getOpcodeName((int)opcode) + "\t|\t" + chr.getName() + "\t|\t" + HexTool.getOpcodeToString(opcode) + "\t|\t" + inPacket.toString());
+    public void handlePacket(final MaplePacketReader in, final MapleClient client, MapleCharacter chr) {
+    	in.skip(12);
+    	short opcode = in.readShort();
+    	System.out.println("[Crash]\t" + SendPacketOpcode.getOpcodeName((int)opcode) + "\t|\t" + chr.getName() + "\t|\t" + HexTool.getOpcodeToString(opcode) + "\t|\t" + in.toString());
     }
 
     @Override

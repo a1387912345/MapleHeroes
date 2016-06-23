@@ -9,33 +9,36 @@ import io.netty.handler.codec.ReplayingDecoder;
 import net.MapleCrypto;
 
 public class MaplePacketDecoder extends ReplayingDecoder<Void> {
+	
+	public static class DecoderState {
+
+        public int packetlength = -1;
+    }
 
 	@Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> objects) throws Exception {
-		MapleClient client = ctx.channel().attr(MapleClient.CLIENT_KEY).get();
-		int storedLength = -1;
+		final DecoderState decoderState = ctx.channel().attr(MapleClient.DECODER_STATE).get(); 
+		final MapleClient client = ctx.channel().attr(MapleClient.CLIENT_KEY).get();
 		
-		if (client != null) {
-			if (storedLength == -1) {
-				if (in.readableBytes() >= 4) {
-					int h = in.readInt();
-					if (!client.getReceiveCrypto().checkPacket(h)) {
-						client.close();
-						return;
-					}
-					storedLength = MapleCrypto.getPacketLength(h);
-				} else {
+		if (decoderState.packetlength == -1) {
+			if (in.readableBytes() >= 4) {
+				final int packetHeader = in.readInt();
+				if (!client.getReceiveCrypto().checkPacket(packetHeader)) {
+					client.close();
 					return;
 				}
+				decoderState.packetlength = MapleCrypto.getPacketLength(packetHeader);
+			} else {
+				return;
 			}
-			if (in.readableBytes() >= storedLength) {
-				byte[] header = new byte[storedLength];
-				in.readBytes(header);
-				storedLength = -1;
-				
-				client.getReceiveCrypto().crypt(header);
-				objects.add(header);
-			}
+		}
+		if (in.readableBytes() >= decoderState.packetlength) {
+			byte[] decryptedPacket = new byte[decoderState.packetlength];
+			in.readBytes(decryptedPacket);
+			decoderState.packetlength = -1;
+			
+			client.getReceiveCrypto().crypt(decryptedPacket);
+			objects.add(decryptedPacket);
 		}
     }
 }

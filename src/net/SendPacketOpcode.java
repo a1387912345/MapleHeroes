@@ -49,7 +49,7 @@ public enum SendPacketOpcode {
     DELETE_CHAR_RESPONSE((short) 0x0C), //v146 - 0x0E; v170 - 0x12; v171 - 0x0C; v174.1 - 0x0C
     PIC_RESPONSE((short) 0x18),         //v146 - 0x19; v171 - 0x18
     REGISTER_PIC_RESPONSE((short) 0x2A),//v146 - 0x1A; v170 - 0x1F; v171 - 0x2A
-    SECONDPW_ERROR((short) 0x34),       //v146 - 0x25; v170 - 0x2F; v171.3 - 0x32; v172.1 - 0x34
+    SECONDPW_ERROR((short) 0x34),       //v146 - 0x25; v170 - 0x2F; v171.3 - 0x32; v172.1 - 0x34; v174.1 - 0x34
     
     SERVER_IP((short) 0x07),            //v146 - 0x0B; v170 - 0x0D; v171 - 0x07; v174.1 - 0x07
     CHANGE_CHANNEL((short) 0x11),       //v146 - 0x10; v171.3 - 0x11
@@ -73,15 +73,15 @@ public enum SendPacketOpcode {
      * Question marks (?) next to the latest opcode indicates it is an assumed opcode
      * which was updated through adding a difference, and it has not been tested yet.
      */
-    INVENTORY_OPERATION((short) 0x44),  //v146 - 0x26; v171 - 0x41; v171.2 - 0x42; v172.1 - 0x44
-    INVENTORY_GROW((short) 0x45),       //v146 - 0x27; v171 - 0x42; v171.2 - 0x43; v172.1 - 0x45
-    UPDATE_STATS((short) 0x46),         //v146 - 0x28; v171 - 0x43; v171.2 - 0x44; v172.1 - 0x46
-    GIVE_BUFF((short) 0x47),            //v146 - 0x29; v171 - 0x44; v171.2 - 0x45; v172.1 - 0x47
-    CANCEL_BUFF((short) 0x48),          //v146 - 0x2A; v171 - 0x45; v171.2 - 0x46; v172.1 - 0x48
-    TEMP_STATS((short) 0x49),           //v146 - 0x2B; v171 - 0x46; v171.2 - 0x47; v172.1 - 0x49
+    INVENTORY_OPERATION((short) 0x47),  //v146 - 0x26; v171 - 0x41; v171.2 - 0x42; v172.1 - 0x44; v174.1 - 0x47
+    INVENTORY_GROW((short) 0x48),       //v146 - 0x27; v171 - 0x42; v171.2 - 0x43; v172.1 - 0x45; v174.1 - 0x48
+    UPDATE_STATS((short) 0x49),         //v146 - 0x28; v171 - 0x43; v171.2 - 0x44; v172.1 - 0x46; v174.1 - 0x49
+    GIVE_BUFF((short) 0x4A),            //v146 - 0x29; v171 - 0x44; v171.2 - 0x45; v172.1 - 0x47; v174.1 - 0x4A
+    CANCEL_BUFF((short) 0x4B),          //v146 - 0x2A; v171 - 0x45; v171.2 - 0x46; v172.1 - 0x48; v174.1 - 0x4B
+    TEMP_STATS((short) 0x4C),           //v146 - 0x2B; v171 - 0x46; v171.2 - 0x47; v172.1 - 0x49; v174.1 - 0x4C
     TEMP_STATS_RESET((short) 0x4D),     //v146 - 0x2C; v171 - 0x47; v171.2 - 0x48; v172.1 - 0x4A; v174.1 - 0x4D
-    UPDATE_SKILLS((short) 0x4B),        //v146 - 0x2D; v171 - 0x48; v171.2 - 0x49; v172.1 - 0x4B
-    UPDATE_STOLEN_SKILLS((short) 0x4C), //v146 - 0x2E; v171 - 0x49; v171.2 - 0x4A; v172.1 - 0x4C
+    UPDATE_SKILLS((short) 0x4E),        //v146 - 0x2D; v171 - 0x48; v171.2 - 0x49; v172.1 - 0x4B; v174.1 - 0x4E
+    UPDATE_STOLEN_SKILLS((short) 0x4F), //v146 - 0x2E; v171 - 0x49; v171.2 - 0x4A; v172.1 - 0x4C; v174.1 - 0x4F
     FALL_DAMAGE((short) 0x4D),          //v172.1 - 0x4D
     PERSONAL_SHOP_BUY_CHECK((short) 0x4E), //v172.1 - 0x4E
     MESO_PICKUP((short) 0x4F),          //v172.1 - 0x4F
@@ -94,8 +94,8 @@ public enum SendPacketOpcode {
     LIE_DETECTOR((short) 0x59),         //v146 - 0x38; v171.3 - 0x58; v172.1 - 0x59
     LIE_DETECTOR_BOMB((short) 0x5A),    //v172.1 - 0x5A
     REPORT_RESPONSE((short) 0x5C),      //v146 - 0x3A; v171.3 - 0x5A; v172.1 - 0x5C
-    REPORT_TIME((short) 0x60),          //v146 - 0x3B; v171.3 - 0x5B; v172.1 - 0x5D; v174.1 - 0x
-    REPORT_STATUS((short) 0x61),        //v146 - 0x3C; v171.3 - 0x5C; v172.1 - 0x5E; v174.1 - 0x
+    REPORT_TIME((short) 0x60),          //v146 - 0x3B; v171.3 - 0x5B; v172.1 - 0x5D; v174.1 - 0x60
+    REPORT_STATUS((short) 0x61),        //v146 - 0x3C; v171.3 - 0x5C; v172.1 - 0x5E; v174.1 - 0x61
     STAR_PLANET_USER_COUNT((short) 0x62),//v172.1 - 0x5F; v174.1 - 0x62
     UPDATE_MOUNT((short) 0x63),         //v146 - 0x3E; v171.3 - 0x5E; v172.1 - 0x60; v174.1 - 0x63
     SHOW_QUEST_COMPLETION((short) 0x61),//v146 - 0x3F; v171.3 - 0x5F; v172.1 - 0x61
@@ -227,7 +227,7 @@ public enum SendPacketOpcode {
     AUTO_CC_MSG((short) 0xBE),//b7
     DISALLOW_DELIVERY_QUEST((short) 0xC2),//bb
     ULTIMATE_EXPLORER((short) 0xC3),//BC
-    SPECIAL_STAT((short) 0xC6), //also profession_info //BD v146 - 0xC4; v171.1 - 0xC1; v171.2 - 0xC2; v172.1 - 0xC3; v174.1 - 0xC6
+    SPECIAL_STAT((short) 0xC6), //also profession_info //BD v146 - 0xC4; v171.1 - 0xC1; v171.2 - 0xC2; v172.1 - 0xC3;  - 0xC6
     UPDATE_IMP_TIME((short) 0xC4),//v146 - 0xC5; v172.1 - 0xC4
     ITEM_POT((short) 0xC5),//v146 - 0xC6; v172.1 - 0xC5
     MULUNG_MESSAGE((short) 0xC9),//C2
@@ -261,7 +261,7 @@ public enum SendPacketOpcode {
     SKILL_MACRO((short) 0x127),//10C //127 Outdated?
     EXPAND_PENDANT_SLOTS((short) 0x12B), // v172.1 - 0x12B
     MACRO_DATA((short) 0x19E), //v172.1
-    WARP_TO_MAP((short) 0x19F), // v172.1 - 0x19F; v174.1 - 0x1AC
+    WARP_TO_MAP((short) 0x1AC), // v172.1 - 0x19F; v174.1 - 0x1AC
     FARM_OPEN((short) 0x1A0),//10E v172.1 - 0x1A0
     CS_OPEN((short) 0x1A1),//110 v146 - 0x12B; v172.1 - 0x1A1
     REMOVE_BG_LAYER((short) 0x12E),//111
@@ -503,11 +503,11 @@ public enum SendPacketOpcode {
     /*
      * NPC Opcodes
      */
-    SPAWN_NPC((short) 0x3A0),//268 //v146 - 0x2A2; v171 - 0x39B; v171.2 - 0x39C; v172.1 - 0x3A0;
-    REMOVE_NPC((short) 0x3A1),//269 //v146 - 0x2A3; v171 - 0x39C; v171.2 - 0x39D; v172.1 - 0x3A1;
-    NPC_UNKNOWN((short) 0x3A2), 
-    SPAWN_NPC_REQUEST_CONTROLLER((short) 0x3A3),//26B //v146 - 0x29F; v171 - 0x39E; v171.2 - 0x39F; v172.1 - 0x3A3
-    NPC_ACTION((short) 0x3A4),//26C v146 - 0x2A0; v171 - 0x39F; v171.2 - 0x3A0; v172.1 - 0x3A4
+    SPAWN_NPC((short) 0x3D5),//268 //v146 - 0x2A2; v171 - 0x39B; v171.2 - 0x39C; v172.1 - 0x3A0; v174.1 - 0x3D5
+    REMOVE_NPC((short) 0x3D6),//269 //v146 - 0x2A3; v171 - 0x39C; v171.2 - 0x39D; v172.1 - 0x3A1; v174.1 - 0x3D6
+    NPC_UNKNOWN((short) 0x3D7), // v174.1 - 0x3D7
+    SPAWN_NPC_REQUEST_CONTROLLER((short) 0x3D8),//26B //v146 - 0x29F; v171 - 0x39E; v171.2 - 0x39F; v172.1 - 0x3A3; v174.1 - 0x3D8
+    NPC_ACTION((short) 0x3D9),//26C v146 - 0x2A0; v171 - 0x39F; v171.2 - 0x3A0; v172.1 - 0x3A4; v174.1 - 0x3D9
     NPC_UPDATE_LIMITED_INFO((short) 0x3A5), //v146 - 0x2A4; v171.3 - 0x3A4; v172.1 - 0x3A5
     NPC_SET_FORCE_MOVE((short) 0x3A8),
     NPC_TOGGLE_VISIBLE((short) 0x3AC), //v146 - 0x2AC; v172.1 - 0x3AC
@@ -617,7 +617,7 @@ public enum SendPacketOpcode {
     ONE_A_DAY((short) 0x258),
     NX_SPEND_GIFT((short) 0x25A),
     RECEIVE_GIFT((short) 0x25A),//new v145
-    KEYMAP((short) 0x542), // v173.1 - 0x542; v174.1 - 0x587
+    KEYMAP((short) 0x587), // v173.1 - 0x542; v174.1 - 0x587
     PET_AUTO_HP((short) 0x377),//321
     PET_AUTO_MP((short) 0x378),//322
     PET_AUTO_CURE((short) 0x379),//323

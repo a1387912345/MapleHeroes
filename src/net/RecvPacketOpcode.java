@@ -6,8 +6,6 @@ public enum RecvPacketOpcode {
      * General Opcodes
      * Used for general purposes.
      */
-    RSA_KEY(false),
-    STRANGE_DATA,
     LOGIN_REDIRECTOR(false, (short) 0x01),
     CRASH_INFO(false, (short) 0x95),    //v146 - 0x2E; v170 - 0xA0; v171 - 0x95
     PONG(false, (short) 0x93),          //v146 - 0x46; v170 - 0x9E; v171 - 0x93
@@ -84,11 +82,11 @@ public enum RecvPacketOpcode {
     ENTER_PVP(true, (short) 0xB9), // v146 - 0x5C; v171 - 0xB9 ?
     ENTER_PVP_PARTY(true, (short) 0xB9), // v146 - 0x5C; v171 - 0xB9 ?
     LEAVE_PVP(true, (short) 0xBA), // v171 - 0xBA ?
-    MOVE_PLAYER(true, (short) 0xBB),  // v146 - 0x5E; v170 - 0xB9; v171 - 0xBB
+    MOVE_PLAYER(true, (short) 0xBE),  // v146 - 0x5E; v170 - 0xB9; v171 - 0xBB; v174.1 - 0xBE
     CANCEL_CHAIR(true, (short) 0xBC), // v146 - 0x60; v171 - 0xBC
     USE_CHAIR(true, (short) 0xBD), //v146 - 0x61; v171 - 0xBD
     CLOSE_RANGE_ATTACK(true, (short) 0xBF), //v146 - 0x62; v171 - 0xBF
-    RANGED_ATTACK(true, (short) 0xC0), // v146 - 0x63; v171 - 0xC0
+    RANGED_ATTACK(true, (short) 0xC4), // v146 - 0x63; v171 - 0xC0; v174.1 - 0xC4
     MAGIC_ATTACK(true, (short) 0xC1), // v146 - 0x64; v171 - 0xC1
     PASSIVE_ENERGY(true, (short) 0xC2), //v146 - 0x65; v171 - 0xC2 ?
     TAKE_DAMAGE(true, (short) 0xC5), // v146 - 0x68; v171 - 0xC5
@@ -109,7 +107,7 @@ public enum RecvPacketOpcode {
     NPC_TALK_MORE(true, (short) 0xDA),  //v146 - 0x81; v171 - 0xDA
     NPC_SHOP(true, (short) 0xDB),       //v146 - 0x82; v171 - 0xDB
     STORAGE_OPERATION(true, (short) 0xDC),//v171 - 0xDC
-    USE_HIRED_MERCHANT(true, (short) 0x86),//was 84 and 85
+    USE_HIRED_MERCHANT(true, (short) 0x87),//was 84 and 85
     MERCH_ITEM_STORE(true, (short) 0x87),//85
     PACKAGE_OPERATION(true, (short) 0x7F),//87
     CANCEL_MECH(true, (short) 0x89),//87
@@ -312,7 +310,7 @@ public enum RecvPacketOpcode {
     MOB_NODE(true, (short) 0x1F6),
     DISPLAY_NODE(true, (short) 0x1F7),
     MONSTER_CARNIVAL(true, (short) 0x1F8),
-    NPC_ACTION(true, (short) 0x32E),//203 v146 - 0x222; v171 - 0x329; v172.1 - 0x32D; v173.1 - 0x32E
+    NPC_ACTION(true, (short) 0x34B),//203 v146 - 0x222; v171 - 0x329; v172.1 - 0x32D; v173.1 - 0x32E; v174.1 - 0x34B
     ITEM_PICKUP(true, (short) 0x333),//208 v146 - 0x22A; v171 - 0x32E; v172.1 - 0x332; v173.1 - 0x333
     DAMAGE_REACTOR(true, (short) 0x336),//v146 - 0x22D; v171 - 0x331; v172.1 - 0x335; v173.1 - 0x336
     TOUCH_REACTOR(true, (short) 0x22E),//v145 Confirmed
@@ -382,7 +380,7 @@ public enum RecvPacketOpcode {
         this.opcode = opcode;
     }
     
-    public int getOpcode() {
+    public short getOpcode() {
 		return opcode;
 	}
     
@@ -393,7 +391,8 @@ public enum RecvPacketOpcode {
     @SuppressWarnings("incomplete-switch")
 	public static boolean isSpam(RecvPacketOpcode header) {
         switch (header) {
-            case AUTH_REQUEST:
+        /*    
+        case AUTH_REQUEST:
             case PONG:
             case MOVE_LIFE:
             case MOVE_PLAYER:
@@ -422,6 +421,7 @@ public enum RecvPacketOpcode {
 //            case DRESSUP_TIME:
             case BUTTON_PRESSED: 
                 return true;
+                */
         }
         return false;
     }

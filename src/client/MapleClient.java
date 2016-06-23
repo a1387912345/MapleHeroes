@@ -8,6 +8,7 @@ import database.DatabaseException;
 import io.netty.channel.Channel;
 import io.netty.util.*;
 import net.MapleCrypto;
+import net.netty.MaplePacketDecoder.DecoderState;
 import net.packet.LoginPacket;
 import net.server.cashshop.CashShopServer;
 import net.server.channel.ChannelServer;
@@ -64,6 +65,7 @@ public class MapleClient implements Serializable {
             CHANGE_CHANNEL = 3;
     
     public static final AttributeKey<MapleClient> CLIENT_KEY = AttributeKey.valueOf("C");
+    public static final AttributeKey<DecoderState> DECODER_STATE = AttributeKey.valueOf("DecoderState");
     private final transient MapleCrypto send, receive;
     private final transient Channel socketChannel;
     private MapleCharacter character;

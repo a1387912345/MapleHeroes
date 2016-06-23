@@ -12,7 +12,7 @@ public abstract class MaplePacketHandler {
 		this.recv = recv;
 	}
 
-	public abstract void handlePacket(MaplePacketReader inPacket, MapleClient client, MapleCharacter chr);
+	public abstract void handlePacket(MaplePacketReader in, MapleClient client, MapleCharacter chr);
 	
 	public boolean validateState(final MapleClient client) {
         return client.isLoggedIn();

@@ -61,6 +61,7 @@ public final class PacketProcessor {
         registerHandler(new AuthRequestHandler(RecvPacketOpcode.AUTH_REQUEST));
         registerHandler(new PongHandler(RecvPacketOpcode.PONG));
         registerHandler(new CrashHandler(RecvPacketOpcode.CRASH_INFO));
+        registerHandler(new ClientErrorHandler(RecvPacketOpcode.CLIENT_ERROR));
         /*
          * Talk Handlers
          */

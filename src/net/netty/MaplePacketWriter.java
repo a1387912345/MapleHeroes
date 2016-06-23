@@ -45,7 +45,14 @@ public class MaplePacketWriter {
      * @return A <code>MaplePacket</code> with the bytes in this stream.
      */
     public final byte[] getPacket() {
-    	if (header == null || !SendPacketOpcode.isSpam(header)) {
+    	if (header != null && !SendPacketOpcode.isSpam(header)) {
+    		print();
+    	}
+        return baos.toByteArray();
+    }
+    
+    public final byte[] getPacket(boolean print) {
+    	if ((header != null && !SendPacketOpcode.isSpam(header)) && print) {
     		print();
     	}
         return baos.toByteArray();
@@ -248,8 +255,6 @@ public class MaplePacketWriter {
 	            tab += "\t";
 	        }
 	        System.out.println("[Send]\t" + header.name() + tab + "|     " + HexTool.getOpcodeToString(header.getOpcode()) + "\t|\t" + toString()/* + "\r\nCaller: " + Thread.currentThread().getStackTrace()[2] */);
-		} else if (baos.size() == 17){ // Maple Handshake size
-			System.out.println("[Send]\tMaple Handshake");
 		} else {
 			String tab = "";
 			String opcode = "UNKNOWN";

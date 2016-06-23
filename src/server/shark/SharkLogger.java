@@ -90,7 +90,7 @@ public class SharkLogger {
         try {
             toWrite.createNewFile();
             try (FileOutputStream fos = new FileOutputStream(toWrite)) {
-                fos.write(mpw.getPacket());
+                fos.write(mpw.getPacket(false));
                 fos.flush();
             }
         } catch (IOException ex) {

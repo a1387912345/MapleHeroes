@@ -39,7 +39,7 @@ public class LoginPacket {
         mpw.write(8);                                                 // MapleStory Locale 8 = GMS
         mpw.write(0);                                                 // Unknown
 
-        return mpw.getPacket();
+        return mpw.getPacket(false);
     }
     
     public static byte[] getClientResponse(int request) {
