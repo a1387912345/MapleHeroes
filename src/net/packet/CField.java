@@ -3141,6 +3141,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             mpw.writeShort(life.getPosition().x);
             mpw.writeShort(life.getCy());
             mpw.write(life.getF() == 1 ? 0 : 1);
+            mpw.write(0); //v174 - nMoveAction
             mpw.writeShort(life.getFh());
             mpw.writeShort(life.getRx0());
             mpw.writeShort(life.getRx1());
@@ -3189,6 +3190,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             mpw.writeShort(life.getPosition().x);
             mpw.writeShort(life.getCy());
             mpw.write(life.getF() == 1 ? 0 : 1);
+            mpw.write(0); //v174 - nMoveAction
             mpw.writeShort(life.getFh());
             mpw.writeShort(life.getRx0());
             mpw.writeShort(life.getRx1());

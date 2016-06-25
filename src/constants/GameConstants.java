@@ -5361,6 +5361,8 @@ public class GameConstants {
                 return 3;
             case 4:
                 return 2;
+            case 5:
+                return 2;
         }
         return 0;
     }

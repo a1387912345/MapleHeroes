@@ -1447,7 +1447,10 @@ public class DamageParse {
         if ((ret.flag & 0x40) != 0) { // if Shadow Star is active
         	mpr.readInt(); // Star Item ID
         }
-        
+        mpr.readShort(); //v174
+        mpr.readShort();
+        mpr.readShort();
+        mpr.readShort(); //eSkillID
         ret.allDamage = new ArrayList<AttackPair>();
 
         for (int i = 0; i < ret.targets; i++) {

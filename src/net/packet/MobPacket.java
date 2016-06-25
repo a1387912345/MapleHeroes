@@ -390,7 +390,7 @@ public class MobPacket {
         
         mpw.writeInt(0);
         mpw.write(0);
-        mpw.write(0);
+        mpw.writeZeroBytes(6); //v174
         
         /*
         mpw.write(spawnType);
@@ -534,7 +534,7 @@ public class MobPacket {
         
         mpw.writeInt(0);
         mpw.write(0);
-        mpw.write(0);
+        mpw.writeZeroBytes(6); //v174
         /*
         mpw.write(spawnType);
         if ((spawnType == -3) || (spawnType >= 0)) {

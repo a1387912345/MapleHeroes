@@ -1142,7 +1142,9 @@ public class PacketHelper {
         mpw.writeShort(1); // Count
         mpw.writeInt(9); // Slot
         mpw.writeMapleAsciiString("check1=0;cDate=16/04/20");
-        
+        if ((flag & 0x40000) != 0) {
+            mpw.writeShort(0); //v174
+        }
         mpw.write(0);
         
         mpw.writeInt(0); // Decode Text Equip Info
@@ -1260,7 +1262,7 @@ public class PacketHelper {
     }
 
     public static void addChosenSkills(MaplePacketWriter mpw, MapleCharacter chr) {
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             boolean found = false;
             if (chr.getStolenSkills() != null) {
                 for (Pair<Integer, Boolean> sk : chr.getStolenSkills()) {
@@ -1278,7 +1280,7 @@ public class PacketHelper {
     }
 
     public static void addStealSkills(final MaplePacketWriter mpw, final MapleCharacter chr) {
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             addStolenSkills(mpw, chr, i, false); // 52
         }
         addChosenSkills(mpw, chr); // 16
