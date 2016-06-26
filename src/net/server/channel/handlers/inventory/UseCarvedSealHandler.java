@@ -15,6 +15,7 @@ import net.channel.handler.InventoryHandler;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.CWvsContext.InventoryPacket;
+import net.packet.field.UserPacket;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
 import server.StructItemOption;
@@ -84,12 +85,12 @@ public class UseCarvedSealHandler extends AbstractMaplePacketHandler {
                         }
                     }
                 }
-                c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, toUse.getItemId()));
+                c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, toUse.getItemId()));
                 c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                 c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
             }
         } else {
-            c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, toUse.getItemId()));
+            c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, toUse.getItemId()));
         }
         c.getSession().write(CWvsContext.enableActions());
 	}

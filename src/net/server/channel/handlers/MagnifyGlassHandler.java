@@ -16,6 +16,7 @@ import net.channel.handler.InventoryHandler;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.CWvsContext.InventoryPacket;
+import net.packet.field.UserPacket;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.Randomizer;
@@ -110,7 +111,7 @@ public class MagnifyGlassHandler extends AbstractMaplePacketHandler {
                     break;
             }
             c.getCharacter().getTrait(MapleTraitType.insight).addExp((src == 0x7F && price != -1 ? 10 : insight ? 10 : ((magnify.getItemId() + 2) - 2460000)) * 2, c.getCharacter());
-            c.getCharacter().getMap().broadcastMessage(CField.showMagnifyingEffect(c.getCharacter().getID(), eqq.getPosition()));
+            c.getCharacter().getMap().broadcastMessage(UserPacket.showMagnifyingEffect(c.getCharacter().getID(), eqq.getPosition()));
             if (!insight && src != 0x7F) {
                 c.getSession().write(InventoryPacket.scrolledItem(magnify, equipped ? MapleInventoryType.EQUIPPED : MapleInventoryType.EQUIP, toReveal, false, true, equipped));
                 MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, magnify.getPosition(), (short) 1, false);

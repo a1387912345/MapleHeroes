@@ -13,6 +13,7 @@ import net.packet.CSPacket;
 import net.packet.CWvsContext;
 import net.packet.JobPacket;
 import net.packet.MobPacket;
+import net.packet.field.AndroidPacket;
 import net.packet.JobPacket.AngelicPacket;
 import net.server.channel.ChannelServer;
 import net.world.World;
@@ -409,7 +410,7 @@ public class PlayerHandler {
 
     public static void changeAndroidEmotion(int emote, MapleCharacter chr) {
         if ((emote > 0) && (chr != null) && (chr.getMap() != null) && (!chr.isHidden()) && (emote <= 17) && (chr.getAndroid() != null)) {
-            chr.getMap().broadcastMessage(CField.showAndroidEmotion(chr.getID(), (byte) emote));
+            chr.getMap().broadcastMessage(AndroidPacket.showAndroidEmotion(chr.getID(), (byte) emote));
         }
     }
 

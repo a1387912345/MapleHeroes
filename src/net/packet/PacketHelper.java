@@ -503,6 +503,14 @@ public class PacketHelper {
         mpw.write(0); // bBurning
     }
 
+    /**
+     * 
+     * @param mpw
+     * @param chr
+     * @param mega
+     * @param second
+     * @see AvatarLook::Decode()
+     */
     public static void addCharLook(MaplePacketWriter mpw, MapleCharacterLook chr, boolean mega, boolean second) {
     	mpw.write(second ? chr.getSecondGender() : chr.getGender());
         mpw.write(second ? chr.getSecondSkinColor() : chr.getSkinColor());
@@ -900,17 +908,17 @@ public class PacketHelper {
     }
 
     public static void addInteraction(MaplePacketWriter mpw, IMaplePlayerShop shop) {
-        mpw.write(shop.getGameType());
-        mpw.writeInt(((AbstractPlayerStore) shop).getObjectId());
-        mpw.writeMapleAsciiString(shop.getDescription());
+        mpw.write(shop.getGameType()); // nMiniRoomType
+        mpw.writeInt(((AbstractPlayerStore) shop).getObjectId()); // dwMiniRoomSN
+        mpw.writeMapleAsciiString(shop.getDescription()); // sMiniRoomTitle
         if (shop.getShopType() != 1) {
-            mpw.write(shop.getPassword().length() > 0 ? 1 : 0);
+            mpw.write(shop.getPassword().length() > 0 ? 1 : 0); // bPrivate
         }
-        mpw.write(shop.getItemId() % 10);
-        mpw.write(shop.getSize());
-        mpw.write(shop.getMaxSize());
+        mpw.write(shop.getItemId() % 10); // nGameKind
+        mpw.write(shop.getSize()); // nCurUsers
+        mpw.write(shop.getMaxSize()); // nMaxUsers
         if (shop.getShopType() != 1) {
-            mpw.write(shop.isOpen() ? 0 : 1);
+            mpw.write(shop.isOpen() ? 0 : 1); // bGameOn
         }
     }
 

@@ -9,6 +9,7 @@ import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.channel.handler.MovementParse;
 import net.packet.CField;
+import net.packet.field.AndroidPacket;
 import server.movement.LifeMovementFragment;
 import tools.data.LittleEndianAccessor;
 
@@ -27,7 +28,7 @@ public class MoveAndroidHandler extends AbstractMaplePacketHandler {
         if ((res != null) && (chr != null) && (!res.isEmpty()) && (chr.getMap() != null) && (chr.getAndroid() != null)) {
             Point pos = new Point(chr.getAndroid().getPos());
             chr.getAndroid().updatePosition(res);
-            chr.getMap().broadcastMessage(chr, CField.moveAndroid(chr.getID(), pos, res), false);
+            chr.getMap().broadcastMessage(chr, AndroidPacket.moveAndroid(chr.getID(), pos, res), false);
         }
 	}
 

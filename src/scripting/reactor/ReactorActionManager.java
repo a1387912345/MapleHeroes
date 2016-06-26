@@ -26,6 +26,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import net.packet.CField;
+import net.packet.field.UserPacket;
 import net.server.channel.ChannelServer;
 import scripting.AbstractPlayerInteraction;
 
@@ -226,7 +227,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void cancelHarvest(boolean succ) {
         getPlayer().setFatigue((byte) (getPlayer().getFatigue() + 1));
         getPlayer().getMap().broadcastMessage(getPlayer(), CField.showHarvesting(getPlayer().getID(), 0), false);
-        getPlayer().getMap().broadcastMessage(CField.harvestResult(getPlayer().getID(), succ));
+        getPlayer().getMap().broadcastMessage(UserPacket.harvestResult(getPlayer().getID(), succ));
     }
 
     public void doHarvest() { //TODO LEGEND

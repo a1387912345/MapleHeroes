@@ -40,6 +40,8 @@ import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.MobPacket;
 import net.packet.PetPacket;
+import net.packet.field.AndroidPacket;
+import net.packet.field.DragonPacket;
 import net.packet.CField.EffectPacket;
 import net.packet.CField.NPCPacket;
 import net.packet.CField.SummonPacket;
@@ -2414,7 +2416,7 @@ public final class MapleMap {
         }
         if (chr.getAndroid() != null) {
             chr.getAndroid().setPos(chr.getPosition());
-            broadcastMessage(CField.spawnAndroid(chr, chr.getAndroid()));
+            broadcastMessage(AndroidPacket.spawnAndroid(chr, chr.getAndroid()));
         }
         if (chr.getParty() != null && !chr.isClone()) {
             chr.silentPartyUpdate();
@@ -2539,7 +2541,7 @@ public final class MapleMap {
                 chr.getDragon().setPosition(chr.getPosition());
             }
             if (chr.getDragon() != null) {
-                broadcastMessage(CField.spawnDragon(chr.getDragon()));
+                broadcastMessage(DragonPacket.spawnDragon(chr.getDragon()));
             }
         }
         if (GameConstants.isKanna(chr.getJob())) {
@@ -2551,7 +2553,7 @@ public final class MapleMap {
             if (chr.getHaku() != null) {
                 if (chr.getBuffSource(MapleBuffStat.HAKU_REBORN) > 0) {
                     chr.getHaku().sendStats();
-                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_change0(chr.getID()), true);
+                    chr.getMap().broadcastMessage(chr, CField.transformHakuEffect(chr.getID()), true);
                     chr.getMap().broadcastMessage(chr, CField.spawnHaku_change1(chr.getHaku()), true);
                     chr.getMap().broadcastMessage(chr, CField.spawnHaku_bianshen(chr.getID(), chr.getHaku().getObjectId(), chr.getHaku().getStats()), true);
                 } else {

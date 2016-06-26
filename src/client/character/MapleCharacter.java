@@ -52,6 +52,9 @@ import net.packet.MobPacket;
 import net.packet.MonsterCarnivalPacket;
 import net.packet.PetPacket;
 import net.packet.PlayerShopPacket;
+import net.packet.field.AndroidPacket;
+import net.packet.field.DragonPacket;
+import net.packet.field.UserPacket;
 import net.packet.CField.EffectPacket;
 import net.packet.CField.NPCPacket;
 import net.packet.CField.SummonPacket;
@@ -3537,7 +3540,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
             guildUpdate();
             familyUpdate();
             if (dragon != null) {
-                map.broadcastMessage(CField.removeDragon(this.id));
+                map.broadcastMessage(DragonPacket.removeDragon(this.id));
                 dragon = null;
             }
             if (haku != null) {
@@ -3840,7 +3843,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void makeDragon() {
         dragon = new MapleDragon(this);
-        map.broadcastMessage(CField.spawnDragon(dragon));
+        map.broadcastMessage(DragonPacket.spawnDragon(dragon));
     }
 
     public MapleDragon getDragon() {
@@ -5677,13 +5680,13 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 }
             }
             if (dragon != null) {
-                client.getSession().write(CField.spawnDragon(dragon));
+                client.getSession().write(DragonPacket.spawnDragon(dragon));
             }
             if (haku != null) {
                 client.getSession().write(CField.spawnHaku(haku));
             }
             if (android != null) {
-                client.getSession().write(CField.spawnAndroid(this, android));
+                client.getSession().write(AndroidPacket.spawnAndroid(this, android));
             }
             if (summonedFamiliar != null) {
                 client.getSession().write(CField.spawnFamiliar(summonedFamiliar, true, true));
@@ -6626,7 +6629,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
     public void setChalkboard(String text) {
         this.chalktext = text;
         if (map != null) {
-            map.broadcastMessage(CSPacket.useChalkboard(getID(), text));
+            map.broadcastMessage(UserPacket.useChalkboard(getID(), text));
         }
     }
 
@@ -6807,10 +6810,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
                 client.getSession().write(PlayerShopPacket.shopChat(message, 0)); //0 or what
                 break;
             case -3:
-                client.getSession().write(CField.getChatText(getID(), message, isSuperGM(), 0)); //1 = hide
+                client.getSession().write(UserPacket.onChatText(getID(), message, isSuperGM(), 0)); //1 = hide
                 break;
             case -4:
-                client.getSession().write(CField.getChatText(getID(), message, isSuperGM(), 1)); //1 = hide
+                client.getSession().write(UserPacket.onChatText(getID(), message, isSuperGM(), 1)); //1 = hide
                 break;
             case -5:
                 client.getSession().write(CField.getGameMessage((short) 6, message)); //pink
@@ -8482,7 +8485,7 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
 
     public void removeAndroid() {
         if (map != null) {
-            map.broadcastMessage(CField.deactivateAndroid(this.id));
+            map.broadcastMessage(AndroidPacket.deactivateAndroid(this.id));
         }
         android = null;
     }
@@ -8490,10 +8493,10 @@ public class MapleCharacter extends AnimatedMapleMapObject implements Serializab
      public void setAndroid(MapleAndroid a) {
         this.android = a;
         if ((this.map != null) && (a != null)) {
-            this.map.broadcastMessage(CField.spawnAndroid(this, a));
-            this.map.broadcastMessage(CField.showAndroidEmotion(getID(), (byte) (Randomizer.nextInt(17) + 1)));
+            this.map.broadcastMessage(AndroidPacket.spawnAndroid(this, a));
+            this.map.broadcastMessage(AndroidPacket.showAndroidEmotion(getID(), (byte) (Randomizer.nextInt(17) + 1)));
         } else if (map != null && a == null) { //Remove
-            map.broadcastMessage(this, CField.deactivateAndroid(this.getID()), true);
+            map.broadcastMessage(this, AndroidPacket.deactivateAndroid(this.getID()), true);
         }
     }
 

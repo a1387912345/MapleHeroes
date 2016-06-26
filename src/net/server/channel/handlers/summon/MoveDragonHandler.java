@@ -10,6 +10,7 @@ import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.channel.handler.MovementParse;
 import net.packet.CField;
+import net.packet.field.DragonPacket;
 import server.Timer.CloneTimer;
 import server.maps.MapleMap;
 import server.movement.LifeMovementFragment;
@@ -31,7 +32,7 @@ public class MoveDragonHandler extends AbstractMaplePacketHandler {
            
 
             if (!chr.isHidden()) {
-                chr.getMap().broadcastMessage(chr, CField.moveDragon(chr.getDragon(), pos, res), chr.getTruePosition());
+                chr.getMap().broadcastMessage(chr, DragonPacket.moveDragon(chr.getDragon(), pos, res), chr.getTruePosition());
             }
 
             WeakReference<MapleCharacter>[] clones = chr.getClones();
@@ -47,7 +48,7 @@ public class MoveDragonHandler extends AbstractMaplePacketHandler {
                                     final Point startPos = clone.getDragon().getPosition();
                                     MovementParse.updatePosition(res, clone.getDragon(), 0);
                                     if (!clone.isHidden()) {
-                                        map.broadcastMessage(clone, CField.moveDragon(clone.getDragon(), startPos, res), clone.getTruePosition());
+                                        map.broadcastMessage(clone, DragonPacket.moveDragon(clone.getDragon(), startPos, res), clone.getTruePosition());
                                     }
 
                                 }

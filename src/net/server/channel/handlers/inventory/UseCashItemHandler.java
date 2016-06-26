@@ -33,6 +33,7 @@ import net.packet.CField;
 import net.packet.CSPacket;
 import net.packet.CWvsContext;
 import net.packet.PetPacket;
+import net.packet.field.UserPacket;
 import net.packet.CField.EffectPacket;
 import net.packet.CField.NPCPacket;
 import net.packet.CWvsContext.InventoryPacket;
@@ -566,7 +567,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                     final Equip eq = (Equip) item;
                     if (eq.getState() == 0) {
                         eq.resetPotential();
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                         c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                         c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                         c.getSession().write(CField.enchantResult(1));
@@ -575,7 +576,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                         c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                     }
                 } else {
-                    c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                    c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                     c.getSession().write(CField.enchantResult(0));
                 }
                 break;
@@ -594,7 +595,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, c.getCharacter().getInventory(MapleInventoryType.CASH).findById(5067000).getPosition(), (short) 1, false);
                         }
                         eq.renewPotential(0, line, toLock, false);
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                         c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                         c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                         int tofind = 0;
@@ -626,7 +627,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                         c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                     }
                 } else {
-                    c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                    c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                     c.getSession().write(CField.enchantResult(0));
                 }
                 break;
@@ -641,7 +642,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                         final Equip eq = (Equip) item;
                         if (eq.getState() >= 17 && eq.getState() != 20) {
                             eq.renewPotential(1, 0, (short) 0, false);
-                            c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                            c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                             c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                             c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                             int tofind = 0;
@@ -672,7 +673,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                             c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                         }
                     } else {
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                         c.getSession().write(CField.enchantResult(0));
                     }
                 }
@@ -687,7 +688,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                         final Equip eq = (Equip) item;
                         if (eq.getState() >= 17) {
                             eq.renewPotential(3, 0, (short) 0, false);
-                            c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                            c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                             c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                             c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                             int tofind = 0;
@@ -718,7 +719,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                             c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                         }
                     } else {
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                         c.getSession().write(CField.enchantResult(0));
                     }
                 }
@@ -737,7 +738,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, c.getCharacter().getInventory(MapleInventoryType.CASH).findById(5067000).getPosition(), (short) 1, false);
                         }
                         eq.renewPotential(4, line, toLock, false);
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                         c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                         c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                         int tofind = 0;
@@ -768,7 +769,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                         c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                     }
                 } else {
-                    c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                    c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                     c.getSession().write(CField.enchantResult(0));
                 }
                 break;
@@ -780,7 +781,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                     final Equip eq = (Equip) item;
                     if (eq.getState() >= 17) {
                         eq.renewPotential(5, 0, (short) 0, false);
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                         c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                         c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                         int tofind = 0;
@@ -811,7 +812,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                         c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                     }
                 } else {
-                    c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                    c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                     c.getSession().write(CField.enchantResult(0));
                 }
                 break;
@@ -822,7 +823,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                     final Equip eq = (Equip) item;
                     if (eq.getState() >= 17) {
                         eq.renewPotential(6, 0, (short) 0, false);
-                        c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), true, itemId));
+                        c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), true, itemId));
                         c.getSession().write(InventoryPacket.scrolledItem(toUse, MapleInventoryType.EQUIP, item, false, true, false));
                         c.getCharacter().forceReAddItem_NoUpdate(item, MapleInventoryType.EQUIP);
                         int tofind = 0;
@@ -853,7 +854,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                     c.getCharacter().dropMessage(5, "This item's Potential cannot be reset.");
                 }
             } else {
-                c.getCharacter().getMap().broadcastMessage(CField.showPotentialReset(c.getCharacter().getID(), false, itemId));
+                c.getCharacter().getMap().broadcastMessage(UserPacket.showPotentialReset(c.getCharacter().getID(), false, itemId));
                 c.getSession().write(CField.enchantResult(0));
                 }
                 break;
@@ -1676,7 +1677,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                     pet.setName(nName);
                     c.getSession().write(PetPacket.updatePet(pet, c.getCharacter().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getInventoryPosition()), true));
                     c.getSession().write(CWvsContext.enableActions());
-                    c.getCharacter().getMap().broadcastMessage(CSPacket.changePetName(c.getCharacter(), nName, slo));
+                    c.getCharacter().getMap().broadcastMessage(PetPacket.changePetName(c.getCharacter().getID(), slo, nName));
                     used = true;
                 }
                 break;
@@ -1984,7 +1985,7 @@ public class UseCashItemHandler extends AbstractMaplePacketHandler implements Ma
                     break;
             }
             c.getCharacter().getTrait(MapleTraitType.insight).addExp((insight ? 10 : ((magnify.getItemId() + 2) - 2460000)) * 2, c.getCharacter());
-            c.getCharacter().getMap().broadcastMessage(CField.showMagnifyingEffect(c.getCharacter().getID(), eqq.getPosition()));
+            c.getCharacter().getMap().broadcastMessage(UserPacket.showMagnifyingEffect(c.getCharacter().getID(), eqq.getPosition()));
             if (!insight) {
                 c.getSession().write(InventoryPacket.scrolledItem(magnify, eqSlot >= 0 ? MapleInventoryType.EQUIP : MapleInventoryType.EQUIPPED, toReveal, false, true, false));
             } else {

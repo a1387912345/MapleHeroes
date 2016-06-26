@@ -7,6 +7,7 @@ package server.maps;
 import client.MapleClient;
 import client.character.MapleCharacter;
 import net.packet.CField;
+import net.packet.field.DragonPacket;
 
 import java.awt.Point;
 import java.util.List;
@@ -46,7 +47,7 @@ public class MapleHaku extends AnimatedMapleMapObject {
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.getSession().write(CField.removeDragon(this.owner));
+        client.getSession().write(DragonPacket.removeDragon(this.owner));
     }
 
     public int getOwner() {

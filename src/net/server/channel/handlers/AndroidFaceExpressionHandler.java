@@ -5,6 +5,7 @@ import client.character.MapleCharacter;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.packet.CField;
+import net.packet.field.AndroidPacket;
 import tools.data.LittleEndianAccessor;
 
 public class AndroidFaceExpressionHandler extends AbstractMaplePacketHandler {
@@ -18,7 +19,7 @@ public class AndroidFaceExpressionHandler extends AbstractMaplePacketHandler {
 		final int emote = lea.readInt();
 		
 		if ((emote > 0) && (chr != null) && (chr.getMap() != null) && (!chr.isHidden()) && (emote <= 17) && (chr.getAndroid() != null)) {
-            chr.getMap().broadcastMessage(CField.showAndroidEmotion(chr.getID(), (byte) emote)); 
+            chr.getMap().broadcastMessage(AndroidPacket.showAndroidEmotion(chr.getID(), (byte) emote)); 
         }
 	}
 

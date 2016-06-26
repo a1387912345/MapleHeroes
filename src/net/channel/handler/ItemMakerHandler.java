@@ -44,6 +44,7 @@ import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.CField.EffectPacket;
 import net.packet.CWvsContext.InventoryPacket;
+import net.packet.field.UserPacket;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -513,7 +514,7 @@ public class ItemMakerHandler {
         if (time > 6000 || time < 3000) {
             time = 4000;
         }
-        chr.getMap().broadcastMessage(CField.craftMake(chr.getID(), something, time));
+        chr.getMap().broadcastMessage(UserPacket.craftMake(chr.getID(), something, time));
         //}
     }
 
@@ -736,7 +737,7 @@ public class ItemMakerHandler {
         }
         MapleQuest.getInstance(2550).forceStart(c.getCharacter(), 9031000, "1"); //removes tutorial stuff
         chr.setFatigue((byte) (chr.getFatigue() + fatigue));
-        chr.getMap().broadcastMessage(CField.craftFinished(chr.getID(), craftID, cr.i, toGet, quantity, expGain));
+        chr.getMap().broadcastMessage(UserPacket.craftFinished(chr.getID(), craftID, cr.i, toGet, quantity, expGain));
     }
 
     public static final void UsePot(final LittleEndianAccessor slea, final MapleClient c) {

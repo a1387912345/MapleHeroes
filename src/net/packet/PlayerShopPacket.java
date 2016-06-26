@@ -62,7 +62,7 @@ public class PlayerShopPacket {
 
         return mpw.getPacket();
     }
-
+    
     public static byte[] requestShopPic(final int oid) {
         final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SEND_TITLE_BOX);
 		mpw.write(17);
@@ -73,24 +73,34 @@ public class PlayerShopPacket {
         return mpw.getPacket();
     }
 
+    /**
+     * 
+     * @see CUser::OnMiniRoomBalloon
+     */
     public static final byte[] addCharBox(final MapleCharacter c, final int type) {
-        final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UPDATE_CHAR_BOX);
+        final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MINI_ROOM_BALLOON);
 		mpw.writeInt(c.getID());
         PacketHelper.addAnnounceBox(mpw, c);
 
         return mpw.getPacket();
     }
 
+    /**
+    * @see CUser::OnMiniRoomBalloon
+    */
     public static final byte[] removeCharBox(final MapleCharacter c) {
-        final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UPDATE_CHAR_BOX);
+        final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MINI_ROOM_BALLOON);
 		mpw.writeInt(c.getID());
         mpw.write(0);
 
         return mpw.getPacket();
     }
 
+    /**
+    * @see CUser::OnMiniRoomBalloon
+    */
     public static final byte[] sendPlayerShopBox(final MapleCharacter c) {
-        final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UPDATE_CHAR_BOX);
+        final MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MINI_ROOM_BALLOON);
 		mpw.writeInt(c.getID());
         PacketHelper.addAnnounceBox(mpw, c);
 

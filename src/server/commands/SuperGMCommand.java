@@ -20,6 +20,7 @@ import net.SendPacketOpcode;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.MobPacket;
+import net.packet.field.UserPacket;
 import net.packet.CField.NPCPacket;
 import net.server.channel.ChannelServer;
 import net.world.World;
@@ -641,7 +642,7 @@ public class SuperGMCommand {
         public int execute(MapleClient c, String[] splitted) {
             for (MapleCharacter victim : c.getCharacter().getMap().getCharactersThreadsafe()) {
                 if (victim.getID() != c.getCharacter().getID()) {
-                    victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
+                    victim.getMap().broadcastMessage(UserPacket.onChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
                 }
             }
             return 1;
@@ -654,7 +655,7 @@ public class SuperGMCommand {
         public int execute(MapleClient c, String[] splitted) {
             for (MapleCharacter victim : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                 if (victim.getID() != c.getCharacter().getID()) {
-                    victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
+                    victim.getMap().broadcastMessage(UserPacket.onChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
                 }
             }
             return 1;
@@ -668,7 +669,7 @@ public class SuperGMCommand {
             for (ChannelServer cserv : ChannelServer.getAllInstances()) {
                 for (MapleCharacter victim : cserv.getPlayerStorage().getAllCharacters()) {
                     if (victim.getID() != c.getCharacter().getID()) {
-                        victim.getMap().broadcastMessage(CField.getChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
+                        victim.getMap().broadcastMessage(UserPacket.onChatText(victim.getID(), StringUtil.joinStringFrom(splitted, 1), victim.isGM(), 0));
                     }
                 }
             }

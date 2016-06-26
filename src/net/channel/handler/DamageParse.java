@@ -1358,6 +1358,7 @@ public class DamageParse {
             
             lea.readInt(); // Monster CRC
             lea.readInt(); // GetMobUpDownYRange
+            lea.readByte();
             ret.allDamage.add(new AttackPair(oid, unkByte, unkBool1, unkBool2, unkShort, allDamageNumbers));
         }
         ret.position = lea.readPos();

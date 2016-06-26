@@ -53,6 +53,7 @@ import net.packet.CWvsContext;
 import net.packet.MobPacket;
 import net.packet.PetPacket;
 import net.packet.PlayerShopPacket;
+import net.packet.field.UserPacket;
 import net.packet.CField.EffectPacket;
 import net.packet.CField.NPCPacket;
 import net.packet.CWvsContext.InfoPacket;
@@ -581,7 +582,7 @@ public class InventoryHandler {
             c.getSession().write(InventoryPacket.scrolledItem(scroll, MapleInventoryType.EQUIP, scrolled, false, false, false));
         }
 
-        chr.getMap().broadcastMessage(chr, CField.getScrollEffect(c.getCharacter().getID(), scrollSuccess, legendarySpirit, toScroll.getItemId(), scroll.getItemId()), vegas == 0);
+        chr.getMap().broadcastMessage(chr, UserPacket.showScrollEffect(c.getCharacter().getID(), scrollSuccess, legendarySpirit, toScroll.getItemId(), scroll.getItemId()), vegas == 0);
         //toscroll
         //scroll
         c.getSession().write(CField.enchantResult(scrollSuccess == ScrollResult.SUCCESS ? 1 : scrollSuccess == ScrollResult.CURSE ? 2 : 0));

@@ -46,6 +46,7 @@ import net.packet.CField.NPCPacket;
 import net.packet.CField.UIPacket;
 import net.packet.CWvsContext.GuildPacket;
 import net.packet.CWvsContext.InfoPacket;
+import net.packet.field.AndroidPacket;
 import net.server.channel.ChannelServer;
 import net.server.channel.MapleGuildRanking;
 import net.server.login.LoginInformationProvider;
@@ -1550,7 +1551,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             c.getCharacter().getAndroid().setHair(args);
             c.getCharacter().getAndroid().saveToDb();
         }
-        CField.updateAndroidLook(false, c.getCharacter(), c.getCharacter().getAndroid());
+        AndroidPacket.updateAndroidLook(false, c.getCharacter(), c.getCharacter().getAndroid());
         c.getCharacter().setAndroid(c.getCharacter().getAndroid()); //Respawn it
         c.getCharacter().equipChanged();
         return 1;

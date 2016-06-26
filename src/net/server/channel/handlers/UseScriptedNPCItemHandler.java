@@ -20,6 +20,7 @@ import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.packet.CWvsContext;
 import net.packet.CWvsContext.InfoPacket;
+import net.packet.field.UserPacket;
 import scripting.npc.NPCScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -1138,7 +1139,7 @@ public class UseScriptedNPCItemHandler extends AbstractMaplePacketHandler {
                         queststatus.setCustomData(skinString == null ? "0" : skinString);
                         c.getCharacter().updateQuest(queststatus);
                         c.getSession().write(CWvsContext.showQuestMsg("Damage skin has been changed!"));
-                        chr.getMap().broadcastMessage(chr, CWvsContext.showForeignDamageSkin(chr, skinnum), false);
+                        chr.getMap().broadcastMessage(chr, UserPacket.setDamageSkin(chr.getID(), skinnum), false);
                         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (byte) 1, false);
                     } else {
                          c.getSession().write(CWvsContext.showQuestMsg("Zero can't used skins!"));

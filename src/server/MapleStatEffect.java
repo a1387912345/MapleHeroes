@@ -2520,7 +2520,7 @@ public class MapleStatEffect implements Serializable {
             case 42101002:
                 if (applyto.getHaku() != null) {
                     applyto.getHaku().sendStats();
-                    applyto.getMap().broadcastMessage(applyto, CField.spawnHaku_change0(applyto.getID()), true);
+                    applyto.getMap().broadcastMessage(applyto, CField.transformHakuEffect(applyto.getID()), true);
                     applyto.getMap().broadcastMessage(applyto, CField.spawnHaku_change1(applyto.getHaku()), true);
                     applyto.getMap().broadcastMessage(applyto, CField.spawnHaku_bianshen(applyto.getID(), applyto.getHaku().getObjectId(), applyto.getHaku().getStats()), true);
                 }

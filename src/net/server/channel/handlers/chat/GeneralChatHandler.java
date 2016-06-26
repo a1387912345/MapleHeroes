@@ -6,6 +6,7 @@ import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.packet.CField;
 import net.packet.CWvsContext;
+import net.packet.field.UserPacket;
 import constants.ServerConstants.CommandType;
 import server.commands.CommandProcessor;
 import tools.data.LittleEndianAccessor;
@@ -32,19 +33,19 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
 	            //Note: This patch is needed to prevent chat packet from being broadcast to people who might be packet sniffing.
             		if (chr.isHidden()) {
             			if (chr.isIntern() && !chr.isSuperGM() && unk == 0) {
-            				chr.getMap().broadcastGMMessage(chr, CField.getChatText(chr.getID(), text, c.getCharacter().isSuperGM(), (byte) 1), true);
+            				chr.getMap().broadcastGMMessage(chr, UserPacket.onChatText(chr.getID(), text, c.getCharacter().isSuperGM(), (byte) 1), true);
             				if (unk == 0) {
             					chr.getMap().broadcastGMMessage(chr, CWvsContext.broadcastMsg(2, chr.getName() + " : " + text), true);
             				}
             			} else {
-            				chr.getMap().broadcastGMMessage(chr, CField.getChatText(chr.getID(), text, c.getCharacter().isSuperGM(), unk), true);
+            				chr.getMap().broadcastGMMessage(chr, UserPacket.onChatText(chr.getID(), text, c.getCharacter().isSuperGM(), unk), true);
 	                	}
             		} else {
             			chr.getCheatTracker().checkMsg();
             			if (chr.isIntern() && !chr.isSuperGM() && unk == 0) {
             				//chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, false, (byte) 1), c.getPlayer().getTruePosition());
             				chr.getMap().broadcastMessage(ColourChat(chr, text, unk, chr.getChatType()));
-            				chr.getMap().broadcastMessage(CField.getChatText(chr.getID(), text, c.getCharacter().isSuperGM(), 1));
+            				chr.getMap().broadcastMessage(UserPacket.onChatText(chr.getID(), text, c.getCharacter().isSuperGM(), 1));
             				/*if (unk == 0) {
 	                     	//chr.getMap().broadcastMessage(CWvsContext.broadcastMsg(2, chr.getName() + " : " + text), c.getPlayer().getTruePosition());
 	                     	chr.getMap().broadcastMessage(ColourChat(chr, text, unk, chr.getChatType()));
@@ -53,7 +54,7 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
             			} else {
             				//chr.getMap().broadcastMessage(CField.getChatText(chr.getId(), text, c.getPlayer().isSuperGM(), unk), c.getPlayer().getTruePosition());
             				chr.getMap().broadcastMessage(ColourChat(chr, text, unk, chr.getChatType()));
-            				chr.getMap().broadcastMessage(CField.getChatText(chr.getID(), text, c.getCharacter().isSuperGM(), 1));//was1
+            				chr.getMap().broadcastMessage(UserPacket.onChatText(chr.getID(), text, c.getCharacter().isSuperGM(), 1));//was1
             			}
             		}
             		if (text.equalsIgnoreCase(c.getChannelServer().getServerName() + " rocks")) {
@@ -111,7 +112,7 @@ public class GeneralChatHandler extends AbstractMaplePacketHandler
                 packet = CField.getGameMessage(colour, rank + chr.getName() + " : " + text);
                 break;
             default:
-                packet = CField.getChatText(chr.getID(), text, false, unk);
+                packet = UserPacket.onChatText(chr.getID(), text, false, unk);
         }
         return packet;
     }

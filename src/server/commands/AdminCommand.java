@@ -58,7 +58,7 @@ public class AdminCommand {
             if (pet == null) {
                 return 0;
             }
-            c.getCharacter().getMap().broadcastMessage(c.getCharacter(), PetPacket.petColor(c.getCharacter().getID(), (byte) 0, Color.yellow.getAlpha()), true);
+            c.getCharacter().getMap().broadcastMessage(c.getCharacter(), PetPacket.changePetColor(c.getCharacter().getID(), (byte) 0, Color.yellow.getAlpha()), true);
             return 1;
         }
     }

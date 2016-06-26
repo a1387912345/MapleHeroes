@@ -789,6 +789,8 @@ public class CField {
      * (field length) = MAX_BUFFSTAT * 4
      * @param chr
      * @return
+     * 
+     * @see CUserRemote::Init()
      */
     public static byte[] spawnPlayerMapobject(MapleCharacter chr) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SPAWN_PLAYER);
@@ -799,7 +801,7 @@ public class CField {
         if ((ultExplorer != null) && (ultExplorer.getCustomData() != null)) {
             mpw.writeMapleAsciiString(ultExplorer.getCustomData());
         } else {
-            mpw.writeMapleAsciiString("");
+            mpw.writeMapleAsciiString(""); // sParentName
         }
         if (chr.getGuildId() <= 0) {
             mpw.writeZeroBytes(8);
@@ -824,21 +826,28 @@ public class CField {
         final List<Pair<Integer, Integer>> buffvaluenew = new ArrayList<>();
         int[] mask = new int[GameConstants.MAX_BUFFSTAT];
         
-        mask[7] |= 0x4000000;
-        mask[7] |= 0x2000000;
+        mask[7] |= 0x1000000;
+        mask[7] |= 0x800000;
         
-        mask[10] |= 0x80;
-        mask[10] |= 0x40;
+        mask[10] |= 0x20;
+        mask[10] |= 0x10;
         
-        mask[12] |= 0x80000000;
-        mask[12] |= 0x8000;
+        mask[12] |= 0x20000000;
         mask[12] |= 0x2000;
-        mask[12] |= 0x100;
+        mask[12] |= 0x800;
+        mask[12] |= 0x40;
         
-        mask[14] |= 0x2000;
-        mask[14] |= 0x1000;
-        mask[14] |= 0xF00;
-        mask[14] |= 0x80;
+        mask[13] |= 0x100;
+        mask[13] |= 0x1;
+        
+        mask[15] |= 0x10000000;
+        mask[15] |= 0x8000000;
+        mask[15] |= 0x4000000;
+        mask[15] |= 0x2000000;
+        mask[15] |= 0x1000000;
+        mask[15] |= 0x800000;
+        mask[15] |= 0x400000;
+        mask[15] |= 0x200000;
         
         if ((chr.getBuffedValue(MapleBuffStat.DARKSIGHT) != null) || (chr.isHidden())) {
             mask[MapleBuffStat.DARKSIGHT.getPosition(true)] |= MapleBuffStat.DARKSIGHT.getValue();
@@ -958,6 +967,8 @@ public class CField {
         for (int i = 0; i < mask.length; i++) {
             mpw.writeInt(mask[i]);
         }
+        mpw.writeInt(-1);
+        mpw.write(0);
         for (Pair i : buffvalue) {
             if (((Integer) i.right).intValue() == 3) {
                 mpw.writeInt(((Integer) i.left).intValue());
@@ -967,7 +978,6 @@ public class CField {
                 mpw.write(((Integer) i.left).byteValue());
             }
         }
-        mpw.writeInt(-1);
         if (buffvaluenew.isEmpty()) {
             mpw.writeZeroBytes(10);
         } else {
@@ -984,17 +994,17 @@ public class CField {
                 }
             }
         }
-        mpw.writeZeroBytes(64); // v171 
+        mpw.writeZeroBytes(72); // v174
 
-        int CHAR_MAGIC_SPAWN = Randomizer.nextInt();
+        int charMagicSpawn = Randomizer.nextInt();
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeZeroBytes(8); //v143 10->8
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeZeroBytes(10);
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeShort(0);
         int buffSrc = chr.getBuffSource(MapleBuffStat.MONSTER_RIDING);
         if (buffSrc > 0) {
@@ -1012,24 +1022,25 @@ public class CField {
             mpw.writeLong(0L);
         }
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeLong(0L);
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.write(0);// For zero?
         mpw.write(GameConstants.isZero(chr.getJob()) || GameConstants.isEvan(chr.getJob()) ? 0 : 1); //Shows the dragon in inventory it seems
         mpw.writeZeroBytes(13);// There must be something in here... But what?...
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeZeroBytes(16);
         mpw.write(1);
-        mpw.writeInt(CHAR_MAGIC_SPAWN);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeShort(0);
 
         mpw.writeShort(chr.getJob());
         mpw.writeShort(chr.getSubcategory());
         mpw.writeInt(0); // nTotalCHUC
-        PacketHelper.addCharLook(mpw, chr, true, false);
+        mpw.write(HexTool.getByteArrayFromHexString("01 03 00 00 00 00 00 E8 00 00 00 0A 00 00 00 01 00 CB 52 00 00 E8 00 00 00 00 A1 93 00 00 01 AB 4A 0F 00 02 A5 72 0F 00 03 2E 99 0F 00 04 43 BF 0F 00 05 AC 0D 10 00 07 32 5C 10 00 08 34 83 10 00 09 FE D2 10 00 0B 94 16 15 00 11 11 20 11 00 31 65 6F 11 00 32 04 47 11 00 37 20 E2 11 00 FF FF FF 00 00 00 00 94 16 15 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"));
+        //PacketHelper.addCharLook(mpw, chr, true, false);
         if (GameConstants.isZero(chr.getJob())) {
             PacketHelper.addCharLook(mpw, chr, true, false);
         }
@@ -1056,6 +1067,7 @@ public class CField {
         mpw.writeInt(0); // nCompleteSetID
         mpw.writeShort(-1); // nFieldSeatID
         mpw.writeInt(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); // nPortableChairID
+        mpw.writeInt(0);
         mpw.writeInt(0);
         mpw.writeInt(0);
         
@@ -1102,7 +1114,7 @@ public class CField {
             mpw.write(x == null ? 0 : Integer.parseInt(x));
         }
 
-        mpw.write(0); //new v142->v143
+        //mpw.write(0); //new v142->v143
         mpw.writeInt(0); //new v142->v143
 
         PacketHelper.addFarmInfo(mpw, chr.getClient(), 0);
@@ -1118,7 +1130,7 @@ public class CField {
         mpw.writeInt(0);
         mpw.writeInt(0);
         mpw.write(1);
-        mpw.writeZeroBytes(26);
+        mpw.writeZeroBytes(31);
         
         return mpw.getPacket();
     }
@@ -1128,70 +1140,7 @@ public class CField {
 		mpw.writeInt(charid);
 
         return mpw.getPacket();
-    }
-
-    public static byte[] getChatText(int cidfrom, String text, boolean whiteBG, int show) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CHATTEXT);
-		mpw.writeInt(cidfrom);
-        mpw.write(whiteBG ? 1 : 0);
-        mpw.writeMapleAsciiString(text);
-        mpw.write(show);
-        mpw.write(0);
-        mpw.write(-1);
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] getScrollEffect(int chr, Equip.ScrollResult scrollSuccess, boolean legendarySpirit, int item, int scroll) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SHOW_SCROLL_EFFECT);
-		mpw.writeInt(chr);
-        mpw.write(scrollSuccess == Equip.ScrollResult.SUCCESS ? 1 : scrollSuccess == Equip.ScrollResult.CURSE ? 2 : 0);
-        mpw.write(legendarySpirit ? 1 : 0);
-        mpw.writeInt(scroll); // scroll
-        mpw.writeInt(item); // item
-        mpw.writeInt(0);
-        mpw.write(0);
-        mpw.write(0);
-
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] showMagnifyingEffect(int chr, short pos) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SHOW_MAGNIFYING_EFFECT);
-		mpw.writeInt(chr);
-        mpw.writeShort(pos);
-        mpw.write(0);//new 143 is in ida?
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] showPotentialReset(int chr, boolean success, int itemid) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SHOW_POTENTIAL_RESET);
-		mpw.writeInt(chr);
-        mpw.write(success ? 1 : 0);
-        mpw.writeInt(itemid);
-
-        /*
-         if (!succes) {
-         if (itemid / 100 == 20495 || itemid == 5062301) {//lol the itemid doesn't even exists yet.
-         'Failed to expand Potential slots.'
-         } else {
-         'Resetting Potential has failed due to insufficient space in the Use item.'
-         }
-         } else {
-         if (itemid / 100 == 20495 || itemid == 5062301) {//lol the itemid doesn't even exists yet.
-         'Successfully expanded Potential slots.'
-         } else {
-         if (itemid != 2710000) {
-         'Potential has been reset.\r\nYou've obtained: %s.' (%s is item name)
-         }
-         'Potential has been reset.'
-         }
-         }
-         */
-        return mpw.getPacket();
-    }
+    } 
 
     public static byte[] showNebuliteEffect(int chr, boolean success) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SHOW_NEBULITE_EFFECT);
@@ -1289,7 +1238,7 @@ public class CField {
     }
 
     public static byte[] followEffect(int initiator, int replier, Point toMap) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FOLLOW_EFFECT);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.FOLLOW_CHARACTER);
 		mpw.writeInt(initiator);
         mpw.writeInt(replier);
         mpw.writeLong(0);
@@ -1310,35 +1259,6 @@ public class CField {
         for (int i = 0; i < 6; i++) {
             mpw.write(0);
         }
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] craftMake(int cid, int something, int time) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CRAFT_EFFECT);
-		mpw.writeInt(cid);
-        mpw.writeInt(something);
-        mpw.writeInt(time);
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] craftFinished(int cid, int craftID, int ranking, int itemId, int quantity, int exp) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CRAFT_COMPLETE);
-		mpw.writeInt(cid);
-        mpw.writeInt(craftID);
-        mpw.writeInt(ranking);
-        mpw.writeInt(itemId);
-        mpw.writeInt(quantity);
-        mpw.writeInt(exp);
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] harvestResult(int cid, boolean success) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.HARVESTED);
-		mpw.writeInt(cid);
-        mpw.write(success ? 1 : 0);
 
         return mpw.getPacket();
     }
@@ -1367,9 +1287,12 @@ public class CField {
         return mpw.getPacket();
     }
 
-    public static byte[] spawnHaku_change0(int cid) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.HAKU_CHANGE_0);
-		mpw.writeInt(cid);
+    /**
+     * @see CFoxMan::OnShowChangeEffect()
+     */
+    public static byte[] transformHakuEffect(int charID) {
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.HAKU_TRANSFORM_EFFECT);
+		mpw.writeInt(charID);
 
         return mpw.getPacket();
     }
@@ -1427,100 +1350,6 @@ public class CField {
         mpw.writePos(pos);
         mpw.writeInt(0);
         PacketHelper.serializeMovementList(mpw, res);
-        return mpw.getPacket();
-    }
-
-    public static byte[] spawnDragon(MapleDragon d) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.DRAGON_SPAWN);
-		mpw.writeInt(d.getOwner());
-        mpw.writeInt(d.getPosition().x);
-        mpw.writeInt(d.getPosition().y);
-        mpw.write(d.getStance());
-        mpw.writeShort(0);
-        mpw.writeShort(d.getJobId());
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] removeDragon(int chrid) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.DRAGON_REMOVE);
-		mpw.writeInt(chrid);
-
-        return mpw.getPacket();
-    }
-
-   public static byte[] moveDragon(MapleDragon d, Point startPos, List<LifeMovementFragment> moves) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.DRAGON_MOVE);
-		mpw.writeInt(d.getOwner());
-        mpw.writeInt(0);
-        mpw.writePos(startPos);
-        mpw.writeInt(0);
-        PacketHelper.serializeMovementList(mpw, moves);
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] spawnAndroid(MapleCharacter cid, MapleAndroid android) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.ANDROID_SPAWN);
-		mpw.writeInt(cid.getID());
-        mpw.write(android.getItemId() == 1662006 ? 5 : android.getItemId() - 1661999);
-        mpw.writePos(android.getPos());
-        mpw.write(android.getStance());
-        mpw.writeShort(0);
-        mpw.writeShort(0);
-        mpw.writeShort(android.getHair() - 30000);
-        mpw.writeShort(android.getFace() - 20000);
-        mpw.writeMapleAsciiString(android.getName());
-        for (short i = -1200; i > -1207; i = (short) (i - 1)) {
-            Item item = cid.getInventory(MapleInventoryType.EQUIPPED).getItem(i);
-            mpw.writeInt(item != null ? item.getItemId() : 0);
-        }
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] moveAndroid(int cid, Point pos, List<LifeMovementFragment> res) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.ANDROID_MOVE);
-		mpw.writeInt(cid);
-        mpw.writeInt(0);
-        mpw.writePos(pos);
-        mpw.writeInt(2147483647);
-        PacketHelper.serializeMovementList(mpw, res);
-        return mpw.getPacket();
-    }
-
-public static byte[] showAndroidEmotion(int cid, byte emotion) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.ANDROID_EMOTION);
-        //mpw.writeInt(cid);
-        mpw.writeInt(emotion);
-        mpw.writeInt(0); // tDuration
-      
-        return mpw.getPacket();
-    }
-
-    public static byte[] updateAndroidLook(boolean itemOnly, MapleCharacter cid, MapleAndroid android) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.ANDROID_UPDATE);
-		mpw.writeInt(cid.getID());
-        mpw.write(itemOnly ? 1 : 0);
-        if (itemOnly) {
-            for (short i = -1200; i > -1207; i = (short) (i - 1)) {
-                Item item = cid.getInventory(MapleInventoryType.EQUIPPED).getItem(i);
-                mpw.writeInt(item != null ? item.getItemId() : 0);
-            }
-        } else {
-            mpw.writeShort(0);
-            mpw.writeShort(android.getHair() - 30000);
-            mpw.writeShort(android.getFace() - 20000);
-            mpw.writeMapleAsciiString(android.getName());
-        }
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] deactivateAndroid(int cid) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.ANDROID_DEACTIVATED);
-		mpw.writeInt(cid);
-
         return mpw.getPacket();
     }
 
@@ -2157,14 +1986,6 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         return mpw.getPacket();
     }
 
-    public static byte[] cancelChair(MapleCharacter chr) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CANCEL_CHAIR);
-		mpw.writeInt(chr.getID());
-        mpw.write(0);
-
-        return mpw.getPacket();
-    }
-    
     public static byte[] cancelChair(int id) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CANCEL_CHAIR);
         if (id == -1) {

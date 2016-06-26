@@ -859,15 +859,7 @@ public class CSPacket {
         return mpw.getPacket();
     }
 
-    public static byte[] changePetName(MapleCharacter chr, String newname, int slot) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.PET_NAMECHANGE);
-		mpw.writeInt(chr.getID());
-        mpw.write(0);
-        mpw.writeMapleAsciiString(newname);
-        mpw.write(slot);
-
-        return mpw.getPacket();
-    }
+    
 
     public static byte[] OnMemoResult(final byte act, final byte mode) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SHOW_NOTES);
@@ -895,19 +887,6 @@ public class CSPacket {
             mpw.writeLong(PacketHelper.getKoreanTimestamp(notes.getLong("timestamp")));
             mpw.write(notes.getInt("gift"));
             notes.next();
-        }
-
-        return mpw.getPacket();
-    }
-
-    public static byte[] useChalkboard(final int charid, final String msg) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CHALKBOARD);
-		mpw.writeInt(charid);
-        if (msg == null || msg.length() <= 0) {
-            mpw.write(0);
-        } else {
-            mpw.write(1);
-            mpw.writeMapleAsciiString(msg);
         }
 
         return mpw.getPacket();

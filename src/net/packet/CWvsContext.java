@@ -1572,13 +1572,6 @@ public class CWvsContext {
         return mpw.getPacket();
     }
 
-    public static byte[] showForeignDamageSkin(MapleCharacter chr, int skinid) {
-    	MaplePacketWriter packet = new MaplePacketWriter(SendPacketOpcode.SHOW_DAMAGE_SKIN);
-        packet.writeInt(chr.getID());
-        packet.writeInt(skinid);
-        return packet.getPacket();
-    }
-
     public static class AlliancePacket {
 
         public static byte[] getAllianceInfo(MapleGuildAlliance alliance) {
