@@ -159,7 +159,7 @@ public class PlayerCommand {
         public int execute(MapleClient c, String[] splitted) {
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.sendPacket(CWvsContext.enableActions());
+            c.getSession().write(CWvsContext.enableActions());
             return 1;
         }
     }
@@ -509,7 +509,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(CWvsContext.gmBoard(c.getNextClientIncrenement(), "http://www.hidden-street.net/"));
+            c.getSession().write(CWvsContext.gmBoard(c.getNextClientIncrenement(), "http://www.hidden-street.net/"));
             return 1;
         }
     }
@@ -518,7 +518,7 @@ public class PlayerCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(CWvsContext.gmBoard(c.getNextClientIncrenement(), ServerConfig.rankingURL));
+            c.getSession().write(CWvsContext.gmBoard(c.getNextClientIncrenement(), ServerConfig.rankingURL));
             return 1;
         }
     }
@@ -719,7 +719,7 @@ public class PlayerCommand {
      public int execute(MapleClient c, String[] splitted) {
      c.removeClickedNPC();
      NPCScriptManager.getInstance().dispose(c);
-     c.sendPacket(CWvsContext.enableActions());
+     c.getSession().write(CWvsContext.enableActions());
      return 1;
      }
      }
@@ -793,7 +793,7 @@ public class PlayerCommand {
             c.getCharacter().dropMessage(6, "EXP: " + c.getCharacter().getExp() + " / " + c.getCharacter().getNeededExp());
             c.removeClickedNPC();
             NPCScriptManager.getInstance().dispose(c);
-            c.sendPacket(CWvsContext.enableActions());
+            c.getSession().write(CWvsContext.enableActions());
             return 1;
         }
     }

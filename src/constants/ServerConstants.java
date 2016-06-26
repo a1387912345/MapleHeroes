@@ -53,8 +53,8 @@ public class ServerConstants {
     }
     public static final String ACCMASTER = "admin";
     public static final short CLIENT_VERSION = (short) 174;
-    public static final String CLIENT_SUBVERSION = "1";
-    public static final String SOURCE_REVISION = "5";
+    public static final String CLIENT_SUBVERSION = "2";
+    public static final String SOURCE_REVISION = "9";
     public static final boolean BLOCK_CS = false;  //true = cash shop disabled
     public static final boolean Old_Maps = false; //example: it will use old maple event's henesys instead of current one
     public static final boolean Use_Localhost = false; //true = packets are logged, false = others can connect to server

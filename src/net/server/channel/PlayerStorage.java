@@ -26,9 +26,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
-
+import client.MapleCharacterUtil;
 import client.character.MapleCharacter;
-import client.character.MapleCharacterUtil;
 import net.world.CharacterTransfer;
 import net.world.CheaterData;
 import net.world.World;
@@ -202,7 +201,7 @@ public class PlayerStorage {
 
                 if (!chr.isGM() || !checkGM) {
                     chr.getClient().disconnect(false, false, true);
-                    chr.getClient().close();
+                    chr.getClient().getSession().close();
                     World.Find.forceDeregister(chr.getID(), chr.getName());
                     itr.remove();
                 }
@@ -251,7 +250,7 @@ public class PlayerStorage {
         try {
             final Iterator<MapleCharacter> itr = nameToChar.values().iterator();
             while (itr.hasNext()) {
-                itr.next().getClient().sendPacket(data);
+                itr.next().getClient().getSession().write(data);
             }
         } finally {
             rL.unlock();
@@ -267,7 +266,7 @@ public class PlayerStorage {
                 chr = itr.next();
 
                 if (chr.getClient().isLoggedIn() && chr.getSmega()) {
-                    chr.getClient().sendPacket(data);
+                    chr.getClient().getSession().write(data);
                 }
             }
         } finally {
@@ -283,7 +282,7 @@ public class PlayerStorage {
             while (itr.hasNext()) {
                 chr = itr.next();
                 if (chr.getClient().isLoggedIn() && chr.isIntern()) {
-                    chr.getClient().sendPacket(data);
+                    chr.getClient().getSession().write(data);
                 }
             }
         } finally {
@@ -301,7 +300,7 @@ public class PlayerStorage {
                 final Iterator<Map.Entry<Integer, CharacterTransfer>> itr = PendingCharacter.entrySet().iterator();
 
                 while (itr.hasNext()) {
-                    if (currenttime - itr.next().getValue().transferTime > 40000) { // 40 sec
+                    if (currenttime - itr.next().getValue().TranferTime > 40000) { // 40 sec
                         itr.remove();
                     }
                 }

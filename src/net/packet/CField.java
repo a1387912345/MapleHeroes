@@ -7,8 +7,7 @@ import constants.GameConstants;
 import constants.Interaction;
 import constants.QuickMove.QuickMoveNPC;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
-import net.server.channel.handler.deprecated.AttackInfo;
+import net.channel.handler.AttackInfo;
 import net.world.World;
 import net.world.guild.MapleGuild;
 import net.world.guild.MapleGuildAlliance;
@@ -29,6 +28,7 @@ import tools.AttackPair;
 import tools.HexTool;
 import tools.Pair;
 import tools.Triple;
+import tools.data.MaplePacketWriter;
 
 public class CField {
 
@@ -1634,11 +1634,15 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         return addAttackInfo(1, cid, tbyte, skill, skillLevel, display, speed, damage, charLevel, mastery, unk, itemid, pos, 0);
     }
     
-    public static byte[] rangedAttack(int charid, AttackInfo attack, int itemid, short charLevel, byte mastery) {
-		return addAttackInfo(1, charid, attack, itemid, charLevel, mastery);
+    public static byte[] rangedAttack(int charID, AttackInfo attack, int itemid, short charLevel, byte mastery) {
+		return addAttackInfo(1, charID, attack, itemid, charLevel, mastery);
 	}
+    
+    public static byte[] magicAttack(int charID, AttackInfo attack, int itemID, short charLevel, byte mastery) {
+        return addAttackInfo(1, charID, attack, itemID, charLevel, mastery);
+    }
 
-    public static byte[] addAttackInfo(int type, int charid, AttackInfo attack, int itemid, short charLevel, byte mastery) {
+    public static byte[] addAttackInfo(int type, int charID, AttackInfo attack, int itemID, short charLevel, byte mastery) {
     	MaplePacketWriter mpw;
     	if (type == 0) {
     		mpw = new MaplePacketWriter(SendPacketOpcode.CLOSE_RANGE_ATTACK);
@@ -1653,7 +1657,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
     	final int skillLevel = attack.skillLevel, skillid = attack.skillid, ultLevel = 0;
     	final byte unk = attack.unk;
 
-        mpw.writeInt(charid);
+        mpw.writeInt(charID);
         mpw.write(0);
         mpw.write(attack.tbyte);
         mpw.write(charLevel);
@@ -1702,6 +1706,7 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
         mpw.write(attack.flag); // some flag
         mpw.write(unk); // flag
         mpw.writeInt(0); // nOption3 or nBySummonedID
+        mpw.writeInt(0);
         
         if ((unk & 2) != 0) {
         	mpw.writeInt(skillid); // buckShotInfo.nSkillID
@@ -1718,9 +1723,12 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
 
         
         mpw.writeShort(attack.display);
+        mpw.writeInt(0);
+        mpw.writeShort(0);
+        mpw.write(0);
         mpw.write(attack.speed);
         mpw.write(mastery);
-        mpw.writeInt(itemid > 0 ? itemid : 0); // Throwing Star ID
+        mpw.writeInt(itemID > 0 ? itemID : 0); // Throwing Star ID
         
         for (AttackPair oned : attack.allDamage) {
             if (oned.attack != null) {
@@ -1771,7 +1779,6 @@ public static byte[] showAndroidEmotion(int cid, byte emotion) {
             mpw.writePos(attack.position);
         }
 
-        System.out.println(mpw.toString());
         return mpw.getPacket();
 	}
 

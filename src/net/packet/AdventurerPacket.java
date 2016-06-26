@@ -9,9 +9,9 @@ import java.awt.Point;
 import java.util.List;
 
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 import server.Randomizer;
 import server.life.MapleMonster;
+import tools.data.MaplePacketWriter;
 
 /**
  *

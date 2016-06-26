@@ -76,18 +76,18 @@ public class MapleShop {
 
     public void sendShop(MapleClient c) {
         c.getCharacter().setShop(this);
-        c.sendPacket(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
+        c.getSession().write(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
     }
 
     public void sendShop(MapleClient c, int customNpc) {
         c.getCharacter().setShop(this);
-        c.sendPacket(CField.NPCPacket.getNPCShop(customNpc, this, c));
+        c.getSession().write(CField.NPCPacket.getNPCShop(customNpc, this, c));
     }
 
     public void buy(MapleClient c, short slot, int itemId, short quantity) {
         if ((itemId / 10000 == 190) && (!GameConstants.isMountItemAvailable(itemId, c.getCharacter().getJob()))) {
             c.getCharacter().dropMessage(1, "You may not buy this item.");
-            c.sendPacket(CWvsContext.enableActions());
+            c.getSession().write(CWvsContext.enableActions());
             return;
         }
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -108,13 +108,13 @@ public class MapleShop {
                     c.getCharacter().gainMeso(-price, false);
                     MapleInventoryManipulator.addbyItem(c, i);
                     c.getCharacter().getRebuy().remove(index);
-                    c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, x));
+                    c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, x));
                 } else {
                     c.getCharacter().dropMessage(1, "Your inventory is full.");
-                    c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                    c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
                 }
             } else {
-                c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
             }
 
             return;
@@ -138,7 +138,7 @@ public class MapleShop {
                 }
                 if (!passed) {
                     c.getCharacter().dropMessage(1, "You need a higher rank.");
-                    c.sendPacket(CWvsContext.enableActions());
+                    c.getSession().write(CWvsContext.enableActions());
                     return;
                 }
             }
@@ -158,7 +158,7 @@ public class MapleShop {
                 } else {
                     c.getCharacter().dropMessage(1, "Your Inventory is full");
                 }
-                c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
             }
         } else if ((item != null) && (item.getReqItem() > 0) && (quantity == 1) && (c.getCharacter().haveItem(item.getReqItem(), item.getReqItemQ(), false, true))) {
             if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
@@ -174,7 +174,7 @@ public class MapleShop {
             } else {
                 c.getCharacter().dropMessage(1, "Your Inventory is full");
             }
-            c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+            c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
         }
     }
 
@@ -247,7 +247,7 @@ public class MapleShop {
             if ((price != -1.0D) && (recvMesos > 0)) {
                 c.getCharacter().gainMeso(recvMesos, false);
             }
-            c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 5, this, c, -1));
+            c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 5, this, c, -1));
         }
     }
 
@@ -268,9 +268,9 @@ public class MapleShop {
             int price = (int) Math.round(ii.getPrice(item.getItemId()) * (slotMax - item.getQuantity()));
             if (c.getCharacter().getMeso() >= price) {
                 item.setQuantity(slotMax);
-                c.sendPacket(CWvsContext.InventoryPacket.updateInventorySlot(MapleInventoryType.USE, item, false));
+                c.getSession().write(CWvsContext.InventoryPacket.updateInventorySlot(MapleInventoryType.USE, item, false));
                 c.getCharacter().gainMeso(-price, false, false);
-                c.sendPacket(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
+                c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 0, this, c, -1));
             }
         }
     }

@@ -10,6 +10,8 @@ import constants.WorldConstants.TespiaWorldOption;
 import constants.WorldConstants.WorldOption;
 import custom.CustomPlayerRankings;
 import database.DatabaseConnection;
+import net.MapleCrypto;
+import net.MapleServerHandler;
 import net.PacketProcessor;
 import net.server.cashshop.CashShopServer;
 import net.server.channel.ChannelServer;
@@ -41,22 +43,19 @@ import server.Timer.WorldTimer;
 import server.events.MapleOxQuizFactory;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonsterInformationProvider;
+import server.life.MobSkillFactory;
 import server.life.PlayerNPC;
 import server.maps.MapleMapFactory;
 import server.quest.MapleQuest;
 
-public class Start implements Runnable {
+public class Start {
 
     public static long startTime = System.currentTimeMillis();
-    private static final Start instance = new Start();
+    public static final Start instance = new Start();
     public static AtomicInteger CompletedLoadingThreads = new AtomicInteger(0);
-    
-    private Start() {
-    	
-    }
 
-    @Override
-    public void run() {
+    public void run() throws InterruptedException, IOException {
+        long start = System.currentTimeMillis();
 //        System.setProperty("wzpath", "wz"); // test only..?
         /*System.out.println("Pick a SQL Setting.");
          Scanner input = new Scanner(System.in);
@@ -88,7 +87,6 @@ public class Start implements Runnable {
          System.out.println("Want the Server to Log Packets? (true/false)");
          inputBool = input.nextBoolean();
          ServerConfig.logPackets = inputBool;*/
-        
         Properties p = new Properties();
         try {
             p.load(new FileInputStream("config.ini"));
@@ -96,7 +94,6 @@ public class Start implements Runnable {
             System.out.println("Failed to load config.ini");
             System.exit(0);
         }
-        
         ServerConfig.interface_ = p.getProperty("ip");
         ServerConfig.logPackets = Boolean.parseBoolean(p.getProperty("logOps"));
         ServerConfig.adminOnly = Boolean.parseBoolean(p.getProperty("adminOnly"));
@@ -106,6 +103,35 @@ public class Start implements Runnable {
         ServerConstants.SQL_PASSWORD = p.getProperty("sql_password");
         ServerConstants.SQL_DATABASE = p.getProperty("sql_db");
         System.setProperty("wzpath", p.getProperty("wzpath"));
+        
+        /*for (Object property : System.getProperties().keySet()) {
+         if (property instanceof String) {
+         String arg = (String) property;
+         switch (arg.toLowerCase()) {
+         case "ip":
+         ServerConfig.interface_ = System.getProperty(arg);
+         break;
+         case "log":
+         ServerConfig.logPackets = Boolean.parseBoolean(System.getProperty(arg));
+         break;
+         case "admin":
+         ServerConfig.adminOnly = Boolean.parseBoolean(System.getProperty(arg));
+         break;
+         case "port":
+         ServerConstants.SQL_PORT = System.getProperty(arg);
+         break;
+         case "user":
+         ServerConstants.SQL_USER = System.getProperty(arg);
+         break;
+         case "password":
+         ServerConstants.SQL_PASSWORD = System.getProperty(arg);
+         break;
+         case "database":
+         ServerConstants.SQL_DATABASE = System.getProperty(arg);
+         break;
+         }
+         }
+         }*/
 
         if (ServerConfig.adminOnly || ServerConstants.Use_Localhost) {
             System.out.println("Admin Only mode is active.");
@@ -138,44 +164,42 @@ public class Start implements Runnable {
             }
         }
         System.out.println("Worlds: Total: " + (ServerConstants.TESPIA ? TespiaWorldOption.values().length : WorldOption.values().length) + " Visible: " + servers + (WorldConstants.gmserver > -1 ? " GM Server: " + WorldConstants.getNameById(WorldConstants.gmserver) : ""));
-        System.out.println("Running Threads");
+
+        System.out.print("Running Threads");
         WorldTimer.getInstance().start();
         EtcTimer.getInstance().start();
         MapTimer.getInstance().start();
         CloneTimer.getInstance().start();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
         EventTimer.getInstance().start();
         BuffTimer.getInstance().start();
         PingTimer.getInstance().start();
         GameConstants.LoadEXP();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
         MapleDojoRanking.getInstance().load();
         MapleGuildRanking.getInstance().load();
         MapleGuild.loadAll();
         MapleFamily.loadAll();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
         MapleLifeFactory.loadQuestCounts();
         MapleQuest.initQuests();
-        
-        // Load Resources
-        System.out.println("Loading resources...");
-		MapleItemInformationProvider.getInstance().runItems();
         MapleItemInformationProvider.getInstance().runEtc();
         MapleMonsterInformationProvider.getInstance().load();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
+        MapleItemInformationProvider.getInstance().runItems();
         SkillFactory.load();
         LoginInformationProvider.getInstance();
         RandomRewards.load();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
         MapleOxQuizFactory.getInstance();
         MapleCarnivalFactory.getInstance();
         CharacterCardFactory.getInstance().initialize();
   //      MobSkillFactory.getInstance();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
         SpeedRunner.loadSpeedRuns();
         MapleInventoryIdentifier.getInstance();
         MapleMapFactory.loadCustomLife();
-        //System.out.print(/*"\u25CF"*/".");
+        System.out.print(/*"\u25CF"*/".");
         Connection con = DatabaseConnection.getConnection();
         PreparedStatement ps;
         try {
@@ -184,24 +208,23 @@ public class Start implements Runnable {
             ps.close();
         } catch (SQLException ex) {
         }
-        //System.out.println(" Complete!");
+        System.out.println(" Complete!");
         CashItemFactory.getInstance().initialize();
+        MapleServerHandler.initiate();
         PacketProcessor.getInstance().initialize();
         
-        // Load Servers
-        LoginServer.getInstance().run();
+        LoginServer.run_startup_configurations();
         LoginAuthServer.getInstance().run();
-        ChannelServer.startChannels();
-        CashShopServer.run();
-        FarmServer.run();
-        //TalkServer.run();
-        
+        ChannelServer.startChannel_Main();
+        CashShopServer.run_startup_configurations();
+        FarmServer.run_startup_configurations();
+        TalkServer.runStartupConfigurations();
         Runtime.getRuntime().addShutdownHook(new Thread(new Shutdown()));
         World.registerRespawn();
         ShutdownServer.registerMBean();
         PlayerNPC.loadAll();
         MapleMonsterInformationProvider.getInstance().addExtra();
-        LoginServer.getInstance().setOn();
+        LoginServer.setOn();
         RankingWorker.run();
         //System.out.println("Event Script List: " + ServerConfig.getEventList());
         if (ServerConfig.logPackets) {
@@ -211,10 +234,10 @@ public class Start implements Runnable {
             System.out.println("[Anti-Sniff] Server is using Fixed IVs!");
         }
         CustomPlayerRankings.getInstance().load();
-        
-        double now = System.currentTimeMillis() - startTime;
-        double seconds = now / 1000;
-        System.out.println("Total loading time: " + seconds + " seconds.");
+        long now = System.currentTimeMillis() - start;
+        long seconds = now / 1000;
+        long ms = now % 1000;
+        System.out.println("Total loading time: " + seconds + "s " + ms + "ms");
     }
 
     public static class Shutdown implements Runnable {

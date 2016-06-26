@@ -320,7 +320,7 @@ public class MapleQuest implements Serializable {
             // we save forfeits only for logging purposes, they shouldn't matter anymore
             // completion time is set by the constructor
 
-            c.getClient().sendPacket(EffectPacket.showForeignEffect(14)); // Quest completion
+            c.getClient().getSession().write(EffectPacket.showForeignEffect(14)); // Quest completion
             c.getMap().broadcastMessage(c, EffectPacket.showForeignEffect(c.getID(), 14), false);
         }
     }
@@ -357,7 +357,7 @@ public class MapleQuest implements Serializable {
     public void forceComplete(MapleCharacter chr, int npc) {
         final MapleQuestStatus newStatus = new MapleQuestStatus(this, (byte) 2, npc);
         newStatus.setForfeited(chr.getQuest(this).getForfeited());
-        chr.getClient().sendPacket(EffectPacket.showForeignEffect(14)); // Quest completion effect
+        chr.getClient().getSession().write(EffectPacket.showForeignEffect(14)); // Quest completion effect
         chr.getMap().broadcastMessage(chr, EffectPacket.showForeignEffect(chr.getID(), 14), false);
         chr.updateQuest(newStatus);
     }
@@ -393,7 +393,7 @@ public class MapleQuest implements Serializable {
         for (MapleQuestAction a : this.completeActs) {
             a.runEnd(c, null);
         }
-        c.getClient().sendPacket(CField.EffectPacket.showForeignEffect(12));
+        c.getClient().getSession().write(CField.EffectPacket.showForeignEffect(12));
         c.getMap().broadcastMessage(c, CField.EffectPacket.showForeignEffect(c.getID(), 12), false);
     }
 

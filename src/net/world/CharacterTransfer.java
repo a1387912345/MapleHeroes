@@ -37,7 +37,7 @@ public class CharacterTransfer implements Externalizable {
             familyid, seniorid, junior1, junior2, currentrep, totalrep, battleshipHP, gachexp, guildContribution, individualGP, totalWins, totalLosses;
     public byte channel, gender, gmLevel, guildrank, alliancerank, clonez,
             fairyExp, cardStack, buddysize, world, initialSpawnPoint, skinColor, mount_level, mount_Fatigue, subcategory;
-    public long lastfametime, transferTime, exp, meso;
+    public long lastfametime, TranferTime, exp, meso;
     public String name, accountname, BlessOfFairy, BlessOfEmpress, chalkboard, tempIP;
     public short level, hpApUsed, job, fatigue;
     public Object inventorys, skillmacro, storage, cs, anticheat, innerSkills, azwanShopList;
@@ -239,7 +239,7 @@ public class CharacterTransfer implements Externalizable {
         this.mount_Fatigue = mount.getFatigue();
         this.mount_level = mount.getLevel();
         this.mount_exp = mount.getExp();
-        transferTime = System.currentTimeMillis();
+        TranferTime = System.currentTimeMillis();
     }
 
     @Override
@@ -480,7 +480,7 @@ public class CharacterTransfer implements Externalizable {
         for (MapleTraitType value : MapleTraitType.values()) {
             this.traits.put(MapleTraitType.values()[in.readByte()], in.readInt());
         }
-        transferTime = System.currentTimeMillis();
+        TranferTime = System.currentTimeMillis();
     }
 
     @Override

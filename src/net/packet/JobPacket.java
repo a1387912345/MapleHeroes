@@ -3,7 +3,6 @@ package net.packet;
 import client.MapleBuffStat;
 import client.character.MapleCharacter;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 
 import java.awt.Point;
 import java.util.EnumMap;
@@ -13,6 +12,7 @@ import server.Randomizer;
 import server.MapleStatEffect;
 import server.MapleStatInfo;
 import tools.HexTool;
+import tools.data.MaplePacketWriter;
 
 /**
  *

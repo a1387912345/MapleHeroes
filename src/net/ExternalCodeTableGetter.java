@@ -1,3 +1,23 @@
+/*
+ This file is part of the OdinMS Maple Story Server
+ Copyright (C) 2008 ~ 2010 Patrick Huy <patrick.huy@frz.cc> 
+ Matthias Butz <matze@odinms.de>
+ Jan Christian Meyer <vimes@odinms.de>
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License version 3
+ as published by the Free Software Foundation. You may not use, modify
+ or distribute this program under any other version of the
+ GNU Affero General Public License.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package net;
 
 import java.util.ArrayList;
@@ -34,7 +54,7 @@ public class ExternalCodeTableGetter {
             int base = 0;
             String offset;
             if (args.length == 2) {
-                base = valueOf(args[0], values).getValue();
+                base = valueOf(args[0], values).getOpcode();
                 if (base == def) {
                     base = getValue(args[0], values, def);
                 }
@@ -59,16 +79,16 @@ public class ExternalCodeTableGetter {
 
             @Override
             public int compare(WritableIntValueHolder o1, WritableIntValueHolder o2) {
-                return Short.valueOf(o1.getValue()).compareTo(o2.getValue());
+                return Short.valueOf(o1.getOpcode()).compareTo(o2.getOpcode());
             }
         });
         for (T code : all) {
             enumVals.append(code.name());
             enumVals.append(" = ");
             enumVals.append("0x");
-            enumVals.append(HexTool.toString(code.getValue()));
+            enumVals.append(HexTool.toString(code.getOpcode()));
             enumVals.append(" (");
-            enumVals.append(code.getValue());
+            enumVals.append(code.getOpcode());
             enumVals.append(")\n");
         }
         return enumVals.toString();
@@ -77,7 +97,7 @@ public class ExternalCodeTableGetter {
     public final static <T extends Enum<? extends WritableIntValueHolder> & WritableIntValueHolder> void populateValues(Properties properties, T[] values) {
         ExternalCodeTableGetter exc = new ExternalCodeTableGetter(properties);
         for (T code : values) {
-            code.setValue(exc.getValue(code.name(), values, (short) -2));
+            code.setOpcode(exc.getValue(code.name(), values, (short) -2));
         }
 
 //		if (log.isTraceEnabled()) { // generics - copy pasted between send and recv current?

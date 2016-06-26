@@ -24,14 +24,15 @@ import client.MapleBuffStat;
 import client.MapleClient;
 import client.MapleJob;
 import client.MonsterStatus;
+import client.PlayerStats;
 import client.Skill;
 import client.SkillFactory;
 import client.character.MapleCharacter;
-import client.character.PlayerStats;
 import client.inventory.Equip;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import net.packet.CField;
+import scripting.npc.NPCConversationManager;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -183,7 +184,7 @@ public class GameConstants {
     public static final int[] rankA = {70000027, 70000028, 70000029, 70000030, 70000031, 70000032, 70000033, 70000034, 70000035, 70000036, 70000039, 70000040, 70000041, 70000042};
     public static final int[] rankS = {70000043, 70000044, 70000045, 70000047, 70000048, 70000049, 70000050, 70000051, 70000052, 70000053, 70000054, 70000055, 70000056, 70000057, 70000058, 70000059, 70000060, 70000061, 70000062};
     public static final int[] circulators = {2702000, 2700000, 2700100, 2700200, 2700300, 2700400, 2700500, 2700600, 2700700, 2700800, 2700900, 2701000};
-    public static final int JAIL = 180000004, MAX_BUFFSTAT = 16, MAX_MOBSTAT = 3;
+    public static final int JAIL = 180000004, MAX_BUFFSTAT = 17, MAX_MOBSTAT = 3;
     public static final int[] blockedSkills = {4341003, 36120045};
     public static final String[] RESERVED = {"Alpha", "Aristocat", "Donor", "MapleNews", "Hack"};
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
@@ -3088,7 +3089,7 @@ public class GameConstants {
     }// 112xxxx - pendants, 113xxxx - belts
 
     public static boolean icsog(int itemId) {
-    	return itemId == 2049122;
+    return itemId == 2049122;
     }  
     //if only there was a way to find in wz files -.-
     public static boolean isEffectRing(int itemid) {
@@ -4751,7 +4752,7 @@ public class GameConstants {
             case 932000100:
             case 923040100:
             case 921160100:
-                c.sendPacket(CField.achievementRatio(0));
+                c.getSession().write(CField.achievementRatio(0));
                 break;
             case 930000200:
             case 922010200:
@@ -4766,7 +4767,7 @@ public class GameConstants {
             case 926100001:
             case 926110001:
             case 921160200:
-                c.sendPacket(CField.achievementRatio(10));
+                c.getSession().write(CField.achievementRatio(10));
                 break;
             case 930000300:
             case 910340200:
@@ -4786,7 +4787,7 @@ public class GameConstants {
             case 921160330:
             case 921160340:
             case 921160350:
-                c.sendPacket(CField.achievementRatio(25));
+                c.getSession().write(CField.achievementRatio(25));
                 break;
             case 930000400:
             case 926100200:
@@ -4796,7 +4797,7 @@ public class GameConstants {
             case 926100202:
             case 926110202:
             case 921160400:
-                c.sendPacket(CField.achievementRatio(35));
+                c.getSession().write(CField.achievementRatio(35));
                 break;
             case 910340300:
             case 922010700:
@@ -4812,7 +4813,7 @@ public class GameConstants {
             case 240080800:
             case 923040300:
             case 921160500:
-                c.sendPacket(CField.achievementRatio(50));
+                c.getSession().write(CField.achievementRatio(50));
                 break;
             case 910340400:
             case 922010800:
@@ -4832,7 +4833,7 @@ public class GameConstants {
             case 932000400:
             case 923040400:
             case 921160600:
-                c.sendPacket(CField.achievementRatio(70));
+                c.getSession().write(CField.achievementRatio(70));
                 break;
             case 910340500:
             case 922010900:
@@ -4845,7 +4846,7 @@ public class GameConstants {
             case 926110401:
             case 921120400:
             case 921160700:
-                c.sendPacket(CField.achievementRatio(85));
+                c.getSession().write(CField.achievementRatio(85));
                 break;
             case 922011000:
             case 922011100:
@@ -4861,7 +4862,7 @@ public class GameConstants {
             case 926110600:
             case 921120500:
             case 921120600:
-                c.sendPacket(CField.achievementRatio(100));
+                c.getSession().write(CField.achievementRatio(100));
                 break;
         }
     }
@@ -5347,6 +5348,8 @@ public class GameConstants {
                 return 24111001;
             case 4:
                 return 24121001;
+            case 5:
+            	return 24120095; //TODO get correct value, just a placeholder
         }
         return 0;
     }
@@ -5362,7 +5365,7 @@ public class GameConstants {
             case 4:
                 return 2;
             case 5:
-                return 2;
+            	return 2;
         }
         return 0;
     }
@@ -5473,22 +5476,22 @@ public class GameConstants {
      }
 
      public static byte[] getQuickMoveData(MapleCharacter chr) { //Not completed yet
-     MaplePacketLittleEndianWriter mpw = new MaplePacketLittleEndianWriter();
+     MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
      MapleMap map = chr.getMap();
 
      for (MapleNPC npc : map.getAllNPCs()) {
      for (QuickMove q : QuickMove.values()) {
      if (npc.getId() == q.getNpc()) {
-     mpw.writeMapleAsciiString(""); //npc name?
-     mpw.writeInt(q.getNpc());
-     mpw.writeInt(q.getType());
-     mpw.writeInt(q.getLevel());
-     mpw.writeMapleAsciiString(q.getDescription());
+     mplew.writeMapleAsciiString(""); //npc name?
+     mplew.writeInt(q.getNpc());
+     mplew.writeInt(q.getType());
+     mplew.writeInt(q.getLevel());
+     mplew.writeMapleAsciiString(q.getDescription());
      }
      }
      }
 
-     return mpw.getPacket();
+     return mplew.getPacket();
      }
      }
      public static final int[] quickMoveNpcIds = {9070004, 9010022, 9071003, 9000086, 9000087, 9000088, 9000089, 9010041};

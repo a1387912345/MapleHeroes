@@ -10,7 +10,6 @@ import constants.ServerConfig;
 import constants.ServerConstants;
 import constants.WorldConstants.WorldOption;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 import net.server.login.LoginServer;
 
 import java.util.LinkedList;
@@ -20,6 +19,7 @@ import java.util.Set;
 import server.Randomizer;
 import tools.HexTool;
 import tools.Triple;
+import tools.data.MaplePacketWriter;
 
 public class LoginPacket {
 
@@ -89,8 +89,7 @@ public class LoginPacket {
     	mpw.write(1);
         mpw.writeInt(-1);
         mpw.writeShort(1);
-        //mpw.writeLong(client.getSocketChannel().getCreationTime());
-        mpw.writeLong(0);
+        mpw.writeLong(client.getSession().getCreationTime());
         
         return mpw.getPacket();
     }
@@ -206,10 +205,10 @@ public class LoginPacket {
     public static byte[] getServerList(int serverId, Map<Integer, Integer> channelLoad) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.SERVERLIST);
 		mpw.write(serverId);
-        String worldName = LoginServer.getInstance().getTrueServerName();
+        String worldName = LoginServer.getTrueServerName();
         mpw.writeMapleAsciiString(worldName);
         mpw.write(WorldOption.getById(serverId).getFlag());
-        mpw.writeMapleAsciiString(LoginServer.getInstance().getEventMessage());
+        mpw.writeMapleAsciiString(LoginServer.getEventMessage());
         mpw.writeShort(100);
         mpw.writeShort(100);
         mpw.write(0);

@@ -5,8 +5,7 @@
 package server.movement;
 
 import java.awt.Point;
-
-import net.netty.MaplePacketWriter;
+import tools.data.MaplePacketWriter;
 
 /**
  *

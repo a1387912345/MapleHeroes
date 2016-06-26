@@ -7,8 +7,8 @@ package net.packet;
 
 import client.character.MapleCharacter;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 import server.maps.MapleMap;
+import tools.data.MaplePacketWriter;
 
 /**
  *

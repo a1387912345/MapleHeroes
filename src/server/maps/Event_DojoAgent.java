@@ -199,7 +199,7 @@ public class Event_DojoAgent {
                             chr.modifyCSPoints(1, point * 4, true);
                             final int dojo = chr.getIntRecord(GameConstants.DOJO) + point;
                             chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
-                            //chr.getClient().sendPacket(WvsContext.Mulung_Pts(point, dojo));
+                            //chr.getClient().getSession().write(WvsContext.Mulung_Pts(point, dojo));
                         }
                     }
                 } else {
@@ -208,7 +208,7 @@ public class Event_DojoAgent {
                     c.modifyCSPoints(1, point * 4, true);
                     final int dojo = c.getIntRecord(GameConstants.DOJO) + point;
                     c.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
-                    //c.getClient().sendPacket(WvsContext.Mulung_Pts(point, dojo));
+                    //c.getClient().getSession().write(WvsContext.Mulung_Pts(point, dojo));
                 }
 
             }
@@ -227,7 +227,7 @@ public class Event_DojoAgent {
                             c.getTrait(MapleTraitType.will).addExp(points, c);
                             final int dojo = chr.getIntRecord(GameConstants.DOJO) + point;
                             chr.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
-                            //chr.getClient().sendPacket(WvsContext.Mulung_Pts(point, dojo));
+                            //chr.getClient().getSession().write(WvsContext.Mulung_Pts(point, dojo));
                             chr.modifyCSPoints(1, 5000, true);
                         }
                     }
@@ -237,7 +237,7 @@ public class Event_DojoAgent {
                     c.getTrait(MapleTraitType.will).addExp(points, c);
                     final int dojo = c.getIntRecord(GameConstants.DOJO) + point;
                     c.getQuestNAdd(MapleQuest.getInstance(GameConstants.DOJO)).setCustomData(String.valueOf(dojo));
-                    //c.getClient().sendPacket(WvsContext.Mulung_Pts(point, dojo));
+                    //c.getClient().getSession().write(WvsContext.Mulung_Pts(point, dojo));
                     c.modifyCSPoints(1, currentmap.getCharactersSize() > 1 ? 5000 : 7500, true);
                 }
                 return true;
@@ -250,7 +250,7 @@ public class Event_DojoAgent {
             }else if (currentmap.getId() == 925032300) {//End Hard
                 final MapleMap mappzz = ch.getMapFactory().getMap(925020003);//rooftop
                 c.changeMap(mappzz, mappzz.getPortal(1));
-                c.getClient().sendPacket(CField.UIPacket.openUI(72));// Dojo ui TODO add points?
+                c.getClient().getSession().write(CField.UIPacket.openUI(72));// Dojo ui TODO add points?
             } else {
 
                 //final int nextmapid = 925020000 + ((thisStage + 1) * 100);

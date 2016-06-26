@@ -131,7 +131,7 @@ public abstract class AbstractPlayerInteraction {
         if (portal != 0 && map == c.getCharacter().getMapId()) { //test
             final Point portalPos = new Point(c.getCharacter().getMap().getPortal(portal).getPosition());
             if (portalPos.distanceSq(getPlayer().getTruePosition()) < 90000.0) { //estimation
-                c.sendPacket(CField.instantMapWarp((byte) portal)); //until we get packet for far movement, this will do
+                c.getSession().write(CField.instantMapWarp((byte) portal)); //until we get packet for far movement, this will do
                 c.getCharacter().checkFollow();
                 c.getCharacter().getMap().movePlayer(c.getCharacter(), portalPos);
             } else {
@@ -156,7 +156,7 @@ public abstract class AbstractPlayerInteraction {
             final Point portalPos = new Point(c.getCharacter().getMap().getPortal(portal).getPosition());
             if (portalPos.distanceSq(getPlayer().getTruePosition()) < 90000.0) { //estimation
                 c.getCharacter().checkFollow();
-                c.sendPacket(CField.instantMapWarp((byte) c.getCharacter().getMap().getPortal(portal).getId()));
+                c.getSession().write(CField.instantMapWarp((byte) c.getCharacter().getMap().getPortal(portal).getId()));
                 c.getCharacter().getMap().movePlayer(c.getCharacter(), new Point(c.getCharacter().getMap().getPortal(portal).getPosition()));
             } else {
                 c.getCharacter().changeMap(mapz, mapz.getPortal(portal));
@@ -185,7 +185,7 @@ public abstract class AbstractPlayerInteraction {
         MapleCharacter chr = c.getChannelServer().getPlayerStorage().getCharacterByName(chrname);
         if (chr == null) {
             c.getCharacter().dropMessage(1, "Could not find the character.");
-            c.sendPacket(CWvsContext.enableActions());
+            c.getSession().write(CWvsContext.enableActions());
             return;
         }
         final MapleMap mapz = getWarpMap(mapid);
@@ -193,12 +193,12 @@ public abstract class AbstractPlayerInteraction {
             chr.changeMap(mapz, mapz.getPortal(Randomizer.nextInt(mapz.getPortals().size())));
             chr.getClient().removeClickedNPC();
             NPCScriptManager.getInstance().dispose(chr.getClient());
-            chr.getClient().sendPacket(CWvsContext.enableActions());
+            chr.getClient().getSession().write(CWvsContext.enableActions());
         } catch (Exception e) {
             chr.changeMap(mapz, mapz.getPortal(0));
             chr.getClient().removeClickedNPC();
             NPCScriptManager.getInstance().dispose(chr.getClient());
-            chr.getClient().sendPacket(CWvsContext.enableActions());
+            chr.getClient().getSession().write(CWvsContext.enableActions());
         }
     }
 
@@ -221,7 +221,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void playPortalSE() {
-        c.sendPacket(EffectPacket.showOwnBuffEffect(0, 7, 1, 1));
+        c.getSession().write(EffectPacket.showOwnBuffEffect(0, 7, 1, 1));
     }
 
     private MapleMap getWarpMap(final int map) {
@@ -385,7 +385,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void showQuestMsg(final String msg) {
-        c.sendPacket(CWvsContext.showQuestMsg(msg));
+        c.getSession().write(CWvsContext.showQuestMsg(msg));
     }
 
     public final void forceStartQuest(final int id, final String data) {
@@ -569,13 +569,13 @@ public abstract class AbstractPlayerInteraction {
             MapleInventoryManipulator.removeById(cg, GameConstants.getInventoryType(id), id, -quantity, true, false);
         }
         if (show) {
-            cg.sendPacket(InfoPacket.getShowItemGain(id, quantity, true));
+            cg.getSession().write(InfoPacket.getShowItemGain(id, quantity, true));
         }
     }
 
     public final boolean removeItem(final int id) { //quantity 1
         if (MapleInventoryManipulator.removeById_Lock(c, GameConstants.getInventoryType(id), id)) {
-            c.sendPacket(InfoPacket.getShowItemGain(id, (short) -1, true));
+            c.getSession().write(InfoPacket.getShowItemGain(id, (short) -1, true));
             return true;
         }
         return false;
@@ -746,7 +746,7 @@ public abstract class AbstractPlayerInteraction {
             } else {
                 MapleInventoryManipulator.removeById(chr.getClient(), GameConstants.getInventoryType(id), id, -quantity, true, false);
             }
-            chr.getClient().sendPacket(InfoPacket.getShowItemGain(id, quantity, true));
+            chr.getClient().getSession().write(InfoPacket.getShowItemGain(id, quantity, true));
         }
     }
 
@@ -866,7 +866,7 @@ public abstract class AbstractPlayerInteraction {
             final int possesed = chr.getInventory(GameConstants.getInventoryType(id)).countById(id);
             if (possesed > 0) {
                 MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(id), id, possesed, true, false);
-                chr.getClient().sendPacket(InfoPacket.getShowItemGain(id, (short) -possesed, true));
+                chr.getClient().getSession().write(InfoPacket.getShowItemGain(id, (short) -possesed, true));
             }
         }
     }
@@ -884,7 +884,7 @@ public abstract class AbstractPlayerInteraction {
 
     public final void useItem(final int id) {
         MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(c.getCharacter());
-        c.sendPacket(InfoPacket.getStatusMsg(id));
+        c.getSession().write(InfoPacket.getStatusMsg(id));
     }
 
     public final void cancelItem(final int id) {
@@ -903,7 +903,7 @@ public abstract class AbstractPlayerInteraction {
         final MaplePet pet = getPlayer().getPet(index);
         if (pet != null) {
             pet.setCloseness(pet.getCloseness() + (closeness * getChannelServer().getTraitRate()));
-            getClient().sendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getInventoryPosition()), true));
+            getClient().getSession().write(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getInventoryPosition()), true));
         }
     }
 
@@ -911,7 +911,7 @@ public abstract class AbstractPlayerInteraction {
         for (final MaplePet pet : getPlayer().getPets()) {
             if (pet != null && pet.getSummoned()) {
                 pet.setCloseness(pet.getCloseness() + closeness);
-                getClient().sendPacket(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getInventoryPosition()), true));
+                getClient().getSession().write(PetPacket.updatePet(pet, getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) pet.getInventoryPosition()), true));
             }
         }
     }
@@ -1003,10 +1003,10 @@ public abstract class AbstractPlayerInteraction {
         c.getCharacter().updateInfoQuest(7216, "3");
         c.getCharacter().updateInfoQuest(7214, "5");
         c.getCharacter().updateInfoQuest(7215, "0");
-        //c.sendPacket(InfoPacket.updateInfoQuest(1207, "min=1;tuto=1")); //old - 1207, "pt=1;min=4;belt=1;tuto=1")); //todo
-        //c.sendPacket(InfoPacket.updateInfoQuest(7281, "item=0;chk=0;cNum=0;sec=" + sec + ";stage=0;lBonus=0"));
-        c.sendPacket(EffectPacket.Mulung_DojoUp2());
-        c.sendPacket(CField.instantMapWarp((byte) 6));
+        //c.getSession().write(InfoPacket.updateInfoQuest(1207, "min=1;tuto=1")); //old - 1207, "pt=1;min=4;belt=1;tuto=1")); //todo
+        //c.getSession().write(InfoPacket.updateInfoQuest(7281, "item=0;chk=0;cNum=0;sec=" + sec + ";stage=0;lBonus=0"));
+        c.getSession().write(EffectPacket.Mulung_DojoUp2());
+        c.getSession().write(CField.instantMapWarp((byte) 6));
     }
 
     public final boolean dojoAgent_NextMap(final boolean dojo, final boolean fromresting) {
@@ -1055,23 +1055,23 @@ public abstract class AbstractPlayerInteraction {
         if (!c.getCharacter().hasSummon()) {
             playerSummonHint(true);
         }
-        c.sendPacket(UIPacket.summonMessage(msg));
+        c.getSession().write(UIPacket.summonMessage(msg));
     }
 
     public final void summonMsg(final int type) {
         if (!c.getCharacter().hasSummon()) {
             playerSummonHint(true);
         }
-        c.sendPacket(UIPacket.summonMessage(type));
+        c.getSession().write(UIPacket.summonMessage(type));
     }
 
     public final void showInstruction(final String msg, final int width, final int height) {
-        c.sendPacket(CField.sendHint(msg, width, height));
+        c.getSession().write(CField.sendHint(msg, width, height));
     }
 
     public final void playerSummonHint(final boolean summon) {
         c.getCharacter().setHasSummon(summon);
-        c.sendPacket(UIPacket.summonHelper(summon));
+        c.getSession().write(UIPacket.summonHelper(summon));
     }
 
     public final String getInfoQuest(final int id) {
@@ -1091,44 +1091,44 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public final void Aran_Start() {
-        c.sendPacket(CField.Aran_Start());
+        c.getSession().write(CField.Aran_Start());
     }
 
     public final void evanTutorial(final String data, final int v1) {
-        c.sendPacket(NPCPacket.getEvanTutorial(data));
+        c.getSession().write(NPCPacket.getEvanTutorial(data));
     }
 
     public final void AranTutInstructionalBubble(final String data) {
-        c.sendPacket(EffectPacket.TutInstructionalBalloon(data));
+        c.getSession().write(EffectPacket.TutInstructionalBalloon(data));
     }
 
     public final void ShowWZEffect(final String data) {
-        c.sendPacket(EffectPacket.TutInstructionalBalloon(data));
+        c.getSession().write(EffectPacket.TutInstructionalBalloon(data));
     }
 
     public final void showWZEffect(final String data) {
-        c.sendPacket(EffectPacket.ShowWZEffect(data));
+        c.getSession().write(EffectPacket.ShowWZEffect(data));
     }
 
     public final void EarnTitleMsg(final String data) {
-        c.sendPacket(CWvsContext.getTopMsg(data));
+        c.getSession().write(CWvsContext.getTopMsg(data));
     }
 
     public final void topMsg(final String data) {
-        c.sendPacket(CWvsContext.getTopMsg(data));
+        c.getSession().write(CWvsContext.getTopMsg(data));
     }
 
     public final void EnableUI(final short i) {
-        c.sendPacket(UIPacket.IntroEnableUI(i));
+        c.getSession().write(UIPacket.IntroEnableUI(i));
     }
 
     public final void DisableUI(final boolean enabled) {
-        c.sendPacket(UIPacket.IntroDisableUI(enabled));
+        c.getSession().write(UIPacket.IntroDisableUI(enabled));
     }
 
     public final void MovieClipIntroUI(final boolean enabled) {
-        c.sendPacket(UIPacket.IntroDisableUI(enabled));
-        c.sendPacket(UIPacket.IntroLock(enabled));
+        c.getSession().write(UIPacket.IntroDisableUI(enabled));
+        c.getSession().write(UIPacket.IntroLock(enabled));
     }
 
     public MapleInventoryType getInvType(int i) {
@@ -1177,7 +1177,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void showMapEffect(String path) {
-        getClient().sendPacket(CField.MapEff(path));
+        getClient().getSession().write(CField.MapEff(path));
     }
 
     public int itemQuantity(int itemid) {
@@ -1241,7 +1241,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void sendUIWindow(final int type, final int npc) {
-        c.sendPacket(CField.UIPacket.openUIOption(type, npc));
+        c.getSession().write(CField.UIPacket.openUIOption(type, npc));
     }
 
     public void logPQ(String text) {
@@ -1253,7 +1253,7 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void trembleEffect(int type, int delay) {
-        c.sendPacket(CField.trembleEffect(type, delay));
+        c.getSession().write(CField.trembleEffect(type, delay));
     }
 
     public int nextInt(int arg0) {
@@ -1320,46 +1320,46 @@ public abstract class AbstractPlayerInteraction {
     }
 
     public void sendDirectionStatus(int key, int value) {
-        c.sendPacket(UIPacket.getDirectionInfo(key, value));
-        c.sendPacket(UIPacket.getDirectionStatus(true));
+        c.getSession().write(UIPacket.getDirectionInfo(key, value));
+        c.getSession().write(UIPacket.getDirectionStatus(true));
     }
 
     public void sendDirectionStatus(int key, int value, boolean direction) {
-        c.sendPacket(UIPacket.getDirectionInfo(key, value));
-        c.sendPacket(UIPacket.getDirectionStatus(direction));
+        c.getSession().write(UIPacket.getDirectionInfo(key, value));
+        c.getSession().write(UIPacket.getDirectionStatus(direction));
     }
 
     public void sendDirectionInfo(String data) {
-        c.sendPacket(UIPacket.getDirectionInfo(data, 2000, 0, -100, 0, 0));
-        c.sendPacket(UIPacket.getDirectionInfo(1, 2000));
+        c.getSession().write(UIPacket.getDirectionInfo(data, 2000, 0, -100, 0, 0));
+        c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
     }
 
     public void getDirectionInfo(String data, int value, int x, int y, int a, int b) {
-        c.sendPacket(CField.UIPacket.getDirectionInfo(data, value, x, y, a, b));
+        c.getSession().write(CField.UIPacket.getDirectionInfo(data, value, x, y, a, b));
     }
 
     public void getDirectionInfo(byte type, int value) {
-        c.sendPacket(CField.UIPacket.getDirectionInfo(type, value));
+        c.getSession().write(CField.UIPacket.getDirectionInfo(type, value));
     }
 
     public void introEnableUI(int wtf) {
-        c.sendPacket(CField.UIPacket.IntroEnableUI(wtf));
+        c.getSession().write(CField.UIPacket.IntroEnableUI(wtf));
     }
     
     public void sendDirectionFacialExpression(int expression, int duration) {
-        c.sendPacket(CField.directionFacialExpression(expression, duration));
+        c.getSession().write(CField.directionFacialExpression(expression, duration));
     }
 
     public void introDisableUI(boolean enable) {
-        c.sendPacket(CField.UIPacket.IntroDisableUI(enable));
+        c.getSession().write(CField.UIPacket.IntroDisableUI(enable));
     }
 
     public void getDirectionStatus(boolean enable) {
-        c.sendPacket(CField.UIPacket.getDirectionStatus(enable));
+        c.getSession().write(CField.UIPacket.getDirectionStatus(enable));
     }
 
     public void playMovie(String data, boolean show) {
-        c.sendPacket(UIPacket.playMovie(data, show));
+        c.getSession().write(UIPacket.playMovie(data, show));
     }
 
     public String getCharacterName(int characterid) {

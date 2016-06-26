@@ -7,7 +7,6 @@ package server.commands;
 import client.*;
 import client.anticheat.ReportType;
 import client.character.MapleCharacter;
-import client.character.MapleCharacterUtil;
 import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants.PlayerGMRank;
@@ -173,13 +172,13 @@ public class GMCommand {
                     //chrs.dropMessage(0, "Event Map: " + c.getPlayer().getMap().getMapName());
                     //World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(25, 0, "MapleGM is hosting an event! Use the @joinevent command to join the event!"));
                     //World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(26, 0, "Event Map: " + c.getPlayer().getMap().getMapName()));
-                    chrs.getClient().sendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 25, c.getChannel(), "Event : MapleGM is hosting an event! Use the @joinevent command to join the event!"));
-                    chrs.getClient().sendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 26, c.getChannel(), "Event : Event Channel: " + c.getChannel() + " Event Map: " + c.getCharacter().getMap().getMapName()));
+                    chrs.getClient().getSession().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 25, c.getChannel(), "Event : MapleGM is hosting an event! Use the @joinevent command to join the event!"));
+                    chrs.getClient().getSession().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 26, c.getChannel(), "Event : Event Channel: " + c.getChannel() + " Event Map: " + c.getCharacter().getMap().getMapName()));
                 }
             } else {
                 for (MapleCharacter chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
                     //World.Broadcast.broadcastMessage(CWvsContext.broadcastMsg(22, 0, "Enteries to the GM event are closed. The event has began!"));
-                    chrs.getClient().sendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Enteries to the GM event are closed. The event has began!"));
+                    chrs.getClient().getSession().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Enteries to the GM event are closed. The event has began!"));
                 }
             }
             return 1;
@@ -477,7 +476,7 @@ public class GMCommand {
         public int execute(MapleClient c, String[] splitted) {
             MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(splitted[splitted.length - 1]);
             if (victim != null && c.getCharacter().getGMLevel() >= victim.getGMLevel()) {
-                victim.getClient().getSocketChannel().close();
+                victim.getClient().getSession().close();
                 victim.getClient().disconnect(true, false);
                 return 1;
             } else {
@@ -1004,13 +1003,13 @@ public class GMCommand {
             MapleInventoryType type = GameConstants.getInventoryType(itemid);
             for (Item item : chr.getInventory(type).listById(itemid)) {
                 item.setFlag((byte) (item.getFlag() | ItemFlag.LOCK.getValue()));
-                chr.getClient().sendPacket(InventoryPacket.updateSpecialItemUse(item, type.getType(), item.getPosition(), true, chr));
+                chr.getClient().getSession().write(InventoryPacket.updateSpecialItemUse(item, type.getType(), item.getPosition(), true, chr));
             }
             if (type == MapleInventoryType.EQUIP) {
                 type = MapleInventoryType.EQUIPPED;
                 for (Item item : chr.getInventory(type).listById(itemid)) {
                     item.setFlag((byte) (item.getFlag() | ItemFlag.LOCK.getValue()));
-                    //chr.getClient().sendPacket(CField.updateSpecialItemUse(item, type.getType()));
+                    //chr.getClient().getSession().write(CField.updateSpecialItemUse(item, type.getType()));
                 }
             }
             c.getCharacter().dropMessage(6, "All items with the ID " + splitted[2] + " has been locked from the inventory of " + splitted[1] + ".");
@@ -1550,7 +1549,7 @@ public class GMCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.getCharacter().dropMessage(5, "IP: " + c.getSocketChannel().remoteAddress().toString().split(":")[0]);
+            c.getCharacter().dropMessage(5, "IP: " + c.getSession().getRemoteAddress().toString().split(":")[0]);
             return 1;
         }
     }
@@ -1801,7 +1800,7 @@ public class GMCommand {
      public int execute(MapleClient c, String[] splitted) {
      //           int clock = 1;
      MapleMonster mob = MapleLifeFactory.getMonster(891000);
-     c.sendPacket(CField.spawnClockMist(this));
+     c.getSession().write(CField.spawnClockMist(this));
      return 0;
      }
      }*/

@@ -5,10 +5,18 @@
 package net.server.farm;
 
 import constants.ServerConfig;
-import net.Acceptor;
+import net.MapleServerHandler;
+import net.mina.MapleCodecFactory;
 import net.server.channel.PlayerStorage;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoAcceptor;
+import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.transport.socket.nio.SocketAcceptor;
+import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
 /**
  *
@@ -17,20 +25,29 @@ import java.net.InetSocketAddress;
 public class FarmServer {
 
     private static String ip;
+    private static InetSocketAddress InetSocketadd;
     private static final int PORT = 8611;
-    private static Acceptor acceptor;
+    private static IoAcceptor acceptor;
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
 
-    public static void run() {
+    public static void run_startup_configurations() {
         ip = ServerConfig.interface_ + ":" + PORT;
 
+        ByteBuffer.setUseDirectBuffers(false);
+        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+
+        acceptor = new SocketAcceptor();
+        SocketAcceptorConfig cfg = new SocketAcceptorConfig();
+        cfg.getSessionConfig().setTcpNoDelay(true);
+        cfg.setDisconnectOnUnbind(true);
+        cfg.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
         players = new PlayerStorage(-30);
         try {
-        	acceptor = new Acceptor(new InetSocketAddress(PORT));
-			acceptor.run();
+            InetSocketadd = new InetSocketAddress(PORT);
+            acceptor.bind(InetSocketadd, new MapleServerHandler(), cfg);
             System.out.println("Farm Server is listening on port  " + PORT + ".");
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.err.println("Binding to port " + PORT + " failed");
             throw new RuntimeException("Binding failed.", e);
         }

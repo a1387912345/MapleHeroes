@@ -6,7 +6,6 @@ import client.inventory.*;
 import constants.GameConstants;
 import constants.ServerConstants;
 import net.Buffstat;
-import net.netty.MaplePacketWriter;
 import net.world.MapleCharacterLook;
 
 import java.util.*;
@@ -25,6 +24,7 @@ import tools.KoreanDateUtil;
 import tools.Pair;
 import tools.StringUtil;
 import tools.Triple;
+import tools.data.MaplePacketWriter;
 
 public class PacketHelper {
 
@@ -1038,12 +1038,14 @@ public class PacketHelper {
         	// TODO
         }
         
+        
         if ((flag & 0x20000000) != 0) {
             //addStealSkills(mpw, chr);
         	mpw.writeInt(0);
             mpw.writeInt(0);
             mpw.writeInt(0);
             mpw.writeInt(0);
+        	mpw.writeInt(0);
         }
         
         if ((flag & 0x10000000) != 0) {
@@ -1051,8 +1053,11 @@ public class PacketHelper {
             mpw.writeInt(0);
             mpw.writeInt(0);
             mpw.writeInt(0);
+            mpw.writeInt(0);
         }
         
+        //addStealSkills(mpw, chr);
+        mpw.writeInt(0); // doesn't belong 
         if ((flag & 0x80000000) != 0) {
             addAbilityInfo(mpw, chr);
         }
@@ -1111,15 +1116,13 @@ public class PacketHelper {
         mpw.writeInt(-1);
         mpw.writeLong(0);
         mpw.writeLong(1);
-        mpw.writeLong(getTime(-2));
+        mpw.writeLong(System.currentTimeMillis());
         mpw.writeZeroBytes(14);
         
         //addEvolutionInfo(mpw, chr);
         //mpw.writeZeroBytes(3);//new 144
         //mpw.write(0); //farm monsters length
 
-
-        
         if((flag & 0x40) != 0) {
         	addFarmInfo(mpw, chr.getClient(), 0);
         	mpw.writeInt(-1); //v146 can be 5 tho...
@@ -1139,9 +1142,13 @@ public class PacketHelper {
         mpw.writeInt(0); // Runner Point
         mpw.writeLong(getTime(-2)); // Last Played
         mpw.writeInt(10); // Total Left
-        mpw.writeShort(1); // Count
-        mpw.writeInt(9); // Slot
-        mpw.writeMapleAsciiString("check1=0;cDate=16/04/20");
+        int runnerCount = 0;
+        mpw.writeShort(runnerCount); // Count
+        for (int i = 0; i < runnerCount; i++) {
+        	mpw.writeInt(9); // Slot
+        	mpw.writeMapleAsciiString("check1=0;cDate=16/06/24");
+        }
+        
         if ((flag & 0x40000) != 0) {
             mpw.writeShort(0); //v174
         }
@@ -1149,7 +1156,7 @@ public class PacketHelper {
         
         mpw.writeInt(0); // Decode Text Equip Info
         
-        mpw.write(HexTool.getByteArrayFromHexString("01 00 01 00 00 00 00 00 00 00 64 00 00 00 80 73 10 EF 29 9C D1 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 80 29 60 76 F1 9C D1 01 00 01 00 00"));
+        mpw.write(HexTool.getByteArrayFromHexString("01 00 01 00 00 00 00 00 00 00 64 00 00 00 D0 25 8A A2 3B CE D1 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 A0 F1 E7 C0 04 CF D1 01 00 01 00 00"));
         
         /*
         if((flag & 0x4000000) != 0) {

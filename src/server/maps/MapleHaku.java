@@ -41,12 +41,12 @@ public class MapleHaku extends AnimatedMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.sendPacket(CField.spawnHaku(this));
+        client.getSession().write(CField.spawnHaku(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.sendPacket(CField.removeDragon(this.owner));
+        client.getSession().write(CField.removeDragon(this.owner));
     }
 
     public int getOwner() {

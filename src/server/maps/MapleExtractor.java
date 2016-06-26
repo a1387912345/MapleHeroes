@@ -27,12 +27,12 @@ public class MapleExtractor extends MapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.sendPacket(CField.makeExtractor(owner, ownerName, getTruePosition(), getTimeLeft(), itemId, fee));
+        client.getSession().write(CField.makeExtractor(owner, ownerName, getTruePosition(), getTimeLeft(), itemId, fee));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.sendPacket(CField.removeExtractor(this.owner));
+        client.getSession().write(CField.removeExtractor(this.owner));
     }
 
     @Override

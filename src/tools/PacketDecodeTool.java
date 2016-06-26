@@ -5,9 +5,8 @@
 package tools;
 
 import java.io.ByteArrayOutputStream;
-
-import net.netty.MaplePacketReader;
 import tools.data.ByteArrayByteStream;
+import tools.data.LittleEndianAccessor;
 
 /**
  *
@@ -24,7 +23,7 @@ public class PacketDecodeTool {
     public static void main(String[] args) {
         String packet = "0A 00 31 30 40 30 32 30 33 30 34 30 35 30";
         byte[] bytes = getByteArrayFromHexString(packet);
-        final MaplePacketReader slea = new MaplePacketReader(new ByteArrayByteStream((byte[]) bytes));
+        final LittleEndianAccessor slea = new LittleEndianAccessor(new ByteArrayByteStream((byte[]) bytes));
         byte next;
         short next_short;
         int next_int;

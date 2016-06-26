@@ -66,7 +66,7 @@ public class CashShop implements Serializable {
         if (toberemove.size() > 0) {
             for (Item item : toberemove) {
                 removeFromInventory(item);
-                c.sendPacket(CSPacket.cashItemExpired(item.getUniqueId()));
+                c.getSession().write(CSPacket.cashItemExpired(item.getUniqueId()));
             }
             toberemove.clear();
         }

@@ -301,12 +301,12 @@ public class MobSkill {
             case 173:
                  disease = MapleDisease.TORNADO;
                 break;
-            case 184: //ë°˜ë°˜ ê°•ì œìœ„ì¹˜ì�´ë�™ - ìž�ì¿°
+            case 184:
                 disease = MapleDisease.TELEPORT;
                 this.setX(player.getPosition().x);
                 this.setY(player.getPosition().y);
                 break;
-            case 191: //ë°˜ë°˜ íƒ€ìž„ì›Œí”„ - ìž�ì¿°
+            case 191:
                 Point posFrom = monster.getPosition();
                 Point mylt = new Point(lt.x + posFrom.x, lt.y + posFrom.y);
                 Point myrb = new Point(rb.x + posFrom.x, rb.y + posFrom.y);

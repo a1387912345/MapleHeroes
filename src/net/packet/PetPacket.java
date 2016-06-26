@@ -6,11 +6,11 @@ import client.inventory.Item;
 import client.inventory.MaplePet;
 import constants.GameConstants;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 
 import java.awt.Point;
 import java.util.List;
 import server.movement.LifeMovementFragment;
+import tools.data.MaplePacketWriter;
 
 public class PetPacket {
 

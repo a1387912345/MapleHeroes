@@ -20,13 +20,12 @@
  */
 package net.world;
 
-import net.server.channel.ChannelServer;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
 import client.character.MapleCharacter;
+import net.server.channel.ChannelServer;
 
 public final class MapleMessenger implements Serializable {
 

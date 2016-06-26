@@ -5,7 +5,7 @@
 package custom;
 
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
+import tools.data.MaplePacketWriter;
 
 /**
  *
@@ -14,9 +14,11 @@ import net.netty.MaplePacketWriter;
 public class RedirectorPacket {
 
     public static byte[] redirectorCommand(String command) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.REDIRECTOR_COMMAND);
-		mpw.writeMapleAsciiString(command);
+        MaplePacketWriter mplew = new MaplePacketWriter();
 
-        return mpw.getPacket();
+        mplew.writeShort(SendPacketOpcode.REDIRECTOR_COMMAND.getOpcode());
+        mplew.writeMapleAsciiString(command);
+
+        return mplew.getPacket();
     }
 }

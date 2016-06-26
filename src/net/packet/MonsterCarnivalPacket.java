@@ -21,12 +21,12 @@
 package net.packet;
 
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 
 import java.util.List;
 
 import client.character.MapleCharacter;
 import server.MapleCarnivalParty;
+import tools.data.MaplePacketWriter;
 
 public class MonsterCarnivalPacket {
 

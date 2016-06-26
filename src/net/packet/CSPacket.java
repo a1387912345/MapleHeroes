@@ -6,7 +6,6 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +20,7 @@ import server.CashItemInfo.CashModInfo;
 import server.CashShop;
 import tools.HexTool;
 import tools.Pair;
+import tools.data.MaplePacketWriter;
 
 public class CSPacket {
 

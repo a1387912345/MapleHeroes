@@ -4,7 +4,6 @@ import client.MonsterStatus;
 import client.MonsterStatusEffect;
 import client.character.MapleCharacter;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 
 import java.awt.Point;
 import java.util.Collection;
@@ -18,6 +17,7 @@ import server.maps.MapleNodes;
 import server.movement.LifeMovementFragment;
 import tools.HexTool;
 import tools.Pair;
+import tools.data.MaplePacketWriter;
 
 public class MobPacket {
 
@@ -330,11 +330,11 @@ public class MobPacket {
         mpw.writeShort(moveid);
         mpw.write(useSkills ? 1 : 0);
         mpw.writeInt(currentMp);
-    //    mpw.writeShort(0);
         mpw.write(skillId);
         mpw.write(skillLevel);
         mpw.writeInt(0);
-     //   mpw.writeZeroBytes(50);
+        mpw.writeShort(0); // New: v174
+        mpw.write(0);      // New: v174
 
         return mpw.getPacket();
     }
@@ -350,10 +350,11 @@ public class MobPacket {
         
         int[] flag = new int[3];
         flag[1] |= 0x60000000;
-        flag[2] |= 0x6000000;
-        flag[2] |= 0x4000000;
-        flag[2] |= 0xFF0000;
-        flag[2] |= 0xF000;
+        flag[2] |= 0x600000;
+        flag[2] |= 0x400000;
+        flag[2] |= 0x70000;
+        flag[2] |= 0xFF00;
+        flag[2] |= 0x80;
         
         for (int i = 0; i < flag.length; i++) {
             mpw.writeInt(flag[i]);
@@ -494,10 +495,11 @@ public class MobPacket {
         
         int[] flag = new int[3];
         flag[1] |= 0x60000000;
-        flag[2] |= 0x6000000;
-        flag[2] |= 0x4000000;
-        flag[2] |= 0xFF0000;
-        flag[2] |= 0xF000;
+        flag[2] |= 0x600000;
+        flag[2] |= 0x400000;
+        flag[2] |= 0x70000;
+        flag[2] |= 0xFF00;
+        flag[2] |= 0x80;
         
         for (int i = 0; i < flag.length; i++) {
             mpw.writeInt(flag[i]);

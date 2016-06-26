@@ -1,7 +1,7 @@
 package tools;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
+import org.apache.mina.common.ByteBuffer;
 
 /**
  * Provides a class for manipulating hexadecimal numbers.

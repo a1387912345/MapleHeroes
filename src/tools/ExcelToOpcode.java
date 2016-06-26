@@ -22,6 +22,7 @@ public class ExcelToOpcode {
             for (int i = 0; i < 2; i++) {
 	            XSSFSheet sheet = workbook.getSheetAt(i);
 	            FileWriter out = new FileWriter(new File(sheet.getSheetName() + ".java"));
+	            out.write("package net;\n\n");
 	            out.write("public enum " + sheet.getSheetName() + " {\n\n"); // Write class header
 	            
 	 
@@ -62,14 +63,14 @@ public class ExcelToOpcode {
 	            // Print opcode methods
 	            out.write("\n\tprivate short opcode;\n\n");
 	            out.write("\tprivate " + sheet.getSheetName() + "(short opcode) {\n");
-	            out.write("\t\tthis.opcode = opcode\n");
+	            out.write("\t\tthis.opcode = opcode;\n");
 	            out.write("\t}\n\n");
 	            
 	            out.write("\tpublic short getOpcode() {\n");
 	            out.write("\t\treturn opcode;\n");
 	            out.write("\t}\n\n");
 	            
-	            out.write("\tpublic short setOpcode(short opcode) {\n");
+	            out.write("\tpublic void setOpcode(short opcode) {\n");
 	            out.write("\t\tthis.opcode = opcode;\n");
 	            out.write("\t}\n\n");
 

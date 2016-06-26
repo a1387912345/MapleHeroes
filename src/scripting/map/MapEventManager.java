@@ -12,11 +12,11 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	}
 	
 	public void enableDirectionStatus() {
-		c.sendPacket(UIPacket.getDirectionStatus(true));
+		c.getSession().write(UIPacket.getDirectionStatus(true));
 	}
 	
 	public void introEnableUI(boolean enable) {
-		c.sendPacket(UIPacket.IntroEnableUI(enable ? 1 : 0));
+		c.getSession().write(UIPacket.IntroEnableUI(enable ? 1 : 0));
 	}
 	
 	public void sleep(int delay) {
@@ -32,7 +32,7 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	 * @param delay the delay in milliseconds to pause threads
 	 */
 	public void delayEvent(int delay) {
-		c.sendPacket(UIPacket.delayDirectionInfo(delay));
+		c.getSession().write(UIPacket.delayDirectionInfo(delay));
 		try {
 			Thread.sleep(delay);
 		} catch (InterruptedException e) {
@@ -46,7 +46,7 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	 * @param offset the additional delay in milliseconds
 	 */
 	public void delayEvent(int delay, int offset) {
-		c.sendPacket(UIPacket.delayDirectionInfo(delay));
+		c.getSession().write(UIPacket.delayDirectionInfo(delay));
 		try {
 			Thread.sleep(delay + offset);
 		} catch (InterruptedException e) {
@@ -59,16 +59,16 @@ public class MapEventManager extends AbstractPlayerInteraction {
 	 * @param input
 	 */
 	public void forceMoveCharacter(int input) {
-		c.sendPacket(UIPacket.forceMoveCharacter(input));
+		c.getSession().write(UIPacket.forceMoveCharacter(input));
 	}
 	
 	
 	public void showDirectionEffect(String data, int value, int x, int y) {
-		c.sendPacket(UIPacket.getDirectionInfo(data, value, x, y, 0, 0));
+		c.getSession().write(UIPacket.getDirectionInfo(data, value, x, y, 0, 0));
 	}
 	
 	public void showDirectionEffect(String data, int value, int x, int y, int a, int b) {
-		c.sendPacket(UIPacket.getDirectionInfo(data, value, x, y, a, b));
+		c.getSession().write(UIPacket.getDirectionInfo(data, value, x, y, a, b));
 	}
 	
 	

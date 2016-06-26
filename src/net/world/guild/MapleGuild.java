@@ -1,12 +1,11 @@
 package net.world.guild;
 
+import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.SkillFactory;
 import client.character.MapleCharacter;
-import client.character.MapleCharacterUtil;
 import constants.GameConstants;
 import database.DatabaseConnection;
-import net.netty.MaplePacketWriter;
 import net.packet.CField;
 import net.packet.CWvsContext;
 import net.packet.PacketHelper;
@@ -34,6 +33,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import server.MapleStatEffect;
+import tools.data.MaplePacketWriter;
 
 public class MapleGuild implements java.io.Serializable {
 
@@ -1038,39 +1038,39 @@ public class MapleGuild implements java.io.Serializable {
         return 10;
     }
 
-    public final void addMemberData(final MaplePacketWriter mpw) {
-        mpw.writeShort(members.size());
+    public final void addMemberData(final MaplePacketWriter mplew) {
+        mplew.writeShort(members.size());
         for (final MapleGuildCharacter mgc : members) {
-            mpw.writeInt(mgc.getId());
+            mplew.writeInt(mgc.getId());
         }
         for (final MapleGuildCharacter mgc : members) {
-            mpw.writeAsciiString(mgc.getName(), 13);
-            mpw.writeInt(mgc.getJobId()); //-1 = ??
-            mpw.writeInt(mgc.getLevel()); //-1 = ??
-            mpw.writeInt(mgc.getGuildRank());
-            mpw.writeInt(mgc.isOnline() ? 1 : 0);
-            mpw.writeInt(mgc.getAllianceRank());
-            mpw.writeInt(mgc.getGuildContribution()); // Contribution
-            mpw.writeInt((int)(mgc.getGuildContribution() * 0.3)); // GP
-            mpw.writeInt(mgc.getIndividualGP()); // IGP
-            mpw.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
+            mplew.writeAsciiString(mgc.getName(), 13);
+            mplew.writeInt(mgc.getJobId()); //-1 = ??
+            mplew.writeInt(mgc.getLevel()); //-1 = ??
+            mplew.writeInt(mgc.getGuildRank());
+            mplew.writeInt(mgc.isOnline() ? 1 : 0);
+            mplew.writeInt(mgc.getAllianceRank());
+            mplew.writeInt(mgc.getGuildContribution()); // Contribution
+            mplew.writeInt((int)(mgc.getGuildContribution() * 0.3)); // GP
+            mplew.writeInt(mgc.getIndividualGP()); // IGP
+            mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
         }
         
-        mpw.writeShort(applications.size());
+        mplew.writeShort(applications.size());
         for (final MapleGuildCharacter mgc : applications) {
-            mpw.writeInt(mgc.getId());
+            mplew.writeInt(mgc.getId());
         }
         for (final MapleGuildCharacter mgc : applications) {
-            mpw.writeAsciiString(mgc.getName(), 13);
-            mpw.writeInt(mgc.getJobId()); //-1 = ??
-            mpw.writeInt(mgc.getLevel()); //-1 = ??
-            mpw.writeInt(mgc.getGuildRank());
-            mpw.writeInt(mgc.isOnline() ? 1 : 0);
-            mpw.writeInt(mgc.getAllianceRank());
-            mpw.writeInt(mgc.getGuildContribution());
-            mpw.writeInt((int)(mgc.getGuildContribution() * 0.3));
-            mpw.writeInt(mgc.getIndividualGP());
-            mpw.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
+            mplew.writeAsciiString(mgc.getName(), 13);
+            mplew.writeInt(mgc.getJobId()); //-1 = ??
+            mplew.writeInt(mgc.getLevel()); //-1 = ??
+            mplew.writeInt(mgc.getGuildRank());
+            mplew.writeInt(mgc.isOnline() ? 1 : 0);
+            mplew.writeInt(mgc.getAllianceRank());
+            mplew.writeInt(mgc.getGuildContribution());
+            mplew.writeInt((int)(mgc.getGuildContribution() * 0.3));
+            mplew.writeInt(mgc.getIndividualGP());
+            mplew.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
         }
     }
 
@@ -1086,7 +1086,7 @@ public class MapleGuild implements java.io.Serializable {
         if (mc.getGuildId() > 0) {
             return MapleGuildResponse.ALREADY_IN_GUILD;
         }
-        mc.getClient().sendPacket(GuildPacket.guildInvite(c.getCharacter().getGuildId(), c.getCharacter().getName(), c.getCharacter().getLevel(), c.getCharacter().getJob()));
+        mc.getClient().getSession().write(GuildPacket.guildInvite(c.getCharacter().getGuildId(), c.getCharacter().getName(), c.getCharacter().getLevel(), c.getCharacter().getJob()));
         return null;
     }
 

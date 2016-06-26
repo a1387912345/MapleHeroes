@@ -295,48 +295,51 @@ public class MapleItemInformationProvider {
     }
 
     public void runItems() {
-    	long startTime = System.currentTimeMillis();
-        final MapleData fData = etcData.getData("FamiliarInfo.img");
-        for (MapleData d : fData) {
-            StructFamiliar f = new StructFamiliar();
-            f.grade = 0;
-            f.mob = MapleDataTool.getInt("mob", d, 0);
-            f.passive = MapleDataTool.getInt("passive", d, 0);
-            f.itemid = MapleDataTool.getInt("consume", d, 0);
-            f.familiar = Integer.parseInt(d.getName());
-            familiars.put(f.familiar, f);
-            familiars_Item.put(f.itemid, f);
-            familiars_Mob.put(f.mob, f);
-        }
-        final MapleDataDirectoryEntry familiarEntry = (MapleDataDirectoryEntry) chrData.getRoot().getEntry("Familiar");
-        for (MapleDataEntry d : familiarEntry.getFiles()) {
-            final int id = Integer.parseInt(d.getName().substring(0, d.getName().length() - 4));
-            if (familiars.containsKey(id)) {
-                familiars.get(id).grade = (byte) MapleDataTool.getInt("grade", chrData.getData("Familiar/" + d.getName()).getChildByPath("info"), 0);
+        if (GameConstants.GMS) { //these must be loaded before items..
+            final MapleData fData = etcData.getData("FamiliarInfo.img");
+            for (MapleData d : fData) {
+                StructFamiliar f = new StructFamiliar();
+                f.grade = 0;
+                f.mob = MapleDataTool.getInt("mob", d, 0);
+                f.passive = MapleDataTool.getInt("passive", d, 0);
+                f.itemid = MapleDataTool.getInt("consume", d, 0);
+                f.familiar = Integer.parseInt(d.getName());
+                familiars.put(f.familiar, f);
+                familiars_Item.put(f.itemid, f);
+                familiars_Mob.put(f.mob, f);
             }
-        }
-
-        final MapleData mSetsData = etcData.getData("MonsterBookSet.img");
-        for (MapleData d : mSetsData.getChildByPath("setList")) {
-            if (MapleDataTool.getInt("deactivated", d, 0) > 0) {
-                continue;
-            }
-            final List<Integer> set = new ArrayList<>(), potential = new ArrayList<>(3);
-            for (MapleData ds : d.getChildByPath("stats/potential")) {
-                if (ds.getType() != MapleDataType.STRING && MapleDataTool.getInt(ds, 0) > 0) {
-                    potential.add(MapleDataTool.getInt(ds, 0));
-                    if (potential.size() >= 5) {
-                        break;
-                    }
+            final MapleDataDirectoryEntry e = (MapleDataDirectoryEntry) chrData.getRoot().getEntry("Familiar");
+            for (MapleDataEntry d : e.getFiles()) {
+                final int id = Integer.parseInt(d.getName().substring(0, d.getName().length() - 4));
+                if (familiars.containsKey(id)) {
+                    familiars.get(id).grade = (byte) MapleDataTool.getInt("grade", chrData.getData("Familiar/" + d.getName()).getChildByPath("info"), 0);
                 }
             }
-            for (MapleData ds : d.getChildByPath("cardList")) {
-                set.add(MapleDataTool.getInt(ds, 0));
+
+            final MapleData mSetsData = etcData.getData("MonsterBookSet.img");
+            for (MapleData d : mSetsData.getChildByPath("setList")) {
+                if (MapleDataTool.getInt("deactivated", d, 0) > 0) {
+                    continue;
+                }
+                final List<Integer> set = new ArrayList<>(), potential = new ArrayList<>(3);
+                for (MapleData ds : d.getChildByPath("stats/potential")) {
+                    if (ds.getType() != MapleDataType.STRING && MapleDataTool.getInt(ds, 0) > 0) {
+                        potential.add(MapleDataTool.getInt(ds, 0));
+                        if (potential.size() >= 5) {
+                            break;
+                        }
+                    }
+                }
+                for (MapleData ds : d.getChildByPath("cardList")) {
+                    set.add(MapleDataTool.getInt(ds, 0));
+                }
+                monsterBookSets.put(Integer.parseInt(d.getName()), new Triple<>(MapleDataTool.getInt("setScore", d, 0), set, potential));
             }
-            monsterBookSets.put(Integer.parseInt(d.getName()), new Triple<>(MapleDataTool.getInt("setScore", d, 0), set, potential));
         }
 
-        try (Connection con = DatabaseConnection.getConnection()){
+        try {
+            Connection con = DatabaseConnection.getConnection();
+
             // Load Item Data
             PreparedStatement ps = con.prepareStatement("SELECT * FROM wz_itemdata");
 
@@ -380,11 +383,9 @@ public class MapleItemInformationProvider {
                     finalizeEquipData(entry.getValue());
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
         }
-        double endTime = System.currentTimeMillis() - startTime;
-        double loadTime = endTime / 1000;
-        System.out.println("Loaded " + dataCache.size() + " items in " + loadTime + " seconds.");
+        //System.out.println(dataCache.size() + " items loaded.");
     }
 
     public final List<StructItemOption> getPotentialInfo(final int potId) {

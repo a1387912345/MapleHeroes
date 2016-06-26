@@ -1,5 +1,6 @@
 package server.commands;
 
+import client.MapleCharacterUtil;
 import client.MapleClient;
 import client.MapleDisease;
 import client.MapleJob;
@@ -8,7 +9,6 @@ import client.Skill;
 import client.SkillFactory;
 import client.anticheat.ReportType;
 import client.character.MapleCharacter;
-import client.character.MapleCharacterUtil;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import constants.GameConstants;
@@ -75,7 +75,7 @@ public class InternCommand {
             if (c.getCharacter().isHidden()) {
                 c.getCharacter().dispelBuff(9101004);
                 //MapleItemInformationProvider.getInstance().getItemEffect(2100069).applyTo(c.getPlayer());
-                //c.sendPacket(CWvsContext.InfoPacket.getStatusMsg(2100069));
+                //c.getSession().write(CWvsContext.InfoPacket.getStatusMsg(2100069));
             } else {
                 SkillFactory.getSkill(9101004).getEffect(1).applyTo(c.getCharacter());
             }
@@ -149,7 +149,7 @@ public class InternCommand {
                 1302002, 1302003, 1302004, 1302005, 1302006,
                 1302007};
                 items = Arrays.asList(itemArray);
-                c.sendPacket(CField.sendBoxDebug(opcode, 2028162, items)); //sealed box
+                c.getSession().write(CField.sendBoxDebug(opcode, 2028162, items)); //sealed box
                 return 1;
             }
         }
@@ -463,7 +463,7 @@ public class InternCommand {
                                 break;
                             }
                             sb.append(singleRetNpc.toString());
-                            //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, retNpcs.toString(), "00 00", (byte) 0, 9010000));
+                            //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, retNpcs.toString(), "00 00", (byte) 0, 9010000));
                             //c.getPlayer().dropMessage(6, singleRetNpc);
                         }
                     } else {
@@ -491,7 +491,7 @@ public class InternCommand {
                                 break;
                             }
                             sb.append(singleRetMap);
-                            //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, retMaps.toString(), "00 00", (byte) 0, 9010000));
+                            //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMaps.toString(), "00 00", (byte) 0, 9010000));
                             //c.getPlayer().dropMessage(6, singleRetMap);
                         }
                     } else {
@@ -516,7 +516,7 @@ public class InternCommand {
                                 break;
                             }
                             sb.append(singleRetMob);
-                            //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, retMobs.toString(), "00 00", (byte) 0, 9010000));
+                            //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, retMobs.toString(), "00 00", (byte) 0, 9010000));
                             //c.getPlayer().dropMessage(6, singleRetMob);
                         }
                     } else {
@@ -537,7 +537,7 @@ public class InternCommand {
                                 break;
                             }
                             sb.append(singleRetItem);
-                            //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, retItems.toString(), "00 00", (byte) 0, 9010000));
+                            //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, retItems.toString(), "00 00", (byte) 0, 9010000));
                             //c.getPlayer().dropMessage(6, singleRetItem);
                         }
                     } else {
@@ -557,7 +557,7 @@ public class InternCommand {
                                 break;
                             }
                             sb.append(singleRetQuest);
-                            //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, retQuests.toString(), "00 00", (byte) 0, 9010000));
+                            //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, retQuests.toString(), "00 00", (byte) 0, 9010000));
                             //    c.getPlayer().dropMessage(6, singleRetItem);
                         }
                     } else {
@@ -577,7 +577,7 @@ public class InternCommand {
                                 break;
                             }
                             sb.append(singleRetSkill);
-                            //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, retSkills.toString(), "00 00", (byte) 0, 9010000));
+                            //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, retSkills.toString(), "00 00", (byte) 0, 9010000));
                             //    c.getPlayer().dropMessage(6, singleRetSkill);
                         }
                     } else {
@@ -603,13 +603,13 @@ public class InternCommand {
                             break;
                         }
                         sb.append(header);
-                        //c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, headers.toString(), "00 00", (byte) 0, 9010000));
+                        //c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, headers.toString(), "00 00", (byte) 0, 9010000));
                         //c.getPlayer().dropMessage(6, header);
                     }
                 } else {
                     c.getCharacter().dropMessage(6, "Sorry, that search call is unavailable");
                 }
-                c.sendPacket(NPCPacket.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0, 9010000));
+                c.getSession().write(NPCPacket.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0, 9010000));
             }
             return 0;
         }
@@ -845,7 +845,7 @@ public class InternCommand {
                     }
                 }
                 for (MapleCharacter chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().sendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
+                    chrs.getClient().getSession().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has started!"));
                 }
                 player.getMap().broadcastMessage(CField.getClock(60));
             }
@@ -884,7 +884,7 @@ public class InternCommand {
                     }
                 }
                 for (MapleCharacter chrs : c.getChannelServer().getPlayerStorage().getAllCharacters()) {
-                    chrs.getClient().sendPacket(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
+                    chrs.getClient().getSession().write(CWvsContext.broadcastMsg(GameConstants.isEventMap(chrs.getMapId()) ? 0 : 22, c.getChannel(), "Event : Bomberman event has ended! The winners are: " + winner));
                 }
             }
             return 1;

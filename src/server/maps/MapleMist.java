@@ -23,8 +23,8 @@ public class MapleMist extends MapleMapObject {
     private boolean isMobMist, isShelter, isRecovery, isTimeCapsule;
     private int skillDelay, skilllevel, isPoisonMist, ownerId;
     private ScheduledFuture<?> schedule = null, poisonSchedule = null;
-    private int clockType;
-    private boolean isUsed;
+        private int clockType;
+         private boolean isUsed;
 
     public MapleMist(Rectangle mistPosition, MapleMonster mob, MobSkill skill) {
         this.mistPosition = mistPosition;
@@ -223,12 +223,12 @@ public class MapleMist extends MapleMapObject {
 
     @Override
     public void sendSpawnData(final MapleClient c) {
-        c.sendPacket(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
+        c.getSession().write(getClockType() > 0 ? CField.spawnClockMist(this) : CField.spawnMist(this));
     }
 
     @Override
     public void sendDestroyData(final MapleClient c) {
-        c.sendPacket(CField.removeMist(getObjectId(), false));
+        c.getSession().write(CField.removeMist(getObjectId(), false));
     }
 
     public boolean makeChanceResult() {

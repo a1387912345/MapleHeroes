@@ -1,32 +1,48 @@
 package net.server.talk;
 
 import constants.ServerConfig;
-import net.Acceptor;
+import net.MapleServerHandler;
+import net.mina.MapleCodecFactory;
 import net.server.channel.PlayerStorage;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoAcceptor;
+import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.transport.socket.nio.SocketAcceptor;
+import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
 public class TalkServer {
 	
 	private static String ip;
     private static InetSocketAddress InetSocketadd;
     private final static int PORT = 8785;
-    private static Acceptor acceptor;
+    private static IoAcceptor acceptor;
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
     
-    public static void run() {
+    public static void runStartupConfigurations() {
         System.out.print("Loading Talk Server...");
         ip = ServerConfig.interface_ + ":" + PORT;
 
+        ByteBuffer.setUseDirectBuffers(false);
+        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+
+        acceptor = new SocketAcceptor();
+        final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
+        cfg.getSessionConfig().setTcpNoDelay(true);
+        cfg.setDisconnectOnUnbind(true);
+        cfg.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
         players = new PlayerStorage(-10);
 
         try {
-        	acceptor = new Acceptor(new InetSocketAddress(PORT));
-			acceptor.run();
+            InetSocketadd = new InetSocketAddress(PORT);
+            acceptor.bind(InetSocketadd, new MapleServerHandler(), cfg);
             System.out.println(" Complete!");
             System.out.println("Talk Server is listening on port " + PORT + ".");
-        } catch (Exception e) {
+        } catch (final IOException e) {
             System.out.println(" Failed!");
             System.err.println("Could not bind to port " + PORT + ".");
             throw new RuntimeException("Binding failed.", e);

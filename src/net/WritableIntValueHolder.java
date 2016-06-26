@@ -2,7 +2,7 @@ package net;
 
 public interface WritableIntValueHolder {
 
-    public short getValue();
+    public short getOpcode();
 
-    public void setValue(short newval);
+    public void setOpcode(short newval);
 }

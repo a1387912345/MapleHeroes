@@ -1,38 +1,38 @@
 package net.server.loginauth;
-import java.nio.ByteBuffer;
+
 import java.nio.ByteOrder;
-import java.util.List;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ReplayingDecoder;
+import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
+import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
-public class LoginAuthDecoder extends ReplayingDecoder<Void> {
-	
+public class LoginAuthDecoder extends CumulativeProtocolDecoder {
+
 	long[] xorTable = new long[] {
 			0x040FC1578, 0x0113B6C1F, 0x08389CA19, 0x0E2196CD8,
 			0x074901489, 0x04AAB1566, 0x07B8C12A0, 0x00018FFCD,
 			0x0CCAB704B, 0x07B5A8C0F, 0x0AA13B891, 0x0DE419807,
 			0x012FFBCAE, 0x05F5FBA34, 0x010F5AC99, 0x0B1C1DD01
 	};
-
+	
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> objects) throws Exception {		
+	protected boolean doDecode(IoSession session, ByteBuffer in, ProtocolDecoderOutput out) throws Exception {
 		// Header
-		short packetSize = in.readShort();
-		short opcode = in.readShort();
+		short packetSize = in.getShort();
+		short opcode = in.getShort();
 		//System.out.println("Header received. PacketSize " + packetSize + " Opcode " + opcode);
 
 		// Body
 		byte[] decryptedBuffer = new byte[packetSize - 16];
 		
-		byte checkCode = in.readByte();
+		byte checkCode = in.get();
 		int length = readSmallSize(in);
-		byte flag = in.readByte();
+		byte flag = in.get();
 		int originalSize = readSmallSize(in);
-		long xorValue = in.readUnsignedInt();
-		in.readInt();
-		in.readBytes(decryptedBuffer);
+		long xorValue = in.getUnsignedInt();
+		in.getInt();
+		in.get(decryptedBuffer);
 		//System.out.println(checkCode + " " + length + " " + flag + " " + originalSize + " " + xorValue);
 		
 		if ((flag & 0x02) != 0) {
@@ -43,13 +43,14 @@ public class LoginAuthDecoder extends ReplayingDecoder<Void> {
 		decodedPacket[0] = (byte) opcode;
 		System.arraycopy(decryptedBuffer, 0, decodedPacket, 2, decryptedBuffer.length);
 		//System.out.println(HexTool.toString(decodedPacket));
-		objects.add(decodedPacket);
+		out.write(decodedPacket);
+		return true;
 	}
 	
-	private int readSmallSize(ByteBuf in) {
-		byte a = in.readByte();
-		byte b = in.readByte();
-		byte c = in.readByte();
+	private int readSmallSize(ByteBuffer in) {
+		byte a = in.get();
+		byte b = in.get();
+		byte c = in.get();
 		
 		return (int) (((int) a) << 16 | ((int) b) << 8 | ((int) c) << 0);
 	}

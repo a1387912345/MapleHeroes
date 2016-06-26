@@ -9,7 +9,6 @@ import constants.Skills.Bishop;
 import constants.Skills.IceLightningMage;
 import constants.Skills.FirePoisonMage;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 import net.server.channel.DojoRankingsData;
 import net.server.channel.MapleGuildRanking;
 import net.server.channel.MapleGeneralRanking.CandyRankingInfo;
@@ -39,6 +38,7 @@ import server.stores.MaplePlayerShopItem;
 import tools.HexTool;
 import tools.Pair;
 import tools.StringUtil;
+import tools.data.MaplePacketWriter;
 
 public class CWvsContext {
 

@@ -1,7 +1,6 @@
 package net.server.cashshop;
 
 import database.DatabaseConnection;
-import net.netty.MaplePacketWriter;
 import net.packet.PacketHelper;
 
 import java.sql.Connection;
@@ -10,6 +9,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import tools.HexTool;
+import tools.data.MaplePacketWriter;
 
 public class CSMenuItem {
 
@@ -57,28 +57,28 @@ public class CSMenuItem {
         this.likes = likes;
     }
 
-    public static void writeData(CSMenuItem csmi, MaplePacketWriter mpw) {
-        mpw.writeInt(csmi.c);
-        mpw.writeInt(csmi.sc);
-        mpw.writeInt(csmi.p);
-        mpw.writeMapleAsciiString(csmi.img); // TODO add check if cat != 4 write empty string
-        mpw.writeInt(csmi.sn);
-        mpw.writeInt(csmi.id);
-        mpw.writeInt(1);
-        mpw.writeInt(csmi.flag);
-        mpw.writeInt(0);
-        mpw.writeInt(0); // this one changes
-        mpw.writeInt(csmi.op);
-        mpw.write(HexTool.getByteArrayFromHexString("00 80 22 D6 94 EF C4 01")); // 1/1/2005
-        mpw.writeLong(PacketHelper.MAX_TIME);
-        mpw.write(HexTool.getByteArrayFromHexString("00 80 22 D6 94 EF C4 01")); // 1/1/2005
-        mpw.writeLong(PacketHelper.MAX_TIME);
-        mpw.writeInt(csmi.sp);
-        mpw.writeInt(0);
-        mpw.writeInt(csmi.qty);
-        mpw.writeInt(csmi.dur);
-        mpw.write(HexTool.getByteArrayFromHexString("01 00 01 00 01 00 00 00 01 00 02 00 00 00")); // flags maybe
-        mpw.writeInt(csmi.likes);
-        mpw.writeZeroBytes(20);
+    public static void writeData(CSMenuItem csmi, MaplePacketWriter mplew) {
+        mplew.writeInt(csmi.c);
+        mplew.writeInt(csmi.sc);
+        mplew.writeInt(csmi.p);
+        mplew.writeMapleAsciiString(csmi.img); // TODO add check if cat != 4 write empty string
+        mplew.writeInt(csmi.sn);
+        mplew.writeInt(csmi.id);
+        mplew.writeInt(1);
+        mplew.writeInt(csmi.flag);
+        mplew.writeInt(0);
+        mplew.writeInt(0); // this one changes
+        mplew.writeInt(csmi.op);
+        mplew.write(HexTool.getByteArrayFromHexString("00 80 22 D6 94 EF C4 01")); // 1/1/2005
+        mplew.writeLong(PacketHelper.MAX_TIME);
+        mplew.write(HexTool.getByteArrayFromHexString("00 80 22 D6 94 EF C4 01")); // 1/1/2005
+        mplew.writeLong(PacketHelper.MAX_TIME);
+        mplew.writeInt(csmi.sp);
+        mplew.writeInt(0);
+        mplew.writeInt(csmi.qty);
+        mplew.writeInt(csmi.dur);
+        mplew.write(HexTool.getByteArrayFromHexString("01 00 01 00 01 00 00 00 01 00 02 00 00 00")); // flags maybe
+        mplew.writeInt(csmi.likes);
+        mplew.writeZeroBytes(20);
     }
 }

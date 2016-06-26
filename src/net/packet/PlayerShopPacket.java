@@ -26,7 +26,6 @@ import client.inventory.Item;
 import constants.GameConstants;
 import constants.Interaction;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 import net.world.MapleCharacterLook;
 
 import java.util.List;
@@ -38,6 +37,7 @@ import server.stores.MapleMiniGame;
 import server.stores.MaplePlayerShop;
 import server.stores.MaplePlayerShopItem;
 import tools.Pair;
+import tools.data.MaplePacketWriter;
 
 public class PlayerShopPacket {
 

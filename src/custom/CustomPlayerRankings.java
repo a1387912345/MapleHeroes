@@ -22,7 +22,6 @@ package custom;
 
 import database.DatabaseConnection;
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +29,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import tools.data.MaplePacketWriter;
 
 public class CustomPlayerRankings {
 
@@ -99,40 +99,42 @@ public class CustomPlayerRankings {
     }
 
     public byte[] customRanks(int npcid) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-		mpw.write(0x50);
-        mpw.writeInt(npcid);
-        mpw.writeInt(getRank().size());
+        MaplePacketWriter mplew = new MaplePacketWriter();
+
+        mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getOpcode());
+        mplew.write(0x50);
+        mplew.writeInt(npcid);
+        mplew.writeInt(getRank().size());
         for (CustomPlayerRankings.CustomRankingInfo info : getRank()) {
-            mpw.writeShort(info.getRank());
-            mpw.writeMapleAsciiString(info.getName());
-            mpw.writeInt(info.getLevel());
-            mpw.writeInt(0);
-            mpw.writeInt(0);
-            mpw.writeInt(0);
-            mpw.writeInt(0);
+            mplew.writeShort(info.getRank());
+            mplew.writeMapleAsciiString(info.getName());
+            mplew.writeInt(info.getLevel());
+            mplew.writeInt(0);
+            mplew.writeInt(0);
+            mplew.writeInt(0);
+            mplew.writeInt(0);
         }
 
-        return mpw.getPacket();
+        return mplew.getPacket();
     }
 
     /*public static byte[] customRanks(int npcid, List<CustomPlayerRankings.CustomRankingInfo> all) {
-     MaplePacketLittleEndianWriter mpw = new MaplePacketLittleEndianWriter();
+     MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
 
-     mpw.writeShort(SendPacketOpcode.GUILD_OPERATION);
-		mpw.write(80);
-     mpw.writeInt(npcid);
-     mpw.writeInt(all.size());
+     mplew.writeShort(SendPacketOpcode.GUILD_OPERATION.getValue());
+     mplew.write(80);
+     mplew.writeInt(npcid);
+     mplew.writeInt(all.size());
      for (CustomPlayerRankings.CustomRankingInfo info : all) {
-     mpw.writeShort(info.getRank());
-     mpw.writeMapleAsciiString(info.getName());
-     mpw.writeInt(info.getLevel());
-     mpw.writeInt(0);
-     mpw.writeInt(0);
-     mpw.writeInt(0);
-     mpw.writeInt(0);
+     mplew.writeShort(info.getRank());
+     mplew.writeMapleAsciiString(info.getName());
+     mplew.writeInt(info.getLevel());
+     mplew.writeInt(0);
+     mplew.writeInt(0);
+     mplew.writeInt(0);
+     mplew.writeInt(0);
      }
 
-     return mpw.getPacket();
+     return mplew.getPacket();
      }*/
 }

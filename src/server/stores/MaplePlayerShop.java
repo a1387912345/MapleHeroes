@@ -72,7 +72,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
                 c.getCharacter().dropMessage(1, "You do not have enough mesos.");
                 //}
             }
-            getMCOwner().getClient().sendPacket(PlayerShopPacket.shopItemUpdate(this));
+            getMCOwner().getClient().getSession().write(PlayerShopPacket.shopItemUpdate(this));
         }
     }
 
@@ -101,7 +101,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         }
         owner.setPlayerShop(null);
         update();
-        getMCOwner().getClient().sendPacket(PlayerShopPacket.shopErrorMessage(10, 1));
+        getMCOwner().getClient().getSession().write(PlayerShopPacket.shopErrorMessage(10, 1));
     }
 
     public void banPlayer(String name) {
@@ -111,7 +111,7 @@ public class MaplePlayerShop extends AbstractPlayerStore {
         for (int i = 0; i < 3; i++) {
             MapleCharacter chr = getVisitor(i);
             if (chr.getName().equals(name)) {
-                chr.getClient().sendPacket(PlayerShopPacket.shopErrorMessage(5, 1));
+                chr.getClient().getSession().write(PlayerShopPacket.shopErrorMessage(5, 1));
                 chr.setPlayerShop(null);
                 removeVisitor(chr);
             }

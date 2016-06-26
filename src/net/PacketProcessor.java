@@ -1,17 +1,39 @@
+/*
+ This file is part of the OdinMS Maple Story Server
+ Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+ Matthias Butz <matze@odinms.de>
+ Jan Christian Meyer <vimes@odinms.de>
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation version 3 as published by
+ the Free Software Foundation. You may not use, modify or distribute
+ this program under any other version of the GNU Affero General Public
+ License.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package net;
 
-import net.server.channel.handler.*;
-import net.server.channel.handler.chat.*;
-import net.server.channel.handler.inventory.*;
-import net.server.channel.handler.monster.*;
-import net.server.channel.handler.pet.*;
-import net.server.channel.handler.player.*;
-import net.server.channel.handler.stat.*;
-import net.server.channel.handler.summon.*;
-import net.server.farm.handler.*;
-import net.server.handler.*;
-import net.server.login.handler.*;
-import net.server.talk.handler.*;
+import net.server.handlers.*;
+import net.server.login.handlers.*;
+import net.server.talk.handlers.*;
+import net.server.channel.handlers.*;
+import net.server.channel.handlers.chat.*;
+import net.server.channel.handlers.inventory.*;
+import net.server.channel.handlers.monster.*;
+import net.server.channel.handlers.pet.*;
+import net.server.channel.handlers.player.*;
+import net.server.channel.handlers.stat.*;
+import net.server.channel.handlers.summon.*;
+import net.server.farm.handlers.*;
 
 public final class PacketProcessor {
 
@@ -28,11 +50,11 @@ public final class PacketProcessor {
         handlers = new MaplePacketHandler[maxRecvOp + 1];
     }
 
-    public MaplePacketHandler getHandler(short packetId) {
-        if (packetId > handlers.length) {
+    public MaplePacketHandler getHandler(short packetHeader) {
+        if (packetHeader > handlers.length) {
             return null;
         }
-        MaplePacketHandler handler = handlers[packetId];
+        MaplePacketHandler handler = handlers[packetHeader];
         if (handler != null) {
             return handler;
         }
@@ -40,7 +62,7 @@ public final class PacketProcessor {
     }
     
     public void registerHandler(MaplePacketHandler handler) {
-    	try {
+        try {
             handlers[handler.getRecvOpcode().getOpcode()] = handler;
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Error registering packet handler - " + handler.getRecvOpcode().name());
@@ -61,13 +83,12 @@ public final class PacketProcessor {
         registerHandler(new AuthRequestHandler(RecvPacketOpcode.AUTH_REQUEST));
         registerHandler(new PongHandler(RecvPacketOpcode.PONG));
         registerHandler(new CrashHandler(RecvPacketOpcode.CRASH_INFO));
-        registerHandler(new ClientErrorHandler(RecvPacketOpcode.CLIENT_ERROR));
         /*
          * Talk Handlers
          */
         registerHandler(new MigrateInHandler(RecvPacketOpcode.MIGRATE_IN));
         registerHandler(new GuildInfoInHandler(RecvPacketOpcode.TALK_GUILD_INFO));
-        //registerHandler(new PongTalkHandler(RecvPacketOpcode.PONG_TALK));
+        //registerHandler(RecvPacketOpcode.PONG_TALK, new PongTalkHandler(RecvPacketOpcode.PONG_TALK));
     	/*
     	 * Login Handlers
     	 */
@@ -76,7 +97,7 @@ public final class PacketProcessor {
     	registerHandler(new LoginPasswordHandler(RecvPacketOpcode.LOGIN_PASSWORD));
     	registerHandler(new ViewServerListHandler(RecvPacketOpcode.VIEW_SERVERLIST));
         registerHandler(new ServerlistRequestHandler(RecvPacketOpcode.REDISPLAY_SERVERLIST));
-        registerHandler(new CharListRequestHandler(RecvPacketOpcode.CHARLIST_REQUEST));
+        registerHandler(new CharlistRequestHandler(RecvPacketOpcode.CHARLIST_REQUEST));
         registerHandler(new CharSelectWithPicHandler(RecvPacketOpcode.CHAR_SELECT));
         registerHandler(new PlayerLoggedInHandler(RecvPacketOpcode.PLAYER_LOGGEDIN));
         registerHandler(new AcceptToSHandler(RecvPacketOpcode.ACCEPT_TOS)); // Doesn't do anything yet.
@@ -183,7 +204,7 @@ public final class PacketProcessor {
         registerHandler(new NPCShopHandler(RecvPacketOpcode.NPC_SHOP));
         registerHandler(new StorageHandler(RecvPacketOpcode.STORAGE_OPERATION));
 
-        registerHandler(new UseHiredMerchantHandler(RecvPacketOpcode.USE_HIRED_MERCHANT));
+        //registerHandler(new UseHiredMerchantHandler(RecvPacketOpcode.USE_HIRED_MERCHANT));
         registerHandler(new MerchItemStoreHandler(RecvPacketOpcode.MERCH_ITEM_STORE));
         registerHandler(new PackageOperationHandler(RecvPacketOpcode.PACKAGE_OPERATION));
         registerHandler(new CancelMechHandler(RecvPacketOpcode.CANCEL_MECH));
@@ -273,7 +294,7 @@ public final class PacketProcessor {
         registerHandler(new AllowPartyInviteHandler(RecvPacketOpcode.ALLOW_PARTY_INVITE));
         registerHandler(new GuildOperationHandler(RecvPacketOpcode.GUILD_OPERATION));
         registerHandler(new GuildInvitationHandler(RecvPacketOpcode.GUILD_INVITATION));
-        registerHandler(new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_OPERATION));
+        //registerHandler(new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_OPERATION));
         registerHandler(new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_REQUEST));
         
         registerHandler(new BuddylistModifyHandler(RecvPacketOpcode.BUDDYLIST_MODIFY));
@@ -300,7 +321,8 @@ public final class PacketProcessor {
         registerHandler(new DamageReactorHandler(RecvPacketOpcode.DAMAGE_REACTOR));
         registerHandler(new TouchReactorHandler(RecvPacketOpcode.CLICK_REACTOR));
         registerHandler(new TouchReactorHandler(RecvPacketOpcode.TOUCH_REACTOR));
-    
+        
+        
     }
 }
 

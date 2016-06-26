@@ -20,67 +20,67 @@
  */
 package net.server.login;
 
+import constants.GameConstants;
 import constants.ServerConfig;
-import net.Acceptor;
+import net.MapleServerHandler;
+import net.mina.MapleCodecFactory;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.common.IoAcceptor;
+import org.apache.mina.common.SimpleByteBufferAllocator;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.transport.socket.nio.SocketAcceptor;
+import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 import tools.Triple;
 
 public class LoginServer {
 
     public static final int PORT = 8484;
-    private Acceptor acceptor;
-    private Map<Integer, Integer> load = new HashMap<>();
-    private String serverName, eventMessage;
-    private byte flag;
-    private int maxCharacters, userLimit, usersOn = 0;
-    private boolean finishedShutdown = true, adminOnly = false;
-    private final HashMap<Integer, Triple<String, String, Integer>> loginAuth = new HashMap<>();
-    private final HashSet<String> loginIPAuth = new HashSet<>();
-    
-    private static final LoginServer instance = new LoginServer();
-    
-    private LoginServer() {
-    	
-    }
-    
-    public static LoginServer getInstance() {
-		return instance;
-	}
+    private static InetSocketAddress InetSocketadd;
+    private static IoAcceptor acceptor;
+    private static Map<Integer, Integer> load = new HashMap<>();
+    private static String serverName, eventMessage;
+    private static byte flag;
+    private static int maxCharacters, userLimit, usersOn = 0;
+    private static boolean finishedShutdown = true, adminOnly = false;
+    private static final HashMap<Integer, Triple<String, String, Integer>> loginAuth = new HashMap<>();
+    private static final HashSet<String> loginIPAuth = new HashSet<>();
 
-    public void putLoginAuth(int chrid, String ip, String tempIP, int channel) {
+    public static void putLoginAuth(int chrid, String ip, String tempIP, int channel) {
         Triple<String, String, Integer> put = loginAuth.put(chrid, new Triple<>(ip, tempIP, channel));
         loginIPAuth.add(ip);
     }
 
-    public Triple<String, String, Integer> getLoginAuth(int chrid) {
+    public static Triple<String, String, Integer> getLoginAuth(int chrid) {
         return loginAuth.remove(chrid);
     }
 
-    public boolean containsIPAuth(String ip) {
+    public static boolean containsIPAuth(String ip) {
         return loginIPAuth.contains(ip);
     }
-    
-    public void removeIPAuth(String ip) {
+
+    public static void removeIPAuth(String ip) {
         loginIPAuth.remove(ip);
     }
 
-    public void addIPAuth(String ip) {
+    public static void addIPAuth(String ip) {
         loginIPAuth.add(ip);
     }
 
-    public final void addChannel(final int channel) {
+    public static final void addChannel(final int channel) {
         load.put(channel, 0);
     }
 
-    public final void removeChannel(final int channel) {
+    public static final void removeChannel(final int channel) {
         load.remove(channel);
     }
 
-    public final void run() {
+    public static final void run_startup_configurations() {
         System.out.print("Loading Login Server...");
         userLimit = ServerConfig.userLimit;
         serverName = ServerConfig.serverName;
@@ -88,53 +88,62 @@ public class LoginServer {
         flag = ServerConfig.flag;
         adminOnly = ServerConfig.adminOnly;
         maxCharacters = ServerConfig.maxCharacters;
-        
+
+        ByteBuffer.setUseDirectBuffers(false);
+        ByteBuffer.setAllocator(new SimpleByteBufferAllocator());
+
+        acceptor = new SocketAcceptor();
+        final SocketAcceptorConfig cfg = new SocketAcceptorConfig();
+        cfg.getSessionConfig().setTcpNoDelay(true);
+        cfg.setDisconnectOnUnbind(true);
+        cfg.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
+
         try {
-        	acceptor = new Acceptor(new InetSocketAddress(PORT));
-			acceptor.run();
+            InetSocketadd = new InetSocketAddress(PORT);
+            acceptor.bind(InetSocketadd, new MapleServerHandler(), cfg);
             System.out.println(" Complete!");
             System.out.println("Login Server is listening on port " + PORT + ".");
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println(" Failed!");
             System.err.println("Could not bind to port " + PORT + ": " + e);
         }
     }
 
-    public final void shutdown() {
+    public static final void shutdown() {
         if (finishedShutdown) {
             return;
         }
         System.out.println("Shutting down login...");
-        acceptor.stop();
+        acceptor.unbindAll();
         finishedShutdown = true; //nothing. lol
     }
 
-    public final String getServerName() {
+    public static final String getServerName() {
         return serverName;
     }
 
-    public final String getTrueServerName() {
-        return serverName.substring(0, serverName.length() - 2);
+    public static final String getTrueServerName() {
+        return serverName.substring(0, serverName.length() - (GameConstants.GMS ? 2 : 3));
     }
 
-    public String getEventMessage() {
+    public static String getEventMessage() {
         return eventMessage;
     }
 
-    public int getMaxCharacters() {
+    public static int getMaxCharacters() {
         return maxCharacters;
     }
 
-    public Map<Integer, Integer> getLoad() {
+    public static Map<Integer, Integer> getLoad() {
         return load;
     }
 
-    public void setLoad(final Map<Integer, Integer> load_, final int usersOn_) {
+    public static void setLoad(final Map<Integer, Integer> load_, final int usersOn_) {
         load = load_;
         usersOn = usersOn_;
     }
 
-    public String getEventMessage(int world) { //TODO: Finish this
+    public static String getEventMessage(int world) { //TODO: Finish this
         switch (world) {
             case 0:
                 return null;
@@ -142,37 +151,35 @@ public class LoginServer {
         return null;
     }
 
-    public final void setFlag(final byte newflag) {
+    public static final void setFlag(final byte newflag) {
         flag = newflag;
     }
 
-    public final int getUserLimit() {
+    public static final int getUserLimit() {
         return userLimit;
     }
 
-    public final int getUsersOn() {
+    public static final int getUsersOn() {
         return usersOn;
     }
 
-    public final void setUserLimit(final int newLimit) {
+    public static final void setUserLimit(final int newLimit) {
         userLimit = newLimit;
     }
 
-    /*
-    public final int getNumberOfSessions() {
+    public static final int getNumberOfSessions() {
         return acceptor.getManagedSessions(InetSocketadd).size();
     }
-    */
 
-    public final boolean isAdminOnly() {
+    public static final boolean isAdminOnly() {
         return adminOnly;
     }
 
-    public final boolean isShutdown() {
+    public static final boolean isShutdown() {
         return finishedShutdown;
     }
 
-    public final void setOn() {
+    public static final void setOn() {
         finishedShutdown = false;
     }
 }

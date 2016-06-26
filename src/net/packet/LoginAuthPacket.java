@@ -1,7 +1,7 @@
 package net.packet;
 
 import net.SendPacketOpcode;
-import net.netty.MaplePacketWriter;
+import tools.data.MaplePacketWriter;
 
 public class LoginAuthPacket {
 	

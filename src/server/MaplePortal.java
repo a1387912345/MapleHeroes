@@ -98,7 +98,7 @@ public class MaplePortal {
 
     public final void enterPortal(final MapleClient c) {
         if (getPosition().distanceSq(c.getCharacter().getPosition()) > 40000 && !c.getCharacter().isGM()) {
-            c.sendPacket(CWvsContext.enableActions());
+            c.getSession().write(CWvsContext.enableActions());
             c.getCharacter().getCheatTracker().registerOffense(CheatingOffense.USING_FARAWAY_PORTAL);
             return;
         }
@@ -114,26 +114,26 @@ public class MaplePortal {
                 final MapleMap oldto = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(getTargetMapId());
                 final MapleMap to = ChannelServer.getInstance(c.getChannel()).getMapFactory().getMap(GameConstants.getSpecialMapTarget(getTargetMapId()));
                 if (to == null) {
-                    c.sendPacket(CWvsContext.enableActions());
+                    c.getSession().write(CWvsContext.enableActions());
                     return;
                 }
                 if (!c.getCharacter().isGM()) {
                     if (to.getLevelLimit() > 0 && to.getLevelLimit() > c.getCharacter().getLevel()) {
                         c.getCharacter().dropMessage(-1, "You are too low of a level to enter this place.");
-                        c.sendPacket(CWvsContext.enableActions());
+                        c.getSession().write(CWvsContext.enableActions());
                         return;
                     }
                 }
                 if (c.getCharacter().getMapId() == 109010100 || c.getCharacter().getMapId() == 109010104 || c.getCharacter().getMapId() == 109020001) {
                     c.getCharacter().dropMessage(5, "You may not exit the event map.");
-                    c.sendPacket(CWvsContext.enableActions());
+                    c.getSession().write(CWvsContext.enableActions());
                     return;
                 }
                 c.getCharacter().changeMapPortal(to, to.getPortal(GameConstants.getSpecialPortalTarget(oldto.getId(), getTarget())) == null ? to.getPortal(0) : to.getPortal(GameConstants.getSpecialPortalTarget(oldto.getId(), getTarget()))); //late resolving makes this harder but prevents us from loading the whole world at once
             }
         }
         if (c != null && c.getCharacter() != null && c.getCharacter().getMap() == currentmap) { // Character is still on the same map.
-            c.sendPacket(CWvsContext.enableActions());
+            c.getSession().write(CWvsContext.enableActions());
         }
     }
 

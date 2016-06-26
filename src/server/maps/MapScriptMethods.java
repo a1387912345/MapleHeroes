@@ -463,7 +463,7 @@ public class MapScriptMethods {
         switch (onFirstUserEnter.fromString(scriptName)) {
 
             case mCastle_enter:
-                c.sendPacket(CField.MapEff("event/mCastle"));
+                c.getSession().write(CField.MapEff("event/mCastle"));
                 break;
             case mapFU_910028310:
                 final MapleMap map = c.getCharacter().getMap();
@@ -539,8 +539,8 @@ public class MapScriptMethods {
                 if (c.getCharacter().getMap().getMobsSize() == 0) {
                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8900000), new Point(497, 551));
                     c.getCharacter().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
-                    c.sendPacket(CField.showEffect("rootabyss/firework"));
-                    c.sendPacket(CField.playSound("rootabyss/firework"));
+                    c.getSession().write(CField.showEffect("rootabyss/firework"));
+                    c.getSession().write(CField.playSound("rootabyss/firework"));
                     break;
                 }
             }
@@ -548,8 +548,8 @@ public class MapScriptMethods {
                 if (c.getCharacter().getMap().getMobsSize() == 0) {
                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8900000), new Point(497, 551));
                     c.getCharacter().getMap().startMapEffect("From the bottom of my heart, welcome to the tea party!", 5120098);
-                    c.sendPacket(CField.showEffect("rootabyss/firework"));
-                    c.sendPacket(CField.playSound("rootabyss/firework"));
+                    c.getSession().write(CField.showEffect("rootabyss/firework"));
+                    c.getSession().write(CField.playSound("rootabyss/firework"));
                     break;
                 }
             }            
@@ -563,7 +563,7 @@ public class MapScriptMethods {
             }
             
             case sao_enterF01: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-615, 336));
                                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-364, 336));
@@ -579,7 +579,7 @@ public class MapScriptMethods {
                  break;
             }
                                                      case sao_enterF02: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(-454, 336));
@@ -597,7 +597,7 @@ public class MapScriptMethods {
                                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(theMob, new Point(1225, 51));             
                  break;
             }                                                     case sao_enterF03: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(-593, 336));
@@ -618,7 +618,7 @@ public class MapScriptMethods {
                  break;
             }
             case sao_enterF04: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-631, -204));
@@ -635,7 +635,7 @@ public class MapScriptMethods {
                  break;
             }
             case sao_enterF05: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                                     MapleMonster theMob = MapleLifeFactory.getMonster(9300003);
@@ -648,7 +648,7 @@ public class MapScriptMethods {
                  break;
             }
                                                 case sao_enterF06: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-615, 336));
                                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390706), new Point(-364, 336));
@@ -664,7 +664,7 @@ public class MapScriptMethods {
                  break;
             }
                                                      case sao_enterF07: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390700), new Point(-454, 336));
@@ -682,7 +682,7 @@ public class MapScriptMethods {
                                     c.getCharacter().getMap().spawnMonsterOnGroundBelow(theMob, new Point(1225, 51));             
                  break;
             }                        case sao_enterF08: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390701), new Point(-593, 336));
@@ -703,7 +703,7 @@ public class MapScriptMethods {
                  break;
             }
             case sao_enterF09: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390702), new Point(-631, -204));
@@ -720,7 +720,7 @@ public class MapScriptMethods {
                  break;
             }
             case sao_enterF10: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().resetFully();
                   //  c.getPlayer().getMap().startMapEffect("Floor 2.", 5120107);
                                     MapleMonster theMob = MapleLifeFactory.getMonster(8620011);
@@ -973,8 +973,8 @@ public class MapScriptMethods {
                 //926010070-926010089 - 50 Yetis (specialized? immortality)
                 //TODO also find positions to spawn these at
                 c.getCharacter().getMap().resetFully();
-                c.sendPacket(CField.showEffect("killing/bonus/bonus"));
-                c.sendPacket(CField.showEffect("killing/bonus/stage"));
+                c.getSession().write(CField.showEffect("killing/bonus/bonus"));
+                c.getSession().write(CField.showEffect("killing/bonus/stage"));
                 Point pos1 = null, pos2 = null, pos3 = null;
                 int spawnPer = 0;
                 int mobId = 0;
@@ -1054,7 +1054,7 @@ public class MapScriptMethods {
                     }
                     c.getCharacter().getMap().spawnMonsterWithEffectBelow(shammos, new Point(c.getCharacter().getMap().getPortal(0).getPosition()), 12);
                     shammos.switchController(c.getCharacter(), false);
-                    c.sendPacket(MobPacket.getNodeProperties(shammos, c.getCharacter().getMap()));
+                    c.getSession().write(MobPacket.getNodeProperties(shammos, c.getCharacter().getMap()));
 
                     /*} else if (c.getPlayer().getMapId() == (GameConstants.GMS ? 921120300 : 921120500) && c.getPlayer().getMap().getAllMonstersThreadsafe().size() == 0) {
                      final MapleMonster shammos = MapleLifeFactory.getMonster(9300281);
@@ -1097,7 +1097,7 @@ public class MapScriptMethods {
                     }
                     c.getCharacter().getMap().spawnMonsterWithEffectBelow(shammos, new Point(c.getCharacter().getMap().getPortal(0).getPosition()), 12);
                     shammos.switchController(c.getCharacter(), false);
-                    c.sendPacket(MobPacket.getNodeProperties(shammos, c.getCharacter().getMap()));
+                    c.getSession().write(MobPacket.getNodeProperties(shammos, c.getCharacter().getMap()));
 
                 }
                 break;
@@ -1254,24 +1254,24 @@ public class MapScriptMethods {
         switch (onUserEnter.fromString(scriptName)) {
             case direction_59070b: {
                 try {
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
-                    c.sendPacket(UIPacket.IntroDisableUI(true));
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 0));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(UIPacket.IntroDisableUI(true));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 0));
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
                     NPCScriptManager.getInstance().start(c, 9390336, "BeastTamerQuestLine4");
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                 }
-                c.sendPacket(UIPacket.IntroEnableUI(0));
-                c.sendPacket(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.IntroDisableUI(false));
                 break;
             }
 
             case direction_59070: {
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 9390336, "BeastTamerQuestLine3");
@@ -1283,8 +1283,8 @@ public class MapScriptMethods {
                     if (c.getCharacter().getQuestStatus(59063) == 1) {
                         MapleQuest.getInstance(59063).forceComplete(c.getCharacter(), 0);
                     }
-                    c.sendPacket(CWvsContext.getTopMsg("On voyage to Nautilus."));
-                    c.sendPacket(CField.getClock(1 * 30));
+                    c.getSession().write(CWvsContext.getTopMsg("On voyage to Nautilus."));
+                    c.getSession().write(CField.getClock(1 * 30));
                     Thread.sleep(30000);
                     MapleMap mapto = c.getChannelServer().getMapFactory().getMap(866000240);
                     c.getCharacter().changeMap(mapto, mapto.getPortal(0));
@@ -1300,8 +1300,8 @@ public class MapScriptMethods {
                     //MapleMap mapto = c.getChannelServer().getMapFactory().getMap(866000230);
                     //c.getPlayer().changeMap(mapto, mapto.getPortal(0));
                 }
-                  //c.sendPacket(UIPacket.getDirectionStatus(true));
-                //c.sendPacket(UIPacket.getDirectionInfo(3, 0));
+                  //c.getSession().write(UIPacket.getDirectionStatus(true));
+                //c.getSession().write(UIPacket.getDirectionInfo(3, 0));
                 break;
             }
 
@@ -1313,15 +1313,15 @@ public class MapScriptMethods {
 
             case direction_59054: {
                 try {
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(0));
-                    c.sendPacket(UIPacket.IntroDisableUI(true));
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 100));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(0));
+                    c.getSession().write(UIPacket.IntroDisableUI(true));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 100));
                     Thread.sleep(100);
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                    c.sendPacket(UIPacket.getDirectionInfoNew((byte) 0, 500, 575, 865));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2825));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 500, 575, 865));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2825));
                     Thread.sleep(2825);
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
@@ -1332,8 +1332,8 @@ public class MapScriptMethods {
             }
 
             case onUserEnter_866191000: {
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 9390301, "BeastTamerTutIntro1");
@@ -1342,9 +1342,9 @@ public class MapScriptMethods {
 
             case onUserEnter_866138000: {
                 try {
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
-                    c.sendPacket(UIPacket.playMovie("BeastTamer.avi", true));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(UIPacket.playMovie("BeastTamer.avi", true));
                     Thread.sleep(75000);
                     MapleMap mapto = c.getChannelServer().getMapFactory().getMap(866191000);
                     c.getCharacter().changeMap(mapto, mapto.getPortal(0));
@@ -1354,10 +1354,10 @@ public class MapScriptMethods {
             }
 
             case onUserEnter_866135000: {
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
                 if (c.getCharacter().haveItem(2500004, 0)) {
                     c.getCharacter().gainItem(2500004, 1);//Animal SP Reset Scroll (Beast Tamer only)
                     final Map<Skill, SkillEntry> sa = new HashMap<>();
@@ -1421,17 +1421,17 @@ public class MapScriptMethods {
              case onUserEnter_866106000: {
              try {
              c.getCharacter().getMap().resetFully();
-             c.sendPacket(UIPacket.getDirectionStatus(true));
-             c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-             c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-             c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+             c.getSession().write(UIPacket.getDirectionStatus(true));
+             c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+             c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+             c.getSession().write(CField.UIPacket.IntroDisableUI(true));
              if (!c.getCharacter().getMap().containsNPC(9390381)) {
              c.getCharacter().getMap().spawnNpc(9390381, new Point(89, 32));
              }
-             c.sendPacket(NPCPacket.setNPCSpecialAction(9390381, "summon", 0, false));
-             c.sendPacket(UIPacket.getDirectionInfo(1, 1000));
+             c.getSession().write(NPCPacket.setNPCSpecialAction(9390381, "summon", 0, false));
+             c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
              Thread.sleep(1000);
-             c.sendPacket(UIPacket.getDirectionStatus(true));
+             c.getSession().write(UIPacket.getDirectionStatus(true));
              NPCScriptManager.getInstance().dispose(c);
              c.removeClickedNPC();
              NPCScriptManager.getInstance().start(c, 9390381, "BeastTamerTut05");
@@ -1444,19 +1444,19 @@ public class MapScriptMethods {
              }
             
              case onUserEnter_866105000: {
-             c.sendPacket(UIPacket.IntroEnableUI(0));
-             c.sendPacket(UIPacket.IntroDisableUI(false));
+             c.getSession().write(UIPacket.IntroEnableUI(0));
+             c.getSession().write(UIPacket.IntroDisableUI(false));
              c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390936), new Point(515, 77));
              break;
              }
 
              case onUserEnter_866104000: {
              try {
-             c.sendPacket(UIPacket.getDirectionStatus(true));
-             c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-             c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-             c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-             c.sendPacket(UIPacket.getDirectionInfo(1, 300));
+             c.getSession().write(UIPacket.getDirectionStatus(true));
+             c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+             c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+             c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+             c.getSession().write(UIPacket.getDirectionInfo(1, 300));
              Thread.sleep(300);
              NPCScriptManager.getInstance().dispose(c);
              c.removeClickedNPC();
@@ -1472,10 +1472,10 @@ public class MapScriptMethods {
              case onUserEnter_866103000: {
              c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390937), new Point(515, 77));
              c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9390935), new Point(278, 70));
-             c.sendPacket(UIPacket.getDirectionStatus(true));
-             c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-             c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-             c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+             c.getSession().write(UIPacket.getDirectionStatus(true));
+             c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+             c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+             c.getSession().write(CField.UIPacket.IntroDisableUI(true));
              NPCScriptManager.getInstance().dispose(c);
              c.removeClickedNPC();
              NPCScriptManager.getInstance().start(c, 9390300, "BeastTamerTut03");
@@ -1483,10 +1483,10 @@ public class MapScriptMethods {
              }
                                      
              case onUserEnter_866100000: {
-             c.sendPacket(UIPacket.getDirectionStatus(true));
-             c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-             c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-             c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+             c.getSession().write(UIPacket.getDirectionStatus(true));
+             c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+             c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+             c.getSession().write(CField.UIPacket.IntroDisableUI(true));
              NPCScriptManager.getInstance().dispose(c);
              c.removeClickedNPC();
              NPCScriptManager.getInstance().start(c, 9390305, "BeastTamerTut01");
@@ -1495,97 +1495,97 @@ public class MapScriptMethods {
                   
              case q59000_tuto: {
              try {
-             c.sendPacket(UIPacket.IntroEnableUI(0));
-             c.sendPacket(UIPacket.IntroDisableUI(false));
-             c.sendPacket(CField.sendHint("Press #e#b[left],[right]#k#n to move around.", 150, 5));
+             c.getSession().write(UIPacket.IntroEnableUI(0));
+             c.getSession().write(UIPacket.IntroDisableUI(false));
+             c.getSession().write(CField.sendHint("Press #e#b[left],[right]#k#n to move around.", 150, 5));
              Thread.sleep(5000);
              NPCScriptManager.getInstance().dispose(c);
              c.removeClickedNPC();
              NPCScriptManager.getInstance().start(c, 1103005, "TotInfoBT");
              MapleQuest.getInstance(28862).forceStart(c.getCharacter(), 0, null);
              MapleQuest.getInstance(28862).forceComplete(c.getCharacter(), 0);
-             c.sendPacket(CWvsContext.getTopMsg("Earned Forever Single title!"));
+             c.getSession().write(CWvsContext.getTopMsg("Earned Forever Single title!"));
              } catch (InterruptedException e) {
              }
              break;
              }
             case Advanture_tuto00: {
                 try {
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
                     Thread.sleep(2100);
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 30));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 30));
                     Thread.sleep(30);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/0", 2100, 0, -120, 0, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2100));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/0", 2100, 0, -120, 0, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2100));
                     Thread.sleep(2800);
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 420));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 420));
                     Thread.sleep(420);
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 420));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 420));
                     Thread.sleep(420);
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 420));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 420));
                     Thread.sleep(420);
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction12.img/effect/tuto/BalloonMsg0/1", 2100, 0, -120, 0, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 1800));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction12.img/effect/tuto/BalloonMsg0/1", 2100, 0, -120, 0, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1800));
                     Thread.sleep(2800);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/1", 2100, 0, -120, 0, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2100));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/1", 2100, 0, -120, 0, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2100));
                     Thread.sleep(2800);
-                    c.sendPacket(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/0", 3000000, -300, 0));
-                    c.sendPacket(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/0", 3000000, 0, 0));
-                    c.sendPacket(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/0", 3000000, 300, 0));
-                    c.sendPacket(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/1", 3000000, 540, 70));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 1200));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/0", 3000000, -300, 0));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/0", 3000000, 0, 0));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/0", 3000000, 300, 0));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/1", 3000000, 540, 70));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1200));
                     Thread.sleep(1800);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/2", 2100, 0, -120, 0, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2100));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/2", 2100, 0, -120, 0, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2100));
                     Thread.sleep(2800);
-                    c.sendPacket(CWvsContext.getTopMsg("Press the left and right keys to move."));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 3000));
+                    c.getSession().write(CWvsContext.getTopMsg("Press the left and right keys to move."));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 3000));
                     Thread.sleep(3000);
-                    c.sendPacket(CWvsContext.getTopMsg("Go to where the portal is and press the up key to move to the next map."));
+                    c.getSession().write(CWvsContext.getTopMsg("Go to where the portal is and press the up key to move to the next map."));
 //                    MapleQuest.getInstance(32200).forceStart(c.getPlayer(), 0, null);
 //                    MapleQuest.getInstance(32200).forceComplete(c.getPlayer(), 0);
 //                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                 }
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 break;
             }
 
             case Advanture_tuto01: {
                 try {
                 	c.getCharacter().getMap().resetFully();
-                	c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
+                	c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
                     final MapleReactor chain = new MapleReactor(MapleReactorFactory.getReactor(1008010), 1008010);
                     c.getCharacter().getMap().spawnReactorOnGroundBelow(chain, new Point(365, 216));
-                    //c.sendPacket(UIPacket.getDirectionInfo(1, 3000));
+                    //c.getSession().write(UIPacket.getDirectionInfo(1, 3000));
                     Thread.sleep(3000);
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/3", 2100, 0, -120, 0, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 1800));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction3.img/effect/tuto/BalloonMsg0/3", 2100, 0, -120, 0, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1800));
                     Thread.sleep(1800);
-                    c.sendPacket(CWvsContext.getTopMsg("Press the Ctrl key to use normal attacks."));
+                    c.getSession().write(CWvsContext.getTopMsg("Press the Ctrl key to use normal attacks."));
                 } catch (InterruptedException e) {
                 }
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 break;
             }
 
             case Advanture_tuto02: {
                 try {
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.environmentChange("demonSlayer/whiteOut", 12));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 1950));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.environmentChange("demonSlayer/whiteOut", 12));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1950));
                     Thread.sleep(1950);
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
                     MapleMap mapto = c.getChannelServer().getMapFactory().getMap(4000010);
                     c.getCharacter().changeMap(mapto, mapto.getPortal(0));
                 } catch (InterruptedException e) {
@@ -1595,19 +1595,19 @@ public class MapScriptMethods {
 
             case Advanture_tuto10: {
                 try {
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2100));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2100));
                     Thread.sleep(2100);
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
                     NPCScriptManager.getInstance().dispose(c);
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 900));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 900));
                     Thread.sleep(900);
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2100));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2100));
                     Thread.sleep(2100);
-                    c.sendPacket(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/2", 3000000, -520, -740));
-                    c.sendPacket(CWvsContext.getTopMsg("Press the down key and Alt at the same time to go down."));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction3.img/effect/tuto/key/2", 3000000, -520, -740));
+                    c.getSession().write(CWvsContext.getTopMsg("Press the down key and Alt at the same time to go down."));
                 } catch (InterruptedException e) {
                 }
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 NPCScriptManager.getInstance().start(c, 10310, "ExplorerTut00");
                 break;
             }
@@ -1628,179 +1628,179 @@ public class MapScriptMethods {
 
             		System.out.println("Mysterious Girl Object ID: " + mysteriousGirl.getObjectId());
             		
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.environmentChange("maplemap/enter/10000", 12));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.environmentChange("maplemap/enter/10000", 12));
                     NPCScriptManager.getInstance().dispose(c);
                     c.removeClickedNPC();
 
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 1000));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(NPCPacket.spawnNPCRequestController(mysteriousGirl, true));
-                    c.sendPacket(NPCPacket.setNPCSpecialAction(mysteriousGirl.getObjectId(), "summon", 0, false));
-                    c.sendPacket(UIPacket.getDirectionEffect("Effect/Direction12.img/effect/tuto/BalloonMsg1/1", 900, 0, -120, mysteriousGirl.getObjectId()));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 1800));
+                    c.getSession().write(NPCPacket.spawnNPCRequestController(mysteriousGirl, true));
+                    c.getSession().write(NPCPacket.setNPCSpecialAction(mysteriousGirl.getObjectId(), "summon", 0, false));
+                    c.getSession().write(UIPacket.getDirectionEffect("Effect/Direction12.img/effect/tuto/BalloonMsg1/1", 900, 0, -120, mysteriousGirl.getObjectId()));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 1800));
                     Thread.sleep(1800);
-                    c.sendPacket(NPCPacket.setNPCForceMove(mysteriousGirl.getObjectId(), 1, 1000, 100));
+                    c.getSession().write(NPCPacket.setNPCForceMove(mysteriousGirl.getObjectId(), 1, 1000, 100));
 
                     
-                    c.sendPacket(UIPacket.getDirectionInfoNew((byte) 0, 200));
+                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 200));
                     //Thread.sleep(4500);
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
                     Thread.sleep(4500);
 
-                    c.sendPacket(UIPacket.getDirectionInfoNew((byte) 1, 0));
-                    //c.sendPacket(UIPacket.getDirectionInfo(1, 0));
-                    //c.sendPacket(UIPacket.getDirectionInfo(1, 900));
+                    c.getSession().write(UIPacket.getDirectionInfoNew((byte) 1, 0));
+                    //c.getSession().write(UIPacket.getDirectionInfo(1, 0));
+                    //c.getSession().write(UIPacket.getDirectionInfo(1, 900));
                     //Thread.sleep(900);
                     //c.getPlayer().getMap().removeNpc(mysteriousGirl.getId());
                     
                     
             	} catch (InterruptedException e) {
                 }
-            	//c.sendPacket(UIPacket.IntroEnableUI(0));
+            	//c.getSession().write(UIPacket.IntroEnableUI(0));
             	NPCScriptManager.getInstance().start(c, 10310, "ExplorerTut06");
                 break;
             }
             case Advanture_tuto33: {
                 c.getCharacter().getMap().resetFully();
-                c.sendPacket(CWvsContext.getTopMsg("Eliminate Mano."));
+                c.getSession().write(CWvsContext.getTopMsg("Eliminate Mano."));
                 c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300815), new Point(0, 0));
                 break;
             }
             
             case sao_enterRewardMap: {
-                    c.sendPacket(CField.showEffect("Sao/Start1"));
+                    c.getSession().write(CField.showEffect("Sao/Start1"));
            //         c.getPlayer().getMap().startMapEffect("Attempt to wake the Crimson Queen", 5120107);
                  break;
             }
             
             case sao_enterRewardMap2: {
-                    c.sendPacket(CField.showEffect("Sao/Start2"));
+                    c.getSession().write(CField.showEffect("Sao/Start2"));
                  break;
             }
             
                         case sao_enter01: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 1.", 5120107);
                  break;
             }
                         
                  case sao_enter02: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 2.", 5120107);
            
                  break;
             }
                                                 
                        case sao_enter03: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 3.", 5120107);
                  break;
             }
                        
                                               case sao_enter04: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 4.", 5120107);
                  break;
             }
             
                               case sao_enter05: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 5.", 5120107);
                  break;
             }
                               
                                                             case sao_enter06: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 6.", 5120107);
                  break;
             }
                            case sao_enter07: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 7.", 5120107);
                  break;
             }
                                case sao_enter08: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 8.", 5120107);
                  break;
             }
                      case sao_enter09: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 9.", 5120107);
                  break;
             }
                                       case sao_enter10: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 10.", 5120107);
                  break;
             }
                         case sao_enter11: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 11.", 5120107);
                  break;
             }
                         
                  case sao_enter12: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 12.", 5120107);
            
                  break;
             }
                                                 
                        case sao_enter13: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 13.", 5120107);
                  break;
             }
                        
                                               case sao_enter14: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 14.", 5120107);
                  break;
             }
             
                               case sao_enter15: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 15.", 5120107);
                  break;
             }
                               
                   case sao_enter16: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 16.", 5120107);
                  break;
             }
                            case sao_enter17: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 17.", 5120107);
                  break;
             }
                                case sao_enter18: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 18.", 5120107);
                  break;
             }
                      case sao_enter19: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 19.", 5120107);
                  break;
             }
                                       case sao_enter20: {
-                 //   c.sendPacket(CField.showEffect("Sao/Start1"));
+                 //   c.getSession().write(CField.showEffect("Sao/Start1"));
                     c.getCharacter().getMap().startMapEffect("Floor 20.", 5120107);
                  break;
             }
             
             case Advanture_tuto04: {
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                // c.sendPacket(UIPacket.playMovie("adventurer.avi", true));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                // c.getSession().write(UIPacket.playMovie("adventurer.avi", true));
                 MapleMap mapto = c.getChannelServer().getMapFactory().getMap(4000005);
                 c.getCharacter().changeMap(mapto, mapto.getPortal(0));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 break;
             }
             
@@ -1813,17 +1813,17 @@ public class MapScriptMethods {
             }
             
             case root_secret: {
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                c.sendPacket(CField.UIPacket.moveScreen(800));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                c.getSession().write(CField.UIPacket.moveScreen(800));
                 NPCScriptManager.getInstance().start(c, 1064000, null);
                 break;
             }
 
        /*     case root_ereb00: {
                 if (c.getPlayer().getQuestStatus(30000) == 1) {
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(true));
                 if (!c.getPlayer().getMap().containsNPC(1064026)) {
                     c.getPlayer().getMap().spawnNpc(1064026, new Point(-113, 88));
                 }
@@ -1838,8 +1838,8 @@ public class MapScriptMethods {
 
             case enter_101072002: {
                 c.getCharacter().getMap().resetFully();
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(true));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 1500004, null);
@@ -1858,8 +1858,8 @@ public class MapScriptMethods {
 
             case enter_101073201: {
                 c.getCharacter().getMap().resetFully();
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(true));
                 if (!c.getCharacter().getMap().containsNPC(1500026)) {
                     c.getCharacter().getMap().spawnNpc(1500026, new Point(-369, 245));
                 }
@@ -1880,7 +1880,7 @@ public class MapScriptMethods {
                 if (c.getCharacter().getQuestStatus(32126) == 1) {
                     MapleQuest.getInstance(32126).forceComplete(c.getCharacter(), 0);
                 }
-                c.sendPacket(CField.getClock(10 * 60));
+                c.getSession().write(CField.getClock(10 * 60));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 1500019, null);
@@ -1902,7 +1902,7 @@ public class MapScriptMethods {
                 c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
                 c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
                 c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(3501006), new Point(-53, 185));
-                c.sendPacket(CField.getClock(10 * 60));
+                c.getSession().write(CField.getClock(10 * 60));
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 1500017, null);
@@ -1910,16 +1910,16 @@ public class MapScriptMethods {
             }
 
             case enter_101070000: {
-                c.sendPacket(CField.MapEff("temaD/enter/fairyAcademy"));
+                c.getSession().write(CField.MapEff("temaD/enter/fairyAcademy"));
                 break;
             }
 
             case evolvingDirection1: {
                 try {
                     MapleQuest.getInstance(1801).forceStart(c.getCharacter(), 9075005, null);
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CField.MapEff("evolving/mapname"));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CField.MapEff("evolving/mapname"));
                     Thread.sleep(4000);
                 } catch (InterruptedException ex) {
                 }
@@ -1933,9 +1933,9 @@ public class MapScriptMethods {
                 try {
                     MapleQuest.getInstance(1801).forceComplete(c.getCharacter(), 0);
                     c.getCharacter().getMap().resetFully();
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CField.MapEff("evolving/swoo1"));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CField.MapEff("evolving/swoo1"));
                     if (!c.getCharacter().getMap().containsNPC(9075004)) {
                         c.getCharacter().getMap().spawnNpc(9075004, new Point(70, 136));
                     }
@@ -1950,14 +1950,14 @@ public class MapScriptMethods {
                    try {
                     MapleQuest.getInstance(1801).forceComplete(c.getCharacter(), 0);
                     c.getCharacter().getMap().resetFully();
-                 //   c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                //    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CField.MapEff("evolving/swoo2"));
+                 //   c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                //    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CField.MapEff("evolving/swoo2"));
                     Thread.sleep(4000);
                     showIntro(c, "Effect/Direction5.img/evolvingDereciton/Scene0");
                     Thread.sleep(8000);
-                 //   c.sendPacket(CField.UIPacket.IntroEnableUI(0));
-                  //  c.sendPacket(CField.UIPacket.IntroDisableUI(false));
+                 //   c.getSession().write(CField.UIPacket.IntroEnableUI(0));
+                  //  c.getSession().write(CField.UIPacket.IntroDisableUI(false));
                     c.getCharacter().changeMap(310010000, 0);
                     c.getCharacter().changeMap(310010000, 0);
                    }   catch (InterruptedException ex) {
@@ -1969,15 +1969,15 @@ public class MapScriptMethods {
             case enter_931060110: {
                 c.getCharacter().saveLocation(SavedLocationType.fromString("TUTORIAL"));
                 try {
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 4, 9072200));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 2));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1200));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 4, 9072200));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 2));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1200));
                     Thread.sleep(1200);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 30));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 30));
                     Thread.sleep(30);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
                 } catch (InterruptedException ex) {
                 }
                 NPCScriptManager.getInstance().dispose(c);
@@ -1987,15 +1987,15 @@ public class MapScriptMethods {
             case enter_931060120: {
                 c.getCharacter().saveLocation(SavedLocationType.fromString("TUTORIAL"));
                 try {
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 4, 9072200));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 2));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1200));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 4, 9072200));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 2));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1200));
                     Thread.sleep(1200);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 30));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 30));
                     Thread.sleep(30);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
                 } catch (InterruptedException ex) {
                 }
                 NPCScriptManager.getInstance().dispose(c);
@@ -2011,14 +2011,14 @@ public class MapScriptMethods {
                 break;
             }
             case cannon_tuto_direction1: {
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(UIPacket.IntroLock(true));
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction4.img/effect/cannonshooter/balloon/0", 5000, 0, 0, 1, 0));
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction4.img/effect/cannonshooter/balloon/1", 5000, 0, 0, 1, 0));
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction4.img/effect/cannonshooter/balloon/2", 5000, 0, 0, 1, 0));
-                c.sendPacket(EffectPacket.ShowWZEffect("Effect/Direction4.img/cannonshooter/face04"));
-                c.sendPacket(EffectPacket.ShowWZEffect("Effect/Direction4.img/cannonshooter/out01"));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 5000));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.IntroLock(true));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction4.img/effect/cannonshooter/balloon/0", 5000, 0, 0, 1, 0));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction4.img/effect/cannonshooter/balloon/1", 5000, 0, 0, 1, 0));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction4.img/effect/cannonshooter/balloon/2", 5000, 0, 0, 1, 0));
+                c.getSession().write(EffectPacket.ShowWZEffect("Effect/Direction4.img/cannonshooter/face04"));
+                c.getSession().write(EffectPacket.ShowWZEffect("Effect/Direction4.img/cannonshooter/out01"));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 5000));
                 break;
             }
             case cannon_tuto_direction2: {
@@ -2052,13 +2052,13 @@ public class MapScriptMethods {
                 break;
             }
             case PRaid_W_Enter: {
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_expPenalty", "0"));
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_ElapssedTimeAtField", "0"));
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_Point", "-1"));
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_Bonus", "-1"));
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_Total", "-1"));
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_Team", ""));
-                c.sendPacket(CWvsContext.sendPyramidEnergy("PRaid_IsRevive", "0"));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_expPenalty", "0"));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_ElapssedTimeAtField", "0"));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_Point", "-1"));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_Bonus", "-1"));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_Total", "-1"));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_Team", ""));
+                c.getSession().write(CWvsContext.sendPyramidEnergy("PRaid_IsRevive", "0"));
                 c.getCharacter().writePoint("PRaid_Point", "-1");
                 c.getCharacter().writeStatus("Red_Stage", "1");
                 c.getCharacter().writeStatus("Blue_Stage", "1");
@@ -2114,12 +2114,12 @@ public class MapScriptMethods {
                 }
                 break;
             case cygnus_Minimap:
-                c.sendPacket(EffectPacket.TutInstructionalBalloon("Effect/OnUserEff.img/guideEffect/cygnusTutorial/0"));
+                c.getSession().write(EffectPacket.TutInstructionalBalloon("Effect/OnUserEff.img/guideEffect/cygnusTutorial/0"));
                 break;
             case check_q20833:
                 if (c.getCharacter().getQuestStatus(20833) == 1) {
                     MapleQuest.getInstance(20833).forceComplete(c.getCharacter(), 0);
-                    c.sendPacket(CWvsContext.getTopMsg("Who's that on the right of the map?"));
+                    c.getSession().write(CWvsContext.getTopMsg("Who's that on the right of the map?"));
                 }
                 break;
             case q2614M:
@@ -2128,10 +2128,10 @@ public class MapScriptMethods {
                 }
                 break;
             case Resi_tutor20:
-                c.sendPacket(CField.MapEff("resistance/tutorialGuide"));
+                c.getSession().write(CField.MapEff("resistance/tutorialGuide"));
                 break;
             case Resi_tutor30:
-                c.sendPacket(EffectPacket.TutInstructionalBalloon("Effect/OnUserEff.img/guideEffect/resistanceTutorial/userTalk"));
+                c.getSession().write(EffectPacket.TutInstructionalBalloon("Effect/OnUserEff.img/guideEffect/resistanceTutorial/userTalk"));
                 break;
             case Resi_tutor40:
                 NPCScriptManager.getInstance().dispose(c);
@@ -2139,9 +2139,9 @@ public class MapScriptMethods {
                 NPCScriptManager.getInstance().start(c, 2159012, null);
                 break;
             case Resi_tutor50:
-                c.sendPacket(UIPacket.IntroDisableUI(false));
-                c.sendPacket(UIPacket.IntroLock(false));
-                c.sendPacket(CWvsContext.enableActions());
+                c.getSession().write(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroLock(false));
+                c.getSession().write(CWvsContext.enableActions());
                 NPCScriptManager.getInstance().dispose(c);
                 c.removeClickedNPC();
                 NPCScriptManager.getInstance().start(c, 2159006, null);
@@ -2197,7 +2197,7 @@ public class MapScriptMethods {
             case EntereurelTW:
             case aranTutorAlone:
             case evanAlone: { //no idea
-                c.sendPacket(CWvsContext.enableActions());
+                c.getSession().write(CWvsContext.enableActions());
                 break;
             }
             case merOutStandAlone: {
@@ -2210,31 +2210,31 @@ public class MapScriptMethods {
 
             case np_tuto_0_5: {
                 //NPCConversationManager cmnp_tuto_0_5= new NPCConversationManager(c, 0, 0, (byte)0, null);
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.showEffect("phantom/back"));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 4));
-                c.sendPacket(CField.showEffect("newPirate/Shuttle/0"));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.showEffect("phantom/back"));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 4));
+                c.getSession().write(CField.showEffect("newPirate/Shuttle/0"));
                 try {
                     Thread.sleep(6000);
                 } catch (InterruptedException e) {
                     System.out.println("" + e.toString());
                 }
-                c.sendPacket(CField.showEffect("phantom/back"));
-                c.sendPacket(CField.showEffect("newPirate/TimeTravel/0"));
+                c.getSession().write(CField.showEffect("phantom/back"));
+                c.getSession().write(CField.showEffect("newPirate/TimeTravel/0"));
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     System.out.println("" + e.toString());
                 }
-                c.sendPacket(CField.showEffect("newPirate/text1"));
+                c.getSession().write(CField.showEffect("newPirate/text1"));
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     System.out.println("" + e.toString());
                 }
 
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 2));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 2));
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -2243,7 +2243,7 @@ public class MapScriptMethods {
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
                         NPCScriptManager.getInstance().start(c, 9270084, "np_tuto_0_5");
                     }
                 }, 2000);
@@ -2252,25 +2252,25 @@ public class MapScriptMethods {
             }
 
             case np_tuto_0_8: {
-                c.sendPacket(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
                 if (!c.getCharacter().getMap().containsNPC(9270084)) {
                     c.getCharacter().getMap().spawnNpc(9270084, new Point(146, -120));
                 }
-                c.sendPacket(UIPacket.getDirectionInfo(3, 2));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 2));
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 1));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 1));
 
-                        c.sendPacket(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/effect/tuto/pirateAttack", 2000, 0, -100, 1, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/effect/tuto/pirateAttack", 2000, 0, -100, 1, 0));
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             System.out.println("" + e.toString());
                         }
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/17", 2000, 0, -100, 1, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/17", 2000, 0, -100, 1, 0));
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
@@ -2305,11 +2305,11 @@ public class MapScriptMethods {
                 break;
             }
             case merTutorSleep02: {
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 break;
             }
             case merTutorDrecotion00: {
-                c.sendPacket(UIPacket.playMovie("Mercedes.avi", true));
+                c.getSession().write(UIPacket.playMovie("Mercedes.avi", true));
                 final Map<Skill, SkillEntry> sa = new HashMap<>();
                 sa.put(SkillFactory.getSkill(20021181), new SkillEntry((byte) 1, (byte) 1, -1));
                 sa.put(SkillFactory.getSkill(20021166), new SkillEntry((byte) 1, (byte) 1, -1));
@@ -2323,23 +2323,23 @@ public class MapScriptMethods {
 //                c.getPlayer().changeJob((short) 2300);
                 final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(101050000);
                 c.getCharacter().changeMap(mapto, mapto.getPortal(0));
-//                c.sendPacket(UIPacket.getDirectionStatus(true));
-//                c.sendPacket(UIPacket.IntroEnableUI(1));
-//                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/6", 2000, 0, -100, 1, 0));
-//                c.sendPacket(UIPacket.getDirectionInfo(1, 2000));
+//                c.getSession().write(UIPacket.getDirectionStatus(true));
+//                c.getSession().write(UIPacket.IntroEnableUI(1));
+//                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/6", 2000, 0, -100, 1, 0));
+//                c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
 //                c.getPlayer().setDirection(0);
                 break;
             }
             case merTutorDrecotion20: {
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/9", 2000, 0, -100, 1, 0));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 2000));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/9", 2000, 0, -100, 1, 0));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
                 c.getCharacter().setDirection(0);
                 break;
             }
             case ds_tuto_ani: {
-                c.sendPacket(UIPacket.playMovie("DemonSlayer1.avi", true));
+                c.getSession().write(UIPacket.playMovie("DemonSlayer1.avi", true));
                 break;
             }
             case Resi_tutor80:
@@ -2347,9 +2347,9 @@ public class MapScriptMethods {
             case mirrorCave:
             case babyPigMap:
             case evanleaveD: {
-                c.sendPacket(UIPacket.IntroDisableUI(false));
-                c.sendPacket(UIPacket.IntroLock(false));
-                c.sendPacket(CWvsContext.enableActions());
+                c.getSession().write(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroLock(false));
+                c.getSession().write(CWvsContext.enableActions());
                 break;
             }
             case dojang_Msg: {
@@ -2396,9 +2396,9 @@ public class MapScriptMethods {
                         data = "Effect/Direction4.img/promotion/Scene3";
                         break;
                     case 900090004:
-                        c.sendPacket(UIPacket.IntroDisableUI(false));
-                        c.sendPacket(UIPacket.IntroLock(false));
-                        c.sendPacket(CWvsContext.enableActions());
+                        c.getSession().write(UIPacket.IntroDisableUI(false));
+                        c.getSession().write(UIPacket.IntroLock(false));
+                        c.getSession().write(CWvsContext.enableActions());
                         final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(900010000);
                         c.getCharacter().changeMap(mapto, mapto.getPortal(0));
                         return;
@@ -2412,34 +2412,34 @@ public class MapScriptMethods {
                     case 1:
                     case 2:
                     case 3:
-                        c.sendPacket(CField.MapEff("monsterPark/stageEff/stage"));
-                        c.sendPacket(CField.MapEff("monsterPark/stageEff/number/" + (((c.getCharacter().getMapId() % 1000) / 100) + 1)));
+                        c.getSession().write(CField.MapEff("monsterPark/stageEff/stage"));
+                        c.getSession().write(CField.MapEff("monsterPark/stageEff/number/" + (((c.getCharacter().getMapId() % 1000) / 100) + 1)));
                         break;
                     case 4:
                         if (c.getCharacter().getMapId() / 1000000 == 952) {
-                            c.sendPacket(CField.MapEff("monsterPark/stageEff/final"));
+                            c.getSession().write(CField.MapEff("monsterPark/stageEff/final"));
                         } else {
-                            c.sendPacket(CField.MapEff("monsterPark/stageEff/stage"));
-                            c.sendPacket(CField.MapEff("monsterPark/stageEff/number/5"));
+                            c.getSession().write(CField.MapEff("monsterPark/stageEff/stage"));
+                            c.getSession().write(CField.MapEff("monsterPark/stageEff/number/5"));
                         }
                         break;
                     case 5:
-                        c.sendPacket(CField.MapEff("monsterPark/stageEff/final"));
+                        c.getSession().write(CField.MapEff("monsterPark/stageEff/final"));
                         break;
                 }
 
                 break;
             case TD_MC_title: {
-                c.sendPacket(UIPacket.IntroDisableUI(false));
-                c.sendPacket(UIPacket.IntroLock(false));
-                c.sendPacket(CWvsContext.enableActions());
-                c.sendPacket(CField.MapEff("temaD/enter/mushCatle"));
+                c.getSession().write(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroLock(false));
+                c.getSession().write(CWvsContext.enableActions());
+                c.getSession().write(CField.MapEff("temaD/enter/mushCatle"));
                 break;
             }
             case TD_NC_title: {
                 switch ((c.getCharacter().getMapId() / 100) % 10) {
                     case 0:
-                        c.sendPacket(CField.MapEff("temaD/enter/teraForest"));
+                        c.getSession().write(CField.MapEff("temaD/enter/teraForest"));
                         break;
                     case 1:
                     case 2:
@@ -2447,17 +2447,17 @@ public class MapScriptMethods {
                     case 4:
                     case 5:
                     case 6:
-                        c.sendPacket(CField.MapEff("temaD/enter/neoCity" + ((c.getCharacter().getMapId() / 100) % 10)));
+                        c.getSession().write(CField.MapEff("temaD/enter/neoCity" + ((c.getCharacter().getMapId() / 100) % 10)));
                         break;
                 }
                 break;
             }
             case explorationPoint: {
                 if (c.getCharacter().getMapId() == 104000000) {
-                    c.sendPacket(CField.environmentChange("maplemap/enter/104000000", 12));
-                    c.sendPacket(UIPacket.IntroDisableUI(false));
-                    c.sendPacket(UIPacket.IntroLock(false));
-                    c.sendPacket(CWvsContext.enableActions());
+                    c.getSession().write(CField.environmentChange("maplemap/enter/104000000", 12));
+                    c.getSession().write(UIPacket.IntroDisableUI(false));
+                    c.getSession().write(UIPacket.IntroLock(false));
+                    c.getSession().write(CWvsContext.enableActions());
                 }
                 MedalQuest m = null;
                 for (MedalQuest mq : MedalQuest.values()) {
@@ -2516,7 +2516,7 @@ public class MapScriptMethods {
                         MapleQuest.getInstance(m.questid - 1995).forceStart(c.getCharacter(), 0, String.valueOf(number));
                         c.getCharacter().dropMessage(-1, "Visited " + number + "/" + m.maps.length + " regions.");
                         c.getCharacter().dropMessage(-1, "Title " + String.valueOf(m) + " Explorer currently in progress");
-                        c.sendPacket(CWvsContext.showQuestMsg("Title " + String.valueOf(m) + " Explorer currently in progress " + number + "/" + m.maps.length + " completed"));
+                        c.getSession().write(CWvsContext.showQuestMsg("Title " + String.valueOf(m) + " Explorer currently in progress " + number + "/" + m.maps.length + " completed"));
                     }
                 }
                 break;
@@ -2541,20 +2541,20 @@ public class MapScriptMethods {
          /*   case dubl2Tuto0: {
                 try {
                     c.getPlayer().getMap().resetFully();
-                    c.sendPacket(NPCPacket.getCutSceneSkip());
+                    c.getSession().write(NPCPacket.getCutSceneSkip());
                     Thread.sleep(4000);
                 } catch (InterruptedException e) {
                 }
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(CWvsContext.getTopMsg("The Secret Garden Depths"));
-                c.sendPacket(CWvsContext.getTopMsg("On a rainy day..."));
-                c.sendPacket(UIPacket.DublStart(false));
-                c.sendPacket(UIPacket.DublStart(true));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(CWvsContext.getTopMsg("The Secret Garden Depths"));
+                c.getSession().write(CWvsContext.getTopMsg("On a rainy day..."));
+                c.getSession().write(UIPacket.DublStart(false));
+                c.getSession().write(UIPacket.DublStart(true));
                 MapTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.DublStart(false));
-                        c.sendPacket(UIPacket.IntroDisableUI(false));
+                        c.getSession().write(UIPacket.DublStart(false));
+                        c.getSession().write(UIPacket.IntroDisableUI(false));
                     }
                 }, 13000);
                 break;
@@ -2565,8 +2565,8 @@ public class MapScriptMethods {
             
             
             case dubl2Tuto10: {
-                c.sendPacket(CWvsContext.getTopMsg("The Secret Garden Depths"));
-                c.sendPacket(CWvsContext.getTopMsg("On a rainy day..."));
+                c.getSession().write(CWvsContext.getTopMsg("The Secret Garden Depths"));
+                c.getSession().write(CWvsContext.getTopMsg("On a rainy day..."));
                 break;
             }
 
@@ -2581,23 +2581,23 @@ public class MapScriptMethods {
             }
 
             case dublTuto23: {
-                c.sendPacket(CWvsContext.getTopMsg("Defeat to Mano to complete Quest"));
+                c.getSession().write(CWvsContext.getTopMsg("Defeat to Mano to complete Quest"));
                 c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300523), new Point(-283, 152));
             break;
             }
 
             case np_tuto_0_0_before: {
                 try {
-                    c.sendPacket(CField.UIPacket.getDirectionStatus(true));
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CField.environmentChange("newPirate/text0", 12));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 9500));
+                    c.getSession().write(CField.UIPacket.getDirectionStatus(true));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CField.environmentChange("newPirate/text0", 12));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 9500));
                     Thread.sleep(9500);
                 } catch (InterruptedException ex) {
                 }
-                c.sendPacket(CField.UIPacket.IntroDisableUI(false));
-                c.sendPacket(CField.UIPacket.IntroEnableUI(0));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(false));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(0));
                 c.getCharacter().changeMap(552000010, 0);
                 break;
             }
@@ -2605,27 +2605,27 @@ public class MapScriptMethods {
                 try {
 
                     c.getCharacter().getMap().resetFully();
-                    c.sendPacket(NPCPacket.getCutSceneSkip());
+                    c.getSession().write(NPCPacket.getCutSceneSkip());
                     Thread.sleep(8000);
                 } catch (InterruptedException e) {
                 }
-                c.sendPacket(CField.UIPacket.getDirectionStatus(true));
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                c.getSession().write(CField.UIPacket.getDirectionStatus(true));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                 try {
                     Thread.sleep(2000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/0", 0, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/0", 0, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
                 } catch (InterruptedException ex) {
                 }
                 NPCScriptManager.getInstance().dispose(c);
@@ -2635,56 +2635,56 @@ public class MapScriptMethods {
             }
                         case lightning_tuto_1_0: {
        //        try {
-              //  c.sendPacket(CField.UIPacket.getDirectionStatus(false));
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(true));
+              //  c.getSession().write(CField.UIPacket.getDirectionStatus(false));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(true));
           //      Thread.sleep(2000L);
                   NPCScriptManager.getInstance().start(c, 2159353, "Lumi_tut1");
-          //      c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-          //      c.sendPacket(CField.UIPacket.getDirectionInfo(1, 8000));
-          //      c.sendPacket(CField.UIPacket.getDirectionInfo(1, 8000));
-          //      c.sendPacket(CField.UIPacket.getDirectionInfo(3, 1));
+          //      c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+          //      c.getSession().write(CField.UIPacket.getDirectionInfo(1, 8000));
+          //      c.getSession().write(CField.UIPacket.getDirectionInfo(1, 8000));
+          //      c.getSession().write(CField.UIPacket.getDirectionInfo(3, 1));
           //      Thread.sleep(2000L);
           //      NPCScriptManager.getInstance().dispose(c);
       ////             } catch (InterruptedException ex) {
       //          }
                 c.removeClickedNPC();
-                 c.sendPacket(CField.UIPacket.IntroEnableUI(0));
+                 c.getSession().write(CField.UIPacket.IntroEnableUI(0));
            //     NPCScriptManager.getInstance().start(c, 2159353, "Lumi_tut1");
                 break;
             }
             case map_913070000: {
                 try {
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 500));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 500));
                     Thread.sleep(500);
-                    c.sendPacket(CWvsContext.getTopMsg("Month 3, Day 4"));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CWvsContext.getTopMsg("Month 3, Day 4"));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/0", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.directionFacialExpression(6, 10000));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/0", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.directionFacialExpression(6, 10000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/1", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/1", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/2", 3000, 0, -100, 1, 0));
-                    c.sendPacket(CField.directionFacialExpression(4, 8000));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 3000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/2", 3000, 0, -100, 1, 0));
+                    c.getSession().write(CField.directionFacialExpression(4, 8000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 3000));
                     Thread.sleep(3000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/3", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.directionFacialExpression(6, 2000));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/3", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.directionFacialExpression(6, 2000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
                     Thread.sleep(500);
                 } catch (InterruptedException ex) {
                 }
@@ -2694,20 +2694,20 @@ public class MapScriptMethods {
                 break;
             }
             case map_913070001: {
-                c.sendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                c.sendPacket(CWvsContext.getTopMsg("Month 3, Day 4"));
+                c.getSession().write(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                c.getSession().write(CWvsContext.getTopMsg("Month 3, Day 4"));
                 break;
             }
             case map_913070002: {
-                c.sendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                c.sendPacket(CWvsContext.getTopMsg("Month 3, Day 8"));
+                c.getSession().write(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                c.getSession().write(CWvsContext.getTopMsg("Month 3, Day 8"));
                 break;
             }
             case map_913070020: {
-                c.sendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                c.getSession().write(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
                 //bigby spawn is not gms like yet
                 c.getCharacter().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9001051), new Point(185, 65));
-                c.sendPacket(CField.getClock(5 * 60));
+                c.getSession().write(CField.getClock(5 * 60));
                 MapTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
@@ -2720,51 +2720,51 @@ public class MapScriptMethods {
             }
             case map_913070004: {
                 try {
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
-                    c.sendPacket(CWvsContext.getTopMsg("Month 3, Day 11"));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CWvsContext.getTopMsg("Mr.Limbert's General Store"));
+                    c.getSession().write(CWvsContext.getTopMsg("Month 3, Day 11"));
                     Thread.sleep(500);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 2));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 2));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/5", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/5", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 2));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 500));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 2));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 500));
                     Thread.sleep(500);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/6", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/6", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/4", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/4", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/7", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/7", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/8", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/8", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CWvsContext.getTopMsg("Someone suspicious is in the back yard..."));
+                    c.getSession().write(CWvsContext.getTopMsg("Someone suspicious is in the back yard..."));
                 } catch (InterruptedException ex) {
                 }
-                c.sendPacket(CField.UIPacket.IntroEnableUI(0));
-                c.sendPacket(CField.UIPacket.IntroDisableUI(false));
-                c.sendPacket(CWvsContext.enableActions());
+                c.getSession().write(CField.UIPacket.IntroEnableUI(0));
+                c.getSession().write(CField.UIPacket.IntroDisableUI(false));
+                c.getSession().write(CWvsContext.enableActions());
                 break;
             }
             case map_913070050: {
                 try {
                     MapleQuest.getInstance(20034).forceStart(c.getCharacter(), 1106000, null);
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(CField.UIPacket.IntroDisableUI(true));
-                    c.sendPacket(CWvsContext.getTopMsg("General Store Yard"));
-                    c.sendPacket(CField.getClock(10 * 60));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(CField.UIPacket.IntroDisableUI(true));
+                    c.getSession().write(CWvsContext.getTopMsg("General Store Yard"));
+                    c.getSession().write(CField.getClock(10 * 60));
                     MapTimer.getInstance().schedule(new Runnable() {
                         @Override
                         public void run() {
@@ -2773,10 +2773,10 @@ public class MapScriptMethods {
                             }
                         }
                     }, 10 * 60 * 1000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/4", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction7.img/effect/tuto/step0/4", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 2000));
                     Thread.sleep(2000);
-                    c.sendPacket(CField.directionFacialExpression(6, 10000));
+                    c.getSession().write(CField.directionFacialExpression(6, 10000));
                 } catch (InterruptedException ex) {
                 }
                 NPCScriptManager.getInstance().dispose(c);
@@ -2786,16 +2786,16 @@ public class MapScriptMethods {
             }
             case mihail_direc: {
                 try {
-                    c.sendPacket(UIPacket.IntroDisableUI(true));
-                    c.sendPacket(UIPacket.IntroLock(true));
+                    c.getSession().write(UIPacket.IntroDisableUI(true));
+                    c.getSession().write(UIPacket.IntroLock(true));
                     showIntro(c, "Effect/Direction7.img/mikhail/1st_Job");
                     while (c.getCharacter().getLevel() < 10) {
                         c.getCharacter().levelUp();
                     }
                     c.getCharacter().changeJob((short) 5100);
                     Thread.sleep(4000);
-                    c.sendPacket(UIPacket.IntroDisableUI(false));
-                    c.sendPacket(UIPacket.IntroLock(false));
+                    c.getSession().write(UIPacket.IntroDisableUI(false));
+                    c.getSession().write(UIPacket.IntroLock(false));
                     c.getCharacter().changeMap(130000000, 0);
                     c.getCharacter().forceChangeChannel(c.getChannel());
                 } catch (InterruptedException ex) {
@@ -2804,40 +2804,40 @@ public class MapScriptMethods {
             }
             case PTtutor000: {
                 try {
-                    c.sendPacket(CField.UIPacket.IntroEnableUI(1));
-                    c.sendPacket(UIPacket.playMovie("phantom_memory.avi", true));
+                    c.getSession().write(CField.UIPacket.IntroEnableUI(1));
+                    c.getSession().write(UIPacket.playMovie("phantom_memory.avi", true));
                     Thread.sleep(85000);
-                    c.sendPacket(CField.MapEff("phantom/mapname1"));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.MapEff("phantom/mapname1"));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 2));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 2));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(UIPacket.getDirectionInfo("Effect/OnUserEff.img/questEffect/phantom/tutorial", 2000, 0, -100, 1, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(UIPacket.getDirectionInfo("Effect/OnUserEff.img/questEffect/phantom/tutorial", 2000, 0, -100, 1, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 2));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 2));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 1));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 500));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 1));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 500));
                     Thread.sleep(500);
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 3, 0));
-                    c.sendPacket(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 3, 0));
+                    c.getSession().write(CField.UIPacket.getDirectionInfo((byte) 1, 1000));
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                 }
@@ -2853,9 +2853,9 @@ public class MapScriptMethods {
                 break;
             }
             case PTtutor300: {
-                c.sendPacket(CField.MapEff("phantom/mapname2"));
+                c.getSession().write(CField.MapEff("phantom/mapname2"));
                 String[] wzinfo = {"UI/tutorial.img/phantom/0/0", "UI/tutorial.img/phantom/1/0", "UI/tutorial.img/phantom/2/0", "UI/tutorial.img/phantom/3/0", "UI/tutorial.img/phantom/4/0", "UI/tutorial.img/phantom/5/0"};
-                c.sendPacket(NPCPacket.getAdviceTalk(wzinfo));
+                c.getSession().write(NPCPacket.getAdviceTalk(wzinfo));
                 //c.getPlayer().getMap().broadcastMessage(HexTool.getByteArrayFromHexString("D8 99 71 00 01 12 EA 8D 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 E0 13 00 00 00 00 00 88 01 00 00 00 00 00 00 00 4C 73 00 00 00 00 00 00 00 00 4C 73 00 00 00 00 00 00 00 00 4C 73 00 00 00 00 00 00 00 00 4C 73 00 01 00 00 00 FE F7 4C FB 02 30 00 30 00 FF FF 80 66 AB 13 00 00 00 00 D2 F6 FF FF 2A F9 FF FF 96 00 00 00 64 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF"));
                 //spawn guards packet
                 break;
@@ -2868,9 +2868,9 @@ public class MapScriptMethods {
                 break;
             }
             case PTtutor500: {
-                c.sendPacket(CField.UIPacket.IntroEnableUI(1));
+                c.getSession().write(CField.UIPacket.IntroEnableUI(1));
                 try {
-                    c.sendPacket(CField.MapEff("phantom/mapname3"));
+                    c.getSession().write(CField.MapEff("phantom/mapname3"));
                     Thread.sleep(3000);
                 } catch (InterruptedException ex) {
                 }
@@ -2897,10 +2897,10 @@ public class MapScriptMethods {
                 break;
             }
             case go10000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/10000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/10000", 12));
                 break;
             case go20000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/20000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/20000", 12));
                 if (c.getCharacter().getQuestStatus(32200) == 0) {
                     MapleQuest.getInstance(32200).forceStart(c.getCharacter(), 0, null);
                     MapleQuest.getInstance(32200).forceComplete(c.getCharacter(), 0);
@@ -2911,37 +2911,37 @@ public class MapScriptMethods {
                 }
                 break;
             case go30000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/30000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/30000", 12));
                 break;
             case go40000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/40000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/40000", 12));
                 break;
             case go50000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/50000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/50000", 12));
                 break;
             case go1000000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1000000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/1000000", 12));
                 break;
             case go1010000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1010000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/1010000", 12));
                 break;
             case go1010100:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1010100", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/1010100", 12));
                 break;
             case go1010200:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1010200", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/1010200", 12));
                 break;
             case go1010300:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1010300", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/1010300", 12));
                 break;
             case go1010400:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1010400", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/1010400", 12));
                 break;
             case go1020000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/1020000", 12));
-                c.sendPacket(UIPacket.IntroDisableUI(false));
-                c.sendPacket(UIPacket.IntroLock(false));
-                c.sendPacket(CWvsContext.enableActions());
+                c.getSession().write(CField.environmentChange("maplemap/enter/1020000", 12));
+                c.getSession().write(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroLock(false));
+                c.getSession().write(CWvsContext.enableActions());
                 break;
                 
            case PinkZak:
@@ -2951,7 +2951,7 @@ public class MapScriptMethods {
                 break;
             
             case go2000000:
-                c.sendPacket(CField.environmentChange("maplemap/enter/2000000", 12));
+                c.getSession().write(CField.environmentChange("maplemap/enter/2000000", 12));
                 break;
             case enter_edelstein:
             case patrty6_1stIn:
@@ -2969,13 +2969,13 @@ public class MapScriptMethods {
                 break;
             case PTjob3M2: {
                 if (c.getCharacter().getQuestStatus(25111) == 1) {
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
                     EventTimer.getInstance().schedule(new Runnable() {
                         @Override
                         public void run() {
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 0));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 0));
                         }
                     }, 2500);
                     MapleQuest.getInstance(25111).forceComplete(c.getCharacter(), 0);
@@ -2989,10 +2989,10 @@ public class MapScriptMethods {
                             break;
                         }
                         if (c.getCharacter().getJob() == 2410) {
-                            c.sendPacket(UIPacket.IntroEnableUI(0));
+                            c.getSession().write(UIPacket.IntroEnableUI(0));
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
-                            c.sendPacket(CWvsContext.enableActions());
+                            c.getSession().write(CWvsContext.enableActions());
                             MapleQuest.getInstance(29969).forceComplete(c.getCharacter(), 0);
                             try {
                                 Thread.sleep(2000);
@@ -3003,10 +3003,10 @@ public class MapScriptMethods {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {
                             }
-                            c.sendPacket(CField.showEffect("phantom/suu"));
+                            c.getSession().write(CField.showEffect("phantom/suu"));
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
-                            c.sendPacket(CWvsContext.enableActions());
+                            c.getSession().write(CWvsContext.enableActions());
                             break;
                         }
                         try {
@@ -3046,36 +3046,36 @@ public class MapScriptMethods {
             }
 
             case PTjob4M2: {
-                //c.sendPacket(UIPacket.getDirectionInfo(4, 2159310));
+                //c.getSession().write(UIPacket.getDirectionInfo(4, 2159310));
 
                 if (c.getCharacter().getQuestStatus(25122) == 2 && c.getCharacter().getJob() == 2411) {
-                    c.sendPacket(UIPacket.IntroEnableUI(1));
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                    c.sendPacket(UIPacket.getDirectionInfo(1, 30));
-                    c.sendPacket(UIPacket.getDirectionStatus(true));
+                    c.getSession().write(UIPacket.IntroEnableUI(1));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                    c.getSession().write(UIPacket.getDirectionInfo(1, 30));
+                    c.getSession().write(UIPacket.getDirectionStatus(true));
                     EventTimer.getInstance().schedule(new Runnable() {
                         @Override
                         public void run() {
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                            c.sendPacket(CField.showEffect("demonSlayer/text6"));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                            c.getSession().write(CField.showEffect("demonSlayer/text6"));
                         }
                     }, 2500);
                     ScheduledFuture<?> schedule;
                     schedule = EventTimer.getInstance().schedule(new Runnable() {
                         @Override
                         public void run() {
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                            c.sendPacket(CField.showEffect("demonSlayer/text5"));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                            c.getSession().write(CField.showEffect("demonSlayer/text5"));
                         }
                     }, 4500);
 
                     EventTimer.getInstance().schedule(new Runnable() {
                         @Override
                         public void run() {
-                            c.sendPacket(UIPacket.IntroEnableUI(0));
+                            c.getSession().write(UIPacket.IntroEnableUI(0));
                             c.removeClickedNPC();
                             NPCScriptManager.getInstance().dispose(c);
-                            c.sendPacket(CWvsContext.enableActions());
+                            c.getSession().write(CWvsContext.enableActions());
                         }
                     }, 6500);
 
@@ -3100,7 +3100,7 @@ public class MapScriptMethods {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                     }
-                                    c.sendPacket(CField.showEffect("phantom/darkphantom"));
+                                    c.getSession().write(CField.showEffect("phantom/darkphantom"));
                                     break;
                                 }
                                 try {
@@ -3119,7 +3119,7 @@ public class MapScriptMethods {
             }
 
             case q53244_dun_in: {
-                c.sendPacket(UIPacket.IntroEnableUI(0));
+                c.getSession().write(UIPacket.IntroEnableUI(0));
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
@@ -3132,33 +3132,33 @@ public class MapScriptMethods {
                 if (!c.getCharacter().getMap().containsNPC(9270090)) {
                     c.getCharacter().getMap().spawnNpc(9270090, new Point(65, 55));
                 }
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/11", 2000, 0, 1, -100, 1));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/DirectionNewPirate.img/newPirate/balloonMsg2/11", 2000, 0, 1, -100, 1));
                 for (int i = 0; i < 10; i++) {
-                    c.sendPacket(UIPacket.getDirectionInfo(3, 5));
+                    c.getSession().write(UIPacket.getDirectionInfo(3, 5));
                     try {
                         Thread.sleep(700);
                     } catch (InterruptedException e) {
                     }
                 }
-                c.sendPacket(UIPacket.getDirectionInfo(3, 2));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 2));
 
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
                         c.getCharacter().dropMessage(-1, "Heh heh heh, nguoi da cham soc no tot that day!");
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
                         }
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 2));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 2));
                         try {
                             Thread.sleep(200);
                         } catch (InterruptedException e) {
                         }
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        //c.sendPacket(UIPacket.getDirectionInfo(4, 1403002));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        //c.getSession().write(UIPacket.getDirectionInfo(4, 1403002));
                         NPCScriptManager.getInstance().start(c, 9270090, "q53244_dun_in");
                     }
                 }, 1000);
@@ -3166,7 +3166,7 @@ public class MapScriptMethods {
             }
 
             case q53251_enter: {
-                c.sendPacket(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
@@ -3175,7 +3175,7 @@ public class MapScriptMethods {
                 if (!c.getCharacter().getMap().containsNPC(9270092)) {
                     c.getCharacter().getMap().spawnNpc(9270092, new Point(352, 55));
                 }
-                c.sendPacket(UIPacket.getDirectionInfo(3, 2));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 2));
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
@@ -3191,14 +3191,14 @@ public class MapScriptMethods {
             }
 
             case ds_tuto_ill0: {
-                c.sendPacket(UIPacket.getDirectionInfo(1, 6300));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 6300));
                 showIntro(c, "Effect/Direction6.img/DemonTutorial/SceneLogo");
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.IntroDisableUI(false));
-                        c.sendPacket(UIPacket.IntroLock(false));
-                        c.sendPacket(CWvsContext.enableActions());
+                        c.getSession().write(UIPacket.IntroDisableUI(false));
+                        c.getSession().write(UIPacket.IntroLock(false));
+                        c.getSession().write(CWvsContext.enableActions());
                         final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(927000000);
                         c.getCharacter().changeMap(mapto, mapto.getPortal(0));
                     }
@@ -3206,14 +3206,14 @@ public class MapScriptMethods {
                 break;
             }
             case ds_tuto_home_before: {
-                c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 30));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 90));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 30));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 90));
 
-                c.sendPacket(CField.showEffect("demonSlayer/text11"));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 4000));
+                c.getSession().write(CField.showEffect("demonSlayer/text11"));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 4000));
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
@@ -3223,61 +3223,61 @@ public class MapScriptMethods {
                 break;
             }
             case ds_tuto_1_0: {
-                c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 30));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 30));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
 
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(UIPacket.getDirectionInfo(4, 2159310));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(4, 2159310));
                         NPCScriptManager.getInstance().start(c, 2159310, null);
                     }
                 }, 1000);
                 break;
             }
             case ds_tuto_4_0: {
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(UIPacket.getDirectionInfo(4, 2159344));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.getDirectionInfo(4, 2159344));
                 NPCScriptManager.getInstance().start(c, 2159344, null);
                 break;
             }
             case cannon_tuto_01: {
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
                 c.getCharacter().changeSingleSkillLevel(SkillFactory.getSkill(110), (byte) 1, (byte) 1);
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(UIPacket.getDirectionInfo(4, 1096000));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.getDirectionInfo(4, 1096000));
                 NPCScriptManager.getInstance().dispose(c);
                 NPCScriptManager.getInstance().start(c, 1096000, null);
                 break;
             }
             case ds_tuto_5_0: {
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(UIPacket.getDirectionInfo(4, 2159314));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(UIPacket.getDirectionInfo(4, 2159314));
                 NPCScriptManager.getInstance().dispose(c);
                 NPCScriptManager.getInstance().start(c, 2159314, null);
                 break;
             }
             case ds_tuto_3_0: {
-                c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 30));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(CField.showEffect("demonSlayer/text12"));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 30));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(CField.showEffect("demonSlayer/text12"));
 
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(UIPacket.getDirectionInfo(4, 2159311));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(4, 2159311));
                         NPCScriptManager.getInstance().dispose(c);
                         NPCScriptManager.getInstance().start(c, 2159311, null);
                     }
@@ -3285,21 +3285,21 @@ public class MapScriptMethods {
                 break;
             }
             case ds_tuto_3_1: {
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
                 if (!c.getCharacter().getMap().containsNPC(2159340)) {
                     c.getCharacter().getMap().spawnNpc(2159340, new Point(175, 0));
                     c.getCharacter().getMap().spawnNpc(2159341, new Point(300, 0));
                     c.getCharacter().getMap().spawnNpc(2159342, new Point(600, 0));
                 }
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/tuto/balloonMsg2/0", 2000, 0, -100, 1, 0));
-                c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/tuto/balloonMsg1/3", 2000, 0, -100, 1, 0));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/tuto/balloonMsg2/0", 2000, 0, -100, 1, 0));
+                c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/tuto/balloonMsg1/3", 2000, 0, -100, 1, 0));
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(UIPacket.getDirectionInfo(4, 2159340));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(UIPacket.getDirectionInfo(4, 2159340));
                         NPCScriptManager.getInstance().dispose(c);
                         NPCScriptManager.getInstance().start(c, 2159340, null);
                     }
@@ -3307,23 +3307,23 @@ public class MapScriptMethods {
                 break;
             }
             case ds_tuto_2_before: {
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 30));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 30));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(CField.showEffect("demonSlayer/text13"));
-                        c.sendPacket(UIPacket.getDirectionInfo(1, 500));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(CField.showEffect("demonSlayer/text13"));
+                        c.getSession().write(UIPacket.getDirectionInfo(1, 500));
                     }
                 }, 1000);
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(CField.showEffect("demonSlayer/text14"));
-                        c.sendPacket(UIPacket.getDirectionInfo(1, 4000));
+                        c.getSession().write(CField.showEffect("demonSlayer/text14"));
+                        c.getSession().write(UIPacket.getDirectionInfo(1, 4000));
                     }
                 }, 1500);
                 EventTimer.getInstance().schedule(new Runnable() {
@@ -3331,7 +3331,7 @@ public class MapScriptMethods {
                     public void run() {
                         final MapleMap mapto = c.getChannelServer().getMapFactory().getMap(927000020);
                         c.getCharacter().changeMap(mapto, mapto.getPortal(0));
-                        c.sendPacket(UIPacket.IntroEnableUI(0));
+                        c.getSession().write(UIPacket.IntroEnableUI(0));
                         MapleQuest.getInstance(23204).forceStart(c.getCharacter(), 0, null);
                         MapleQuest.getInstance(23205).forceComplete(c.getCharacter(), 0);
                         final Map<Skill, SkillEntry> sa = new HashMap<>();
@@ -3346,28 +3346,28 @@ public class MapScriptMethods {
                         c.getCharacter().changeKeybinding(46, (byte) 1, 30011168);
                         c.getCharacter().changeKeybinding(47, (byte) 1, 30011169);
                         c.getCharacter().changeKeybinding(48, (byte) 1, 30011170);
-                        c.sendPacket(CField.getKeymap(c.getCharacter().getKeyLayout()));
+                        c.getSession().write(CField.getKeymap(c.getCharacter().getKeyLayout()));
                     }
                 }, 5500);
                 break;
             }
             case ds_tuto_1_before: {
-                c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 30));
-                c.sendPacket(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 30));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                        c.sendPacket(CField.showEffect("demonSlayer/text8"));
-                        c.sendPacket(UIPacket.getDirectionInfo(1, 500));
+                        c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                        c.getSession().write(CField.showEffect("demonSlayer/text8"));
+                        c.getSession().write(UIPacket.getDirectionInfo(1, 500));
                     }
                 }, 1000);
                 EventTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
-                        c.sendPacket(CField.showEffect("demonSlayer/text9"));
-                        c.sendPacket(UIPacket.getDirectionInfo(1, 3000));
+                        c.getSession().write(CField.showEffect("demonSlayer/text9"));
+                        c.getSession().write(UIPacket.getDirectionInfo(1, 3000));
                     }
                 }, 1500);
                 EventTimer.getInstance().schedule(new Runnable() {
@@ -3380,9 +3380,9 @@ public class MapScriptMethods {
                 break;
             }
             case ds_tuto_0_0: {
-                c.sendPacket(UIPacket.getDirectionStatus(true));
-                c.sendPacket(UIPacket.IntroEnableUI(1));
-                c.sendPacket(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.getDirectionStatus(true));
+                c.getSession().write(UIPacket.IntroEnableUI(1));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
 
                 final Map<Skill, SkillEntry> sa = new HashMap<>();
                 sa.put(SkillFactory.getSkill(30011109), new SkillEntry((byte) 1, (byte) 1, -1));
@@ -3390,10 +3390,10 @@ public class MapScriptMethods {
                 sa.put(SkillFactory.getSkill(30010111), new SkillEntry((byte) 1, (byte) 1, -1));
                 sa.put(SkillFactory.getSkill(30010185), new SkillEntry((byte) 1, (byte) 1, -1));
                 c.getCharacter().changeSkillsLevel(sa);
-                c.sendPacket(UIPacket.getDirectionInfo(3, 0));
-                c.sendPacket(CField.showEffect("demonSlayer/back"));
-                c.sendPacket(CField.showEffect("demonSlayer/text0"));
-                c.sendPacket(UIPacket.getDirectionInfo(1, 500));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 0));
+                c.getSession().write(CField.showEffect("demonSlayer/back"));
+                c.getSession().write(CField.showEffect("demonSlayer/text0"));
+                c.getSession().write(UIPacket.getDirectionInfo(1, 500));
                 c.getCharacter().setDirection(0);
                 if (!c.getCharacter().getMap().containsNPC(2159307)) {
                     c.getCharacter().getMap().spawnNpc(2159307, new Point(1305, 50));
@@ -3408,7 +3408,7 @@ public class MapScriptMethods {
                     c.getCharacter().changeKeybinding(46, (byte) 1, 30011168);
                     c.getCharacter().changeKeybinding(47, (byte) 1, 30011169);
                     c.getCharacter().changeKeybinding(48, (byte) 1, 30011170);
-                    c.sendPacket(CField.getKeymap(c.getCharacter().getKeyLayout()));
+                    c.getSession().write(CField.getKeymap(c.getCharacter().getKeyLayout()));
                     break;
                 }
             }
@@ -3476,16 +3476,16 @@ public class MapScriptMethods {
                 sa.put(SkillFactory.getSkill(20000017), new SkillEntry((byte) -1, (byte) 0, -1));
                 sa.put(SkillFactory.getSkill(20000018), new SkillEntry((byte) -1, (byte) 0, -1));
                 c.getCharacter().changeSkillsLevel(sa);
-                c.sendPacket(EffectPacket.ShowWZEffect("Effect/Direction1.img/aranTutorial/ClickLirin"));
-                c.sendPacket(UIPacket.IntroDisableUI(false));
-                c.sendPacket(UIPacket.IntroLock(false));
-                c.sendPacket(CWvsContext.enableActions());
+                c.getSession().write(EffectPacket.ShowWZEffect("Effect/Direction1.img/aranTutorial/ClickLirin"));
+                c.getSession().write(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroLock(false));
+                c.getSession().write(CWvsContext.enableActions());
                 break;
             }
             case rienArrow: {
                 if (c.getCharacter().getInfoQuest(21019).equals("miss=o;helper=clear")) {
                     c.getCharacter().updateInfoQuest(21019, "miss=o;arr=o;helper=clear");
-                    c.sendPacket(EffectPacket.TutInstructionalBalloon("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3"));
+                    c.getSession().write(EffectPacket.TutInstructionalBalloon("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3"));
                 }
                 break;
             }
@@ -3493,8 +3493,8 @@ public class MapScriptMethods {
                 if (c.getCharacter().getQuestStatus(21101) == 2 && c.getCharacter().getInfoQuest(21019).equals("miss=o;arr=o;helper=clear")) {
                     c.getCharacter().updateInfoQuest(21019, "miss=o;arr=o;ck=1;helper=clear");
                 }
-                c.sendPacket(UIPacket.IntroDisableUI(false));
-                c.sendPacket(UIPacket.IntroLock(false));
+                c.getSession().write(UIPacket.IntroDisableUI(false));
+                c.getSession().write(UIPacket.IntroLock(false));
                 break;
             }
             case check_count: {
@@ -3532,20 +3532,20 @@ public class MapScriptMethods {
                     }
                     c.getCharacter().getMap().spawnMonsterWithEffectBelow(shammos, new Point(c.getCharacter().getMap().getPortal(0).getPosition()), 12);
                     shammos.switchController(c.getCharacter(), false);
-                    c.sendPacket(MobPacket.getNodeProperties(shammos, c.getCharacter().getMap()));
+                    c.getSession().write(MobPacket.getNodeProperties(shammos, c.getCharacter().getMap()));
 
                 }
                 break;
             }
 
             case azwan_stageEff: {
-                //  c.sendPacket(CWvsContext.getTopMsg("Remove all the monsters in the field need to be able to move to the next stage."));
+                //  c.getSession().write(CWvsContext.getTopMsg("Remove all the monsters in the field need to be able to move to the next stage."));
                 switch ((c.getCharacter().getMapId() % 1000) / 100) {
                     case 1:
                     case 2:
                     case 3:
-                        c.sendPacket(CField.showEffect("aswan/stageEff/stage"));
-                        c.sendPacket(CField.showEffect("aswan/stageEff/number/" + (((c.getCharacter().getMapId() % 1000) / 100))));
+                        c.getSession().write(CField.showEffect("aswan/stageEff/stage"));
+                        c.getSession().write(CField.showEffect("aswan/stageEff/number/" + (((c.getCharacter().getMapId() % 1000) / 100))));
                         break;
                 }
                 synchronized (MapScriptMethods.class) {
@@ -3560,20 +3560,20 @@ public class MapScriptMethods {
             }
             case Massacre_result: { //clear, give exp, etc.
                 //if (c.getPlayer().getPyramidSubway() == null) {
-                c.sendPacket(CField.showEffect("killing/fail"));
+                c.getSession().write(CField.showEffect("killing/fail"));
                 //} else {
-                //	c.sendPacket(CField.showEffect("killing/clear"));
+                //	c.getSession().write(CField.showEffect("killing/clear"));
                 //}
                 //left blank because pyramidsubway handles this.
                 break;
             }
 
             case hayatoJobChange: {
-                c.sendPacket(UIPacket.playMovie("JPKanna.avi", true));
+                c.getSession().write(UIPacket.playMovie("JPKanna.avi", true));
                 while (c.getCharacter().getLevel() < 10) {
-                    c.sendPacket(CField.showEffect("JPKanna/text0"));
-                    c.sendPacket(CField.showEffect("JPKanna/text1"));
-                    c.sendPacket(CField.showEffect("JPKanna/text2"));
+                    c.getSession().write(CField.showEffect("JPKanna/text0"));
+                    c.getSession().write(CField.showEffect("JPKanna/text1"));
+                    c.getSession().write(CField.showEffect("JPKanna/text2"));
                     c.getCharacter().levelUp();
                     c.getCharacter().levelUp();
                     c.getCharacter().levelUp();
@@ -3594,21 +3594,21 @@ public class MapScriptMethods {
             
             case enter_101074000: {
             	try {
-	            	c.sendPacket(UIPacket.getDirectionStatus(true));
-	            	c.sendPacket(UIPacket.IntroEnableUI(1));
-	                c.sendPacket(UIPacket.getDirectionInfo(9, 1));
-	                c.sendPacket(UIPacket.getDirectionInfoNew((byte) 0, 100, -600, 0));
-	                c.sendPacket(UIPacket.getDirectionStatus(true));
-	                c.sendPacket(UIPacket.getDirectionInfo(1, 1000));
+	            	c.getSession().write(UIPacket.getDirectionStatus(true));
+	            	c.getSession().write(UIPacket.IntroEnableUI(1));
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 1));
+	                c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 100, -600, 0));
+	                c.getSession().write(UIPacket.getDirectionStatus(true));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
 	                Thread.sleep(1000);
-	                c.sendPacket(CWvsContext.getTopMsg("The forest of fairies seems to materialize from nowhere as you exit the passage."));
-	                c.sendPacket(UIPacket.getDirectionInfo(1, 3800));
+	                c.getSession().write(CWvsContext.getTopMsg("The forest of fairies seems to materialize from nowhere as you exit the passage."));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 3800));
 	                Thread.sleep(3800);
-	                c.sendPacket(CField.environmentChange("temaD/enter/fairyAcademy", 12));
-	                c.sendPacket(UIPacket.getDirectionInfo(1, 2800));
+	                c.getSession().write(CField.environmentChange("temaD/enter/fairyAcademy", 12));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 2800));
 	                Thread.sleep(2800);
-	                c.sendPacket(UIPacket.getDirectionInfo(9, 0));
-	            	c.sendPacket(UIPacket.IntroEnableUI(0));
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 0));
+	            	c.getSession().write(UIPacket.IntroEnableUI(0));
 
 	                
 	                MapleMap mapto = c.getChannelServer().getMapFactory().getMap(101070000);
@@ -3621,18 +3621,18 @@ public class MapScriptMethods {
             
             case enter_101074001: {
             	try {
-	            	c.sendPacket(UIPacket.getDirectionStatus(true));
-	            	c.sendPacket(UIPacket.IntroEnableUI(1));
-	                c.sendPacket(UIPacket.getDirectionInfo(9, 1));
-	                c.sendPacket(UIPacket.getDirectionInfoNew((byte) 0, 100, 600, 0));
-	                c.sendPacket(UIPacket.getDirectionStatus(true));
-	                c.sendPacket(UIPacket.getDirectionInfo(1, 1000));
+	            	c.getSession().write(UIPacket.getDirectionStatus(true));
+	            	c.getSession().write(UIPacket.IntroEnableUI(1));
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 1));
+	                c.getSession().write(UIPacket.getDirectionInfoNew((byte) 0, 100, 600, 0));
+	                c.getSession().write(UIPacket.getDirectionStatus(true));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 1000));
 	                Thread.sleep(1000);
-	                c.sendPacket(CWvsContext.getTopMsg("The forest of fairies gradually fades from view, as if waking from a dream."));
-	                c.sendPacket(UIPacket.getDirectionInfo(1, 2000));
+	                c.getSession().write(CWvsContext.getTopMsg("The forest of fairies gradually fades from view, as if waking from a dream."));
+	                c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
 	                Thread.sleep(2000);
-	                c.sendPacket(UIPacket.getDirectionInfo(9, 0));
-	            	c.sendPacket(UIPacket.IntroEnableUI(0));
+	                c.getSession().write(UIPacket.getDirectionInfo(9, 0));
+	            	c.getSession().write(UIPacket.IntroEnableUI(0));
 
 	            	MapleMap mapto = c.getChannelServer().getMapFactory().getMap(101030000);
 	                c.getCharacter().changeMap(mapto, mapto.getPortal(5));
@@ -3690,23 +3690,23 @@ public class MapScriptMethods {
     }
 
     private static void showIntro(final MapleClient c, final String data) {
-        c.sendPacket(UIPacket.IntroDisableUI(true));
-        c.sendPacket(UIPacket.IntroLock(true));
-        c.sendPacket(EffectPacket.ShowWZEffect(data));
+        c.getSession().write(UIPacket.IntroDisableUI(true));
+        c.getSession().write(UIPacket.IntroLock(true));
+        c.getSession().write(EffectPacket.ShowWZEffect(data));
     }
 
     private static void sendDojoClock(MapleClient c, int time) {
-        c.sendPacket(CField.getClock(time));
+        c.getSession().write(CField.getClock(time));
     }
 
     private static void sendDojoStart(MapleClient c, int stage) {
         for (int i = 0; i < 3; i++) {
             c.getCharacter().updateInfoQuest(1213, "try=3");
         }
-        c.sendPacket(CField.environmentChange("Dojang/start", 5));//was4
-        c.sendPacket(CField.environmentChange("dojang/start/stage", 12));//was3
-        c.sendPacket(CField.environmentChange("dojang/start/number/" + stage, 12));//was3
-        c.sendPacket(CField.trembleEffect(0, 1));
+        c.getSession().write(CField.environmentChange("Dojang/start", 5));//was4
+        c.getSession().write(CField.environmentChange("dojang/start/stage", 12));//was3
+        c.getSession().write(CField.environmentChange("dojang/start/number/" + stage, 12));//was3
+        c.getSession().write(CField.trembleEffect(0, 1));
     }
 
     private static void handlePinkBeanStart(MapleClient c) {
@@ -3761,106 +3761,106 @@ public class MapScriptMethods {
         DirectionInfo di = chr.getMap().getDirectionInfo(start ? 0 : chr.getDirection());
         if (di != null && di.eventQ.size() > 0) {
             if (start) {
-                c.sendPacket(UIPacket.IntroDisableUI(true));
-                c.sendPacket(UIPacket.getDirectionInfo(3, 4));
+                c.getSession().write(UIPacket.IntroDisableUI(true));
+                c.getSession().write(UIPacket.getDirectionInfo(3, 4));
             } else {
                 for (String s : di.eventQ) {
                     switch (directionInfo.fromString(s)) {
                         case merTutorDrecotion01: //direction info: 1 is probably the time
-                            c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/0", 2000, 0, -100, 1, 0));
+                            c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/0", 2000, 0, -100, 1, 0));
                             break;
                         case merTutorDrecotion02:
-                            c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/1", 2000, 0, -100, 1, 0));
+                            c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/1", 2000, 0, -100, 1, 0));
                             break;
                         case merTutorDrecotion03:
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                            c.sendPacket(UIPacket.getDirectionStatus(true));
-                            c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/2", 2000, 0, -100, 1, 0));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                            c.getSession().write(UIPacket.getDirectionStatus(true));
+                            c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/2", 2000, 0, -100, 1, 0));
                             break;
                         case merTutorDrecotion04:
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                            c.sendPacket(UIPacket.getDirectionStatus(true));
-                            c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/3", 2000, 0, -100, 1, 0));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                            c.getSession().write(UIPacket.getDirectionStatus(true));
+                            c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/3", 2000, 0, -100, 1, 0));
                             break;
                         case merTutorDrecotion05:
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                            c.sendPacket(UIPacket.getDirectionStatus(true));
-                            c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/4", 2000, 0, -100, 1, 0));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                            c.getSession().write(UIPacket.getDirectionStatus(true));
+                            c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/4", 2000, 0, -100, 1, 0));
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                                    c.sendPacket(UIPacket.getDirectionStatus(true));
-                                    c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/5", 2000, 0, -100, 1, 0));
+                                    c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                                    c.getSession().write(UIPacket.getDirectionStatus(true));
+                                    c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/5", 2000, 0, -100, 1, 0));
                                 }
                             }, 2000);
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.IntroEnableUI(0));
-                                    c.sendPacket(CWvsContext.enableActions());
+                                    c.getSession().write(UIPacket.IntroEnableUI(0));
+                                    c.getSession().write(CWvsContext.enableActions());
                                 }
                             }, 4000);
                             break;
                         case merTutorDrecotion12:
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 2));
-                            c.sendPacket(UIPacket.getDirectionStatus(true));
-                            c.sendPacket(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/8", 2000, 0, -100, 1, 0));
-                            c.sendPacket(UIPacket.IntroEnableUI(0));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 2));
+                            c.getSession().write(UIPacket.getDirectionStatus(true));
+                            c.getSession().write(UIPacket.getDirectionInfo("Effect/Direction5.img/effect/mercedesInIce/merBalloon/8", 2000, 0, -100, 1, 0));
+                            c.getSession().write(UIPacket.IntroEnableUI(0));
                             break;
                         case merTutorDrecotion21:
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 1));
-                            c.sendPacket(UIPacket.getDirectionStatus(true));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 1));
+                            c.getSession().write(UIPacket.getDirectionStatus(true));
                             MapleMap mapto = c.getChannelServer().getMapFactory().getMap(910150005);
                             c.getCharacter().changeMap(mapto, mapto.getPortal(0));
                             break;
                         case ds_tuto_0_2:
-                            c.sendPacket(CField.showEffect("demonSlayer/text1"));
+                            c.getSession().write(CField.showEffect("demonSlayer/text1"));
                             break;
                         case ds_tuto_0_1:
-                            c.sendPacket(UIPacket.getDirectionInfo(3, 2));
+                            c.getSession().write(UIPacket.getDirectionInfo(3, 2));
                             break;
                         case ds_tuto_0_3:
-                            c.sendPacket(CField.showEffect("demonSlayer/text2"));
+                            c.getSession().write(CField.showEffect("demonSlayer/text2"));
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(1, 4000));
-                                    c.sendPacket(CField.showEffect("demonSlayer/text3"));
+                                    c.getSession().write(UIPacket.getDirectionInfo(1, 4000));
+                                    c.getSession().write(CField.showEffect("demonSlayer/text3"));
                                 }
                             }, 2000);
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(1, 500));
-                                    c.sendPacket(CField.showEffect("demonSlayer/text4"));
+                                    c.getSession().write(UIPacket.getDirectionInfo(1, 500));
+                                    c.getSession().write(CField.showEffect("demonSlayer/text4"));
                                 }
                             }, 6000);
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(1, 4000));
-                                    c.sendPacket(CField.showEffect("demonSlayer/text5"));
+                                    c.getSession().write(UIPacket.getDirectionInfo(1, 4000));
+                                    c.getSession().write(CField.showEffect("demonSlayer/text5"));
                                 }
                             }, 6500);
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(1, 500));
-                                    c.sendPacket(CField.showEffect("demonSlayer/text6"));
+                                    c.getSession().write(UIPacket.getDirectionInfo(1, 500));
+                                    c.getSession().write(CField.showEffect("demonSlayer/text6"));
                                 }
                             }, 10500);
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(1, 4000));
-                                    c.sendPacket(CField.showEffect("demonSlayer/text7"));
+                                    c.getSession().write(UIPacket.getDirectionInfo(1, 4000));
+                                    c.getSession().write(CField.showEffect("demonSlayer/text7"));
                                 }
                             }, 11000);
                             EventTimer.getInstance().schedule(new Runnable() {
                                 @Override
                                 public void run() {
-                                    c.sendPacket(UIPacket.getDirectionInfo(4, 2159307));
+                                    c.getSession().write(UIPacket.getDirectionInfo(4, 2159307));
                                     NPCScriptManager.getInstance().dispose(c);
                                     NPCScriptManager.getInstance().start(c, 2159307, null);
                                 }
@@ -3869,7 +3869,7 @@ public class MapScriptMethods {
                     }
                 }
             }
-            c.sendPacket(UIPacket.getDirectionInfo(1, 2000));
+            c.getSession().write(UIPacket.getDirectionInfo(1, 2000));
             chr.setDirection(chr.getDirection() + 1);
             if (chr.getMap().getDirectionInfo(chr.getDirection()) == null) {
                 chr.setDirection(-1);

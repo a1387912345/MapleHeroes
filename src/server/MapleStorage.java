@@ -205,19 +205,19 @@ public class MapleStorage implements Serializable {
         for (MapleInventoryType type : MapleInventoryType.values()) {
             typeItems.put(type, items);
         }
-        c.sendPacket(NPCPacket.getStorage(npcId, slots, items, meso));
+        c.getSession().write(NPCPacket.getStorage(npcId, slots, items, meso));
     }
 
     public void update(MapleClient c) {
-        c.sendPacket(NPCPacket.arrangeStorage(slots, items, true));
+        c.getSession().write(NPCPacket.arrangeStorage(slots, items, true));
     }
 
     public void sendStored(MapleClient c, MapleInventoryType type) {
-        c.sendPacket(NPCPacket.storeStorage(slots, type, typeItems.get(type)));
+        c.getSession().write(NPCPacket.storeStorage(slots, type, typeItems.get(type)));
     }
 
     public void sendTakenOut(MapleClient c, MapleInventoryType type) {
-        c.sendPacket(NPCPacket.takeOutStorage(slots, type, typeItems.get(type)));
+        c.getSession().write(NPCPacket.takeOutStorage(slots, type, typeItems.get(type)));
     }
 
     public long getMeso() {
@@ -242,7 +242,7 @@ public class MapleStorage implements Serializable {
     }
 
     public void sendMeso(MapleClient c) {
-        c.sendPacket(NPCPacket.mesoStorage(slots, meso));
+        c.getSession().write(NPCPacket.mesoStorage(slots, meso));
     }
 
     public boolean isFull() {

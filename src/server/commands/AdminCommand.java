@@ -21,7 +21,7 @@ import net.packet.PetPacket;
 import net.packet.CField.NPCPacket;
 import net.server.cashshop.CashShopServer;
 import net.server.channel.ChannelServer;
-import net.server.login.handler.deprecated.AutoRegister;
+import net.server.login.handlers.deprecated.AutoRegister;
 import net.world.CharacterTransfer;
 import net.world.MapleMessengerCharacter;
 import net.world.PlayerBuffStorage;
@@ -87,7 +87,7 @@ public class AdminCommand {
             int end = Randomizer.nextInt(10);
             String data = "Magic Wheel";
             c.getCharacter().setWheelItem(items.get(end));
-            c.sendPacket(CWvsContext.magicWheel((byte) 3, items, data, end));
+            c.getSession().write(CWvsContext.magicWheel((byte) 3, items, data, end));
             return 1;
         }
     }
@@ -106,7 +106,7 @@ public class AdminCommand {
                 1302002, 1302003, 1302004, 1302005, 1302006,
                 1302007};
             final List<Integer> items = Arrays.asList(itemArray);
-            c.sendPacket(CField.sendSealedBox(slot, 2028162, items)); //sealed box
+            c.getSession().write(CField.sendSealedBox(slot, 2028162, items)); //sealed box
             final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             WorldTimer.getInstance().schedule(new Runnable() {
                 @Override
@@ -114,8 +114,8 @@ public class AdminCommand {
                     MapleInventoryManipulator.removeById(c, GameConstants.getInventoryType(itemId), itemId, 1, false, false);
                     Item item = ii.getEquipById(items.get(Randomizer.nextInt(items.size())));
                     MapleInventoryManipulator.addbyItem(c, item);
-                    c.sendPacket(CField.unsealBox(item.getItemId()));
-                    c.sendPacket(CField.EffectPacket.showRewardItemAnimation(2028162, "")); //sealed box
+                    c.getSession().write(CField.unsealBox(item.getItemId()));
+                    c.getSession().write(CField.EffectPacket.showRewardItemAnimation(2028162, "")); //sealed box
                 }
             }, 10000);
             return 1;
@@ -126,7 +126,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(NPCPacket.getCutSceneSkip());
+            c.getSession().write(NPCPacket.getCutSceneSkip());
             return 1;
         }
     }
@@ -135,7 +135,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(NPCPacket.getDemonSelection());
+            c.getSession().write(NPCPacket.getDemonSelection());
             return 1;
         }
     }
@@ -144,7 +144,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(LoadPacket.getPacket());
+            c.getSession().write(LoadPacket.getPacket());
             return 1;
         }
     }
@@ -260,8 +260,8 @@ public class AdminCommand {
             client.updateLoginState(MapleClient.CHANGE_CHANNEL, client.getSessionIPAddress());
             chr.saveToDB(false, false);
             chr.getMap().removePlayer(chr);
-            client.sendPacket(CField.getChannelChange(client, Integer.parseInt(CashShopServer.getIP().split(":")[1])));
-            client.setCharacter(null);
+            client.getSession().write(CField.getChannelChange(client, Integer.parseInt(CashShopServer.getIP().split(":")[1])));
+            client.setPlayer(null);
             client.setReceiving(false);
             return 1;
         }
@@ -271,7 +271,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(CField.UIPacket.getDirectionInfo(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
+            c.getSession().write(CField.UIPacket.getDirectionInfo(StringUtil.joinStringFrom(splitted, 5), Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]), Integer.parseInt(splitted[3]), Integer.parseInt(splitted[4]), Integer.parseInt(splitted[5])));
             return 1;
         }
     }
@@ -291,7 +291,7 @@ public class AdminCommand {
 
         @Override
         public int execute(MapleClient c, String[] splitted) {
-            c.sendPacket(HexTool.getByteArrayFromHexString(StringUtil.joinStringFrom(splitted, 1)));
+            c.getSession().write(HexTool.getByteArrayFromHexString(StringUtil.joinStringFrom(splitted, 1)));
             return 1;
         }
     }
@@ -373,7 +373,7 @@ public class AdminCommand {
                 for (MapleCharacter mch : cserv.getPlayerStorage().getAllCharacters()) {
                     if (c.canClickNPC()) {
                         mch.gainItem(Integer.parseInt(splitted[1]), 1);
-                        mch.getClient().sendPacket(CField.NPCPacket.getNPCTalk(9010010, (byte) 0, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", "00 00", (byte) 1, 9010010));
+                        mch.getClient().getSession().write(CField.NPCPacket.getNPCTalk(9010010, (byte) 0, "You got the #t" + Integer.parseInt(splitted[1]) + "#, right? Click it to see what's inside. Go ahead and check your item inventory now, if you're curious.", "00 00", (byte) 1, 9010010));
                     }
                 }
             }
