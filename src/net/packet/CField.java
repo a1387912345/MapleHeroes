@@ -1034,13 +1034,15 @@ public class CField {
         mpw.writeZeroBytes(16);
         mpw.write(1);
         mpw.writeInt(charMagicSpawn);
+        mpw.writeZeroBytes(10);
+        mpw.write(1);
+        mpw.writeInt(charMagicSpawn);
         mpw.writeShort(0);
 
         mpw.writeShort(chr.getJob());
         mpw.writeShort(chr.getSubcategory());
         mpw.writeInt(0); // nTotalCHUC
-        mpw.write(HexTool.getByteArrayFromHexString("01 03 00 00 00 00 00 E8 00 00 00 0A 00 00 00 01 00 CB 52 00 00 E8 00 00 00 00 A1 93 00 00 01 AB 4A 0F 00 02 A5 72 0F 00 03 2E 99 0F 00 04 43 BF 0F 00 05 AC 0D 10 00 07 32 5C 10 00 08 34 83 10 00 09 FE D2 10 00 0B 94 16 15 00 11 11 20 11 00 31 65 6F 11 00 32 04 47 11 00 37 20 E2 11 00 FF FF FF 00 00 00 00 94 16 15 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"));
-        //PacketHelper.addCharLook(mpw, chr, true, false);
+        PacketHelper.addCharLook(mpw, chr, true, false);
         if (GameConstants.isZero(chr.getJob())) {
             PacketHelper.addCharLook(mpw, chr, true, false);
         }
@@ -1067,13 +1069,18 @@ public class CField {
         mpw.writeInt(0); // nCompleteSetID
         mpw.writeShort(-1); // nFieldSeatID
         mpw.writeInt(GameConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0); // nPortableChairID
-        mpw.writeInt(0);
+        int check = 0;
+        mpw.writeInt(check); // check
+        if (check != 0) {
+        	mpw.writeMapleAsciiString(""); // sPortableChairMsg
+        }
         mpw.writeInt(0);
         mpw.writeInt(0);
         
         mpw.writePos(chr.getTruePosition());
         mpw.write(chr.getStance());
         mpw.writeShort(chr.getFH());
+        System.out.println(chr.getTruePosition().getX() + " " + chr.getTruePosition().getY() + " " + chr.getStance() + " " + chr.getFH());
         mpw.writeZeroBytes(3);
 
         mpw.write(1);
@@ -1123,14 +1130,18 @@ public class CField {
         }
 
         mpw.writeInt(0);
-        mpw.write(1);
-        mpw.writeInt(0);
+        mpw.write(1); // bSoulEffect
+        mpw.write(0); // unk check
+        mpw.write(0);
+        mpw.writeShort(0);
         mpw.writeInt(0); //v145
         mpw.writeInt(0);
         mpw.writeInt(0);
         mpw.writeInt(0);
         mpw.write(1);
-        mpw.writeZeroBytes(31);
+        mpw.writeInt(0);
+        mpw.write(1);
+        mpw.writeZeroBytes(26);
         
         return mpw.getPacket();
     }
@@ -1443,9 +1454,9 @@ public class CField {
         return mpw.getPacket();
     }
 
-    public static byte[] movePlayer(int cid, List<LifeMovementFragment> moves, Point startPos) {
+    public static byte[] movePlayer(int charID, List<LifeMovementFragment> moves, Point startPos) {
         MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.MOVE_PLAYER);
-		mpw.writeInt(cid);
+		mpw.writeInt(charID);
         mpw.writeInt(0);
         mpw.writePos(startPos);
         mpw.writeShort(0);

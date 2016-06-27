@@ -175,14 +175,13 @@ public class MovementParse {
                     xvelocity = lea.readShort();
                     yvelocity = lea.readShort();
                     break;
-                case 12: {
+                case 12:
                 	if(startPos != null) {
 		            	xposition = (short) startPos.getX();
 		            	yposition = (short) startPos.getY();
 	            	}
                     wui = lea.readByte();
                     break;
-                }
                 default:
                    // if (chr.isGM()) {
                         //chr.showInfo("Movement", false, "Failed to read movement type " + command);
@@ -191,7 +190,6 @@ public class MovementParse {
                     //FileoutputUtil.log(FileoutputUtil.Movement_Log, "Kind movement: " + kind + ", Remaining : " + (numCommands - res.size()) + " New type of movement ID : " + command + ", packet : " + lea.toString(true) + "\r\n");
                     //return null;
             }
-            
             if (command != 12) {
 		        moveAction = lea.readByte(); // stance
 		        duration = lea.readShort();

@@ -64,14 +64,14 @@ public class StaticLifeMovement extends AbstractLifeMovement {
     public void serialize(MaplePacketWriter mlew) {
         mlew.write(getType());
         switch (getType()) {
-            case 0:
-            case 8:
-            case 15:
-            case 16:
-            case 18:
-            case 66:
-            case 67:
-            case 68:
+	        case 0:
+	        case 8:
+	        case 15:
+	        case 17:
+	        case 19:
+	        case 67:
+	        case 68:
+	        case 69:
                 mlew.writePos(getPosition());
                 mlew.writePos(pixelsPerSecond);
                 mlew.writeShort(foothold);
@@ -81,29 +81,28 @@ public class StaticLifeMovement extends AbstractLifeMovement {
                 }
                 mlew.writePos(offset);
                 break;
-            case 55:
-            case 65:
-            case 82:
+	        case 56:
+            case 66:
+            case 85:
             	mlew.writePos(getPosition());
             	mlew.writePos(pixelsPerSecond);
             	mlew.writeShort(foothold);
             	break;
             case 1:
             case 2:
-            case 17:
-            case 20:
+            case 18:
             case 21:
-            case 23:
-            case 61:
+            case 22:
+            case 24:
             case 62:
             case 63:
             case 64:
+            case 65:
                 mlew.writePos(pixelsPerSecond);
                 if (getType() == 20 || getType() == 21) {
                     mlew.writeShort(unknown);
                 }
                 break;
-            case 28:
             case 29:
             case 30:
             case 31:
@@ -126,16 +125,18 @@ public class StaticLifeMovement extends AbstractLifeMovement {
             case 48:
             case 49:
             case 50:
-            case 56:
+            case 51:
             case 57:
             case 58:
             case 59:
-            case 69:
+            case 60:
             case 70:
             case 71:
-            case 73:
-            case 78:
-            case 80:
+            case 72:
+            case 74:
+            case 79:
+            case 81:
+            case 83:
                 break;
             case 3:
             case 4:
@@ -146,24 +147,26 @@ public class StaticLifeMovement extends AbstractLifeMovement {
             case 10:
             case 11:
             case 13:
-            case 25:
             case 26:
-            case 51:
+            case 27:
             case 52:
             case 53:
-            case 60:
-            case 75:
+            case 54:
+            case 61:
             case 76:
             case 77:
-            case 79:
+            case 78:
+            case 80:
+            case 82:
                 mlew.writePos(getPosition());
                 mlew.writeShort(foothold);
                 break;
             case 14:
+            case 16:
             	mlew.writePos(pixelsPerSecond);
             	mlew.writeShort(unknown);
                 break;
-            case 22:
+            case 23:
                 mlew.writePos(getPosition());
                 mlew.writePos(pixelsPerSecond);
                 break;
