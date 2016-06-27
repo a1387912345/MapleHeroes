@@ -1049,10 +1049,6 @@ public class CField {
 
         mpw.writeInt(0); // dwDriverID
         mpw.writeInt(0); // dwPassengerID
-
-        mpw.writeInt(0);
-        mpw.writeInt(0);
-        mpw.writeInt(0);
         
         mpw.writeInt(Math.min(250, chr.getInventory(MapleInventoryType.CASH).countById(5110000))); //Valentine Effect
         mpw.writeInt(chr.getItemEffect()); // nActiveEffectItemID
@@ -1125,24 +1121,38 @@ public class CField {
         mpw.writeInt(0); //new v142->v143
 
         PacketHelper.addFarmInfo(mpw, chr.getClient(), 0);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 20; i++) {
             mpw.write(-1);
         }
 
         mpw.writeInt(0);
-        mpw.write(1); // bSoulEffect
-        mpw.write(0); // unk check
         mpw.write(0);
-        mpw.writeShort(0);
-        mpw.writeInt(0); //v145
-        mpw.writeInt(0);
-        mpw.writeInt(0);
-        mpw.writeInt(0);
-        mpw.write(1);
-        mpw.writeInt(0);
-        mpw.write(1);
-        mpw.writeZeroBytes(26);
+        mpw.write(0);
         
+        
+        mpw.write(0);
+        
+        mpw.writeInt(0);
+        
+        mpw.writeInt(0);
+        
+        mpw.write(0);
+        mpw.writeInt(0);
+        
+        mpw.writeInt(0);
+        
+        
+        mpw.write(0);
+        mpw.write(0);
+        mpw.writeInt(1);
+        mpw.writeInt(0);
+        mpw.writeInt(0);
+        mpw.writeMapleAsciiString("");
+        mpw.writeInt(0);
+        mpw.write(0);
+        mpw.writeInt(0);
+        mpw.writeInt(0);
+        mpw.writeInt(0);
         return mpw.getPacket();
     }
 
