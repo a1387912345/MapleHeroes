@@ -2554,8 +2554,8 @@ public final class MapleMap {
                 if (chr.getBuffSource(MapleBuffStat.HAKU_REBORN) > 0) {
                     chr.getHaku().sendStats();
                     chr.getMap().broadcastMessage(chr, CField.transformHakuEffect(chr.getID()), true);
-                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_change1(chr.getHaku()), true);
-                    chr.getMap().broadcastMessage(chr, CField.spawnHaku_bianshen(chr.getID(), chr.getHaku().getObjectId(), chr.getHaku().getStats()), true);
+                    //chr.getMap().broadcastMessage(chr, CField.spawnHaku_change1(chr.getHaku()), true);
+                    //chr.getMap().broadcastMessage(chr, CField.spawnHaku_bianshen(chr.getID(), chr.getHaku().getObjectId(), chr.getHaku().getStats()), true);
                 } else {
                     broadcastMessage(CField.spawnHaku(chr.getHaku()));
                 }

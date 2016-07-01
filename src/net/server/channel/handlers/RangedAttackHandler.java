@@ -284,7 +284,7 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
             bulletCount *= 2;
         }
         int projectile = 0;
-        int visProjectile = 0;
+        attack.projectileItemID = 0;
         if ((!AOE) && (chr.getBuffedValue(MapleBuffStat.SOULARROW) == null) && (!noBullet)) {
             Item ipp = chr.getInventory(MapleInventoryType.USE).getItem((short) attack.slot);
             if (ipp == null) {
@@ -296,9 +296,9 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
                 if (chr.getInventory(MapleInventoryType.CASH).getItem((short) attack.csstar) == null) {
                     return;
                 }
-                visProjectile = chr.getInventory(MapleInventoryType.CASH).getItem((short) attack.csstar).getItemId();
+                attack.projectileItemID = chr.getInventory(MapleInventoryType.CASH).getItem((short) attack.csstar).getItemId();
             } else {
-                visProjectile = projectile;
+                attack.projectileItemID = projectile;
             }
 
             if (chr.getBuffedValue(MapleBuffStat.SPIRIT_CLAW) == null) {
@@ -324,9 +324,9 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
                 }
             }
         } else if ((chr.getJob() >= 3500) && (chr.getJob() <= 3512)) {
-            visProjectile = 2333000;
+            attack.projectileItemID = 2333000;
         } else if (GameConstants.isCannon(chr.getJob())) {
-            visProjectile = 2333001;
+            attack.projectileItemID = 2333001;
         }
         int projectileWatk = 0;
         if (projectile != 0) {
@@ -367,16 +367,20 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
         chr.checkFollow();
         if (!chr.isHidden()) {
             if (attack.skillid == 3211006) {
-                chr.getMap().broadcastMessage(chr, CField.strafeAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk, chr.getTotalSkillLevel(3220010)), chr.getTruePosition());
+            	attack.hyperLevel = chr.getTotalSkillLevel(3220010);
+                //chr.getMap().broadcastMessage(chr, CField.strafeAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.projectileItemID, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk, chr.getTotalSkillLevel(3220010)), chr.getTruePosition());
+                chr.getMap().broadcastMessage(chr, CField.strafeAttack(chr.getID(), attack, chr.getLevel(), chr.getStat().getPassiveMastery()), chr.getTruePosition());
             } else {
                 //chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getId(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().passive_mastery(), attack.unk), chr.getTruePosition());
-                chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getID(), attack, visProjectile, chr.getLevel(), chr.getStat().getPassiveMastery()), chr.getTruePosition());
-
+                chr.getMap().broadcastMessage(chr, CField.rangedAttack(chr.getID(), attack, chr.getLevel(), chr.getStat().getPassiveMastery()), chr.getTruePosition());
             }
         } else if (attack.skillid == 3211006) {
-            chr.getMap().broadcastGMMessage(chr, CField.strafeAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk, chr.getTotalSkillLevel(3220010)), false);
+            //chr.getMap().broadcastGMMessage(chr, CField.strafeAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.projectileItemID, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk, chr.getTotalSkillLevel(3220010)), false);
+            chr.getMap().broadcastGMMessage(chr, CField.strafeAttack(chr.getID(), attack, chr.getLevel(), chr.getStat().getPassiveMastery()), false);
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.rangedAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, visProjectile, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk), false);
+            //chr.getMap().broadcastGMMessage(chr, CField.rangedAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.projectileItemID, attack.allDamage, attack.position, chr.getLevel(), chr.getStat().getPassiveMastery(), attack.unk), false);
+            chr.getMap().broadcastGMMessage(chr, CField.rangedAttack(chr.getID(), attack, chr.getLevel(), chr.getStat().getPassiveMastery()), false);
+
         }
 
         DamageParse.applyAttack(attack, skill, chr, bulletCount, basedamage, effect, ShadowPartner != null ? AttackType.RANGED_WITH_SHADOWPARTNER : AttackType.RANGED);
@@ -388,22 +392,28 @@ public class RangedAttackHandler extends AbstractMaplePacketHandler {
                 final MapleStatEffect eff2 = effect;
                 final double basedamage2 = basedamage;
                 final int bulletCount2 = bulletCount;
-                final int visProjectile2 = visProjectile;
+                final int visProjectile2 = attack.projectileItemID;
                 final AttackInfo attack2 = DamageParse.DivideAttack(attack, chr.isGM() ? 1 : 4);
                 Timer.CloneTimer.getInstance().schedule(new Runnable() {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
                             if (attack2.skillid == 3211006) {
-                                clone.getMap().broadcastMessage(CField.strafeAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk, chr.getTotalSkillLevel(3220010)));
+                            	attack2.hyperLevel = chr.getTotalSkillLevel(3220010);
+                                //clone.getMap().broadcastMessage(CField.strafeAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk, chr.getTotalSkillLevel(3220010)));
+                                clone.getMap().broadcastMessage(CField.strafeAttack(clone.getID(), attack2, clone.getLevel(), clone.getStat().getPassiveMastery()), clone.getTruePosition());
                             } else {
-                                clone.getMap().broadcastMessage(CField.rangedAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk));
+                                //clone.getMap().broadcastMessage(CField.rangedAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk));
+                                clone.getMap().broadcastMessage(CField.rangedAttack(clone.getID(), attack2, clone.getLevel(), clone.getStat().getPassiveMastery()), clone.getTruePosition());
+
                             }
                         } else {
                             if (attack2.skillid == 3211006) {
-                                clone.getMap().broadcastGMMessage(clone, CField.strafeAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk, chr.getTotalSkillLevel(3220010)), false);
+                                //clone.getMap().broadcastGMMessage(clone, CField.strafeAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk, chr.getTotalSkillLevel(3220010)), false);
+                                clone.getMap().broadcastGMMessage(clone, CField.strafeAttack(clone.getID(), attack2, clone.getLevel(), clone.getStat().getPassiveMastery()), false);
                             } else {
-                                clone.getMap().broadcastGMMessage(clone, CField.rangedAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk), false);
+                                //clone.getMap().broadcastGMMessage(clone, CField.rangedAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, visProjectile2, attack2.allDamage, attack2.position, clone.getLevel(), clone.getStat().getPassiveMastery(), attack2.unk), false);
+                                clone.getMap().broadcastGMMessage(clone, CField.rangedAttack(clone.getID(), attack2, clone.getLevel(), clone.getStat().getPassiveMastery()), false);
                             }
                         }
                         DamageParse.applyAttack(attack2, skil2, chr, bulletCount2, basedamage2, eff2, AttackType.RANGED);

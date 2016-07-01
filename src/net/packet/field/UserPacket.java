@@ -185,7 +185,7 @@ public class UserPacket {
 	 * @see CUser::OnSetMakingMeisterSkillEff()
 	 */
 	public static byte[] setCraftSkillEffect(final int charID, final int skillID) {
-        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CRAFT_SKILL_EFFECT);
+        MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.CRAFT_MEISTER_EFFECT);
 		mpw.writeInt(charID);
         mpw.writeInt(skillID); // nSkillID
 

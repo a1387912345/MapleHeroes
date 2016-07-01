@@ -145,9 +145,11 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
         }
         chr.checkFollow();
         if (!chr.isHidden()) {
-            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getTruePosition());
+            //chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), chr.getTruePosition());
+            chr.getMap().broadcastMessage(chr, CField.magicAttack(chr.getID(), attack, chr.getLevel(), chr.getStat().getPassiveMastery()), chr.getTruePosition());
         } else {
-            chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), false);
+            //chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getID(), attack.tbyte, attack.skillid, attack.skillLevel, attack.display, attack.speed, attack.allDamage, attack.charge, chr.getLevel(), attack.unk), false);
+            chr.getMap().broadcastGMMessage(chr, CField.magicAttack(chr.getID(), attack, chr.getLevel(), chr.getStat().getPassiveMastery()), false);
         }
         DamageParse.applyMagicAttack(attack, skill, c.getCharacter(), effect, maxdamage);
         WeakReference<MapleCharacter>[] clones = chr.getClones();
@@ -162,9 +164,11 @@ public class MagicDamageHandler extends AbstractMaplePacketHandler {
                     @Override
                     public void run() {
                         if (!clone.isHidden()) {
-                            clone.getMap().broadcastMessage(CField.magicAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
+                            //clone.getMap().broadcastMessage(CField.magicAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk));
+                            clone.getMap().broadcastMessage(CField.magicAttack(clone.getID(), attack2, clone.getLevel(), clone.getStat().getPassiveMastery()));
                         } else {
-                            clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk), false);
+                            //clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getID(), attack2.tbyte, attack2.skillid, attack2.skillLevel, attack2.display, attack2.speed, attack2.allDamage, attack2.charge, clone.getLevel(), attack2.unk), false);
+                            clone.getMap().broadcastGMMessage(clone, CField.magicAttack(clone.getID(), attack2, clone.getLevel(), clone.getStat().getPassiveMastery()), false);
                         }
                         DamageParse.applyMagicAttack(attack2, skil2, chr, eff2, maxd);
                     }

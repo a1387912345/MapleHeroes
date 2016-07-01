@@ -22,11 +22,11 @@ public enum MapleBuffStat implements Serializable, Buffstat {
     ACC(0x10, 1),
     AVOID(0x2000, 6), // Last updated: v171
     HANDS(0x40, 1),
-    SPEED(0x10, 2), // Last updated: v171
-    JUMP(0x8, 2), // Last updated: v171
+    SPEED(0x1, 2), // Last updated: v174
+    JUMP(0x80000000, 3), // Last updated: v174
     STATUS_RESIST(0x10, 2),
     ELEMENT_RESIST(0x20, 2),
-    BOOSTER(0x1, 2), // Last updated: v171
+    BOOSTER(0x10000000, 3), // Last updated: v174
     DARKSIGHT(0x2, 2), // Last updated: v171
     MAGIC_GUARD(0x4, 2), // Last updated: v171
     HOLY_SYMBOL(0x100000, 3), // Last updated: v171.3

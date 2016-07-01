@@ -33,12 +33,17 @@ import tools.HexTool;
 
 public class AttackInfo {
 
-    public int skillid, skillLevel, charge, lastAttackTickCount;
+    public int skillid, skillLevel, charge, lastAttackTickCount, hyperLevel;
     public List<AttackPair> allDamage;
     public Point position;
-    public int display;
+    public int display, projectileItemID;
     public byte hits, targets, tbyte, speed, csstar, AOE, slot, unk, flag;
     public boolean real = true;
+    
+    public AttackInfo() {
+    	projectileItemID = 0;
+    	hyperLevel = 0;
+    }
 
     public final MapleStatEffect getAttackEffect(final MapleCharacter chr, final Skill skill) {
         if (GameConstants.isMulungSkill(skillid) || GameConstants.isPyramidSkill(skillid) || GameConstants.isInflationSkill(skillid)) {

@@ -5,6 +5,7 @@ import client.character.MapleCharacter;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
 import net.packet.CField;
+import net.packet.field.UserPacket;
 import tools.data.LittleEndianAccessor;
 
 public class CancelChairHandler extends AbstractMaplePacketHandler {
@@ -33,7 +34,7 @@ public class CancelChairHandler extends AbstractMaplePacketHandler {
 		if (id == -1) {
             chr.cancelFishingTask();
             chr.setChair(0);
-            c.getSession().write(CField.cancelChair(chr.getID()));
+            c.getSession().write(UserPacket.cancelChair(chr.getID()));
             if (chr.getMap() != null) {
                 chr.getMap().broadcastMessage(chr, CField.showChair(chr.getID(), 0), false);
             }

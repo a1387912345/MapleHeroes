@@ -1341,7 +1341,8 @@ public class PacketHelper {
 
     public static void addShopInfo(MaplePacketWriter mpw, MapleShop shop, MapleClient c) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        mpw.write(shop.getRanks().size() > 0 ? 1 : 0);
+        mpw.writeInt(0); // nStarCoin
+        mpw.write(shop.getRanks().size() > 0 ? 1 : 0); // nCount
 
         mpw.writeInt(0);
         
