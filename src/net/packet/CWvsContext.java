@@ -2640,7 +2640,7 @@ public class CWvsContext {
 
         public static byte[] newGuildMember(MapleGuildCharacter mgc) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(63); // Last updated: v172.2
+            mpw.write(63); // Last updated: v174.3
             mpw.writeInt(mgc.getGuildId());
             mpw.writeInt(mgc.getId());
             mpw.writeAsciiString(mgc.getName(), 13);
@@ -2687,7 +2687,7 @@ public class CWvsContext {
 
         public static byte[] guildContribution(int guildid, int charid, int contribution, int individualGP) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(98); // Last updated: v172.2
+            mpw.write(100); // Last updated: v174.3
             mpw.writeInt(guildid);
             mpw.writeInt(charid);
             mpw.writeInt(contribution); // Contribution
@@ -2700,7 +2700,7 @@ public class CWvsContext {
 
         public static byte[] changeRank(MapleGuildCharacter mgc) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(96); // Last updated: v172.2
+            mpw.write(98); // Last updated: v174.3
             mpw.writeInt(mgc.getGuildId());
             mpw.writeInt(mgc.getId());
             mpw.write(mgc.getGuildRank());
@@ -2710,7 +2710,7 @@ public class CWvsContext {
 
         public static byte[] rankTitleChange(int gid, String[] ranks) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(94); // Last updated: v172.2
+            mpw.write(96); // Last updated: v174.3
             mpw.writeInt(gid);
             for (String r : ranks) {
                 mpw.writeMapleAsciiString(r);
@@ -2721,7 +2721,7 @@ public class CWvsContext {
 
         public static byte[] guildEmblemChange(int gid, short bg, byte bgcolor, short logo, byte logocolor) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(99); // Last updated: v172.2
+            mpw.write(101); // Last updated: v174.3 guess
             mpw.writeInt(gid);
             mpw.writeShort(bg);
             mpw.write(bgcolor);
@@ -2733,7 +2733,7 @@ public class CWvsContext {
 
         public static byte[] updateGP(int guildId, int honorexp, int GP, int guildLevel) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(105); // Last updated: v172.2
+            mpw.write(107); // Last updated: v174.3
             mpw.writeInt(guildId);
             mpw.writeInt(honorexp);
             mpw.writeInt(guildLevel);
@@ -2764,7 +2764,7 @@ public class CWvsContext {
 
         public static byte[] guildMemberOnline(int guildId, int charId, boolean bOnline) {
             MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILD_OPERATION);
-            mpw.write(93); // Last updated: v172.2
+            mpw.write(95); // Last updated: v174.3
             mpw.writeInt(guildId);
             mpw.writeInt(charId);
             mpw.write(bOnline ? 1 : 0);

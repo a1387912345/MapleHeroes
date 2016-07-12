@@ -31,7 +31,7 @@ public class FarmServer {
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
 
-    public static void run_startup_configurations() {
+    public static void run() {
         ip = ServerConfig.interface_ + ":" + PORT;
 
         ByteBuffer.setUseDirectBuffers(false);

@@ -23,7 +23,7 @@ public class CashShopServer {
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
 
-    public static void run_startup_configurations() {
+    public static void run() {
         System.out.print("Loading Cash Shop...");
         ip = ServerConfig.interface_ + ":" + PORT;
 

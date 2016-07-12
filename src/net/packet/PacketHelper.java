@@ -1341,42 +1341,28 @@ public class PacketHelper {
 
     public static void addShopInfo(MaplePacketWriter mpw, MapleShop shop, MapleClient c) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        mpw.writeInt(0); // nSelectNPCItemID
+        mpw.writeInt(shop.getNpcId()); // dwNpcTemplateID
         mpw.writeInt(0); // nStarCoin
-        mpw.write(shop.getRanks().size() > 0 ? 1 : 0); // nCount
-
-        mpw.writeInt(0);
         
+        mpw.write(shop.getRanks().size() > 0 ? 1 : 0);
         if (shop.getRanks().size() > 0) {
-            mpw.write(shop.getRanks().size());
-            for (Pair s : shop.getRanks()) {
+            mpw.write(shop.getRanks().size());  
+            for (Pair<Integer, String> s : shop.getRanks()) {
                 mpw.writeInt(((Integer) s.left).intValue());
                 mpw.writeMapleAsciiString((String) s.right);
             }
         }
-        mpw.writeShort(shop.getItems().size() + c.getCharacter().getRebuy().size());
+
+        mpw.writeInt(0); // nShopVerNo 
+        
+        mpw.writeShort(shop.getItems().size() + c.getCharacter().getRebuy().size()); // nCount
         for (MapleShopItem item : shop.getItems()) {
             addShopItemInfo(mpw, item, shop, ii, null, c.getCharacter());
         }
         for (Item i : c.getCharacter().getRebuy()) {
             addShopItemInfo(mpw, new MapleShopItem(i.getItemId(), (int) ii.getPrice(i.getItemId()), i.getQuantity(), i.getPosition()), shop, ii, i, c.getCharacter());
         }
-   
-        /*
-        if (shop.getRanks().size() > 0) {
-            mpw.write(shop.getRanks().size());
-            for (Pair s : shop.getRanks()) {
-                mpw.writeInt(((Integer) s.left).intValue());
-                mpw.writeMapleAsciiString((String) s.right);
-            }
-        }
-        mpw.writeShort(shop.getItems().size() + c.getPlayer().getRebuy().size());
-        for (MapleShopItem item : shop.getItems()) {
-            addShopItemInfo(mpw, item, shop, ii, null, c.getPlayer());
-        }
-        for (Item i : c.getPlayer().getRebuy()) {
-            addShopItemInfo(mpw, new MapleShopItem(i.getItemId(), (int) ii.getPrice(i.getItemId()), i.getQuantity(), i.getPosition()), shop, ii, i, c.getPlayer());
-        }
-        */
     }
 
     /*
@@ -1401,36 +1387,53 @@ public class PacketHelper {
      * 82 - Little Dragon
      * 83 - Ika
      */
-    public static void addShopItemInfo(MaplePacketWriter mpw, MapleShopItem item, MapleShop shop, MapleItemInformationProvider ii, Item i, MapleCharacter chr) {
-        mpw.writeInt(item.getItemId());
-        mpw.writeInt(item.getPrice());
+    public static void addShopItemInfo(MaplePacketWriter mpw, MapleShopItem shopItem, MapleShop shop, MapleItemInformationProvider itemInfo, Item item, MapleCharacter chr) {
+        mpw.writeInt(shopItem.getItemId());
+        mpw.writeInt(shopItem.getPrice());
         mpw.write(ServerConstants.SHOP_DISCOUNT); //Discount
-        mpw.writeInt(item.getReqItem());
-        mpw.writeInt(item.getReqItemQ());
-        mpw.writeInt(1440 * item.getExpiration());
-        mpw.writeInt(item.getMinLevel());
-        mpw.writeInt(0);
-        mpw.writeZeroBytes(26);
-        mpw.writeLong(getTime(-2L)); //new v140 1900
-        mpw.writeLong(getTime(-1L)); //new v140 2079
+        mpw.writeInt(shopItem.getReqItem()); // nTokenItemID
+        mpw.writeInt(shopItem.getReqItemQ()); // nTokenPrice
+        mpw.writeInt(1440 * shopItem.getExpiration()); // nPointQuestID
+        mpw.writeInt(shopItem.getMinLevel()); // nPointPrice
+        mpw.writeInt(0); // nStarCoin
+        mpw.writeInt(0); // nQuestExID
+        mpw.writeMapleAsciiString(""); // sQuestExKey
+        mpw.writeInt(0); // nQuestExValue
+        mpw.writeInt(0); // nItemPeriod
+        mpw.writeInt(0); // nLevelLimited
+        mpw.writeShort(0); // nShowLevMin
+        mpw.writeShort(0); // nShowLevMax
+        mpw.writeInt(0); // nQuestID
+        mpw.writeLong(getTime(-2L)); // ftSellStart
+        mpw.writeLong(getTime(-1L)); // ftSellEnd
         
-        mpw.writeInt(item.getCategory());
-        if (GameConstants.isEquip(item.getItemId())) {
-            mpw.write(item.hasPotential() ? 1 : 0);
+        mpw.writeInt(shopItem.getCategory()); // nTabIndex
+        if (GameConstants.isEquip(shopItem.getItemId())) { // bWorldBlock
+            mpw.write(shopItem.hasPotential() ? 1 : 0);
         } else {
             mpw.write(0);
         }
-        mpw.writeInt(item.getExpiration() > 0 ? 1 : 0);
-        mpw.write(0);//new 144
-        mpw.writeInt(0);
-        if ((!GameConstants.isThrowingStar(item.getItemId())) && (!GameConstants.isBullet(item.getItemId()))) {
-        	mpw.writeShort(item.getBuyable()); //buyable
-        	mpw.writeShort(item.getQuantity()); //quantity of item to buy
+        //mpw.writeInt(item.getExpiration() > 0 ? 1 : 0);
+        mpw.writeInt(0); // nPotentialGrade
+        mpw.writeInt(0); // nBuyLimit
+        int nType = 0;
+        mpw.write(nType); // nType
+        if (nType == 1 || nType == 2 || nType == 3) {
+        	int v3 = 0;
+        	mpw.writeInt(v3);
+        	for (int j = 0; j < v3; j++) {
+        		mpw.writeLong(0); // time
+        	}
+        }
+        if ((!GameConstants.isThrowingStar(shopItem.getItemId())) && (!GameConstants.isBullet(shopItem.getItemId()))) {
+        	//mpw.writeShort(item.getBuyable()); //buyable
+        	mpw.writeShort(shopItem.getQuantity()); //quantity of item to buy
         } else {
-            mpw.writeAsciiString("333333");
-            mpw.writeShort(BitTools.doubleToShortBits(ii.getPrice(item.getItemId())));
+            //mpw.writeAsciiString("333333");
+            //mpw.writeShort(BitTools.doubleToShortBits(ii.getPrice(item.getItemId())));
 			//mpw.writeShort(ItemInformation.getInstance().getSlotMax(c, item.getItemId()));
-            mpw.writeShort(ii.getSlotMax(item.getItemId()));
+            //mpw.writeShort(ii.getSlotMax(item.getItemId()));
+        	mpw.writeLong(0); // dUnitPrice
         
         /*
              mpw.writeInt(0);
@@ -1441,22 +1444,23 @@ public class PacketHelper {
 //            mpw.writeShort(ii.getSlotMax(item.getItemId()));
         }
     
-        
-        mpw.write(i == null ? 0 : 1);
-        if (i != null) {
-            addItemInfo(mpw, i);
+        mpw.writeShort(shopItem.getQuantity()); // nMaxPerSlot
+        mpw.write(item == null ? 0 : 1);
+        if (item != null) {
+            addItemInfo(mpw, item);
         }
+        /*
         if (shop.getRanks().size() > 0) {
-            mpw.write(item.getRank() >= 0 ? 1 : 0);
-            if (item.getRank() >= 0) {
-                mpw.write(item.getRank());
+            mpw.write(shopItem.getRank() >= 0 ? 1 : 0);
+            if (shopItem.getRank() >= 0) {
+                mpw.write(shopItem.getRank());
             }
         }
+        */
         for (int j = 0; j < 4; j++) {
             mpw.writeInt(0); //red leaf high price probably
         }
         
-        //mpw.write(HexTool.getByteArrayFromHexString("00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"));
         addRedLeafInfo(mpw, chr);
     }
 
@@ -1513,9 +1517,9 @@ public class PacketHelper {
         mpw.writeInt(1);
     }
 
-public static void addRedLeafInfo(MaplePacketWriter mpw, MapleCharacter chr) {      
-            for (int i = 0; i < 4; i++) {
-            mpw.writeInt(9410165 + i);//v146 -2
+    public static void addRedLeafInfo(MaplePacketWriter mpw, MapleCharacter chr) {      
+    	for (int i = 0; i < 4; i++) {
+            mpw.writeInt(9410165 + i);
             mpw.writeInt(chr.getFriendShipPoints()[i]);
         }
 

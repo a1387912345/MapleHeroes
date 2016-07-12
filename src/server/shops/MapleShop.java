@@ -76,12 +76,12 @@ public class MapleShop {
 
     public void sendShop(MapleClient c) {
         c.getCharacter().setShop(this);
-        c.getSession().write(CField.NPCPacket.getNPCShop(getNpcId(), this, c));
+        c.getSession().write(CField.NPCPacket.getNPCShop(this, c));
     }
 
     public void sendShop(MapleClient c, int customNpc) {
         c.getCharacter().setShop(this);
-        c.getSession().write(CField.NPCPacket.getNPCShop(customNpc, this, c));
+        c.getSession().write(CField.NPCPacket.getNPCShop(this, c));
     }
 
     public void buy(MapleClient c, short slot, int itemId, short quantity) {
@@ -247,7 +247,7 @@ public class MapleShop {
             if ((price != -1.0D) && (recvMesos > 0)) {
                 c.getCharacter().gainMeso(recvMesos, false);
             }
-            c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 5, this, c, -1));
+            c.getSession().write(CField.NPCPacket.confirmShopTransaction((byte) 8, this, c, -1));
         }
     }
 

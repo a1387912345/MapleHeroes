@@ -1,6 +1,5 @@
 package net.packet;
 
-import client.character.MapleCharacter;
 import net.SendPacketOpcode;
 import tools.data.MaplePacketWriter;
 
@@ -19,22 +18,23 @@ public class TalkPacket {
 		return mpw.getPacket();
 	}
 	
-	public static byte[] onAccountInfo(MapleCharacter chr) {
+	public static byte[] onTalkSessionID(int accountID) {
 		MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.UNK_RESPONSE);
 		mpw.write(0);
-		mpw.write(chr.getAccountID());
+		mpw.writeInt(accountID);
 		
 		return mpw.getPacket();
 	}
 	
-	public static byte[] onGuildChat(MapleCharacter chr, String message) {
+	public static byte[] onGuildChat(int accountID, int charID, int guildID, String message) {
 		MaplePacketWriter mpw = new MaplePacketWriter(SendPacketOpcode.GUILDCHAT);
-		mpw.writeInt(0); // [26 36 F3 02] tick?
-		mpw.writeInt(chr.getGuildId());
-		mpw.writeInt(chr.getAccountID());
-		mpw.writeInt(chr.getID());
+		mpw.writeInt(accountID);
+		mpw.writeInt(guildID);
+		mpw.writeInt(accountID);
+		mpw.writeInt(charID);
 		mpw.writeLong(PacketHelper.getTime(System.currentTimeMillis()));
 		mpw.writeMapleAsciiString(message);
+		mpw.write(0);
 		
 		return mpw.getPacket();
 	}

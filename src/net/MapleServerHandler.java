@@ -32,6 +32,7 @@ import net.packet.LoginPacket;
 import net.server.cashshop.handlers.CashShopOperation;
 import net.server.login.LoginServer;
 import net.server.login.handlers.deprecated.CharLoginHandler;
+import net.world.World;
 import scripting.npc.NPCScriptManager;
 
 import java.io.File;
@@ -414,6 +415,7 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
                 session.removeAttribute(MapleClient.CLIENT_KEY);
             }
         }
+        System.out.println("Session Closed");
         super.sessionClosed(session);
     }
 

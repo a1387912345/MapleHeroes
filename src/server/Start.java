@@ -213,12 +213,12 @@ public class Start {
         MapleServerHandler.initiate();
         PacketProcessor.getInstance().initialize();
         
-        LoginServer.run_startup_configurations();
+        LoginServer.run();
         LoginAuthServer.getInstance().run();
-        ChannelServer.startChannel_Main();
-        CashShopServer.run_startup_configurations();
-        FarmServer.run_startup_configurations();
-        TalkServer.runStartupConfigurations();
+        ChannelServer.startChannels();
+        CashShopServer.run();
+        FarmServer.run();
+        TalkServer.run();
         Runtime.getRuntime().addShutdownHook(new Thread(new Shutdown()));
         World.registerRespawn();
         ShutdownServer.registerMBean();

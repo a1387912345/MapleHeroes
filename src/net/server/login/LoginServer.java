@@ -80,7 +80,7 @@ public class LoginServer {
         load.remove(channel);
     }
 
-    public static final void run_startup_configurations() {
+    public static final void run() {
         System.out.print("Loading Login Server...");
         userLimit = ServerConfig.userLimit;
         serverName = ServerConfig.serverName;

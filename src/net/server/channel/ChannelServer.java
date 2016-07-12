@@ -270,7 +270,7 @@ public class ChannelServer {
         return BossDropRate;
     }
 
-    public static void startChannel_Main() {
+    public static void startChannels() {
         System.out.println("Loading Channels...");
         serverStartTime = System.currentTimeMillis();
 

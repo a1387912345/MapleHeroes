@@ -4,6 +4,7 @@ import client.MapleClient;
 import client.character.MapleCharacter;
 import net.AbstractMaplePacketHandler;
 import net.RecvPacketOpcode;
+import net.packet.TalkPacket;
 import tools.data.LittleEndianAccessor;
 
 public class GuildInfoInHandler extends AbstractMaplePacketHandler {
@@ -14,8 +15,15 @@ public class GuildInfoInHandler extends AbstractMaplePacketHandler {
 
 	@Override
 	public void handlePacket(LittleEndianAccessor lea, MapleClient c, MapleCharacter chr) {
-		final int guildid = lea.readInt();
-		final int charid = lea.readInt();
+		final int guildID = lea.readInt();
+		final int charID = lea.readInt();
+		
+		c.sendPacket(TalkPacket.onTalkSessionID(c.getAccountID()));
+	}
+	
+	@Override
+	public boolean validateState(final MapleClient c) {
+		return true;
 	}
 
 }

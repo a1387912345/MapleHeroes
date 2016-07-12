@@ -65,6 +65,7 @@ public class MapleClient implements Serializable {
     public static final String CLIENT_KEY = "CLIENT";
     private final transient MapleCrypto send, receive;
     private final transient IoSession session;
+    private MapleClient talkSession;
     private MapleCharacter player;
     private int channel = 1, accId = -1, world, birthday;
     private int charslots = DEFAULT_CHARSLOT;
@@ -75,6 +76,7 @@ public class MapleClient implements Serializable {
     private boolean monitored = false, receiving = true;
     private boolean gm;
     private byte greason = 1, gender = -1;
+    public int charID = 0, guildID = 0;
     public transient short loginAttempt = 0;
     public transient short couponAttempt = 0;
     private final transient List<Integer> allowedChar = new LinkedList<>();
@@ -109,6 +111,10 @@ public class MapleClient implements Serializable {
     public final IoSession getSession() {
         return session;
     }
+    
+    public final void sendPacket(byte[] packet) {
+    	session.write(packet);
+    }
 
     public final Lock getLock() {
         return mutex;
@@ -116,6 +122,14 @@ public class MapleClient implements Serializable {
 
     public final Lock getNPCLock() {
         return npc_mutex;
+    }
+    
+    public MapleClient getTalkSession() {
+    	return talkSession;
+    }
+    
+    public void setTalkSession(MapleClient talkSession) {
+    	this.talkSession = talkSession;
     }
 
     public MapleCharacter getCharacter() {

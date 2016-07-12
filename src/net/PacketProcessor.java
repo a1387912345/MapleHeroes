@@ -88,6 +88,7 @@ public final class PacketProcessor {
          */
         registerHandler(new MigrateInHandler(RecvPacketOpcode.MIGRATE_IN));
         registerHandler(new GuildInfoInHandler(RecvPacketOpcode.TALK_GUILD_INFO));
+        registerHandler(new GuildChatHandler(RecvPacketOpcode.GUILDCHAT));
         //registerHandler(RecvPacketOpcode.PONG_TALK, new PongTalkHandler(RecvPacketOpcode.PONG_TALK));
     	/*
     	 * Login Handlers
@@ -297,7 +298,7 @@ public final class PacketProcessor {
         //registerHandler(new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_OPERATION));
         registerHandler(new AllianceOperationHandler(RecvPacketOpcode.ALLIANCE_REQUEST));
         
-        registerHandler(new BuddylistModifyHandler(RecvPacketOpcode.BUDDYLIST_MODIFY));
+        //registerHandler(new BuddylistModifyHandler(RecvPacketOpcode.BUDDYLIST_MODIFY));
         registerHandler(new MysticDoorHandler(RecvPacketOpcode.USE_MYSTIC_DOOR));
         registerHandler(new MechDoorHandler(RecvPacketOpcode.USE_MECH_DOOR));
         registerHandler(new HolyFountainHandler(RecvPacketOpcode.USE_HOLY_FOUNTAIN));

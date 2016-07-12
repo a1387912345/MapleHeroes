@@ -23,7 +23,7 @@ public class TalkServer {
     private static PlayerStorage players;
     private static boolean finishedShutdown = false;
     
-    public static void runStartupConfigurations() {
+    public static void run() {
         System.out.print("Loading Talk Server...");
         ip = ServerConfig.interface_ + ":" + PORT;
 
@@ -64,7 +64,7 @@ public class TalkServer {
         System.out.println("Saving all connected clients (Talk)...");
         players.disconnectAll();
         System.out.println("Shutting down Talk Server...");
-        //acceptor.unbindAll();
+        acceptor.unbindAll();
         finishedShutdown = true;
     }
 
